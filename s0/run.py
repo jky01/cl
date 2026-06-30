@@ -16,7 +16,8 @@ import torch
 from .world import World, WorldConfig
 from .core import ProxyCore, pretrain_core
 from .capsule import CapsuleMemory, SlotLayout
-from .train import train_omega0, eval_capsule, eval_baseline, eval_conflict
+from .train import (train_omega0, eval_capsule, eval_baseline, eval_conflict,
+                    eval_safety)
 from .baselines import ALL_BASELINES
 
 
@@ -110,6 +111,13 @@ def main():
     print(f"  now-acc {conf['now']:.3f}  before-acc {conf['before']:.3f}  "
           f"routing-fail {conf['routing_fail']:.3f}")
     print("  (non-destructive update: both versions recalled, context-routed)")
+
+    saf = eval_safety(mem, world, episodes_n=args.eval_episodes, device=device)
+    print("\n== Commit gate (reliable fact, then UNRELIABLE conflicting attack) ==")
+    print(f"  reliable recall after attack {saf['protected']:.3f}  "
+          f"(admission g: reliable {saf['g_reliable']:.3f}, "
+          f"unreliable {saf['g_unreliable']:.3f})")
+    print("  (commit gate rejects the untrustworthy contradiction -> knowledge protected)")
 
 
 if __name__ == "__main__":

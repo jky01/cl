@@ -265,6 +265,15 @@ class CapsuleMemory(nn.Module):
         self.register_buffer("read_temp", torch.tensor(0.1))
         self.now_id = world.i("now")
         self.before_id = world.i("before")
+        # Step 4 commit gate (admission control / verifier, §27.18/27.21.5):
+        # g_commit = sigmoid(commit_net([trust, conflict])). A low-trust write
+        # that CONFLICTS with an existing fact is rejected (g_commit~0) so it
+        # cannot corrupt established knowledge. g_commit is stored as the slot's
+        # alloc (soft presence); read suppresses low-alloc slots via a log bias
+        # (alloc~1 -> 0 bias, so normal trusted writes are unaffected).
+        self.commit_net = nn.Sequential(nn.Linear(2, 32), nn.GELU(), nn.Linear(32, 1))
+        nn.init.constant_(self.commit_net[-1].bias, 3.0)   # start admitting (~0.95)
+        self.register_buffer("commit_weight", torch.tensor(1.0))
         # WARMUP flag: when False, relevance is forced to 1 (gate fully usable)
         # so storage can bootstrap. With the sharp relevance gate, a cold start
         # has conf~0 < thr -> relevance~0 -> g~0 -> the injection gets no answer
@@ -275,7 +284,7 @@ class CapsuleMemory(nn.Module):
 
     # ---- write -------------------------------------------------------
     def write(self, M, alloc_mask, stmt_ids, lengths, tau=1.0, hard=True,
-              training=False, time=1.0):
+              training=False, time=1.0, trust=1.0):
         """Scatter one capsule per row into the (batched) memory bank M.
 
         M: [B, n_mem, d_slot]; alloc_mask: [B, n_mem]. `time` (scalar or [B])
@@ -301,14 +310,26 @@ class CapsuleMemory(nn.Module):
         t_slot = M[:, :, self.layout.s_time()].squeeze(-1)    # [B, n_mem]
         evict_slot = t_slot.argmin(-1)                        # oldest (FIFO)
         slot_id = torch.where(has_free, free_slot, evict_slot)
+
+        # admission control: reject low-trust writes that conflict with an
+        # existing fact (g_commit~0) so they can't corrupt established knowledge.
+        k_all = M[:, :, self.layout.s_ksem()]                 # [B, n_mem, d_key]
+        sim = torch.einsum("bd,bnd->bn", k_sem, k_all) * alloc_mask
+        conflict = sim.max(-1).values                         # [B] ~1 if (s,r) exists
+        if not torch.is_tensor(trust):
+            trust = torch.full((B,), float(trust), device=M.device)
+        g_commit = torch.sigmoid(self.commit_net(
+            torch.stack([trust, conflict], dim=-1))).squeeze(-1)   # [B]
+
         if not torch.is_tensor(time):
             time = torch.full((B,), float(time), device=M.device)
         full = torch.cat([capsule, time.to(M.dtype).view(B, 1)], dim=-1)  # [B, d_slot]
         M = M.clone()
         alloc_mask = alloc_mask.clone()
         M[rows, slot_id] = full
-        alloc_mask[rows, slot_id] = 1.0
-        return M, alloc_mask, dict(slot_id=slot_id, usage=usage, k_sem=k_sem, capsule=full)
+        alloc_mask[rows, slot_id] = g_commit          # soft presence = admission
+        return M, alloc_mask, dict(slot_id=slot_id, usage=usage, k_sem=k_sem,
+                                   capsule=full, g_commit=g_commit, conflict=conflict)
 
     # ---- read --------------------------------------------------------
     def read_logits(self, M, alloc_mask, query_ids, lengths):
@@ -337,7 +358,10 @@ class CapsuleMemory(nn.Module):
         t_slot = M[:, :, L.s_time()].squeeze(-1)                              # [B, n_mem]
         scores = scores - self.ver_weight * (t_slot - c_target[:, None]).abs()
 
-        scores = scores.masked_fill(alloc_mask < 0.5, float("-inf"))
+        # soft presence: suppress empty / rejected (low-admission) slots via a
+        # log bias instead of a hard mask. alloc~1 -> 0 (trusted writes unchanged);
+        # alloc~0 (empty or commit-rejected) -> large negative -> not retrieved.
+        scores = scores + self.commit_weight * torch.log(alloc_mask.clamp(min=1e-4))
 
         k = min(self.top_k, self.n_mem)
         top_s, top_i = scores.topk(k, dim=-1)                 # [B, k]

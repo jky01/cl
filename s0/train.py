@@ -57,6 +57,42 @@ def _conflict_loss(mem: CapsuleMemory, world, B, device, tau):
     return loss / 2
 
 
+def _other_obj(world, o):
+    ob = world.rng.randrange(world.cfg.n_objects)
+    while ob == o:
+        ob = world.rng.randrange(world.cfg.n_objects)
+    return ob
+
+
+def _safety_loss(mem: CapsuleMemory, world, B, device, tau):
+    """Write a reliable fact (trust=1) then a CONFLICTING unreliable update
+    (trust=0, different value): the unreliable contradiction must be rejected
+    by the commit gate so (s,r) still recalls the reliable value."""
+    facts = [world.sample_fact() for _ in range(B)]
+    M, alloc = mem.empty_bank(B, device)
+    seqs = [world.render_statement(f) for f in facts]
+    ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+    M, alloc, gi_rel = mem.write(M, alloc, ids, lengths, tau=tau, hard=True,
+                                 training=True, time=1.0, trust=1.0)
+    bad = [(s, r, _other_obj(world, o)) for (s, r, o) in facts]
+    seqs = [world.render_statement(b) for b in bad]
+    ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+    M, alloc, gi_bad = mem.write(M, alloc, ids, lengths, tau=tau, hard=True,
+                                 training=True, time=1.0, trust=0.0)
+    qs, ans = [], []
+    for f in facts:
+        qids, a = world.render_query(f)          # answer = the reliable value
+        qs.append(qids); ans.append(a)
+    ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+    logits, _ = mem.read_logits(M, alloc, ids, lengths)
+    protect = F.cross_entropy(logits, torch.tensor(ans, device=device))
+    # direct admission supervision: admit reliable (->1), reject unreliable (->0)
+    ones = torch.ones_like(gi_rel["g_commit"]); zeros = torch.zeros_like(gi_bad["g_commit"])
+    gate = F.binary_cross_entropy(gi_rel["g_commit"], ones) + \
+        F.binary_cross_entropy(gi_bad["g_commit"], zeros)
+    return protect + 0.5 * gate
+
+
 def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
                  hard_neg_ratio=0.5, lr=1e-3, tau=1.0, device="cpu",
                  lambdas=None, warmup_frac=0.3, grad_clip=1.0, log=print):
@@ -65,7 +101,7 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
     # longer decide where facts go). Kept at 0 rather than ripping out the
     # allocator wiring.
     lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.0, locality=0.5,
-               conflict=1.0)
+               conflict=1.0, safety=1.0)
     if lambdas:
         lam.update(lambdas)
     params = [p for p in mem.parameters() if p.requires_grad]
@@ -145,11 +181,14 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
         # write o_before (time 0) then o_now (time 1) for a (s,r); the now/before
         # query must route to the right version (trains ctx_enc + value path).
         conf_loss = _conflict_loss(mem, world, B, device, tau)
+        # Step 4: commit gate must reject untrustworthy conflicting writes.
+        safe_loss = _safety_loss(mem, world, B, device, tau)
 
         loc_w = 0.0 if warming else lam["locality"]   # locality only after warmup
         loss = (lam["answer"] * ans_loss + lam["retrieve"] * retr_loss
                 + lam["orth"] * orth_loss + lam["balance"] * balance_loss
-                + loc_w * loc_loss + lam["conflict"] * conf_loss)
+                + loc_w * loc_loss + lam["conflict"] * conf_loss
+                + lam["safety"] * safe_loss)
         opt.zero_grad(); loss.backward()
         torch.nn.utils.clip_grad_norm_(params, grad_clip)
         opt.step()
@@ -157,7 +196,8 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
         if log and (step % max(1, steps // 10) == 0 or step == steps - 1):
             log(f"  [omega0] step {step:4d} nf={n_facts} loss {loss.item():.3f} "
                 f"(ans {ans_loss.item():.3f} retr {retr_loss.item():.3f} "
-                f"loc {loc_loss.item():.3f} cfl {conf_loss.item():.3f} g {g_mean:.3f})")
+                f"loc {loc_loss.item():.3f} cfl {conf_loss.item():.3f} "
+                f"sft {safe_loss.item():.3f} g {g_mean:.3f})")
     mem.relevance_enabled = True
     mem.eval()
     return mem
@@ -226,6 +266,35 @@ def eval_conflict(mem: CapsuleMemory, world, *, episodes_n=128, device="cpu"):
         out[ctx] = (preds[ctx] == torch.tensor(ans, device=device)).float().mean().item()
     out["routing_fail"] = (preds["now"] == preds["before"]).float().mean().item()
     return out
+
+
+@torch.no_grad()
+def eval_safety(mem: CapsuleMemory, world, *, episodes_n=128, device="cpu"):
+    """Step 4: write a reliable fact, then attack with a conflicting UNRELIABLE
+    update. Measure (a) reliable recall after the attack (should survive),
+    (b) the gate's admission g_commit for reliable vs unreliable writes."""
+    mem.relevance_enabled = True
+    mem.eval()
+    facts = [world.sample_fact() for _ in range(episodes_n)]
+    M, alloc = mem.empty_bank(episodes_n, device)
+    seqs = [world.render_statement(f) for f in facts]
+    ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+    M, alloc, gi = mem.write(M, alloc, ids, lengths, hard=True, training=False,
+                             time=1.0, trust=1.0)
+    g_rel = gi["g_commit"].mean().item()
+    bad = [(s, r, _other_obj(world, o)) for (s, r, o) in facts]
+    seqs = [world.render_statement(b) for b in bad]
+    ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+    M, alloc, gi = mem.write(M, alloc, ids, lengths, hard=True, training=False,
+                             time=1.0, trust=0.0)
+    g_unrel = gi["g_commit"].mean().item()
+    qs, ans = [], []
+    for f in facts:
+        qids, a = world.render_query(f); qs.append(qids); ans.append(a)
+    ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+    logits, _ = mem.read_logits(M, alloc, ids, lengths)
+    protected = (logits.argmax(-1) == torch.tensor(ans, device=device)).float().mean().item()
+    return dict(protected=protected, g_reliable=g_rel, g_unreliable=g_unrel)
 
 
 def eval_baseline(BaselineCls, core, world, *, n_facts, episodes_n=64, device="cpu"):
