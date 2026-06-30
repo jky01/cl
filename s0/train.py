@@ -1,0 +1,174 @@
+"""Train Omega-0 and evaluate Accuracy(N_facts) vs baselines.
+
+Omega-0 TRAINING DISTRIBUTION (review point #4): episodes contain MULTIPLE
+facts with same-relation hard negatives from the start, so that collision at
+eval time is in-distribution rather than a shock to a single-fact-trained net.
+"""
+
+from __future__ import annotations
+import torch
+import torch.nn.functional as F
+
+from .pad import pad_batch
+from .capsule import CapsuleMemory
+
+
+def _build_episode_tensors(world, B, n_facts, hard_neg_ratio, device):
+    """Returns episode_facts[B][n_facts]."""
+    return [world.sample_episode_facts(n_facts, hard_neg_ratio) for _ in range(B)]
+
+
+def _write_all(mem: CapsuleMemory, episodes, n_facts, device, tau, hard, training):
+    """Write the j-th fact of every episode in parallel, for j in 0..n_facts-1."""
+    B = len(episodes)
+    M, alloc = mem.empty_bank(B, device)
+    k_sem_list, slot_list, usage_acc = [], [], 0.0
+    for j in range(n_facts):
+        seqs = [mem.world.render_statement(episodes[b][j]) for b in range(B)]
+        ids, lengths = pad_batch(seqs, mem.world.i("<pad>"), device)
+        M, alloc, info = mem.write(M, alloc, ids, lengths, tau=tau, hard=hard, training=training)
+        k_sem_list.append(info["k_sem"])
+        slot_list.append(info["slot_id"])
+        usage_acc = usage_acc + info["usage"]
+    K = torch.stack(k_sem_list, dim=1)          # [B, n_facts, d_key]
+    slots = torch.stack(slot_list, dim=1)       # [B, n_facts]
+    return M, alloc, K, slots, usage_acc / n_facts
+
+
+def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
+                 hard_neg_ratio=0.5, lr=1e-3, tau=1.0, device="cpu",
+                 lambdas=None, warmup_frac=0.3, grad_clip=1.0, log=print):
+    lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.1, locality=0.5)
+    if lambdas:
+        lam.update(lambdas)
+    params = [p for p in mem.parameters() if p.requires_grad]
+    opt = torch.optim.AdamW(params, lr=lr)
+    mem.train()
+    warmup_steps = int(warmup_frac * steps)
+
+    for step in range(steps):
+        # WARMUP: relevance forced open + locality off -> storage bootstraps and
+        # the margin loss separates conf. After warmup: relevance gate + locality
+        # on -> selective read. (Avoids the sharp-gate cold-start deadlock.)
+        warming = step < warmup_steps
+        mem.relevance_enabled = not warming
+        n_facts = torch.randint(1, max_facts + 1, ()).item()
+        episodes = _build_episode_tensors(world, B, n_facts, hard_neg_ratio, device)
+        M, alloc, K, slots, usage = _write_all(mem, episodes, n_facts, device, tau,
+                                                hard=True, training=True)
+
+        # --- read every written fact, accumulate answer + retrieval losses ---
+        ans_loss = 0.0
+        Q = []
+        g_acc = 0.0
+        for j in range(n_facts):
+            qs, ans = [], []
+            for b in range(B):
+                qids, a = world.render_query(episodes[b][j])
+                qs.append(qids); ans.append(a)
+            ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+            logits, info = mem.read_logits(M, alloc, ids, lengths)
+            ans_loss = ans_loss + F.cross_entropy(logits, torch.tensor(ans, device=device))
+            Q.append(info["q_sem"])
+            g_acc = g_acc + info["g"].mean().item()
+        ans_loss = ans_loss / n_facts
+        g_mean = g_acc / n_facts
+        Q = torch.stack(Q, dim=1)               # [B, n_facts, d_key]
+
+        # cross-batch InfoNCE retrieval: every fact's query must retrieve its OWN
+        # key among ALL keys in the batch. This (on (S,R)-token keys) is what
+        # actually trains -- a single/in-episode contrastive or the pooled-feature
+        # key collapses (matched & random query.key become identical). Validated
+        # standalone to retrieval@1 ~0.91.
+        Qf = Q.reshape(-1, Q.size(-1))                      # [B*nf, d_key]
+        Kf = K.reshape(-1, K.size(-1))
+        sim = Qf @ Kf.t() / 0.07                            # [B*nf, B*nf]
+        labels = torch.arange(Qf.size(0), device=device)
+        retr_loss = 0.5 * (F.cross_entropy(sim, labels) + F.cross_entropy(sim.t(), labels))
+
+        # key orthogonality (decorrelate keys within episode)
+        gram = torch.einsum("bnd,bmd->bnm", K, K)
+        eye = torch.eye(n_facts, device=device)[None]
+        orth_loss = ((gram - eye) ** 2).mean()
+
+        # bucket balance (spread product-key usage)
+        balance_loss = ((usage - usage.mean()) ** 2).mean()
+
+        # locality: an unrelated query's answer should be unchanged by the
+        # injection. Baseline = the SAME read with no injection (g=0):
+        # lm_head(inject_ln(H_ans)). This isolates the memory's effect from the
+        # inject_ln reshaping (comparing to raw core would penalise the LN too).
+        loc_qs, loc_ans = [], []
+        for b in range(B):
+            qids, a = world.render_unrelated_query(episodes[b][0][0])
+            loc_qs.append(qids); loc_ans.append(a)
+        ids, lengths = pad_batch(loc_qs, world.i("<pad>"), device)
+        loc_logits, loc_info = mem.read_logits(M, alloc, ids, lengths)
+        with torch.no_grad():
+            base_logits = mem.core.lm_head(mem.inject_ln(loc_info["H_ans"]))
+        loc_loss = F.kl_div(F.log_softmax(loc_logits, -1),
+                            F.softmax(base_logits, -1), reduction="batchmean")
+
+        loc_w = 0.0 if warming else lam["locality"]   # locality only after warmup
+        loss = (lam["answer"] * ans_loss + lam["retrieve"] * retr_loss
+                + lam["orth"] * orth_loss + lam["balance"] * balance_loss
+                + loc_w * loc_loss)
+        opt.zero_grad(); loss.backward()
+        torch.nn.utils.clip_grad_norm_(params, grad_clip)
+        opt.step()
+
+        if log and (step % max(1, steps // 10) == 0 or step == steps - 1):
+            log(f"  [omega0] step {step:4d} nf={n_facts} loss {loss.item():.3f} "
+                f"(ans {ans_loss.item():.3f} retr {retr_loss.item():.3f} "
+                f"loc {loc_loss.item():.3f} g {g_mean:.3f})")
+    mem.relevance_enabled = True
+    mem.eval()
+    return mem
+
+
+@torch.no_grad()
+def eval_capsule(mem: CapsuleMemory, world, *, n_facts, episodes_n=64, n_para=4,
+                 device="cpu"):
+    """Exact-match object accuracy over paraphrase queries + locality score."""
+    mem.relevance_enabled = True
+    mem.eval()
+    correct = total = 0
+    loc_match = loc_total = 0
+    # process episodes in one batch
+    episodes = [world.sample_episode_facts(n_facts, hard_negative_ratio=0.5)
+                for _ in range(episodes_n)]
+    M, alloc, _, _, _ = _write_all(mem, episodes, n_facts, device, tau=1.0,
+                                   hard=True, training=False)
+    for j in range(n_facts):
+        for t in range(n_para):
+            qs, ans = [], []
+            for b in range(episodes_n):
+                qids, a = world.render_query(episodes[b][j], template_idx=t % 4)
+                qs.append(qids); ans.append(a)
+            ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+            logits, _ = mem.read_logits(M, alloc, ids, lengths)
+            pred = logits.argmax(-1)
+            correct += (pred == torch.tensor(ans, device=device)).sum().item()
+            total += len(ans)
+    # locality: an unrelated answer should be unchanged by the injection.
+    # Compare the read against the SAME read with the gate closed (no
+    # injection) -- this measures the memory's effect, not the inject_ln.
+    qs = []
+    for b in range(episodes_n):
+        qids, _ = world.render_unrelated_query(episodes[b][0][0]); qs.append(qids)
+    ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+    mem_logits, info = mem.read_logits(M, alloc, ids, lengths)
+    base_logits = mem.core.lm_head(mem.inject_ln(info["H_ans"]))
+    loc_match = (mem_logits.argmax(-1) == base_logits.argmax(-1)).sum().item()
+    loc_total = episodes_n
+    return dict(acc=correct / total, locality=loc_match / loc_total)
+
+
+def eval_baseline(BaselineCls, core, world, *, n_facts, episodes_n=64, device="cpu"):
+    # NOTE: not under no_grad -- the LoRA baseline trains an adapter per episode.
+    bl = BaselineCls(core, world)
+    accs = []
+    for _ in range(episodes_n):
+        facts = world.sample_episode_facts(n_facts, hard_negative_ratio=0.5)
+        accs.append(bl.eval_episode(facts, device))
+    return sum(accs) / len(accs)

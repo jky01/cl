@@ -1,0 +1,8 @@
+# Python virtual env (multi-GB, includes CUDA torch wheels)
+.venv/
+# byte-compiled
+__pycache__/
+*.py[cod]
+*.egg-info/
+# local scratch / logs
+*.log
