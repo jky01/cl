@@ -122,13 +122,23 @@ d125ef1  grow_deeper — function-preserving growth operator
   (versioning/admission/consolidation) that raw RAG lacks. Data must use SENSIBLE
   typed values (random attr/value pairing makes nonsensical facts even RAG fights).
 
+- **WHERE MEMORY BEATS RAG — temporal versioning on Qwen** (`qwen_conflict.py`).
+  Each fact has two versions over time (v1@t=0, v2@t=1, sharing a key built from
+  (name,attr) only); a Currently/Originally query routes by explicit time stamp.
+  **Memory: current 0.984, original 0.992. Raw-text RAG (both statements shuffled,
+  undated, in context): ~0.22 both** — it can't tell which undated/unordered fact
+  is current vs original. Needed explicit retrieval InfoNCE + DIRECT c_target
+  supervision (current→1/original→0) to avoid ctx_enc collapse (same fix as the
+  proxy relevance gate). Honest caveat: this beats UNDATED text-RAG; a RAG that
+  embeds timestamps in the text could also do it — but at context cost + reasoning,
+  which is exactly the structured-memory advantage.
+
 ## Roadmap (next, prioritized)
 
-1. **Strengthen the Qwen memory case**: (a) **multi-token / KV-prefix value
-   injection** (current is single-token); (b) port the §27 features onto Qwen
-   (versioning, admission, capacity, lifelong) and benchmark *those* vs RAG —
-   that's where the memory should win, not raw single-fact accuracy; (c) scale
-   (many facts, efficient retrieval); (d) multi-seed stability.
+1. **Broaden the Qwen memory case**: (a) **multi-token / KV-prefix value
+   injection** (current is single-token); (b) port the remaining §27 features
+   (admission/trust, capacity, lifelong) onto Qwen + benchmark vs RAG; (c) scale
+   (many facts, efficient ANN retrieval); (d) multi-seed stability.
 2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
    trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
 3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
