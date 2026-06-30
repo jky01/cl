@@ -133,12 +133,22 @@ d125ef1  grow_deeper — function-preserving growth operator
   embeds timestamps in the text could also do it — but at context cost + reasoning,
   which is exactly the structured-memory advantage.
 
+- **Blocker #2 (multi-token answers) CRACKED** (`qwen_multitoken.py`). Per-step
+  injection (inject the retrieved R at EVERY answer position) lets the memory
+  drive a multi-token free-form answer ("San Francisco", "software engineer")
+  with NO context. Free-generation exact-match (both tokens) = **0.979** vs
+  no-mem 0.000 (few-shot RAG 1.000 — parity, memory's edge is context-cost +
+  structure). NB: needed **left padding** (right-align real tokens) so the last
+  hidden is `[:,-1]` and appended generations land at the sequence end — a
+  right-pad bug was silently capping accuracy. Both real-model blockers (#1
+  free-text key, #2 multi-token value) are now down.
+
 ## Roadmap (next, prioritized)
 
-1. **Broaden the Qwen memory case**: (a) **multi-token / KV-prefix value
-   injection** (current is single-token); (b) port the remaining §27 features
-   (admission/trust, capacity, lifelong) onto Qwen + benchmark vs RAG; (c) scale
-   (many facts, efficient ANN retrieval); (d) multi-seed stability.
+1. **Broaden the Qwen memory case**: (a) port the remaining §27 features
+   (admission/trust, capacity, lifelong) onto Qwen + benchmark vs RAG; (b) scale
+   (many facts, efficient ANN retrieval, persistent bank); (c) longer answers
+   (3+ tokens / KV-prefix); (d) multi-seed stability.
 2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
    trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
 3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
