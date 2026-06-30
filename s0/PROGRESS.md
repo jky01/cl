@@ -99,13 +99,24 @@ d125ef1  grow_deeper — function-preserving growth operator
 - Much of §27/§28 is unbuilt: dream replay, merge/abstraction, distill-into-core,
   expert/MoE growth, and the whole §28 meta-training of Ω.
 
-## Roadmap (next session, prioritized)
+## Qwen real-model path (started — `qwen_iface.py`, `qwen_retrieval.py`)
 
-1. **Real-model path (Qwen)** — the productization threshold:
-   (a) free-text **key encoder** to replace the `gather_sr` token-id trick;
-   (b) **generative value injection** (KV/prefix, not single-position);
-   (c) backprop through a frozen Qwen (checkpointing) + real (fact,query,answer)
-   data; (d) **benchmark vs RAG and vs LoRA**.
+- **Interface verified**: Qwen2.5-0.5B (transformers 5.12.1, fp16, ~1GB GPU),
+  `max|lm_head(final_hidden) - logits| = 0.00` → inject `h_last + g*R → renorm →
+  lm_head` exactly as the proxy. Arch: hidden=896, 24 layers, GQA, vocab=151936,
+  tied emb, Qwen2RMSNorm.
+- **Blocker #1 CRACKED**: free-text retrieval key works. Qwen (frozen) mean-pooled
+  last hidden + a small trained projection + InfoNCE → **retrieval@1 = 1.000** on
+  free-text paraphrased facts (toy proxy mean-pool only hit 0.41). Only the tiny
+  projection trains — no backprop through Qwen. So the template-bound `gather_sr`
+  trick is replaceable; free-text keys are easy at real-model scale.
+
+## Roadmap (next, prioritized)
+
+1. **Finish the Qwen memory**: (b) **generative value injection** (KV/prefix
+   across generation, not single-position single-token); (c) full write/read of
+   free-text facts on Qwen with the verified key encoder; (d) **benchmark vs RAG
+   and vs LoRA** (the must-win comparison).
 2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
    trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
 3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
