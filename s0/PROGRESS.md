@@ -1,0 +1,117 @@
+# s0 — Progress & Handoff
+
+A from-scratch, all-neural **continual-learning small-model** prototype, built to
+validate the architecture in `reference/` (esp. §27 Sleep Consolidator / §28
+meta-training). Everything here runs on a controlled **synthetic** world with a
+small **frozen proxy transformer** standing in for a real LM — the goal is to
+prove the *mechanisms*, not to ship a product. Runs on CPU or CUDA
+(`.venv`, torch 2.11.0+cu128, validated on an RTX 2070).
+
+```
+python -m s0.run --smoke      # fast end-to-end demo (d=64), ~few min on GPU
+python -m s0.run              # default config (d=128, 60-vocab)
+```
+
+## Status snapshot (all validated in the synthetic sandbox)
+
+| Capability | Result |
+|---|---|
+| Step 0 — single-fact write/read (§11.4 gate) | acc 1.0, locality 1.0 |
+| Step 1 — multi-fact via difficulty curriculum | nf 1–16 ≈1.0, locality ~1.0 |
+| Step 2 — conflict versioning (§27.10) | now/before 1.0, routing-fail 0 |
+| Step 3A — occupancy allocation / capacity | survival 1.0 within capacity; FIFO over |
+| Step 4 — commit gate / admission (§27.18) | reliable-recall-after-attack 1.0; admit 1.0 / reject 0.0 |
+| Step 5 — lifelong zero-forgetting | capsule flat 1.0 across 8 sessions; LoRA rival ~0.02 |
+| Growth — function-preserving deepen | hidden Δ = 0.00 at growth (zero-forgetting) |
+| Growth — adds capability | K-hop: L=2 stuck (K2 0.52), grow→L=4 0.98; control (2× steps) stuck |
+| Growth — autonomous controller | plateau-trigger grows L=2→4→6 by itself, K2 0.46→0.96 |
+| Growth — neural gate (learned) | grow blocks ablation-essential, K-hop fully solved (K5 0.97) |
+
+## Commit history
+
+```
+473b941  Step 0  single-fact capsule write/read passes the §11.4 gate
+639698e  Step 1  multi-fact retrieval via difficulty curriculum
+97d4510  Step 2  conflict versioning — non-destructive, context-routed updates
+c662a43  Step 3A occupancy-aware allocation — zero within-capacity forgetting
+01d6b8b  Step 4  commit gate — reject untrustworthy conflicting writes
+5bd7008  Step 5  lifelong zero-forgetting demo + fix version-routing recency bug
+d125ef1  grow_deeper — function-preserving growth operator
+4226826  demo that growth IMPROVES capability (K-hop), not just preserves
+327746b  autonomous growth controller (plateau-triggered) — self-driven small→large
+257d8b9  neural growth trigger via learned per-layer gates (GrowableCore)
+9d6b0a2  ungameable norm-based capacity cost for the growth gate (honest mixed result)
+```
+
+## Component map
+
+- `world.py` — synthetic (subject,relation,object) world; templates; versioned
+  queries (`now`/`before`); conflict episodes. CLAIM BOUNDARY: tests
+  *combinatorial binding over a known vocab*, not novel-symbol / real language.
+- `core.py` — `ProxyCore` (frozen decoder LM proxy) + `pretrain_core`;
+  `grow_deeper` (function-preserving identity-block deepening);
+  `GrowableCore` + `GatedBlock` (learned per-layer growth gates).
+- `capsule.py` — `CapsuleMemory`: write/read, `SRKeyEncoder` (retrieval key from
+  subject/relation **token hiddens**), occupancy allocation, version routing
+  (time stamp + `ctx_enc`), relevance gate, commit gate (admission).
+- `train.py` — `train_omega0` (curriculum, warmup, losses: answer CE, InfoNCE
+  retrieval, locality, conflict, safety) + evals (`eval_capsule`,
+  `eval_conflict`, `eval_safety`, `eval_lifelong`).
+- `baselines.py` — no-mem, in-context (≈RAG), external-KV, oracle-slot, LoRA.
+- `diag_*.py` — growth experiments (grow_hops, autogrow, neurogrow).
+
+## Key findings (hard-won; don't re-derive)
+
+1. **Retrieval contrastive collapse → fixed by token-level keys.** Attention/mean
+   pooling of hidden states collapses under contrastive loss (matched and random
+   query·key become identical). Building keys from the **subject/relation token
+   hiddens** (`SRKeyEncoder`, by token-id range) + cross-batch InfoNCE fixed it
+   (retrieval@1 ≈0.91). This is also the brittle scaffolding that must be
+   replaced for real text (see roadmap).
+2. **Multi-fact needs a difficulty curriculum.** Training directly on large
+   N_facts collapses to chance; ramping episode size 1→max over 70% of training
+   fixes it.
+3. **Recall decay under load was OVERWRITES, not retrieval** (rec|survived flat
+   ~0.87). The content-addressed product-key allocator collided; **occupancy
+   (free-slot) placement** gives survival 1.0 within capacity and also fixed
+   multi-fact (nf=16 0.76→1.0).
+4. **Growth without forgetting works**: identity-initialised added layers give
+   bit-for-bit identical hidden states (Δ=0.00), and the added capacity is
+   usable; it raises a depth-limited capability ceiling that more in-place
+   training cannot (controlled by a 2×-steps baseline).
+5. Bugs found & fixed: divergent residual injection (added inject-LN + gated +
+   clip); version routing applied to plain queries → false forgetting (gated by
+   `has_ctx`).
+
+## Open problems / honest caveats
+
+- **Not practically usable yet.** Synthetic world, frozen tiny proxy core (not a
+  real LM), templated facts. The `gather_sr` retrieval key exploits the rigid
+  template (token-id ranges) — it will NOT work on free text.
+- **Clean neural growth DIAL is unsolved.** The growth *mechanism* + ablation
+  verification hold, but neither L1-on-gate (gameable) nor the norm cost gives a
+  clean monotonic "how-much-to-grow" control (single-seed, non-monotonic; a
+  tiny-norm contribution can be essential). Needs multi-seed / scheduling / a
+  different controller — a real research point.
+- **vs RAG.** The in-context baseline (≈RAG) scores 1.0; the memory must justify
+  itself on what RAG can't do (no context-length cost, versioning, admission,
+  consolidation) — must be benchmarked directly against RAG.
+- Much of §27/§28 is unbuilt: dream replay, merge/abstraction, distill-into-core,
+  expert/MoE growth, and the whole §28 meta-training of Ω.
+
+## Roadmap (next session, prioritized)
+
+1. **Real-model path (Qwen)** — the productization threshold:
+   (a) free-text **key encoder** to replace the `gather_sr` token-id trick;
+   (b) **generative value injection** (KV/prefix, not single-position);
+   (c) backprop through a frozen Qwen (checkpointing) + real (fact,query,answer)
+   data; (d) **benchmark vs RAG and vs LoRA**.
+2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
+   trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
+3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
+   capacity-growth axis and the "slow knowledge → core weights" step.
+4. **§28 end-to-end Ω meta-training** — the largest piece; meta-learn the whole
+   sleep/grow controller over simulated lifelong sequences.
+
+See the memory files under the project's `memory/` for the same state in
+condensed, recall-oriented form (`s0-step0-state`, `s0-step0-design-constraints`).
