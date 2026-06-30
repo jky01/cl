@@ -50,14 +50,14 @@ def main():
     ap.add_argument("--prefix", type=int, default=4)
     ap.add_argument("--topk", type=int, default=4)
     ap.add_argument("--core-steps", type=int, default=1500)
-    ap.add_argument("--omega-steps", type=int, default=4000)
+    ap.add_argument("--omega-steps", type=int, default=8000)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--omega-batch", type=int, default=32)
-    # Step 0 = SINGLE-fact storage (the reference/3.md sec 11.4 gate). Training
-    # with mixed N_facts collapses even N_facts=1 (unlearned multi-slot
-    # retrieval poisons the shared read path); multi-fact retrieval is Step 1.
-    ap.add_argument("--max-facts", type=int, default=1)
-    ap.add_argument("--facts", type=int, nargs="+", default=[1, 4, 16, 64])
+    # Multi-fact episodes up to this size (Step 1). The curriculum in
+    # train_omega0 ramps episode size 1 -> max_facts so large values bootstrap
+    # cleanly (without it, big max_facts collapses to chance).
+    ap.add_argument("--max-facts", type=int, default=16)
+    ap.add_argument("--facts", type=int, nargs="+", default=[1, 4, 8, 16, 32])
     ap.add_argument("--eval-episodes", type=int, default=64)
     args = ap.parse_args()
 
@@ -65,13 +65,11 @@ def main():
         args.entities, args.objects = 60, 60
         args.d_model, args.layers, args.max_len = 64, 2, 32
         args.n_mem = 64
-        # core needs ~1k steps before the copy-from-prompt readout works;
-        # below that even the in-context baseline reads 0.
-        # locality (gate selectivity) needs ~5k steps to converge; storage
-        # alone converges by ~2.5k. Keep smoke at the converged count.
-        args.core_steps, args.omega_steps, args.omega_batch = 1000, 5000, 32
-        args.max_facts = 1
-        args.facts = [1, 4, 16]
+        # core needs ~1k steps before the copy-from-prompt readout works.
+        # Multi-fact + locality (gate selectivity) need ~5-6k steps to converge.
+        args.core_steps, args.omega_steps, args.omega_batch = 1000, 6000, 64
+        args.max_facts = 8
+        args.facts = [1, 4, 8, 16]
         args.eval_episodes = 32
 
     torch.manual_seed(args.seed)

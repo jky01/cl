@@ -52,7 +52,12 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
         # on -> selective read. (Avoids the sharp-gate cold-start deadlock.)
         warming = step < warmup_steps
         mem.relevance_enabled = not warming
-        n_facts = torch.randint(1, max_facts + 1, ()).item()
+        # CURRICULUM: ramp the max episode size 1 -> max_facts over the first 70%
+        # of training. Sampling uniformly over [1, max_facts] from step 0 is too
+        # hard for large max_facts (the answer loss never gets traction and the
+        # whole thing collapses to chance); easy episodes first lets it bootstrap.
+        cur_max = 1 + int((max_facts - 1) * min(1.0, step / (0.7 * steps + 1)))
+        n_facts = torch.randint(1, cur_max + 1, ()).item()
         episodes = _build_episode_tensors(world, B, n_facts, hard_neg_ratio, device)
         M, alloc, K, slots, usage = _write_all(mem, episodes, n_facts, device, tau,
                                                 hard=True, training=True)
