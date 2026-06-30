@@ -20,6 +20,9 @@ FUNC_WORDS = [
     "<pad>", "<bos>", "<eos>", "<sep>", "<ans>",
     "the", "of", "is", "in", "has", "which", "what", "tell", "me",
     "located", "called", "?", ".",
+    # Step 2 (conflict versioning): temporal context tokens. A query carries
+    # one of these to select WHICH version of a conflicting (s,r) fact it wants.
+    "now", "before",
 ]
 PAD, BOS, EOS, SEP, ANS = 0, 1, 2, 3, 4
 
@@ -133,3 +136,45 @@ class World:
         o = self.rng.randrange(self.cfg.n_objects)
         ids, ans = self.render_query((s, r, o))
         return ids, ans
+
+    # ---- Step 2: conflict versioning ----------------------------------
+    # Same query forms, but with a temporal-context token (now / before) just
+    # before the answer slot, selecting which version of a conflicting fact.
+    _Q_TEMPLATES_VER = [
+        ["<bos>", "what", "is", "the", "R", "of", "S", "CTX", "?", "<ans>"],
+        ["<bos>", "the", "R", "of", "S", "CTX", "is", "what", "?", "<ans>"],
+        ["<bos>", "tell", "me", "the", "R", "of", "S", "CTX", ".", "<ans>"],
+        ["<bos>", "S", "CTX", "has", "which", "R", "?", "<ans>"],
+    ]
+
+    def render_query_versioned(self, s, r, o, ctx, template_idx=None):
+        """ctx in {'now','before'}. Returns (token_ids, answer_object_id)."""
+        if template_idx is None:
+            template_idx = self.rng.randrange(len(self._Q_TEMPLATES_VER))
+        tmpl = self._Q_TEMPLATES_VER[template_idx]
+        ids = []
+        for t in tmpl:
+            if t == "R":
+                ids.append(self.i(self.relations[r]))
+            elif t == "S":
+                ids.append(self.i(self.entities[s]))
+            elif t == "CTX":
+                ids.append(self.i(ctx))
+            else:
+                ids.append(self.i(t))
+        return ids, self.i(self.objects[o])
+
+    def sample_conflict_episode(self, n_pairs: int):
+        """Each pair is a (subject, relation) that gets TWO conflicting values
+        written in temporal order: o_before then o_now. Subjects are distinct.
+        Returns a list of dicts {s, r, o_before, o_now}."""
+        subs = self.rng.sample(range(self.cfg.n_entities), n_pairs)
+        groups = []
+        for s in subs:
+            r = self.rng.randrange(self.cfg.n_relations)
+            o_before = self.rng.randrange(self.cfg.n_objects)
+            o_now = self.rng.randrange(self.cfg.n_objects)
+            while o_now == o_before:
+                o_now = self.rng.randrange(self.cfg.n_objects)
+            groups.append(dict(s=s, r=r, o_before=o_before, o_now=o_now))
+        return groups

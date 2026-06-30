@@ -35,10 +35,33 @@ def _write_all(mem: CapsuleMemory, episodes, n_facts, device, tau, hard, trainin
     return M, alloc, K, slots, usage_acc / n_facts
 
 
+def _conflict_loss(mem: CapsuleMemory, world, B, device, tau):
+    """Write a conflicting (s,r): o_before@t=0 then o_now@t=1, then require the
+    now/before query to route to the right version. Trains version routing."""
+    groups = [world.sample_conflict_episode(1)[0] for _ in range(B)]
+    Mc, allocc = mem.empty_bank(B, device)
+    for which, t in (("o_before", 0.0), ("o_now", 1.0)):
+        seqs = [world.render_statement((g["s"], g["r"], g[which])) for g in groups]
+        ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+        Mc, allocc, _ = mem.write(Mc, allocc, ids, lengths, tau=tau, hard=True,
+                                  training=True, time=t)
+    loss = 0.0
+    for ctx, key in (("now", "o_now"), ("before", "o_before")):
+        qs, ans = [], []
+        for g in groups:
+            qids, a = world.render_query_versioned(g["s"], g["r"], g[key], ctx)
+            qs.append(qids); ans.append(a)
+        ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+        logits, _ = mem.read_logits(Mc, allocc, ids, lengths)
+        loss = loss + F.cross_entropy(logits, torch.tensor(ans, device=device))
+    return loss / 2
+
+
 def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
                  hard_neg_ratio=0.5, lr=1e-3, tau=1.0, device="cpu",
                  lambdas=None, warmup_frac=0.3, grad_clip=1.0, log=print):
-    lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.1, locality=0.5)
+    lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.1, locality=0.5,
+               conflict=1.0)
     if lambdas:
         lam.update(lambdas)
     params = [p for p in mem.parameters() if p.requires_grad]
@@ -114,10 +137,15 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
         loc_loss = F.kl_div(F.log_softmax(loc_logits, -1),
                             F.softmax(base_logits, -1), reduction="batchmean")
 
+        # --- Step 2: conflict versioning sub-batch ---
+        # write o_before (time 0) then o_now (time 1) for a (s,r); the now/before
+        # query must route to the right version (trains ctx_enc + value path).
+        conf_loss = _conflict_loss(mem, world, B, device, tau)
+
         loc_w = 0.0 if warming else lam["locality"]   # locality only after warmup
         loss = (lam["answer"] * ans_loss + lam["retrieve"] * retr_loss
                 + lam["orth"] * orth_loss + lam["balance"] * balance_loss
-                + loc_w * loc_loss)
+                + loc_w * loc_loss + lam["conflict"] * conf_loss)
         opt.zero_grad(); loss.backward()
         torch.nn.utils.clip_grad_norm_(params, grad_clip)
         opt.step()
@@ -125,7 +153,7 @@ def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
         if log and (step % max(1, steps // 10) == 0 or step == steps - 1):
             log(f"  [omega0] step {step:4d} nf={n_facts} loss {loss.item():.3f} "
                 f"(ans {ans_loss.item():.3f} retr {retr_loss.item():.3f} "
-                f"loc {loc_loss.item():.3f} g {g_mean:.3f})")
+                f"loc {loc_loss.item():.3f} cfl {conf_loss.item():.3f} g {g_mean:.3f})")
     mem.relevance_enabled = True
     mem.eval()
     return mem
@@ -167,6 +195,33 @@ def eval_capsule(mem: CapsuleMemory, world, *, n_facts, episodes_n=64, n_para=4,
     loc_match = (mem_logits.argmax(-1) == base_logits.argmax(-1)).sum().item()
     loc_total = episodes_n
     return dict(acc=correct / total, locality=loc_match / loc_total)
+
+
+@torch.no_grad()
+def eval_conflict(mem: CapsuleMemory, world, *, episodes_n=128, device="cpu"):
+    """Step 2: write a conflicting (s,r) -- o_before@t=0 then o_now@t=1 -- and
+    check the now/before query routes to the right version (non-destructive)."""
+    mem.relevance_enabled = True
+    mem.eval()
+    groups = [world.sample_conflict_episode(1)[0] for _ in range(episodes_n)]
+    M, alloc = mem.empty_bank(episodes_n, device)
+    for which, t in (("o_before", 0.0), ("o_now", 1.0)):
+        seqs = [world.render_statement((g["s"], g["r"], g[which])) for g in groups]
+        ids, lengths = pad_batch(seqs, world.i("<pad>"), device)
+        M, alloc, _ = mem.write(M, alloc, ids, lengths, hard=True, training=False, time=t)
+    out = {}
+    preds = {}
+    for ctx, key in (("now", "o_now"), ("before", "o_before")):
+        qs, ans = [], []
+        for g in groups:
+            qids, a = world.render_query_versioned(g["s"], g["r"], g[key], ctx)
+            qs.append(qids); ans.append(a)
+        ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+        logits, _ = mem.read_logits(M, alloc, ids, lengths)
+        preds[ctx] = logits.argmax(-1)
+        out[ctx] = (preds[ctx] == torch.tensor(ans, device=device)).float().mean().item()
+    out["routing_fail"] = (preds["now"] == preds["before"]).float().mean().item()
+    return out
 
 
 def eval_baseline(BaselineCls, core, world, *, n_facts, episodes_n=64, device="cpu"):

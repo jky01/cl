@@ -32,17 +32,36 @@ class SlotLayout:
     d_v: int         # capsule value latent
     d_ctx: int       # context latent
     d_aux: int       # control scalars (confidence, usage, alloc, ...)
+    d_time: int = 1  # write-time stamp (Step 2 versioning); set externally
+
+    # fields in slot-vector order; slices computed by cumulative offset
+    def _fields(self):
+        return [("ksem", self.d_key), ("kaddr", self.d_key), ("v", self.d_v),
+                ("ctx", self.d_ctx), ("aux", self.d_aux), ("time", self.d_time)]
+
+    def _slice(self, name):
+        off = 0
+        for n, d in self._fields():
+            if n == name:
+                return slice(off, off + d)
+            off += d
+        raise KeyError(name)
 
     @property
     def d_slot(self):
-        return 2 * self.d_key + self.d_v + self.d_ctx + self.d_aux
+        return sum(d for _, d in self._fields())
 
-    # field slices within a slot vector
-    def s_ksem(self):  return slice(0, self.d_key)
-    def s_kaddr(self): return slice(self.d_key, 2 * self.d_key)
-    def s_v(self):     return slice(2 * self.d_key, 2 * self.d_key + self.d_v)
-    def s_ctx(self):   return slice(2 * self.d_key + self.d_v, 2 * self.d_key + self.d_v + self.d_ctx)
-    def s_aux(self):   return slice(self.d_slot - self.d_aux, self.d_slot)
+    @property
+    def d_learned(self):
+        """size WriteNet produces (everything except the externally-set time)."""
+        return self.d_slot - self.d_time
+
+    def s_ksem(self):  return self._slice("ksem")
+    def s_kaddr(self): return self._slice("kaddr")
+    def s_v(self):     return self._slice("v")
+    def s_ctx(self):   return self._slice("ctx")
+    def s_aux(self):   return self._slice("aux")
+    def s_time(self):  return self._slice("time")
 
 
 def gumbel_softmax(logits, tau, hard, training):
@@ -231,6 +250,21 @@ class CapsuleMemory(nn.Module):
         # the boundary sharp so relevance is ~1 above it and ~0 below.
         self.register_buffer("relev_scale", torch.tensor(20.0))
         self.relev_thr = nn.Parameter(torch.tensor(0.3))
+        # Step 2 version routing: a query's now/before token -> a target time
+        # c_target in [0,1]; among slots matching the (s,r) key, the one whose
+        # write-time stamp is closest to c_target wins the tie. ver_weight is
+        # < the matched-vs-unmatched cosine gap (~0.8) so it only breaks ties
+        # among matched slots, never promotes a different-key slot.
+        self.ctx_enc = nn.Sequential(nn.Linear(d_model, d_model // 2), nn.GELU(),
+                                     nn.Linear(d_model // 2, 1))
+        self.register_buffer("ver_weight", torch.tensor(0.5))
+        # sharp read selection: same-key conflicting versions differ only by the
+        # ver_weight*time bias (~0.5); a temperature-1 softmax would still blend
+        # them (~0.62/0.38) and the blended value decodes to the wrong token. A
+        # low temperature makes the selected version dominate.
+        self.register_buffer("read_temp", torch.tensor(0.1))
+        self.now_id = world.i("now")
+        self.before_id = world.i("before")
         # WARMUP flag: when False, relevance is forced to 1 (gate fully usable)
         # so storage can bootstrap. With the sharp relevance gate, a cold start
         # has conf~0 < thr -> relevance~0 -> g~0 -> the injection gets no answer
@@ -240,11 +274,13 @@ class CapsuleMemory(nn.Module):
         assert n1 * n2 == n_mem, "Step 0: one product bucket == one slot"
 
     # ---- write -------------------------------------------------------
-    def write(self, M, alloc_mask, stmt_ids, lengths, tau=1.0, hard=True, training=False):
+    def write(self, M, alloc_mask, stmt_ids, lengths, tau=1.0, hard=True,
+              training=False, time=1.0):
         """Scatter one capsule per row into the (batched) memory bank M.
 
-        M: [B, n_mem, d_slot]; alloc_mask: [B, n_mem]. Returns updated copies
-        plus aux tensors needed for the write-side losses.
+        M: [B, n_mem, d_slot]; alloc_mask: [B, n_mem]. `time` (scalar or [B])
+        is the write-time stamp stored in the slot for version routing; it
+        defaults to 1.0 (latest) so single-fact / Step-0 behaviour is unchanged.
         """
         with torch.no_grad():
             h = self.core.hidden(stmt_ids)
@@ -254,11 +290,14 @@ class CapsuleMemory(nn.Module):
 
         B = M.size(0)
         rows = torch.arange(B, device=M.device)
+        if not torch.is_tensor(time):
+            time = torch.full((B,), float(time), device=M.device)
+        full = torch.cat([capsule, time.to(M.dtype).view(B, 1)], dim=-1)  # [B, d_slot]
         M = M.clone()
         alloc_mask = alloc_mask.clone()
-        M[rows, slot_id] = capsule
+        M[rows, slot_id] = full
         alloc_mask[rows, slot_id] = 1.0
-        return M, alloc_mask, dict(slot_id=slot_id, usage=usage, k_sem=k_sem, capsule=capsule)
+        return M, alloc_mask, dict(slot_id=slot_id, usage=usage, k_sem=k_sem, capsule=full)
 
     # ---- read --------------------------------------------------------
     def read_logits(self, M, alloc_mask, query_ids, lengths):
@@ -274,12 +313,25 @@ class CapsuleMemory(nn.Module):
         q_sem = self.query_enc(query_ids, h, self.sr_ranges)  # [B, d_key] (from S,R tokens)
         k_sem_all = M[:, :, L.s_ksem()]                       # [B, n_mem, d_key]
         scores = torch.einsum("bd,bnd->bn", q_sem, k_sem_all) # [B, n_mem]
+
+        # version routing: the query's now/before token -> target time c_target;
+        # bias toward the matching slot's stored time. Absent ctx token (Step 0/1
+        # queries) -> default c_target=1 (latest), and all normal writes have
+        # time=1, so the bias is identically 0 -> Step 0/1 behaviour unchanged.
+        ctx_tok = (query_ids == self.now_id) | (query_ids == self.before_id)  # [B,T]
+        has_ctx = ctx_tok.any(1)                                              # [B]
+        ctx_pos = ctx_tok.float().argmax(1)                                   # [B]
+        c_target = torch.sigmoid(self.ctx_enc(h[rows, ctx_pos])).squeeze(-1)  # [B]
+        c_target = torch.where(has_ctx, c_target, torch.ones_like(c_target))
+        t_slot = M[:, :, L.s_time()].squeeze(-1)                              # [B, n_mem]
+        scores = scores - self.ver_weight * (t_slot - c_target[:, None]).abs()
+
         scores = scores.masked_fill(alloc_mask < 0.5, float("-inf"))
 
         k = min(self.top_k, self.n_mem)
         top_s, top_i = scores.topk(k, dim=-1)                 # [B, k]
-        # retrieval weights; rows with no allocated slot -> all -inf -> uniform-safe
-        ret_w = torch.softmax(torch.nan_to_num(top_s, neginf=-1e4), dim=-1)  # [B, k]
+        # retrieval weights (sharp); rows with no allocated slot -> uniform-safe
+        ret_w = torch.softmax(torch.nan_to_num(top_s, neginf=-1e4) / self.read_temp, dim=-1)
 
         sel = torch.gather(M, 1, top_i[..., None].expand(-1, -1, M.size(-1)))  # [B,k,d_slot]
         v = sel[:, :, L.s_v()]
@@ -302,7 +354,8 @@ class CapsuleMemory(nn.Module):
         H_prime = self.inject_ln(H_ans + g * R)   # re-normalise before frozen head
         logits = self.core.lm_head(H_prime)
         return logits, dict(q_sem=q_sem, top_i=top_i, ret_w=ret_w, g=g,
-                            conf=conf, relevance=relevance, H_ans=H_ans)
+                            conf=conf, relevance=relevance, H_ans=H_ans,
+                            c_target=c_target, has_ctx=has_ctx)
 
     def core_only_logits(self, query_ids, lengths):
         with torch.no_grad():
