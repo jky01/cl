@@ -286,10 +286,21 @@ class CapsuleMemory(nn.Module):
             h = self.core.hidden(stmt_ids)
         z_f = self.fact_enc(h, lengths)
         k_sem = self.key_enc(stmt_ids, h, self.sr_ranges)   # from (S,R) tokens
-        capsule, slot_id, usage, k_sem = self.write_net(z_f, k_sem, tau, hard, training)
+        capsule, _slot_pk, usage, k_sem = self.write_net(z_f, k_sem, tau, hard, training)
 
         B = M.size(0)
         rows = torch.arange(B, device=M.device)
+        # OCCUPANCY-AWARE placement: read scans all slots by k_sem, so the slot
+        # INDEX is free to choose -- the content-addressed product key collides
+        # (birthday) and overwrites, losing facts. Write to a FREE slot; only
+        # when the bank is full evict the lowest-value slot (Step 3B; here the
+        # FIFO/oldest-time baseline). slot index affects no differentiable loss.
+        free = alloc_mask < 0.5                                # [B, n_mem]
+        has_free = free.any(-1)                                # [B]
+        free_slot = free.float().argmax(-1)                   # first free slot
+        t_slot = M[:, :, self.layout.s_time()].squeeze(-1)    # [B, n_mem]
+        evict_slot = t_slot.argmin(-1)                        # oldest (FIFO)
+        slot_id = torch.where(has_free, free_slot, evict_slot)
         if not torch.is_tensor(time):
             time = torch.full((B,), float(time), device=M.device)
         full = torch.cat([capsule, time.to(M.dtype).view(B, 1)], dim=-1)  # [B, d_slot]

@@ -60,7 +60,11 @@ def _conflict_loss(mem: CapsuleMemory, world, B, device, tau):
 def train_omega0(mem: CapsuleMemory, world, *, steps=600, B=32, max_facts=8,
                  hard_neg_ratio=0.5, lr=1e-3, tau=1.0, device="cpu",
                  lambdas=None, warmup_frac=0.3, grad_clip=1.0, log=print):
-    lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.1, locality=0.5,
+    # balance=0: placement is now occupancy-aware (free-slot), not product-key,
+    # so the product-key usage-balance loss is vestigial (the codebooks no
+    # longer decide where facts go). Kept at 0 rather than ripping out the
+    # allocator wiring.
+    lam = dict(answer=1.0, retrieve=1.0, orth=0.1, balance=0.0, locality=0.5,
                conflict=1.0)
     if lambdas:
         lam.update(lambdas)
