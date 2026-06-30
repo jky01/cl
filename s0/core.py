@@ -65,6 +65,25 @@ class ProxyCore(nn.Module):
         return self.lm_head(h), h
 
 
+def grow_deeper(core: ProxyCore, n_new: int, trainable: bool = False):
+    """FUNCTION-PRESERVING growth: append n_new transformer blocks initialised to
+    the IDENTITY (attention out-proj and MLP final linear zeroed -> block(x)=x),
+    so hidden()/logits are bit-for-bit unchanged at the moment of growth (zero
+    forgetting). Width (d_model) is unchanged, so every downstream memory module
+    keeps its interface. The new blocks add capacity that later training fills.
+    """
+    device = next(core.parameters()).device
+    n_heads = core.blocks[0].attn.num_heads
+    for _ in range(n_new):
+        blk = Block(core.d_model, n_heads).to(device)
+        nn.init.zeros_(blk.attn.out_proj.weight); nn.init.zeros_(blk.attn.out_proj.bias)
+        nn.init.zeros_(blk.mlp[-1].weight); nn.init.zeros_(blk.mlp[-1].bias)
+        for p in blk.parameters():
+            p.requires_grad_(trainable)
+        core.blocks.append(blk)
+    return core
+
+
 def pretrain_core(core: ProxyCore, world, steps=400, batch=64, lr=3e-3,
                   device="cpu", log=print):
     """Teach the core the template language with RANDOM facts.
