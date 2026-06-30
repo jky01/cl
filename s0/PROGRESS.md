@@ -143,12 +143,24 @@ d125ef1  grow_deeper — function-preserving growth operator
   right-pad bug was silently capping accuracy. Both real-model blockers (#1
   free-text key, #2 multi-token value) are now down.
 
+- **2nd structural win vs RAG — ADMISSION / trust** (`qwen_admission.py`, §27.18).
+  A source has a RELIABLE fact + an UNTRUSTWORTHY contradiction. The commit gate
+  (g_commit = σ(commit_net([trust, conflict])), stored as soft slot presence)
+  learns to admit reliable (1.00) / reject untrustworthy (0.00) via direct BCE.
+  **Memory reliable-recall 1.000 vs naive text-RAG (both unmarked facts in
+  context) 0.188** — RAG can't tell which is reliable and is misled. Ported from
+  the proxy first-try. (Caveat: beats UNMARKED-trust text-RAG; structured
+  ingestion with source-trust is exactly the memory's advantage.)
+
+Two clean structural wins over RAG on Qwen now: temporal versioning (knowledge
+that changes) and admission (knowledge that's noisy).
+
 ## Roadmap (next, prioritized)
 
-1. **Broaden the Qwen memory case**: (a) port the remaining §27 features
-   (admission/trust, capacity, lifelong) onto Qwen + benchmark vs RAG; (b) scale
-   (many facts, efficient ANN retrieval, persistent bank); (c) longer answers
-   (3+ tokens / KV-prefix); (d) multi-seed stability.
+1. **Broaden the Qwen memory case**: (a) lifelong zero-forgetting on Qwen vs
+   sequential-LoRA (needs backprop-through-Qwen for the LoRA rival — the
+   no-forgetting thesis on a real model); (b) capacity/eviction on Qwen; (c)
+   scale (many facts, ANN retrieval, persistent bank); (d) multi-seed stability.
 2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
    trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
 3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
