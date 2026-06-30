@@ -108,15 +108,27 @@ d125ef1  grow_deeper — function-preserving growth operator
 - **Blocker #1 CRACKED**: free-text retrieval key works. Qwen (frozen) mean-pooled
   last hidden + a small trained projection + InfoNCE → **retrieval@1 = 1.000** on
   free-text paraphrased facts (toy proxy mean-pool only hit 0.41). Only the tiny
-  projection trains — no backprop through Qwen. So the template-bound `gather_sr`
-  trick is replaceable; free-text keys are easy at real-model scale.
+  projection trains — no backprop through Qwen.
+- **Full write/read on Qwen works** (`qwen_memory.py`). Free-text fact written
+  (key + value from frozen Qwen features), cloze query retrieves it and injects
+  `H_ans + g*R → lm_head` (single-token answers; direct additive injection — the
+  tied lm_head makes R≈emb[answer] a clean logit boost; NO inject_ln). Result:
+  capsule recall with **NO context 0.961** vs no-mem 0.047. Needed lr 5e-4 +
+  grad-clip to stabilise (was 0.97/0.05 across runs without).
+- **HONEST vs RAG**: fair few-shot RAG = **0.945** (zero-shot cloze RAG only 0.195
+  because Qwen-0.5B-base copies unreliably in cloze — a model limitation, verified
+  in `qwen_ragcheck.py`, NOT our bug). So accuracy is COMPARABLE — the memory does
+  NOT beat RAG on accuracy; its value is no-context-cost + the §27 features
+  (versioning/admission/consolidation) that raw RAG lacks. Data must use SENSIBLE
+  typed values (random attr/value pairing makes nonsensical facts even RAG fights).
 
 ## Roadmap (next, prioritized)
 
-1. **Finish the Qwen memory**: (b) **generative value injection** (KV/prefix
-   across generation, not single-position single-token); (c) full write/read of
-   free-text facts on Qwen with the verified key encoder; (d) **benchmark vs RAG
-   and vs LoRA** (the must-win comparison).
+1. **Strengthen the Qwen memory case**: (a) **multi-token / KV-prefix value
+   injection** (current is single-token); (b) port the §27 features onto Qwen
+   (versioning, admission, capacity, lifelong) and benchmark *those* vs RAG —
+   that's where the memory should win, not raw single-fact accuracy; (c) scale
+   (many facts, efficient retrieval); (d) multi-seed stability.
 2. **Clean neural growth controller** — multi-seed/scheduled; tie the growth
    trigger to a learned SleepGate/CapacityNet (§27.16) rather than a heuristic.
 3. **Expert/MoE growth (§27.11) + distill-into-core (§27.12)** — the other
