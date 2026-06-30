@@ -354,9 +354,13 @@ class CapsuleMemory(nn.Module):
         has_ctx = ctx_tok.any(1)                                              # [B]
         ctx_pos = ctx_tok.float().argmax(1)                                   # [B]
         c_target = torch.sigmoid(self.ctx_enc(h[rows, ctx_pos])).squeeze(-1)  # [B]
-        c_target = torch.where(has_ctx, c_target, torch.ones_like(c_target))
         t_slot = M[:, :, L.s_time()].squeeze(-1)                              # [B, n_mem]
-        scores = scores - self.ver_weight * (t_slot - c_target[:, None]).abs()
+        # version bias ONLY for queries that carry a now/before token. A plain
+        # query must NOT prefer recent-time slots, else a lone old fact's match
+        # score is penalised below the relevance threshold and never recalled
+        # (recency bias / false forgetting).
+        ver_bias = -self.ver_weight * (t_slot - c_target[:, None]).abs()
+        scores = scores + ver_bias * has_ctx[:, None].float()
 
         # soft presence: suppress empty / rejected (low-admission) slots via a
         # log bias instead of a hard mask. alloc~1 -> 0 (trusted writes unchanged);

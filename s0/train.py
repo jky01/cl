@@ -297,6 +297,92 @@ def eval_safety(mem: CapsuleMemory, world, *, episodes_n=128, device="cpu"):
     return dict(protected=protected, g_reliable=g_rel, g_unreliable=g_unrel)
 
 
+def _seq_lora_recall(core, world, sessions, device, rank=8, steps=40, lr=1e-2):
+    """Sequential LoRA (the parametric rival): one adapter fine-tuned session by
+    session. Returns per-session recall measured with the FINAL adapter -- old
+    sessions are catastrophically forgotten as later sessions overwrite it."""
+    import torch.nn as nn
+    d = core.d_model
+
+    def incontext(f):
+        stmt = world.render_statement(f)[1:-1]
+        qids, a = world.render_query(f)
+        return [world.i("<bos>")] + stmt + [world.i("<sep>")] + qids[1:], a
+
+    with torch.enable_grad():                  # eval_lifelong runs under no_grad
+        A = torch.zeros(d, rank, device=device, requires_grad=True)
+        Bm = torch.zeros(rank, d, device=device, requires_grad=True)
+        nn.init.normal_(A, std=0.02)
+        opt = torch.optim.Adam([A, Bm], lr=lr)
+        for sess in sessions:                  # learn sessions in order
+            seqs, ans = zip(*[incontext(f) for f in sess])
+            ids, lengths = pad_batch(list(seqs), world.i("<pad>"), device)
+            rows = torch.arange(ids.size(0), device=device)
+            ans_t = torch.tensor(ans, device=device)
+            for _ in range(steps):
+                h = core.hidden(ids)[rows, lengths - 1].detach()
+                logits = core.lm_head(h + (h @ A) @ Bm)
+                loss = F.cross_entropy(logits, ans_t)
+                opt.zero_grad(); loss.backward(); opt.step()
+
+    recalls = []
+    with torch.no_grad():
+        for sess in sessions:                  # recall each session at the end
+            qs, qans = [], []
+            for f in sess:
+                qids, a = world.render_query(f); qs.append(qids); qans.append(a)
+            ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+            rows = torch.arange(ids.size(0), device=device)
+            h = core.hidden(ids)[rows, lengths - 1]
+            logits = core.lm_head(h + (h @ A) @ Bm)
+            recalls.append((logits.argmax(-1) == torch.tensor(qans, device=device)).float().mean().item())
+    return recalls
+
+
+@torch.no_grad()
+def eval_lifelong(mem: CapsuleMemory, world, *, n_sessions=8, per_session=6,
+                  n_seq=24, device="cpu"):
+    """Lifelong sequence: learn n_sessions of `per_session` facts in order, then
+    recall EACH session at the end. Capsule (external memory) should be flat
+    across session age; the sequential-LoRA rival should decay for old sessions.
+    Returns (cap_by_session, lora_by_session) averaged over n_seq sequences."""
+    mem.relevance_enabled = True; mem.eval()
+    N = n_sessions * per_session
+    # ---- capsule: write all N facts into one bank (batched over n_seq) ----
+    seqs = []
+    for _ in range(n_seq):
+        subs = world.rng.sample(range(world.cfg.n_entities), N)
+        facts = [(s, world.rng.randrange(world.cfg.n_relations),
+                  world.rng.randrange(world.cfg.n_objects)) for s in subs]
+        seqs.append(facts)                          # facts[0:per_session]=session0, ...
+    M, alloc = mem.empty_bank(n_seq, device)
+    for j in range(N):
+        st = [world.render_statement(seqs[b][j]) for b in range(n_seq)]
+        ids, lengths = pad_batch(st, world.i("<pad>"), device)
+        M, alloc, _ = mem.write(M, alloc, ids, lengths, hard=True, training=False,
+                                time=(j + 1) / N, trust=1.0)
+    cap_by_session = []
+    for s in range(n_sessions):
+        correct = total = 0
+        for j in range(s * per_session, (s + 1) * per_session):
+            qs, ans = [], []
+            for b in range(n_seq):
+                qids, a = world.render_query(seqs[b][j]); qs.append(qids); ans.append(a)
+            ids, lengths = pad_batch(qs, world.i("<pad>"), device)
+            logits, _ = mem.read_logits(M, alloc, ids, lengths)
+            correct += (logits.argmax(-1) == torch.tensor(ans, device=device)).sum().item()
+            total += n_seq
+        cap_by_session.append(correct / total)
+    # ---- sequential LoRA rival (per sequence) ----
+    lora_acc = [[] for _ in range(n_sessions)]
+    for b in range(n_seq):
+        sessions = [seqs[b][s * per_session:(s + 1) * per_session] for s in range(n_sessions)]
+        for s, r in enumerate(_seq_lora_recall(mem.core, world, sessions, device)):
+            lora_acc[s].append(r)
+    lora_by_session = [sum(x) / len(x) for x in lora_acc]
+    return cap_by_session, lora_by_session
+
+
 def eval_baseline(BaselineCls, core, world, *, n_facts, episodes_n=64, device="cpu"):
     # NOTE: not under no_grad -- the LoRA baseline trains an adapter per episode.
     bl = BaselineCls(core, world)

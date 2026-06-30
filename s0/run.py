@@ -17,7 +17,7 @@ from .world import World, WorldConfig
 from .core import ProxyCore, pretrain_core
 from .capsule import CapsuleMemory, SlotLayout
 from .train import (train_omega0, eval_capsule, eval_baseline, eval_conflict,
-                    eval_safety)
+                    eval_safety, eval_lifelong)
 from .baselines import ALL_BASELINES
 
 
@@ -118,6 +118,16 @@ def main():
           f"(admission g: reliable {saf['g_reliable']:.3f}, "
           f"unreliable {saf['g_unreliable']:.3f})")
     print("  (commit gate rejects the untrustworthy contradiction -> knowledge protected)")
+
+    if n_mem >= 48:
+        cap_s, lora_s = eval_lifelong(mem, world, n_sessions=8, per_session=6,
+                                      n_seq=24, device=device)
+        print("\n== Lifelong forgetting: recall of each session AT THE END ==")
+        print("  session:   " + " ".join(f"{i:5d}" for i in range(len(cap_s))) + "   (0=oldest)")
+        print("  capsule:   " + " ".join(f"{x:5.2f}" for x in cap_s))
+        print("  seq-LoRA:  " + " ".join(f"{x:5.2f}" for x in lora_s))
+        print("  capsule flat across session age (external memory); LoRA decays "
+              "for old sessions = catastrophic forgetting in weights.")
 
 
 if __name__ == "__main__":
