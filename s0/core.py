@@ -65,6 +65,70 @@ class ProxyCore(nn.Module):
         return self.lm_head(h), h
 
 
+class GatedBlock(Block):
+    """A transformer block whose residual contribution is scaled by a scalar
+    gate g (0 -> identity, 1 -> full block)."""
+
+    def forward(self, x, attn_mask, g):
+        h = self.ln1(x)
+        a, _ = self.attn(h, h, h, attn_mask=attn_mask, need_weights=False)
+        x = x + g * a
+        x = x + g * self.mlp(self.ln2(x))
+        return x
+
+
+class GrowableCore(nn.Module):
+    """Neural growth trigger: a stack of n_base always-on blocks plus n_grow
+    blocks each behind a LEARNED gate. The gates start ~0 (the extra blocks are
+    the identity, so effective depth = n_base), and the TASK LOSS opens them
+    differentiably when more depth helps. A capacity penalty on the grow-gates
+    (L_capacity, §27) means the network only engages depth it actually needs ->
+    the model decides its own effective depth (the neural form of 'grow when
+    saturated'). No hidden-dim change, so memory modules keep their interface.
+    """
+
+    def __init__(self, vocab_size, d_model=128, n_base=2, n_grow=4, n_heads=4, max_len=64):
+        super().__init__()
+        self.d_model = d_model
+        self.max_len = max_len
+        self.n_base = n_base
+        self.tok_emb = nn.Embedding(vocab_size, d_model)
+        self.pos_emb = nn.Embedding(max_len, d_model)
+        self.blocks = nn.ModuleList([GatedBlock(d_model, n_heads) for _ in range(n_base + n_grow)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
+        self.lm_head.weight = self.tok_emb.weight
+        # base gates open (~1, learnable but start engaged); grow gates ~0 (identity)
+        init = [10.0] * n_base + [-4.0] * n_grow
+        self.gate_logit = nn.Parameter(torch.tensor(init))
+
+    def gates(self):
+        return torch.sigmoid(self.gate_logit)
+
+    def grow_gate_penalty(self):
+        return self.gates()[self.n_base:].sum()
+
+    def effective_depth(self):
+        return float(self.n_base + self.gates()[self.n_base:].sum().item())
+
+    def _causal_mask(self, T, device):
+        return torch.triu(torch.full((T, T), float("-inf"), device=device), diagonal=1)
+
+    def hidden(self, ids):
+        B, T = ids.shape
+        pos = torch.arange(T, device=ids.device)
+        x = self.tok_emb(ids) + self.pos_emb(pos)[None]
+        mask = self._causal_mask(T, ids.device)
+        g = self.gates()
+        for i, blk in enumerate(self.blocks):
+            x = blk(x, mask, g[i])
+        return self.ln_f(x)
+
+    def forward(self, ids):
+        h = self.hidden(ids)
+        return self.lm_head(h), h
+
+
 def grow_deeper(core: ProxyCore, n_new: int, trainable: bool = False):
     """FUNCTION-PRESERVING growth: append n_new transformer blocks initialised to
     the IDENTITY (attention out-proj and MLP final linear zeroed -> block(x)=x),
