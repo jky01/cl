@@ -34,9 +34,9 @@ def run(world, device, lam_cap, steps=10000, B=64, lr=3e-3):
         opt.step()
         if step % 2000 == 0 or step == steps - 1:
             a = acc_by_k(core, world, device)
-            gv = ",".join(f"{x:.2f}" for x in core.gates()[core.n_base:].tolist())
+            cv = ",".join(f"{x:.2f}" for x in core.grow_contrib().tolist())
             print(f"  step {step:5d} eff_depth {core.effective_depth():.2f} "
-                  f"grow_gates[{gv}] | " + " ".join(f"K{k}:{a[k]:.2f}" for k in range(1, KMAX + 1)))
+                  f"contrib[{cv}] | " + " ".join(f"K{k}:{a[k]:.2f}" for k in range(1, KMAX + 1)))
     # ABLATION: force grow gates to 0 -> if accuracy drops, the extra blocks WERE
     # being used (the small gate value just hides weight up-scaling).
     a_full = acc_by_k(core, world, device)
@@ -52,10 +52,11 @@ def run(world, device, lam_cap, steps=10000, B=64, lr=3e-3):
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     world = World(WorldConfig(n_entities=200, n_objects=200, seed=0))
-    run(world, device, lam_cap=0.02)   # mild cost: should grow into the depth it needs
+    run(world, device, lam_cap=0.05)   # mild cost: should engage depth it needs
     run(world, device, lam_cap=0.50)   # heavy cost: should stay shallow
-    print("\n  mild penalty -> gates open, depth grows, high-K climbs (loss-driven growth);")
-    print("  heavy penalty -> gates stay shut, stays shallow, high-K poor = cost-aware control.")
+    print("\n  With the UNGAMEABLE norm cost, contrib is now a faithful usage meter:")
+    print("  mild -> grow blocks contribute, high-K climbs; heavy -> contrib~0, stays shallow.")
+    print("  Ablation drop should now MATCH the reported contribution.")
 
 
 if __name__ == "__main__":

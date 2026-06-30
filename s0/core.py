@@ -106,10 +106,20 @@ class GrowableCore(nn.Module):
         return torch.sigmoid(self.gate_logit)
 
     def grow_gate_penalty(self):
-        return self.gates()[self.n_base:].sum()
+        """Capacity cost = summed RELATIVE contribution each grow block injects
+        into the residual stream, from the last hidden() call. Penalising the
+        actual injected norm (not the gate scalar) is UNGAMEABLE: scaling block
+        weights to make a small gate matter raises the penalty too. Doubles as a
+        faithful usage meter (ablating a block drops accuracy ~ its contribution).
+        """
+        return self._last_grow_cost
+
+    def grow_contrib(self):
+        """Per-grow-block relative residual contribution from the last forward."""
+        return self._last_grow_contrib
 
     def effective_depth(self):
-        return float(self.n_base + self.gates()[self.n_base:].sum().item())
+        return float(self.n_base + self._last_grow_contrib.sum().item())
 
     def _causal_mask(self, T, device):
         return torch.triu(torch.full((T, T), float("-inf"), device=device), diagonal=1)
@@ -120,8 +130,16 @@ class GrowableCore(nn.Module):
         x = self.tok_emb(ids) + self.pos_emb(pos)[None]
         mask = self._causal_mask(T, ids.device)
         g = self.gates()
+        contribs = []
         for i, blk in enumerate(self.blocks):
+            x_in = x
             x = blk(x, mask, g[i])
+            if i >= self.n_base:
+                rel = ((x - x_in).norm(dim=-1) / (x_in.norm(dim=-1) + 1e-6)).mean()
+                contribs.append(rel)
+        self._last_grow_cost = torch.stack(contribs).sum() if contribs else x.new_zeros(())
+        self._last_grow_contrib = (torch.stack(contribs).detach() if contribs
+                                   else torch.zeros(0, device=x.device))
         return self.ln_f(x)
 
     def forward(self, ids):
