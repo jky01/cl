@@ -1,0 +1,33 @@
+robust growth trigger (held-out slope + patience=2) vs fixed, kmax=7, budget=8000, N=3
+    used=1000 L=2 heldout=0.365 sat=False head=True -> train
+    used=2000 L=2 heldout=0.349 sat=False head=True -> train
+    used=3000 L=2 heldout=0.353 sat=True head=True -> GROW
+    used=4000 L=4 heldout=0.375 sat=False head=True -> train
+    used=5000 L=4 heldout=0.448 sat=False head=True -> train
+    used=6000 L=4 heldout=0.519 sat=False head=True -> train
+    used=7000 L=4 heldout=0.723 sat=False head=True -> train
+    used=8000 L=4 heldout=0.940 sat=False head=False -> train
+  seed 0: controller L=4 acc=0.929 (1 grows) | fixed L2 0.938  L4 0.350  L8 0.371
+    used=1000 L=2 heldout=0.345 sat=False head=True -> train
+    used=2000 L=2 heldout=0.350 sat=False head=True -> train
+    used=3000 L=2 heldout=0.350 sat=True head=True -> GROW
+    used=4000 L=4 heldout=0.417 sat=False head=True -> train
+    used=5000 L=4 heldout=0.551 sat=False head=True -> train
+    used=6000 L=4 heldout=0.780 sat=False head=True -> train
+    used=7000 L=4 heldout=0.909 sat=False head=False -> train
+    used=8000 L=4 heldout=0.977 sat=False head=False -> train
+  seed 1: controller L=4 acc=0.979 (1 grows) | fixed L2 0.398  L4 0.998  L8 0.542
+    used=1000 L=2 heldout=0.295 sat=False head=True -> train
+    used=2000 L=2 heldout=0.312 sat=False head=True -> train
+    used=3000 L=2 heldout=0.347 sat=False head=True -> train
+    used=4000 L=2 heldout=0.330 sat=True head=True -> GROW
+    used=5000 L=4 heldout=0.335 sat=True head=True -> train
+    used=6000 L=4 heldout=0.342 sat=True head=True -> train
+    used=7000 L=4 heldout=0.346 sat=True head=True -> train
+    used=8000 L=4 heldout=0.360 sat=True head=True -> train
+  seed 2: controller L=4 acc=0.368 (1 grows) | fixed L2 0.363  L4 0.354  L8 0.434
+
+== mean over 3 seeds ==
+  controller 0.759 (final depth [4, 4, 4], grows [1, 1, 1]) | fixed L2 0.567  L4 0.568  L8 0.449
+  robust trigger should land near L4's accuracy, beat fixed-L2, and NOT
+  waste budget over-growing to L8 like the naive loss-delta trigger did.
