@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+CAPSTONE no-forgetting 3-way (Qwen/Qwen2.5-0.5B, cuda, NVIDIA GeForce RTX 5090) K=4 PER=24 LTOP=2 STEPS=1200
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 76/290 [00:00<00:00, 743.50it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 1143.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 981.82it/s] 
+
+-- ARM A: sequential in-place fine-tune (shared top layers) --
+  after session 0: S0:1.00
+  after session 1: S0:0.21 S1:1.00
+  after session 2: S0:0.04 S1:0.38 S2:1.00
+  after session 3: S0:0.17 S1:0.17 S2:0.29 S3:1.00
+
+-- ARM C: growth + routing (per-session branch, oracle route) --
+  after session 0: S0:1.00
+  after session 1: S0:1.00 S1:1.00
+  after session 2: S0:1.00 S1:1.00 S2:1.00
+  after session 3: S0:1.00 S1:1.00 S2:1.00 S3:1.00
+
+-- ARM B: memory (external, self-routed) --
+  final recall: S0:1.00 S1:1.00 S2:1.00 S3:0.96
+
+== FINAL recall per session (after all 4 sessions) ==
+  in-place(A): S0:0.17 S1:0.17 S2:0.29 S3:1.00  mean 0.41
+  growth  (C): S0:1.00 S1:1.00 S2:1.00 S3:1.00  mean 1.00
+  memory  (B): S0:1.00 S1:1.00 S2:1.00 S3:0.96  mean 0.99
+
+  in-place should FORGET old sessions (S0 recall drops after later sessions);
+  memory + growth+routing RETAIN. Asymmetry: C needs an oracle router + grows
+  2 layers/session; B needs neither (external self-routed bank).
