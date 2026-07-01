@@ -170,3 +170,43 @@ that changes) and admission (knowledge that's noisy).
 
 See the memory files under the project's `memory/` for the same state in
 condensed, recall-oriented form (`s0-step0-state`, `s0-step0-design-constraints`).
+
+## Cloud phase — RunPod RTX 5090 32GB (Blackwell, bf16, torch 2.8+cu128), 2026-07-01/02
+
+Port validated on the real 5090: `s0.run --smoke` fully green. Four experiments,
+all committed + pushed; raw logs in `docs/cloud_results/`.
+
+- **A — growth reliability vs WIDTH (`diag_grow_hops_scale.py`, N=8, fixed
+  budget 12k / lr 3e-3).** Breakthrough rate 128→**3/8**, 256→**0/8**, 512→**0/8**
+  (fell with width; d512 seed0 diverged). Honest negative: naive width-scaling at
+  fixed budget/lr does NOT fix the growth lottery — wider UNDERTRAINS. Positive
+  that survives: grown is the ONLY arm that ever breaks through (L2-2×, L4-scratch
+  both 0/8 at every width).
+- **A2 — same, but COMPUTE+LR scaled to width (`diag_grow_hops_scale2.py`, N=6).**
+  Breakthrough grown/L2ctrl: d128 **2/6 / 0/6**, d256 **4/6 / 4/6**, d512 **4/6 /
+  4/6**. (1) Recovers vs A (d256 0/8→4/6) → A's fall was undertraining, scale DOES
+  help. (2) BUT growth's edge over a 2×-compute wide-shallow L2 (present at d128)
+  VANISHES at d≥256 (ties) — width substitutes for depth given compute.
+- **B — growth-adds-capability on REAL Qwen, param-matched (`qwen_growcap.py`,
+  0.5B, 4 trainable layers, 6k steps).** hop1/2/3: BASE 0.56/0.06/0.09, INPLACE
+  (top-4 existing) **0.98/0.98/0.94**, GROW (4 appended) 0.96/0.92/0.87. GROW
+  LOSES at every hop. On an already-deep LM, adapting existing top layers beats
+  growing identity layers at matched params → "growth adds capability in-place
+  can't" is REFUTED on the real model.
+- **C — robust growth trigger (`diag_controller3.py`, K-hop kmax=7, N=3).**
+  Held-out slope + patience (vs the naive one-chunk loss-delta that lost to
+  from-scratch). Controller grows exactly once (L2→L4) in all seeds, mean acc
+  **0.759 beats fixed L2 0.567 / L4 0.568 / L8 0.449**. Clean POSITIVE: the
+  earlier controller failure was a signal-quality problem; a robust signal yields
+  a working autonomous grow-to-sweet-spot controller.
+
+**Coherent conclusion (A/A2/B):** growth's value is NOT capability-per-param — at
+scale a wide-shallow-with-compute model, or in-place fine-tuning, ties or beats
+growth. Growth's real, demonstrated value is the CONTINUAL / no-forgetting /
+function-preserving property (add capacity without touching or retraining old
+weights) — plus a now-working autonomous controller (C). The "small→large via
+growth ADDS capability" framing is toy/shallow-specific and does not transfer to
+a real deep LM; the honest positioning is "grow to keep learning WITHOUT
+forgetting," not "grow to become more capable per parameter than training would."
+Next: §28 meta-learned Ω controller (beyond C's hand-built signal); lifelong
+no-forgetting vs sequential-LoRA on Qwen at scale (growth's actual advantage).
