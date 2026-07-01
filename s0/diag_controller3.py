@@ -22,12 +22,13 @@ from .core import ProxyCore, grow_deeper
 from . import diag_growpenalty2 as dgp
 from .diag_growpenalty2 import gen, acc
 
+import os
 CHUNK = 1000
 BUDGET = 8000
 MAXL = 8
 PATIENCE = 2          # chunks of no held-out gain before it counts as saturated
 EPS = 0.02            # held-out gain over the patience window below this = plateau
-N_SEEDS = 3
+N_SEEDS = int(os.environ.get("C3_SEEDS", 3))
 
 
 def opt_for(core, lr=3e-3):
