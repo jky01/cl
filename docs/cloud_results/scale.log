@@ -1,0 +1,37 @@
+growth-reliability WIDTH sweep (N=8, KMAX=5, widths=[128, 256, 512], dev=NVIDIA GeForce RTX 5090)
+  d=128 seed 0: grown[K4:0.27 K5:0.21]-- L2x2[K4:0.26 K5:0.18]-- L4scr[K4:0.27 K5:0.22]--
+  d=128 seed 1: grown[K4:0.71 K5:0.44]-- L2x2[K4:0.64 K5:0.37]-- L4scr[K4:0.24 K5:0.19]--
+  d=128 seed 2: grown[K4:0.61 K5:0.39]-- L2x2[K4:0.63 K5:0.38]-- L4scr[K4:0.77 K5:0.53]--
+  d=128 seed 3: grown[K4:0.94 K5:0.81]BT L2x2[K4:0.22 K5:0.19]-- L4scr[K4:0.22 K5:0.19]--
+  d=128 seed 4: grown[K4:0.70 K5:0.40]-- L2x2[K4:0.29 K5:0.19]-- L4scr[K4:0.35 K5:0.27]--
+  d=128 seed 5: grown[K4:0.97 K5:0.85]BT L2x2[K4:0.43 K5:0.28]-- L4scr[K4:0.63 K5:0.38]--
+  d=128 seed 6: grown[K4:0.33 K5:0.24]-- L2x2[K4:0.26 K5:0.17]-- L4scr[K4:0.26 K5:0.19]--
+  d=128 seed 7: grown[K4:0.99 K5:0.92]BT L2x2[K4:0.41 K5:0.30]-- L4scr[K4:0.98 K5:0.59]--
+  -> d=128: grown BT 3/8, L2x2 BT 0/8, L4scr BT 0/8  (grown meanK4 0.69 K5 0.53)
+  d=256 seed 0: grown[K4:0.38 K5:0.31]-- L2x2[K4:0.37 K5:0.32]-- L4scr[K4:0.39 K5:0.26]--
+  d=256 seed 1: grown[K4:0.34 K5:0.29]-- L2x2[K4:0.27 K5:0.21]-- L4scr[K4:0.63 K5:0.37]--
+  d=256 seed 2: grown[K4:0.44 K5:0.28]-- L2x2[K4:0.23 K5:0.16]-- L4scr[K4:0.30 K5:0.18]--
+  d=256 seed 3: grown[K4:0.59 K5:0.35]-- L2x2[K4:0.52 K5:0.40]-- L4scr[K4:0.24 K5:0.17]--
+  d=256 seed 4: grown[K4:0.64 K5:0.40]-- L2x2[K4:0.57 K5:0.37]-- L4scr[K4:0.38 K5:0.29]--
+  d=256 seed 5: grown[K4:0.67 K5:0.48]-- L2x2[K4:0.51 K5:0.24]-- L4scr[K4:0.39 K5:0.25]--
+  d=256 seed 6: grown[K4:0.22 K5:0.22]-- L2x2[K4:0.45 K5:0.28]-- L4scr[K4:0.27 K5:0.18]--
+  d=256 seed 7: grown[K4:0.40 K5:0.29]-- L2x2[K4:0.40 K5:0.25]-- L4scr[K4:0.46 K5:0.27]--
+  -> d=256: grown BT 0/8, L2x2 BT 0/8, L4scr BT 0/8  (grown meanK4 0.46 K5 0.33)
+  d=512 seed 0: grown[K4:0.01 K5:0.02]-- L2x2[K4:0.01 K5:0.02]-- L4scr[K4:0.38 K5:0.27]--
+  d=512 seed 1: grown[K4:0.34 K5:0.28]-- L2x2[K4:0.64 K5:0.32]-- L4scr[K4:0.23 K5:0.17]--
+  d=512 seed 2: grown[K4:0.26 K5:0.20]-- L2x2[K4:0.29 K5:0.20]-- L4scr[K4:0.24 K5:0.16]--
+  d=512 seed 3: grown[K4:0.02 K5:0.07]-- L2x2[K4:0.24 K5:0.21]-- L4scr[K4:0.42 K5:0.23]--
+  d=512 seed 4: grown[K4:0.38 K5:0.25]-- L2x2[K4:0.20 K5:0.21]-- L4scr[K4:0.00 K5:0.01]--
+  d=512 seed 5: grown[K4:0.31 K5:0.21]-- L2x2[K4:0.40 K5:0.24]-- L4scr[K4:0.29 K5:0.18]--
+  d=512 seed 6: grown[K4:0.17 K5:0.18]-- L2x2[K4:0.27 K5:0.17]-- L4scr[K4:0.37 K5:0.20]--
+  d=512 seed 7: grown[K4:0.52 K5:0.31]-- L2x2[K4:0.45 K5:0.26]-- L4scr[K4:0.28 K5:0.26]--
+  -> d=512: grown BT 0/8, L2x2 BT 0/8, L4scr BT 0/8  (grown meanK4 0.25 K5 0.19)
+
+== breakthrough rate (K4&K5>=0.8) vs width, N=8 ==
+   d_model |   grown    L2x2   L4scr | grown meanK4/K5
+       128 |    3/8    0/8    0/8 | 0.69 / 0.53
+       256 |    0/8    0/8    0/8 | 0.46 / 0.33
+       512 |    0/8    0/8    0/8 | 0.25 / 0.19
+
+  grown BT rate RISING with width => growth-capability reliability is a scale
+  effect (the toy 2/5 was a small-model artifact). Flat => needs more than width.

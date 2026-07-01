@@ -1,0 +1,35 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+growth-adds-capability vs in-place (Qwen/Qwen2.5-0.5B, cuda, NVIDIA GeForce RTX 5090)
+  usable single-token names: 44; NLAYER=4 STEPS=6000
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 1859.84it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1825.02it/s]
+  [BASE] frozen floor | h1:0.56 h2:0.06 h3:0.09
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 100/290 [00:00<00:00, 988.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1495.69it/s]
+  [INPLACE] step    0 loss 4.407 depth 24 trainable 59.6M | h1:0.27 h2:0.19 h3:0.15
+  [INPLACE] step  800 loss 0.090 depth 24 trainable 59.6M | h1:0.95 h2:0.88 h3:0.80
+  [INPLACE] step 1600 loss 0.348 depth 24 trainable 59.6M | h1:0.98 h2:0.92 h3:0.85
+  [INPLACE] step 2400 loss 0.398 depth 24 trainable 59.6M | h1:0.98 h2:0.93 h3:0.86
+  [INPLACE] step 3200 loss 0.095 depth 24 trainable 59.6M | h1:0.99 h2:0.95 h3:0.89
+  [INPLACE] step 4000 loss 0.185 depth 24 trainable 59.6M | h1:1.00 h2:0.98 h3:0.90
+  [INPLACE] step 4800 loss 0.066 depth 24 trainable 59.6M | h1:0.98 h2:0.97 h3:0.93
+  [INPLACE] step 5600 loss 0.348 depth 24 trainable 59.6M | h1:0.99 h2:0.95 h3:0.93
+  [INPLACE] step 5999 loss 0.988 depth 24 trainable 59.6M | h1:0.98 h2:0.98 h3:0.93
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  47%|████▋     | 137/290 [00:00<00:00, 1364.99it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1552.05it/s]
+  [GROW] step    0 loss 4.407 depth 28 trainable 59.6M | h1:0.03 h2:0.05 h3:0.02
+  [GROW] step  800 loss 0.742 depth 28 trainable 59.6M | h1:0.73 h2:0.63 h3:0.63
+  [GROW] step 1600 loss 0.797 depth 28 trainable 59.6M | h1:0.77 h2:0.68 h3:0.68
+  [GROW] step 2400 loss 0.654 depth 28 trainable 59.6M | h1:0.88 h2:0.76 h3:0.73
+  [GROW] step 3200 loss 0.642 depth 28 trainable 59.6M | h1:0.93 h2:0.79 h3:0.75
+  [GROW] step 4000 loss 0.250 depth 28 trainable 59.6M | h1:0.95 h2:0.86 h3:0.79
+  [GROW] step 4800 loss 0.305 depth 28 trainable 59.6M | h1:0.94 h2:0.90 h3:0.80
+  [GROW] step 5600 loss 0.346 depth 28 trainable 59.6M | h1:0.95 h2:0.94 h3:0.83
+  [GROW] step 5999 loss 0.417 depth 28 trainable 59.6M | h1:0.93 h2:0.93 h3:0.86
+
+== final (n=512), NLAYER=4, param-matched trainable ==
+  arm       depth  trainable |  hop1 hop2 hop3
+  BASE         24     0.0M  |  0.56 0.06 0.09
+  INPLACE      24   59.6M  |  0.98 0.98 0.94
+  GROW         28   59.6M  |  0.96 0.92 0.87
+  GROW-INPLACE gap:            |  -0.03 -0.05 -0.07
+
+  GROW > INPLACE at high hop => depth-via-growth adds capability in-place
+  adaptation can't (param-matched). Tie => benefit is capacity, not depth (honest).
