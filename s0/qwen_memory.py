@@ -8,6 +8,7 @@ version is the next step). Compares to no-memory and in-context (=RAG).
   .venv/bin/python -m s0.qwen_memory
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
@@ -16,7 +17,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from .qwen_retrieval import NAMES
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 # typed value pools so each fact is SENSIBLE (random attr/value pairing makes
 # nonsensical facts that even RAG fights). The model still can't know WHICH
 # sensible value a given person has -> no-mem fails, memory/RAG succeed.

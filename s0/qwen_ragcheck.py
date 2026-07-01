@@ -5,10 +5,11 @@ Qwen-0.5B limitation or an eval bug (padding/format).
   .venv/bin/python -m s0.qwen_ragcheck
 """
 from __future__ import annotations
+import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 EX = [("Alice", "favorite color", "blue"), ("Bob", "hometown", "Tokyo"),
       ("Carol", "job", "baker"), ("David", "pet", "parrot")]
 FORMATS = [

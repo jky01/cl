@@ -8,6 +8,7 @@ scale, on Qwen2.5-0.5B.
   .venv/bin/python -m s0.qwen_lifelong
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
@@ -18,7 +19,7 @@ from .qwen_retrieval import NAMES
 from .qwen_memory import ATTR_VALUES
 from .qwen_grow import grow_qwen
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 ATTRS = list(ATTR_VALUES)
 SESS, PER = 6, 32                       # 6 sessions x 32 facts = 192
 

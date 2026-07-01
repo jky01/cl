@@ -8,13 +8,14 @@ Question: does retrieval@1 get high (toy proxy mean-pool only reached ~0.41)?
   .venv/bin/python -m s0.qwen_retrieval
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 NAMES = ("Alice Bob Carol David Emma Frank Grace Henry Iris Jack Karen Leo Mia "
          "Nina Oscar Paula Quinn Rosa Sam Tina Uma Victor Wendy Xavier Yara Zack "
          "Adam Beth Caleb Dana Eli Fiona Gabe Hana Ian Julia Kyle Lena Mike Nora "

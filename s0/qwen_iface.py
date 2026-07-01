@@ -6,10 +6,11 @@ prints the architecture facts the memory modules must adapt to.
   .venv/bin/python -m s0.qwen_iface
 """
 from __future__ import annotations
+import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 
 
 def main():

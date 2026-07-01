@@ -8,12 +8,13 @@ real LMs.
   .venv/bin/python -m s0.qwen_grow
 """
 from __future__ import annotations
+import os
 import copy
 import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 
 
 def grow_qwen(model, n_new):

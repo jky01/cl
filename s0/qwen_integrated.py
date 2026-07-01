@@ -9,6 +9,7 @@ Cheap because the new layers are at the END: backprop only flows through the top
   .venv/bin/python -m s0.qwen_integrated
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
@@ -19,7 +20,7 @@ from .qwen_retrieval import NAMES
 from .qwen_memory import ATTR_VALUES
 from .qwen_grow import grow_qwen
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 ATTRS = list(ATTR_VALUES)
 
 

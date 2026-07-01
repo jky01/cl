@@ -7,6 +7,7 @@ Qwen; teacher-forced training, free-generation eval (exact match of both tokens)
   .venv/bin/python -m s0.qwen_multitoken
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
@@ -15,7 +16,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from .qwen_retrieval import NAMES
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 ATTR_VALUES = {
     "hometown": ["San Francisco", "New York", "Hong Kong", "Los Angeles",
                  "Cape Town", "Las Vegas", "San Diego", "Tel Aviv", "Buenos Aires"],

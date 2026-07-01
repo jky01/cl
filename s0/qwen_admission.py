@@ -9,6 +9,7 @@ Frozen Qwen2.5-0.5B; only small modules train. Single-token answers.
   .venv/bin/python -m s0.qwen_admission
 """
 from __future__ import annotations
+import os
 import random
 import torch
 import torch.nn as nn
@@ -18,7 +19,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from .qwen_retrieval import NAMES
 from .qwen_memory import ATTR_VALUES
 
-NAME = "Qwen/Qwen2.5-0.5B"
+NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 ATTRS = list(ATTR_VALUES)
 
 
