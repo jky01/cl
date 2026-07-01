@@ -1,0 +1,32 @@
+A2: growth reliability with COMPUTE+LR scaled to width (N=6, KMAX=5, dev=NVIDIA GeForce RTX 5090)
+  budget={128: 12000, 256: 24000, 512: 40000}  lr={128: 0.003, 256: 0.0015, 512: 0.001}
+  d=128 seed 0: grown[K4:0.27 K5:0.21]-- L2ctrl[K4:0.26 K5:0.18]--
+  d=128 seed 1: grown[K4:0.71 K5:0.44]-- L2ctrl[K4:0.64 K5:0.37]--
+  d=128 seed 2: grown[K4:0.61 K5:0.39]-- L2ctrl[K4:0.63 K5:0.38]--
+  d=128 seed 3: grown[K4:0.94 K5:0.81]BT L2ctrl[K4:0.22 K5:0.19]--
+  d=128 seed 4: grown[K4:0.70 K5:0.40]-- L2ctrl[K4:0.29 K5:0.19]--
+  d=128 seed 5: grown[K4:0.97 K5:0.85]BT L2ctrl[K4:0.43 K5:0.28]--
+  -> d=128: grown BT 2/6, L2ctrl BT 0/6 (grown meanK4 0.70 K5 0.51)
+  d=256 seed 0: grown[K4:0.99 K5:0.99]BT L2ctrl[K4:1.00 K5:0.99]BT
+  d=256 seed 1: grown[K4:1.00 K5:0.98]BT L2ctrl[K4:0.99 K5:0.98]BT
+  d=256 seed 2: grown[K4:0.98 K5:0.65]-- L2ctrl[K4:0.96 K5:0.66]--
+  d=256 seed 3: grown[K4:1.00 K5:0.97]BT L2ctrl[K4:0.97 K5:0.99]BT
+  d=256 seed 4: grown[K4:1.00 K5:0.98]BT L2ctrl[K4:0.99 K5:1.00]BT
+  d=256 seed 5: grown[K4:0.88 K5:0.78]-- L2ctrl[K4:0.97 K5:0.51]--
+  -> d=256: grown BT 4/6, L2ctrl BT 4/6 (grown meanK4 0.98 K5 0.89)
+  d=512 seed 0: grown[K4:0.86 K5:0.71]-- L2ctrl[K4:0.64 K5:0.35]--
+  d=512 seed 1: grown[K4:0.93 K5:0.46]-- L2ctrl[K4:0.95 K5:0.42]--
+  d=512 seed 2: grown[K4:0.99 K5:0.95]BT L2ctrl[K4:0.99 K5:0.96]BT
+  d=512 seed 3: grown[K4:0.96 K5:0.94]BT L2ctrl[K4:0.95 K5:0.86]BT
+  d=512 seed 4: grown[K4:0.93 K5:0.95]BT L2ctrl[K4:1.00 K5:0.99]BT
+  d=512 seed 5: grown[K4:0.99 K5:0.95]BT L2ctrl[K4:0.97 K5:0.93]BT
+  -> d=512: grown BT 4/6, L2ctrl BT 4/6 (grown meanK4 0.94 K5 0.83)
+
+== breakthrough rate vs width, COMPUTE+LR SCALED (N=6) ==
+   d_model |  budget      lr |   grown  L2ctrl | meanK4/K5
+       128 |   12000   3e-03 |    2/6    0/6 | 0.70 / 0.51
+       256 |   24000   2e-03 |    4/6    4/6 | 0.98 / 0.89
+       512 |   40000   1e-03 |    4/6    4/6 | 0.94 / 0.83
+
+  grown BT rate recovering/rising with width (vs A's 3/8->0/8->0/8) => A's fall
+  was UNDERTRAINING; scale + proper lr does help. Still 0 => width truly doesn't.
