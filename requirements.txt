@@ -1,0 +1,17 @@
+# Python deps for s0/ (tested on Python 3.14).
+#
+# IMPORTANT: install torch SEPARATELY, matched to the machine's CUDA, BEFORE
+# these — do NOT pin the CUDA build here (the local box used 2.11.0+cu128; a
+# cloud A100/H100/4090 wants its own cuXXX wheel). Prefer an Ampere+ GPU so you
+# get bf16 (avoids the fp16 training instability documented in PROGRESS.md).
+#
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124   # e.g. A100
+#   pip install -r requirements.txt
+#
+# The proxy-only experiments (s0.run, diag_grow*, diag_integrated) need only
+# torch + numpy; transformers/accelerate/safetensors are for the Qwen_* scripts.
+
+numpy>=2.0
+transformers>=5.12
+accelerate>=1.14
+safetensors>=0.8
