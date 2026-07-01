@@ -10,6 +10,22 @@ Validated so far on a local RTX 2070 (8GB) + Qwen2.5-**0.5B** (frozen, feature
 extraction only). This doc is the handoff to a **Tier-1** box: a single **24–40GB
 Ampere+ GPU** (RTX 4090 / A100-40G — bf16 required) to push to **1–3B** real models.
 
+**The local mechanism-validation phase is COMPLETE, including two honest boundaries
+that DEFINE the first cloud experiments (2026-07):**
+- **Growth-adds-capability is real but LOTTERY at toy scale.** Multi-seed audit
+  (`diag_grow_hops_ms.py`, N=5): "growth adds DEPTH-capability beyond compute" is
+  sign-robust (grown-L4 > 2×-compute-L2 in 5/5 seeds at K4), and **warm-start
+  growth is the ONLY arm that ever cracks high-K** (deep-from-scratch NEVER breaks
+  through, max K4 0.41). BUT the breakthrough is bimodal: only **2/5 seeds** hit
+  ~1.0, the rest stay ~0.3, and a post-growth K-curriculum did NOT lift it
+  (`diag_grow_hops_curric.py`: 2/5 vs 2/5) → reliability is set by the init/basin,
+  i.e. a **scale/architecture question, not a local-tuning one**.
+- **The hand-crafted growth CONTROLLER failed (`diag_controller2.py`).** A
+  single-window loss-delta is a bad saturation signal — temporary plateaus before
+  phase transitions trigger premature, repeated growth that burns budget re-warming
+  layers; the controller LOST to plain from-scratch. Growth TIMING needs a robust
+  signal (held-out validation slope / patience / the meta-learned Ω of §28).
+
 ## 0. Setup on the cloud box
 
 ```bash
@@ -36,40 +52,60 @@ python -m s0.qwen_lifelong        # 192-fact lifelong + growth on Qwen
 
 ## 2. Tier-1 experiment plan (what the bigger GPU unlocks)
 
-Priorities, roughly in order. All the `qwen_*.py` scripts hardcode
-`NAME = "Qwen/Qwen2.5-0.5B"` — bump to `-1.5B` / `-3B` there. Switch fp32→**bf16**
-(`dtype=torch.bfloat16`) once on Ampere+ (fixes the fp16 instability without the
-fp32 memory cost; see PROGRESS.md "gotcha").
+Priorities, in order. Items **A–C are the findings-driven core** (they resolve the
+two local boundaries above — do these first); items 1–5 are the supporting
+scale-up. All `qwen_*.py` scripts read `NAME = os.environ.get("QWEN_MODEL",
+"Qwen/Qwen2.5-0.5B")` — set `QWEN_MODEL=Qwen/Qwen2.5-1.5B` (or `-3B`) instead of
+editing. Switch fp32→**bf16** (`dtype=torch.bfloat16`) once on Ampere+ (fixes the
+fp16 instability without the fp32 memory cost; see PROGRESS.md "gotcha").
 
-1. **Real-model scale-up.** Re-run `qwen_memory`, `qwen_conflict`, `qwen_admission`,
-   `qwen_multitoken` at **1.5B and 3B**. Confirm the wins (recall, versioning
-   0.98 vs RAG, admission, multi-token) hold / sharpen.
-   NOTE: the **frozen-feature** scripts (memory/conflict/admission/multitoken/
-   retrieval) already fit at **1.5B on an 8GB card** (1.5B fp16 = ~3.1GB, 28
-   layers, hidden 1536) — validate those at 1.5B LOCALLY before renting; only the
-   TRAINING-heavy ones (`qwen_integrated`/`qwen_lifelong` train grown layers in
-   fp32 → too big for 8GB at 1.5B) need the cloud. `n_base` is now derived
-   dynamically (was hardcoded 24 for 0.5B; 1.5B has 28).
-2. **Growth that ADDS capability on a real model.** Extend `qwen_integrated`:
-   grow Qwen by several layers, train the grown layers (bf16, more steps, richer
-   data than the toy fact-LM), and measure capability GAIN on a task Qwen-0.5B/1.5B
-   is weak at (multi-hop, long-context reasoning). We only showed growth *preserves*
-   + *composes* on Qwen; this shows growth *helps* on a real model (shown on the
-   toy in `diag_grow_hops`).
-3. **Growth penalty at bigger scale.** `diag_growpenalty2` with larger `d_model`,
-   more layers (2→16+), more seeds — does the "growth ≥ from-scratch" toy result
-   hold as models grow? (The from-scratch baseline is the compute cost here.)
-4. **Full re-sync at scale.** `qwen_lifelong` at 500–2000 facts with more re-sync
-   steps (the 192-fact run only partially recovered — needs more retrieval training).
-   Add capacity/eviction (proxy Step 3A) on Qwen for a persistent growing bank.
-5. **Benchmarks that matter.** vs **RAG** (retriever + context) and vs **full
-   fine-tuning / sequential-LoRA** on real facts — the memory should win on
-   context-cost, versioning, admission, and no-forgetting, not raw single-fact acc.
+### A. Is the growth-capability breakthrough RELIABLE at real scale? (the #1 question)
+The toy is bimodal (2/5 seeds). Test whether real depth/width converges it toward
+~5/5. Extend `diag_grow_hops_ms.py` (keep the 4 arms A/B/C/D and the per-seed
+breakthrough count) but scale `d_model` (128→512/1024) and depth (2→4 → grow to
+8/12), N≥8 seeds. **Success metric: breakthrough rate (K4&K5≥0.8) rises with
+width/scale**; also confirm the sign-robust "grown > 2×-compute-L2" and "grown is
+the ONLY arm that cracks high-K (from-scratch never does)" hold. If breakthrough
+stays ~2/5 even at scale, growth needs a better warm-start/basin fix, not just size.
 
-Rough budget: items 1,4,5 are cheap (frozen base + feature extraction / small
-training) — hours on one 24GB card. Item 2 (train grown layers) and item 3
-(from-scratch baselines) are the compute sinks; a single A100-40G handles 1–3B.
-7B+ / true "super-large" and §28 meta-training are Tier-2/3 (see PROGRESS.md).
+### B. Growth-adds-capability on a REAL model, with a PARAM-MATCHED control
+Extend `qwen_integrated`: pick a task Qwen-1.5B is weak at (3–4-hop / long-context
+composition), then compare three arms at **equal trainable-param & compute budget**:
+grow +N layers & train them **vs** LoRA/in-place adapters on existing top layers
+**vs** the frozen base. Growth wins the thesis only if **grown > param-matched
+in-place** at high difficulty (depth, not just params). Caveat learned locally:
+Qwen is already 24–28 layers deep, so +N is a small *relative* depth increase —
+the toy's large 2→8 lift may not reproduce; a null here is itself informative
+(the capability benefit may be specific to genuinely-shallow→deep).
+
+### C. Replace the failed hand-crafted controller with a learned signal (§28 Ω)
+`diag_controller2.py` proved a single-window loss-delta is a bad grow trigger.
+Build the growth decision on a **held-out validation slope + patience** (grow only
+after K chunks of no held-out gain, not one noisy plateau), then graduate to the
+**meta-learned Ω** (§27-28): train the controller to predict "grow now / how much"
+from (budget, saturation, headroom) across many tasks. Validate it beats both
+fixed depth and the naive trigger on breakthrough-rate-per-FLOP.
+
+### Supporting scale-up (cheaper, do alongside)
+1. **Real-model win scale-up.** Re-run `qwen_memory`, `qwen_conflict`,
+   `qwen_admission`, `qwen_multitoken` at **1.5B and 3B**; confirm recall,
+   versioning (0.98 vs RAG), admission, multi-token hold / sharpen. The
+   **frozen-feature** ones already fit at 1.5B on 8GB — validate LOCALLY first;
+   only the training-heavy `qwen_integrated`/`qwen_lifelong` need the cloud.
+2. **Growth penalty at bigger scale.** `diag_growpenalty2` with larger `d_model`,
+   more layers (2→16+), more seeds — does "growth ≥ from-scratch" hold as models
+   grow? (from-scratch baseline = the compute cost).
+3. **Full re-sync at scale.** `qwen_lifelong` at 500–2000 facts (192-fact needed
+   3500 re-sync steps for full recovery — scale the steps). Add capacity/eviction
+   (proxy Step 3A) on Qwen for a persistent growing bank.
+4. **Benchmarks that matter.** vs **RAG** (retriever + context) and vs **full
+   fine-tuning / sequential-LoRA** — memory should win on context-cost, versioning,
+   admission, no-forgetting, not raw single-fact acc.
+
+Rough budget: the supporting items + B/C's frozen parts are cheap (hours on one
+24GB card); A (wide from-scratch baselines) and B (train grown layers) are the
+compute sinks — a single A100-40G handles 1–3B. 7B+ / true "super-large" and full
+§28 meta-training are Tier-2/3 (see PROGRESS.md).
 
 ## 3. Notes / gotchas (from the local session)
 
@@ -83,3 +119,11 @@ training) — hours on one 24GB card. Item 2 (train grown layers) and item 3
   `d_model` and breaks every module that reads hidden states).
 - The memory side never needs backprop through the LM (frozen feature extraction);
   only training the grown core layers does, and only the top layers get gradients.
+- **Toy tasks are high-variance / bimodal** — always run **multi-seed** (N≥5) and
+  report breakthrough RATE + [min,max], never a single seed (a single run can read
+  0.3 or 1.0 for the *same* config). Load-bearing claims must be sign-stability
+  checks across seeds, not one number.
+- **Don't grow on a one-chunk loss plateau** — loss briefly flattens right before a
+  phase transition, so a naive plateau trigger grows prematurely/repeatedly and
+  wastes budget re-warming identity layers. Gate growth on a held-out slope with
+  patience (or the meta-learned Ω), not a single-window training-loss delta.
