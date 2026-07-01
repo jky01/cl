@@ -127,7 +127,7 @@ def main():
     print(f"  after  growth:  " + sh(recall_by_session(bank)) + "  (identity -> preserved)")
     train_qwen_new(150)
     print(f"  after  core-train: " + sh(recall_by_session(bank)) + "  (drift -> drop)")
-    train_mem(1200)
+    train_mem(3500)   # more steps -> full re-sync recovery at scale
     print(f"  after  re-sync: " + sh(recall_by_session(bank)) + "  (recovered)")
     print(f"\n  recall stays flat across all {SESS} sessions (no forgetting by age) and is")
     print("  maintained across the growth event at scale (192 facts) on a real Qwen.")
