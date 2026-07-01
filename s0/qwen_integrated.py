@@ -33,6 +33,7 @@ def main():
     for p in lm.parameters():
         p.requires_grad_(False)
     d = lm.config.hidden_size
+    n_base = len(lm.model.layers)   # base depth (24 for 0.5B, 28 for 1.5B) -- for growth slicing
 
     def ans_id(v):
         t = tok(" " + v, add_special_tokens=False).input_ids
@@ -96,7 +97,7 @@ def main():
         return (read(f)[0].argmax(-1) == gold(f)).float().mean().item()
 
     def train_qwen_new(steps):
-        new = [p for blk in lm.model.layers[24:] for p in blk.parameters()]
+        new = [p for blk in lm.model.layers[n_base:] for p in blk.parameters()]
         for p in new:
             p.requires_grad_(True)
         # GENTLE: fresh identity layers wreck the residual stream if trained hard

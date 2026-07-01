@@ -42,8 +42,14 @@ Priorities, roughly in order. All the `qwen_*.py` scripts hardcode
 fp32 memory cost; see PROGRESS.md "gotcha").
 
 1. **Real-model scale-up.** Re-run `qwen_memory`, `qwen_conflict`, `qwen_admission`,
-   `qwen_multitoken`, `qwen_lifelong` at **1.5B and 3B**. Confirm the wins
-   (recall, versioning 0.98 vs RAG, admission, multi-token) hold / sharpen.
+   `qwen_multitoken` at **1.5B and 3B**. Confirm the wins (recall, versioning
+   0.98 vs RAG, admission, multi-token) hold / sharpen.
+   NOTE: the **frozen-feature** scripts (memory/conflict/admission/multitoken/
+   retrieval) already fit at **1.5B on an 8GB card** (1.5B fp16 = ~3.1GB, 28
+   layers, hidden 1536) — validate those at 1.5B LOCALLY before renting; only the
+   TRAINING-heavy ones (`qwen_integrated`/`qwen_lifelong` train grown layers in
+   fp32 → too big for 8GB at 1.5B) need the cloud. `n_base` is now derived
+   dynamically (was hardcoded 24 for 0.5B; 1.5B has 28).
 2. **Growth that ADDS capability on a real model.** Extend `qwen_integrated`:
    grow Qwen by several layers, train the grown layers (bf16, more steps, richer
    data than the toy fact-LM), and measure capability GAIN on a task Qwen-0.5B/1.5B
