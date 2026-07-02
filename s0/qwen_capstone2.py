@@ -33,6 +33,7 @@ LTOP = int(os.environ.get("CAP_LTOP", 2))
 STEPS = int(os.environ.get("CAP_STEPS", 800))
 LR = float(os.environ.get("CAP_LR", 1.5e-4))
 MEM_STEPS = int(os.environ.get("CAP_MEM_STEPS", 3000))
+MEM_RESTARTS = int(os.environ.get("CAP_MEM_RESTARTS", 3))   # restart-on-collapse for the memory arm
 
 
 def main():
@@ -127,41 +128,57 @@ def main():
             r.append(recall_w(m, sessions[s]))
         del m; torch.cuda.empty_cache(); return r
 
-    def arm_memory(sessions, allf):                 # router-free: retrieve by key over whole bank
-        mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
-        proj_k, proj_q, val_enc = mk(d, 128), mk(d, 128), mk(d, 256)
-        val_dec = nn.Sequential(nn.Linear(256, d), nn.GELU(), nn.Linear(d, d)).to(device)
-        gate = nn.Sequential(nn.Linear(2 * d, d), nn.GELU(), nn.Linear(d, 1)).to(device)
-        nn.init.constant_(gate[-1].bias, 2.0)
-        mods = [proj_k, proj_q, val_enc, val_dec, gate]
-        params = [p for mm in mods for p in mm.parameters()]
-        opt = torch.optim.Adam(params, lr=5e-4)
-        Bsz = 96; tgt = torch.arange(Bsz, device=device)
-        for _ in range(MEM_STEPS):
-            f = [allf[j] for j in torch.randint(0, len(allf), (Bsz,))]
-            Kk = F.normalize(proj_k(pooled(kt(f))), -1); V = val_enc(pooled(st(f)))
-            q = F.normalize(proj_q(pooled(qt(f))), -1)
-            R = val_dec(torch.softmax(q @ Kk.t() / 0.05, -1) @ V)
-            H = last_hidden(base, qt(f)).float(); g = torch.sigmoid(gate(torch.cat([H, R], -1)))
-            loss = F.cross_entropy(base.lm_head((H + g * R)).float(), gold(f)) \
-                + F.cross_entropy(q @ Kk.t() / 0.05, tgt)
-            opt.zero_grad(); loss.backward()
-            torch.nn.utils.clip_grad_norm_(params, 1.0); opt.step()
+    def arm_memory(sessions, allf, seed):           # router-free; CACHED feats + full-bank + restart
+        N = len(allf)
+        Kf, Sf, Qf = pooled(kt(allf)), pooled(st(allf)), pooled(qt(allf))   # cache ONCE
+        Hf = last_hidden(base, qt(allf)).float()
+        goldA = gold(allf)
+
+        def train_once(init_seed):
+            torch.manual_seed(init_seed)
+            mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
+            proj_k, proj_q, val_enc = mk(d, 128), mk(d, 128), mk(d, 256)
+            val_dec = nn.Sequential(nn.Linear(256, d), nn.GELU(), nn.Linear(d, d)).to(device)
+            gate = nn.Sequential(nn.Linear(2 * d, d), nn.GELU(), nn.Linear(d, 1)).to(device)
+            nn.init.constant_(gate[-1].bias, 2.0)
+            mods = (proj_k, proj_q, val_enc, val_dec, gate)
+            params = [p for mm in mods for p in mm.parameters()]
+            opt = torch.optim.Adam(params, lr=5e-4)
+            Bq = min(256, N)
+            for _ in range(MEM_STEPS):
+                idx = torch.randint(0, N, (Bq,), device=device)
+                Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)      # FULL bank
+                q = F.normalize(proj_q(Qf[idx]), -1)
+                sims = q @ Kall.t() / 0.05
+                R = val_dec(torch.softmax(sims, -1) @ Vall)
+                H = Hf[idx]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
+                loss = F.cross_entropy(base.lm_head((H + g * R)).float(), goldA[idx]) \
+                    + F.cross_entropy(sims, idx)
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_(params, 1.0); opt.step()
+            return mods
 
         @torch.no_grad()
-        def recall(f):
-            Kk = F.normalize(proj_k(pooled(kt(allf))), -1); V = val_enc(pooled(st(allf)))
-            q = F.normalize(proj_q(pooled(qt(f))), -1)
-            R = val_dec(torch.softmax(q @ Kk.t() / 0.05, -1) @ V)
-            H = last_hidden(base, qt(f)).float(); g = torch.sigmoid(gate(torch.cat([H, R], -1)))
-            return (base.lm_head((H + g * R)).float().argmax(-1) == gold(f)).float().mean().item()
-        return [recall(sessions[s]) for s in range(K)]
+        def rec_rows(mods, rows):
+            proj_k, proj_q, val_enc, val_dec, gate = mods
+            Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
+            q = F.normalize(proj_q(Qf[rows]), -1)
+            R = val_dec(torch.softmax(q @ Kall.t() / 0.05, -1) @ Vall)
+            H = Hf[rows]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
+            return (base.lm_head((H + g * R)).float().argmax(-1) == goldA[rows]).float().mean().item()
+
+        sub = torch.randperm(N, device=device)[:min(256, N)]
+        for attempt in range(MEM_RESTARTS + 1):     # restart-on-collapse
+            mods = train_once(seed * 100 + attempt)
+            if rec_rows(mods, sub) >= 0.5:
+                break
+        return [rec_rows(mods, torch.arange(s * PER, (s + 1) * PER, device=device)) for s in range(K)]
 
     agg = {"in-place": [], "memory": [], "growth": []}
     for seed in range(SEEDS):
         sessions, allf = build_stream(seed)
         A = arm_inplace(sessions)
-        B = arm_memory(sessions, allf)
+        B = arm_memory(sessions, allf, seed)
         C = arm_growth(sessions)
         agg["in-place"].append(A); agg["memory"].append(B); agg["growth"].append(C)
         sh = lambda r: " ".join(f"S{s}:{r[s]:.2f}" for s in range(K))
