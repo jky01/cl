@@ -117,7 +117,10 @@ that would make the modulation end-to-end neural.
 **Validated (this repo):** no-forgetting on real Qwen (0.5B & 1.5B), router-free for
 memory and growth, memory scaling to ~10k facts, an autonomous grow-to-sweet-spot
 controller with a robust signal, function-preserving growth transfers to Qwen
-(`qwen_grow`, Δlogits=0).
+(`qwen_grow`, Δlogits=0), and — the pieces COMPOSE into ONE autonomous lifelong loop
+(`diag_system.py`): a single system accumulates facts (recall 0.88 / 192) while
+growing its core (depth 2→6, capability 0.33→0.47), with memory re-synced cheaply as
+the core drifts. The growth *decision* is neuralized (§28 Ω, matches the heuristic).
 
 **Open / caveats:** 0.5B–1.5B only (not 3B+); synthetic single-token-**answer** facts;
 2–3 seeds on the real-model runs; routing validated over ≤~100-fact session banks
