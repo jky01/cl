@@ -100,6 +100,14 @@ fixed-deep-from-start; "learned > hand-crafted" is still open (needs reward shap
 more episodes / better credit assignment). Earlier v1 degenerated to never-grow until
 bigger batch restored the grow-pays regime.
 
+**Write-vs-grow decision — now NEURALIZED (`diag_writegrow.py`):** a gate over the
+frozen-core item feature learns to route each incoming item to memory (write) or
+growth (consolidate) — held-out routing 1.00, reward = oracle, >> always-one. So the
+integrated loop's modulation is now neural at every decision point: what-to-store
+(admission gate), write-vs-grow (this), when/how-much-to-grow (§28 Ω), route/recall
+(trained retriever). Caveat: the easy separable case; genuine cost-tradeoff routing
+is the next hardening.
+
 **Still heuristic / hand-set (NOT neural):**
 - restart-on-collapse (quick-check < 0.5 → reinit): hand threshold;
 - readout / selection: top-k=32, answer-position last-token, and the discrete
