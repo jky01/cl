@@ -105,8 +105,10 @@ frozen-core item feature learns to route each incoming item to memory (write) or
 growth (consolidate) — held-out routing 1.00, reward = oracle, >> always-one. So the
 integrated loop's modulation is now neural at every decision point: what-to-store
 (admission gate), write-vs-grow (this), when/how-much-to-grow (§28 Ω), route/recall
-(trained retriever). Caveat: the easy separable case; genuine cost-tradeoff routing
-is the next hardening.
+(trained retriever). Hardened to the genuine COST-TRADEOFF too (`diag_writegrow2.py`):
+with every item a fact and the right choice depending on system state, the gate learns
+a state-dependent policy (consolidate-threshold drops as memory load rises), matching
+the oracle (97% of its reward) and beating fixed heuristics.
 
 **Still heuristic / hand-set (NOT neural):**
 - restart-on-collapse (quick-check < 0.5 → reinit): hand threshold;
