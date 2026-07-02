@@ -123,19 +123,40 @@ def main():
         for k in range(LTOP):
             m.model.layers[-LTOP + k] = branch[k]
 
+    import torch.nn as nn
+
+    def train_router(allf):
+        """A trained retrieval router (proj_k/proj_q + InfoNCE on cached feats) -- raw
+        pooled features route at chance; trained keys route at ~retrieval@1."""
+        Kf, Qf = pooled(kt(allf)), pooled([f"{x[0]}'s {x[1]} is" for x in allf])
+        d = base.config.hidden_size
+        mk = lambda o: nn.Sequential(nn.Linear(d, d), nn.GELU(), nn.Linear(d, o)).to(device)
+        pk, pq = mk(128), mk(128)
+        opt = torch.optim.Adam([p for m in (pk, pq) for p in m.parameters()], lr=5e-4)
+        Nb = len(allf); Bq = min(128, Nb)
+        for _ in range(2500):
+            idx = torch.randint(0, Nb, (Bq,), device=device)
+            Kall = F.normalize(pk(Kf), -1); q = F.normalize(pq(Qf[idx]), -1)
+            loss = F.cross_entropy(q @ Kall.t() / 0.05, idx)
+            opt.zero_grad(); loss.backward(); opt.step()
+        with torch.no_grad():
+            Kall = F.normalize(pk(Kf), -1)
+        return pk, pq, Kall
+
     def arm_growth(sessions, routed):
         m, branches = grow_branches(sessions)
-        # frozen KEY-NN router bank: pooled key of every fact, labelled by session
         allf = [x for s in sessions for x in s]
-        Kbank = F.normalize(pooled(kt(allf)), -1)                 # [K*PER, d]
         sess_of = torch.tensor([i for i in range(K) for _ in range(PER)], device=device)
+        if routed:
+            pk, pq, Kall = train_router(allf)                     # trained retrieval router
         route_hits = 0; total = 0
         per_sess = []
         for s in range(K):
             f = sessions[s]
             if routed:
-                qk = F.normalize(pooled(kt(f)), -1)               # query key (name,attr) frozen
-                pred_sess = sess_of[(qk @ Kbank.t()).argmax(1)]   # nearest stored key -> its session
+                with torch.no_grad():
+                    q = F.normalize(pq(pooled([f"{x[0]}'s {x[1]} is" for x in f])), -1)
+                pred_sess = sess_of[(q @ Kall.t()).argmax(1)]     # trained-retrieval route -> session
                 route_hits += (pred_sess == s).sum().item(); total += len(f)
                 # apply each fact's ROUTED branch (group by predicted session)
                 correct = 0
