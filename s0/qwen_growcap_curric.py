@@ -77,12 +77,12 @@ def main():
     @torch.no_grad()
     def evalh(m, hop, n=256):
         rng = random.Random(999)
-        ok = 0
+        ok = tot = 0
         for i in range(0, n, B):
             enc, aid = batch(m, rng, hop)
             pred = m.lm_head(m.model(**enc, use_cache=False).last_hidden_state[:, -1]).float().argmax(-1)
-            ok += (pred == aid).sum().item()
-        return ok / ((n // B) * B)
+            ok += (pred == aid).sum().item(); tot += aid.numel()
+        return ok / tot
 
     def opt_for(m):
         return torch.optim.AdamW([p for p in m.parameters() if p.requires_grad], lr=LR)
