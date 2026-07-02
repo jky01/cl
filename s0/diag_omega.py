@@ -40,11 +40,20 @@ def opt_for(core, lr=3e-3):
     return torch.optim.AdamW([p for p in core.parameters() if p.requires_grad], lr=lr)
 
 
-def train_chunk(core, world, device, opt, kmax, steps=CHUNK, B=64):
-    core.train()
-    losses = []
+POOL = {}          # kmax -> (list of train batches, eval batch); pre-generated ONCE (gen is CPU-slow)
+
+
+def build_pool(world, device, kmax, nbatch=256, B=64, neval=1024):
+    batches = [gen(world, device, B, kmax=kmax) for _ in range(nbatch)]
+    ev = gen(world, device, neval, kmax=kmax)
+    POOL[kmax] = (batches, ev)
+
+
+def train_chunk(core, device, opt, kmax, steps=CHUNK):
+    core.train(); losses = []
+    batches = POOL[kmax][0]
     for _ in range(steps):
-        ids, lengths, ans, _ = gen(world, device, B, kmax=kmax)
+        ids, lengths, ans, _ = batches[torch.randint(0, len(batches), (1,)).item()]
         rows = torch.arange(ids.size(0), device=device)
         loss = F.cross_entropy(core.lm_head(core.hidden(ids)[rows, lengths - 1]), ans)
         opt.zero_grad(); loss.backward()
@@ -55,10 +64,10 @@ def train_chunk(core, world, device, opt, kmax, steps=CHUNK, B=64):
 
 
 @torch.no_grad()
-def acc_km(core, world, device, kmax, n=1024):
+def acc_km(core, device, kmax):
     core.eval()
-    ids, lengths, ans, _ = gen(world, device, n, kmax=kmax)
-    rows = torch.arange(n, device=device)
+    ids, lengths, ans, _ = POOL[kmax][1]
+    rows = torch.arange(ids.size(0), device=device)
     pred = core.lm_head(core.hidden(ids)[rows, lengths - 1]).argmax(-1)
     return (pred == ans).float().mean().item()
 
@@ -83,14 +92,14 @@ def episode(omega, world, device, kmax, budget, mode, log=None):
     if isinstance(mode, int):                                   # fixed-depth baseline
         core = new_core(world, device, mode); opt = opt_for(core)
         for _ in range(budget // CHUNK):
-            train_chunk(core, world, device, opt, kmax)
-        return acc_km(core, world, device, kmax), 0, mode, []
+            train_chunk(core, device, opt, kmax)
+        return acc_km(core, device, kmax), 0, mode, []
     core = new_core(world, device, 2); opt = opt_for(core)
     used, prev_loss, prev_a, cool, grows = 0, None, 0.0, 0, 0
     logps = []; hist = []
     while used < budget:
-        loss = train_chunk(core, world, device, opt, kmax); used += CHUNK
-        a = acc_km(core, world, device, kmax); hist.append(a)
+        loss = train_chunk(core, device, opt, kmax); used += CHUNK
+        a = acc_km(core, device, kmax); hist.append(a)
         can = cool == 0 and len(core.blocks) < MAXL and (budget - used) >= 2 * CHUNK
         grow = False
         if can:
@@ -111,22 +120,25 @@ def episode(omega, world, device, kmax, budget, mode, log=None):
         else:
             cool = max(0, cool - 1)
         prev_loss, prev_a = loss, a
-    return acc_km(core, world, device, kmax), grows, len(core.blocks), logps
+    return acc_km(core, device, kmax), grows, len(core.blocks), logps
 
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"OMEGA meta-learned growth controller ({device}) episodes={EPISODES} lambda={LAMBDA} "
           f"train_kmax={TRAIN_KMAX} test_kmax={TEST_KMAX}")
+    ref_world = World(WorldConfig(n_entities=200, n_objects=200, seed=0))
+    for km in sorted(set(TRAIN_KMAX + TEST_KMAX)):              # pre-generate batch pools ONCE
+        ref_world.rng.seed(100 + km); build_pool(ref_world, device, km)
+    print(f"  pools built for kmax={sorted(POOL)}", flush=True)
     omega = Omega().to(device)
     optO = torch.optim.Adam(omega.parameters(), lr=1e-3)
     baseline = None
     rng = random.Random(0)
     for ep in range(EPISODES):
         kmax = rng.choice(TRAIN_KMAX); budget = rng.choice(BUDGETS)
-        world = World(WorldConfig(n_entities=200, n_objects=200, seed=ep))
-        torch.manual_seed(ep); world.rng.seed(ep)
-        acc, grows, depth, logps = episode(omega, world, device, kmax, budget, "sample")
+        torch.manual_seed(ep)
+        acc, grows, depth, logps = episode(omega, ref_world, device, kmax, budget, "sample")
         reward = acc - LAMBDA * grows
         baseline = reward if baseline is None else 0.9 * baseline + 0.1 * reward
         if logps:
@@ -143,9 +155,8 @@ def main():
         for mode, tag in [("greedy", "omega"), ("heuristic", "heur"), (2, "L2"), (4, "L4"), (6, "L6")]:
             accs, gr, dep = [], [], []
             for s in range(3):
-                world = World(WorldConfig(n_entities=200, n_objects=200, seed=1000 + s))
-                torch.manual_seed(1000 + s); world.rng.seed(1000 + s)
-                a, g, d, _ = episode(omega, world, device, kmax, 7000, mode)
+                torch.manual_seed(1000 + s)                     # core-init variation; pool fixed per kmax
+                a, g, d, _ = episode(omega, ref_world, device, kmax, 7000, mode)
                 accs.append(a); gr.append(g); dep.append(d)
             row[tag] = (sum(accs) / 3, sum(dep) / 3, sum(gr) / 3)
         print(f"  kmax={kmax}: " + "  ".join(
