@@ -1,0 +1,11 @@
+AUTONOMOUS cadence (cuda) seeds=3 total=7500 curriculum kmax 3->7
+  seed 0: auto-controller depth=10 grows=4 K1:1.00 K2:1.00 K3:0.99 K4:0.96 K5:0.93 K6:0.80 K7:0.70
+  seed 1: auto-controller depth=8 grows=3 K1:1.00 K2:1.00 K3:1.00 K4:1.00 K5:0.98 K6:0.99 K7:0.97
+  seed 2: auto-controller depth=10 grows=4 K1:1.00 K2:0.62 K3:0.37 K4:0.30 K5:0.21 K6:0.19 K7:0.15
+
+== autonomous controller, mean over 3 seeds ==
+  depth [10, 8, 10] grows [4, 3, 4] | K1:1.00 K2:0.87 K3:0.79 K4:0.75 K5:0.71 K6:0.66 K7:0.61  mean 0.77
+
+  reference (diag_growlarge3): grow-every 0.47 | fixed-small 0.54 | once-mid 0.72 | L6-scratch 0.82
+  autonomous mean near once-mid (>> grow-every / fixed-small) => the controller
+  autonomously found the capability-adding cadence — grow AND get smarter, on its own.
