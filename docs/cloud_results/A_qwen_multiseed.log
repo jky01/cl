@@ -1,0 +1,24 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A: grow-cadence on real Qwen (Qwen/Qwen2.5-0.5B, cuda, NVIDIA GeForce RTX 5090) stages=[1, 2, 3] steps/stage=1200 usable-names=44
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 221/290 [00:00<00:00, 2204.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1740.12it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2990.78it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2959.15it/s]
+  seed 0: grown mean 0.770  fixed-small mean 0.742  margin +0.028  (hop3 0.63 vs 0.62)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3030.23it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 2248.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2367.39it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 2179.91it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2507.41it/s]
+  seed 1: grown mean 0.758  fixed-small mean 0.753  margin +0.005  (hop3 0.67 vs 0.64)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  72%|███████▏  | 208/290 [00:00<00:00, 2066.30it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2411.76it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 1108.20it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1521.28it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1690.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1677.58it/s]
+  seed 2: grown mean 0.756  fixed-small mean 0.782  margin -0.025  (hop3 0.63 vs 0.64)
+
+== mean accuracy by hop over 3 seeds (real Qwen) ==
+  arm           hop1 hop2 hop3   mean
+  fixed-small   0.94 0.70 0.64   0.76
+  grown         0.94 0.70 0.64   0.76
+  fixed-large   0.93 0.79 0.67   0.79
+
+  grown-minus-fixed-small margin: mean +0.003, positive in 2/3 seeds  [0.028, 0.005, -0.025]
+  consistently positive => grow-cadence-smarter robustly transfers to Qwen; mixed/near-0
+  => the single-seed +0.04 was within noise (honest down-adjust).

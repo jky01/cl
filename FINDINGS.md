@@ -78,7 +78,7 @@ gives speed, not accuracy (top-k hit-rate is already 1.0).
   failure mode. Boundaries that stand: from-scratch-at-final-size still wins if you know
   the size and can retrain (continual learning can't); and DISTILL-into-core COMPOSITION
   (cross-session 2-hop) does **not** emerge at toy scale (`diag_compose`, even at
-  grokking length) — that "smarter" path awaits real scale.
+  grokking length) — that "smarter" path awaits real scale. (Multi-seed Qwen check: the cadence capability gain is WITHIN NOISE on a pretrained Qwen-0.5B — grown 0.76 == fixed-small 0.76 over 3 seeds — so grow-for-capability is robust only for a genuinely capacity-bound base like toy-L2, not a pretrained deep model.)
 - **The naive growth controller failed.** A one-chunk training-loss-delta trigger grows
   on temporary plateaus and **loses to from-scratch** (`diag_controller2`). Fixed by a
   **held-out-slope + patience** trigger (`diag_controller3`): grows once to the sweet
