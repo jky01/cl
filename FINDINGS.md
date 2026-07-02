@@ -65,13 +65,20 @@ gives speed, not accuracy (top-k hit-rate is already 1.0).
 
 ## Honest negatives (what did NOT work — these shaped the thesis)
 
-- **Growth ≠ capability-per-param.** On real Qwen at matched trainable params,
-  **in-place fine-tune BEATS growth** (`qwen_growcap`: hop1/2/3 INPLACE 0.98/0.98/0.94
-  vs GROW 0.96/0.92/0.87). At toy scale, growth's high-K "breakthrough" is a **bimodal
-  lottery** (2/5 seeds; `diag_grow_hops_ms`) and naive width-scaling does not fix it —
-  that was undertraining, and even with compute+lr scaled, growth's edge over a
-  wide-shallow model **vanishes** (`diag_grow_hops_scale/2`). Growth's value is
-  retention, not raw capability.
+- **Growth-for-capability is real but CADENCE-critical (a corrected story).** Naive
+  growth often fails: matched-param in-place beats growth on real Qwen (`qwen_growcap`
+  0.98/0.98/0.94 vs 0.96/0.92/0.87), the toy high-K breakthrough is a **lottery**
+  (`diag_grow_hops_ms`), and **grow-EVERY-stage LOSES** to fixed-small on a curriculum
+  (`diag_growlarge` 0.47 vs 0.54 — re-warming burns budget). BUT the failure is
+  cadence, not growth per se: **ONE controller-timed grow ADDS capability** —
+  `diag_growlarge3` (same curriculum/budget): grow-every-stage 0.47 < fixed-small 0.54
+  < **once-mid (one grow L2→L6) 0.72** < fixed-L6-from-scratch 0.82 (K7: once-mid 0.44
+  vs fixed-small 0.17). So grow *rarely and well-timed* (exactly what the §28 Ω / robust
+  controllers pick) genuinely makes a small model smarter; frequent naive growth is the
+  failure mode. Boundaries that stand: from-scratch-at-final-size still wins if you know
+  the size and can retrain (continual learning can't); and DISTILL-into-core COMPOSITION
+  (cross-session 2-hop) does **not** emerge at toy scale (`diag_compose`, even at
+  grokking length) — that "smarter" path awaits real scale.
 - **The naive growth controller failed.** A one-chunk training-loss-delta trigger grows
   on temporary plateaus and **loses to from-scratch** (`diag_controller2`). Fixed by a
   **held-out-slope + patience** trigger (`diag_controller3`): grows once to the sweet
