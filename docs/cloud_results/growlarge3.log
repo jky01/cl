@@ -1,0 +1,14 @@
+growth CADENCE test (cuda) seeds=3 curriculum kmax=[3, 4, 5, 6, 7]
+  seed 0: every-stage(L10) mean=0.59  once-mid(L6) mean=0.62  fixed-small(L2) mean=0.61  fixed-L6-scr mean=0.80
+  seed 1: every-stage(L10) mean=0.45  once-mid(L6) mean=0.99  fixed-small(L2) mean=0.64  fixed-L6-scr mean=0.67
+  seed 2: every-stage(L10) mean=0.37  once-mid(L6) mean=0.55  fixed-small(L2) mean=0.37  fixed-L6-scr mean=0.97
+
+== mean accuracy by K over 3 seeds ==
+  cadence           K1 K2 K3 K4 K5 K6 K7   mean
+  every-stage(L10)  1.00 0.75 0.58 0.31 0.28 0.20 0.17   0.47
+  once-mid(L6)      1.00 0.99 0.87 0.69 0.54 0.50 0.44   0.72
+  fixed-small(L2)   1.00 0.83 0.74 0.50 0.31 0.22 0.17   0.54
+  fixed-L6-scr      1.00 1.00 0.98 0.89 0.79 0.60 0.46   0.82
+
+  once-mid > every-stage AND > fixed-small => the growlarge negative was CADENCE
+  (frequent growth burns budget re-warming); ONE well-timed grow does add capability.
