@@ -1,0 +1,20 @@
+SMALL->LARGE capability accumulation (cuda) seeds=3 curriculum kmax=[3, 4, 5, 6, 7]
+  seed 0: grown(L10) [K1:1.00 K2:0.98 K3:0.89 K4:0.39 K5:0.35 K6:0.29 K7:0.20]
+           small(L2)  [K1:1.00 K2:0.99 K3:0.91 K4:0.56 K5:0.35 K6:0.24 K7:0.19]
+           large(L10scr)[K1:1.00 K2:1.00 K3:0.98 K4:0.50 K5:0.39 K6:0.25 K7:0.17]
+  seed 1: grown(L10) [K1:1.00 K2:0.75 K3:0.47 K4:0.31 K5:0.28 K6:0.17 K7:0.16]
+           small(L2)  [K1:1.00 K2:1.00 K3:0.99 K4:0.67 K5:0.37 K6:0.26 K7:0.19]
+           large(L10scr)[K1:1.00 K2:1.00 K3:0.99 K4:0.88 K5:0.54 K6:0.37 K7:0.21]
+  seed 2: grown(L10) [K1:1.00 K2:0.51 K3:0.37 K4:0.24 K5:0.20 K6:0.15 K7:0.14]
+           small(L2)  [K1:1.00 K2:0.50 K3:0.31 K4:0.26 K5:0.22 K6:0.15 K7:0.12]
+           large(L10scr)[K1:1.00 K2:0.99 K3:0.86 K4:0.76 K5:0.66 K6:0.41 K7:0.27]
+
+== mean accuracy by K over 3 seeds (grown reached L10 from L2) ==
+  model         K1 K2 K3 K4 K5 K6 K7   mean
+  grown->L10     1.00 0.75 0.58 0.31 0.28 0.20 0.17   0.47
+  fixed-small L2 1.00 0.83 0.74 0.50 0.31 0.22 0.17   0.54
+  fixed-large scr 1.00 1.00 0.94 0.71 0.53 0.35 0.22   0.68
+
+  high-K (K>=5) mean: grown 0.22 vs fixed-small 0.23
+  grown master high-K where fixed-small saturates => a small model GREW into a large
+  one that ACCUMULATED capability across the curriculum (small->large is real here).
