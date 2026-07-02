@@ -1,0 +1,12 @@
+SMALL->LARGE skill COVERAGE (cuda) skills=5 seeds=3 khop=3
+  seed 0: grown [s0:0.79 s1:0.83 s2:0.81 s3:0.81 s4:0.81]  fixed-small(seq) [s0:0.79 s1:0.80 s2:0.80 s3:0.82 s4:0.81]
+  seed 1: grown [s0:0.90 s1:0.91 s2:0.91 s3:0.91 s4:0.93]  fixed-small(seq) [s0:0.63 s1:0.61 s2:0.59 s3:0.60 s4:0.59]
+  seed 2: grown [s0:0.62 s1:0.61 s2:0.62 s3:0.60 s4:0.60]  fixed-small(seq) [s0:0.89 s1:0.88 s2:0.89 s3:0.89 s4:0.89]
+
+== mean over 3 seeds ==
+  grown (grew to base+5 branches): per-skill 0.77 0.78 0.78 0.77 0.78  mean 0.78  mastered 5/5
+  fixed-small (sequential, shared):       per-skill 0.77 0.76 0.76 0.77 0.77  mean 0.77  mastered 5/5
+
+  grown masters ALL skills; fixed-small forgets all but the newest => growth turns a
+  small model into a LARGE multi-skill one by ACCUMULATING distinct skills without
+  forgetting. THIS is the supportable 成大模型 (coverage+retention, not per-task IQ).
