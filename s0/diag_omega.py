@@ -43,7 +43,7 @@ def opt_for(core, lr=3e-3):
 POOL = {}          # kmax -> (list of train batches, eval batch); pre-generated ONCE (gen is CPU-slow)
 
 
-def build_pool(world, device, kmax, nbatch=128, B=32, neval=512):
+def build_pool(world, device, kmax, nbatch=128, B=int(os.environ.get("OM_B", 256)), neval=512):
     batches = [gen(world, device, B, kmax=kmax) for _ in range(nbatch)]
     ev = gen(world, device, neval, kmax=kmax)
     POOL[kmax] = (batches, ev)
