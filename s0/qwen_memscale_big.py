@@ -25,6 +25,7 @@ STEPS = int(os.environ.get("MB_STEPS", 5000))
 SEEDS = int(os.environ.get("MB_SEEDS", 2))
 KDIM = int(os.environ.get("MB_KDIM", 256))
 RESTARTS = int(os.environ.get("MB_RESTARTS", 3))
+TOPK = int(os.environ.get("MB_TOPK", 32))   # ANN-style shortlist for injection readout
 ATTRS = list(ATTR_VALUES)
 
 FIRST = ("Alice Bob Carol David Emma Frank Grace Henry Iris Jack Karen Leo Mia Nina "
@@ -104,7 +105,9 @@ def main():
             Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
             q = F.normalize(proj_q(Qf[idx]), -1)
             sims = q @ Kall.t() / 0.05
-            R = val_dec(torch.softmax(sims, -1) @ Vall)
+            vk, ik = sims.topk(min(TOPK, N), dim=1)               # ANN shortlist
+            w = torch.softmax(vk, -1)                             # softmax over top-k only
+            R = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))      # inject top-k mixture
             H = Hf[idx]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
             loss = F.cross_entropy(lm.lm_head((H + g * R)).float(), gold[idx]) \
                 + F.cross_entropy(sims, idx)
@@ -122,8 +125,10 @@ def main():
             ri = rows[i:i + 256]
             s = qall[ri] @ Kall.t()
             r1 += (s.argmax(1) == ri).sum().item()
-            rk += (s.topk(min(32, N), 1).indices == ri[:, None]).any(1).sum().item()
-            R = val_dec(torch.softmax(s / 0.05, -1) @ Vall)
+            vk, ik = (s / 0.05).topk(min(TOPK, N), 1)             # ANN shortlist
+            rk += (ik == ri[:, None]).any(1).sum().item()
+            w = torch.softmax(vk, -1)
+            R = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))      # top-k injection readout
             H = Hf[ri]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
             rf += (lm.lm_head((H + g * R)).float().argmax(-1) == gold[ri]).sum().item()
         return r1 / n, rf / n, rk / n
