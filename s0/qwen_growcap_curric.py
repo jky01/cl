@@ -23,7 +23,8 @@ from .qwen_growcap import single_tok_names, make
 
 NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 STAGES = [1, 2, 3]                          # escalating max-hop curriculum
-STEPS = int(os.environ.get("GC_STEPS", 2500))   # per stage
+STEPS = int(os.environ.get("GC_STEPS", 2000))   # per stage
+SEEDS = int(os.environ.get("GC_SEEDS", 3))
 LR = 1.5e-4
 B = 24
 HOPS_EVAL = [1, 2, 3]
@@ -87,43 +88,51 @@ def main():
     def opt_for(m):
         return torch.optim.AdamW([p for p in m.parameters() if p.requires_grad], lr=LR)
 
-    results = {}
+    def run_arm(arm, seed):
+        torch.manual_seed(seed); rng = random.Random(seed)
+        m = load()
+        if arm == "fixed-large":
+            grow_qwen(m, 4); set_trainable(m, 4); opt = opt_for(m)
+            for mh in STAGES:
+                train_stage(m, rng, mh, STEPS, opt)
+        elif arm == "grown":
+            grow_qwen(m, 2); set_trainable(m, 2); opt = opt_for(m)
+            for i, mh in enumerate(STAGES):
+                if i == len(STAGES) - 1:              # one well-timed grow before the hard stage
+                    grow_qwen(m, 2); set_trainable(m, 4); opt = opt_for(m)
+                train_stage(m, rng, mh, STEPS, opt)
+        else:                                         # fixed-small
+            grow_qwen(m, 2); set_trainable(m, 2); opt = opt_for(m)
+            for mh in STAGES:
+                train_stage(m, rng, mh, STEPS, opt)
+        r = {h: evalh(m, h) for h in HOPS_EVAL}
+        del m; torch.cuda.empty_cache()
+        return r
 
-    # fixed-small: append 2, train across all stages
-    m = load(); grow_qwen(m, 2); set_trainable(m, 2); opt = opt_for(m)
-    rng = random.Random(0)
-    for mh in STAGES:
-        train_stage(m, rng, mh, STEPS, opt)
-    results["fixed-small(+2)"] = {h: evalh(m, h) for h in HOPS_EVAL}
-    del m; torch.cuda.empty_cache()
+    arms = ["fixed-small", "grown", "fixed-large"]
+    agg = {a: {h: [] for h in HOPS_EVAL} for a in arms}
+    margins = []
+    for seed in range(SEEDS):
+        res = {a: run_arm(a, seed) for a in arms}
+        for a in arms:
+            for h in HOPS_EVAL:
+                agg[a][h].append(res[a][h])
+        gmean = sum(res["grown"].values()) / 3; smean = sum(res["fixed-small"].values()) / 3
+        margins.append(gmean - smean)
+        print(f"  seed {seed}: grown mean {gmean:.3f}  fixed-small mean {smean:.3f}  "
+              f"margin {gmean - smean:+.3f}  (hop3 {res['grown'][3]:.2f} vs {res['fixed-small'][3]:.2f})", flush=True)
 
-    # grown: append 2 (easy stages) -> append 2 MORE (hard stage)
-    m = load(); grow_qwen(m, 2); set_trainable(m, 2); opt = opt_for(m)
-    rng = random.Random(0)
-    for i, mh in enumerate(STAGES):
-        if i == len(STAGES) - 1:                     # one well-timed grow before the hard stage
-            grow_qwen(m, 2); set_trainable(m, 4); opt = opt_for(m)
-        train_stage(m, rng, mh, STEPS, opt)
-    results["grown(2->4)"] = {h: evalh(m, h) for h in HOPS_EVAL}
-    del m; torch.cuda.empty_cache()
-
-    # fixed-large: append 4, train across all stages
-    m = load(); grow_qwen(m, 4); set_trainable(m, 4); opt = opt_for(m)
-    rng = random.Random(0)
-    for mh in STAGES:
-        train_stage(m, rng, mh, STEPS, opt)
-    results["fixed-large(+4)"] = {h: evalh(m, h) for h in HOPS_EVAL}
-    del m; torch.cuda.empty_cache()
-
-    print(f"\n== accuracy by hop (real Qwen, curriculum) ==")
-    print(f"  {'arm':16s} " + " ".join(f"hop{h}" for h in HOPS_EVAL) + "   mean")
-    for name, r in results.items():
-        mean = sum(r.values()) / len(r)
-        print(f"  {name:16s} " + " ".join(f"{r[h]:.2f}" for h in HOPS_EVAL) + f"   {mean:.2f}")
-    g, s = results["grown(2->4)"], results["fixed-small(+2)"]
-    print(f"\n  grown-vs-fixed-small hop3: {g[3]:.2f} vs {s[3]:.2f}")
-    print("  grown >= fixed-small (esp hop3) => cadence-timed grow-smarter TRANSFERS to real Qwen;")
-    print("  fixed >= grown => it does not (pretrained Qwen not capacity-bound like toy-L2).")
+    m_ = lambda a, h: sum(agg[a][h]) / len(agg[a][h])
+    print(f"\n== mean accuracy by hop over {SEEDS} seeds (real Qwen) ==")
+    print(f"  {'arm':13s} " + " ".join(f"hop{h}" for h in HOPS_EVAL) + "   mean")
+    for a in arms:
+        mean = sum(m_(a, h) for h in HOPS_EVAL) / 3
+        print(f"  {a:13s} " + " ".join(f"{m_(a,h):.2f}" for h in HOPS_EVAL) + f"   {mean:.2f}")
+    pos = sum(1 for x in margins if x > 0)
+    mm = sum(margins) / len(margins)
+    print(f"\n  grown-minus-fixed-small margin: mean {mm:+.3f}, positive in {pos}/{SEEDS} seeds  {[round(x,3) for x in margins]}")
+    print("  consistently positive => grow-cadence-smarter robustly transfers to Qwen; mixed/near-0")
+    print("  => the single-seed +0.04 was within noise (honest down-adjust).")
 
 
 if __name__ == "__main__":
