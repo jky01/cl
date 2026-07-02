@@ -125,27 +125,34 @@ def main():
             r1 = (sims.argmax(1) == torch.arange(N, device=device)).float().mean().item()
             topk = sims.topk(min(8, N), dim=1).indices
             rk = (topk == torch.arange(N, device=device)[:, None]).any(1).float().mean().item()
-            # answer recall (full softmax injection), batched
-            rec = 0
-            for i in range(0, N, 256):
-                s = sims[i:i + 256]
-                R = val_dec(torch.softmax(s / 0.05, -1) @ Vall)
-                H = Hf[i:i + 256]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
-                pred = lm.lm_head((H + g * R)).float().argmax(-1)
-                rec += (pred == gold[i:i + 256]).sum().item()
-            rec /= N
-        return r1, rk, rec
 
-    print(f"\n  {'N':>6} | {'retrieval@1':>12} {'top8@ANN':>9} {'answer-recall':>14}")
-    results = []
+            def recall(mode):                       # answer recall under an injection mode
+                ok = 0
+                for i in range(0, N, 256):
+                    s = sims[i:i + 256]
+                    if mode == "full":              # softmax over ALL keys (blurs at scale)
+                        R = val_dec(torch.softmax(s / 0.05, -1) @ Vall)
+                    elif mode == "top1":            # hard argmax: inject the single best value (ANN top-1)
+                        R = val_dec(Vall[s.argmax(1)])
+                    else:                           # top-8 restricted softmax (ANN shortlist)
+                        vk, ik = s.topk(min(8, N), dim=1)
+                        w = torch.softmax(vk / 0.05, -1)              # [b,8]
+                        R = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))
+                    H = Hf[i:i + 256]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
+                    pred = lm.lm_head((H + g * R)).float().argmax(-1)
+                    ok += (pred == gold[i:i + 256]).sum().item()
+                return ok / N
+            return r1, rk, recall("full"), recall("top1"), recall("top8")
+
+    print(f"\n  {'N':>6} | {'retr@1':>7} {'top8@ANN':>8} | {'ans:full':>9} {'ans:top1':>9} {'ans:top8':>9}")
     for N in SIZES:
         if N > max_pairs:
             print(f"  {N:>6} | skip (only {max_pairs} distinct pairs available)"); continue
-        r1, rk, rec = run(N)
-        results.append((N, r1, rk, rec))
-        print(f"  {N:>6} | {r1:>12.3f} {rk:>9.3f} {rec:>14.3f}", flush=True)
-    print("\n  retrieval@1 holding as N grows => router-free memory SCALES (ANN keeps it fast);")
-    print("  collapsing => learned keys saturate -> need bigger key dim / harder-negative training.")
+        r1, rk, rf, rt1, rt8 = run(N)
+        print(f"  {N:>6} | {r1:>7.3f} {rk:>8.3f} | {rf:>9.3f} {rt1:>9.3f} {rt8:>9.3f}", flush=True)
+    print("\n  retrieval@1 holds as N grows => router-free retrieval SCALES. If ans:full")
+    print("  collapses but ans:top1/top8 hold, full-softmax injection BLURS at scale and the")
+    print("  fix is hard top-k (ANN) injection -> ANN is needed for ACCURACY, not just speed.")
 
 
 if __name__ == "__main__":
