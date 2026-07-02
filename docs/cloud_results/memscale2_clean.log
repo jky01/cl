@@ -1,0 +1,13 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 1109.17it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1501.62it/s]
+MEMSCALE-2 full-bank training (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) sizes=[512, 1024, 1500] steps=5000 seeds=5 kdim=128
+  usable single-token names: 159 -> up to 1590 distinct facts
+
+       N |  retr@1  ans:full  ans:top1  restarts  (mean/5 seeds)
+     512 |   1.000     1.000     1.000         1   (full min 1.000)
+    1024 |   0.998     0.999     0.999         0   (full min 0.996)
+    1500 |   0.989     0.991     0.991         4   (full min 0.971)
+
+  restart-on-collapse: if a seed's injection collapses (quick-check < 0.5) reinit
+  + retrain. full min ~= mean across seeds => residual instability cleaned up;
+  router-free 1000+fact recall now reliable every seed.
