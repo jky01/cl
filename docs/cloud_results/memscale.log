@@ -1,0 +1,12 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  69%|██████▉   | 201/290 [00:00<00:00, 2008.00it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2414.53it/s]
+MEMSCALE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) sizes=[128, 512, 1024] steps=6000 kdim=128
+  usable single-token names: 120  -> up to 1200 distinct facts
+
+       N |  retrieval@1  top8@ANN  answer-recall
+     128 |        0.961     1.000          0.961
+     512 |        0.975     1.000          0.035
+    1024 |        0.970     1.000          0.032
+
+  retrieval@1 holding as N grows => router-free memory SCALES (ANN keeps it fast);
+  collapsing => learned keys saturate -> need bigger key dim / harder-negative training.
