@@ -24,7 +24,7 @@ SIZES = [int(x) for x in os.environ.get("MB_SIZES", "1000,4000,10000").split(","
 STEPS = int(os.environ.get("MB_STEPS", 5000))
 SEEDS = int(os.environ.get("MB_SEEDS", 2))
 KDIM = int(os.environ.get("MB_KDIM", 256))
-RESTARTS = int(os.environ.get("MB_RESTARTS", 3))
+RESTARTS = int(os.environ.get("MB_RESTARTS", 2))   # value-readout fix -> collapses should be rare
 TOPK = int(os.environ.get("MB_TOPK", 32))   # ANN-style shortlist for injection readout
 ATTRS = list(ATTR_VALUES)
 
@@ -82,8 +82,8 @@ def main():
         rng = random.Random(seed)
         pairs = rng.sample([(n, a) for n in names for a in ATTRS], N)
         facts = [(n, a, rng.choice(av[a])) for (n, a) in pairs]
-        Kf = pooled([f"{n}'s {a}" for (n, a, _) in facts])
-        Sf = pooled([f"{n}'s {a} is {v}." for (n, a, v) in facts])
+        Kf = pooled([f"{n}'s {a}" for (n, a, _) in facts])                  # key: mean-pool (retrieval fine)
+        Sf = last_h([f"{n}'s {a} is {v}" for (n, a, v) in facts])           # value: ANSWER-POSITION last-token (no name-length dilution)
         Qf = pooled([f"{n}'s {a} is" for (n, a, _) in facts])
         Hf = last_h([f"{n}'s {a} is" for (n, a, _) in facts])
         gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
