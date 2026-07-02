@@ -1,0 +1,13 @@
+  ep    0 kind=skill action=grow  reward +0.85 baseline 0.043
+  ep  300 kind=skill action=grow  reward +0.85 baseline 0.859
+  ep  600 kind=skill action=grow  reward +0.85 baseline 0.934
+  ep  900 kind=fact  action=write reward +1.00 baseline 0.931
+  ep 1200 kind=skill action=grow  reward +0.85 baseline 0.900
+  ep 1499 kind=skill action=grow  reward +0.85 baseline 0.913
+
+== held-out routing: learned gate vs oracle / always-write / always-grow ==
+  gate routing acc: fact->write 1.00, skill->grow 1.00  (mean 1.00)
+  mean reward: gate 0.925 | oracle 0.925 | always-write 0.500 | always-grow 0.450
+
+  gate acc ~1.0 and reward ~= oracle (>> always-write / always-grow) => the
+  write-vs-grow decision is a LEARNED neural policy from features (loop fully modulated).
