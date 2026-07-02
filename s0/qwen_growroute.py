@@ -133,8 +133,9 @@ def main():
         mk = lambda o: nn.Sequential(nn.Linear(d, d), nn.GELU(), nn.Linear(d, o)).to(device)
         pk, pq = mk(128), mk(128)
         opt = torch.optim.Adam([p for m in (pk, pq) for p in m.parameters()], lr=5e-4)
-        Nb = len(allf); Bq = min(128, Nb)
-        for _ in range(2500):
+        Nb = len(allf); Bq = min(96, Nb)
+        torch.manual_seed(0)
+        for _ in range(6000):
             idx = torch.randint(0, Nb, (Bq,), device=device)
             Kall = F.normalize(pk(Kf), -1); q = F.normalize(pq(Qf[idx]), -1)
             loss = F.cross_entropy(q @ Kall.t() / 0.05, idx)
