@@ -50,17 +50,19 @@ def build_pool(world, device, kmax, nbatch=128, B=int(os.environ.get("OM_B", 256
 
 
 def train_chunk(core, device, opt, kmax, steps=CHUNK):
-    core.train(); losses = []
-    batches = POOL[kmax][0]
+    core.train()
+    batches = POOL[kmax][0]; nb = len(batches)
+    rows = torch.arange(batches[0][0].size(0), device=device)   # B fixed across pool
+    params = [p for p in core.parameters() if p.requires_grad]
+    loss_sum = torch.zeros((), device=device)                   # accumulate on GPU
     for _ in range(steps):
-        ids, lengths, ans, _ = batches[torch.randint(0, len(batches), (1,)).item()]
-        rows = torch.arange(ids.size(0), device=device)
+        ids, lengths, ans, _ = batches[random.randrange(nb)]    # pure-Python pick, no GPU sync
         loss = F.cross_entropy(core.lm_head(core.hidden(ids)[rows, lengths - 1]), ans)
         opt.zero_grad(); loss.backward()
-        torch.nn.utils.clip_grad_norm_([p for p in core.parameters() if p.requires_grad], 1.0)
-        opt.step(); losses.append(loss.item())
+        torch.nn.utils.clip_grad_norm_(params, 1.0)
+        opt.step(); loss_sum += loss.detach()
     core.eval()
-    return sum(losses) / len(losses)
+    return (loss_sum / steps).item()                            # single sync per chunk
 
 
 @torch.no_grad()
