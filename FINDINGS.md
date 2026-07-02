@@ -90,9 +90,17 @@ decoder, injection gate σ(net([H,R])), commit/admission gate, versioning ctx_en
 grown branch layers, and the frozen Qwen features. Routing uses *learned* similarities
 (not rules).
 
+**Growth controller — now NEURALIZED (§28 first cut, `diag_omega.py`):** a learned
+policy Ω (small MLP over per-chunk observables, meta-trained by REINFORCE across a
+K-hop task distribution) replaces the hand rule for *when/how-much to grow*. Held-out
+(unseen kmax): Ω grows appropriately and **matches the hand heuristic** (kmax5 0.81 vs
+0.84; kmax8 0.73 vs 0.78) and beats fixed-L2/L4 — so the growth *decision* is now a
+learned, generalizing neural policy. Caveat: Ω does **not yet beat** the heuristic or
+fixed-deep-from-start; "learned > hand-crafted" is still open (needs reward shaping /
+more episodes / better credit assignment). Earlier v1 degenerated to never-grow until
+bigger batch restored the grow-pays regime.
+
 **Still heuristic / hand-set (NOT neural):**
-- growth controller — *when* to grow and *how much*: held-out-slope + patience
-  thresholds (`diag_controller3`), a hand rule, not a learned policy;
 - restart-on-collapse (quick-check < 0.5 → reinit): hand threshold;
 - readout / selection: top-k=32, answer-position last-token, and the discrete
   argmax→branch swap are hand-chosen (the router is learned, the *selection* is hard);
