@@ -138,6 +138,10 @@ controller with a robust signal, function-preserving growth transfers to Qwen
 (`diag_system.py`): a single system accumulates facts (recall 0.88 / 192) while
 growing its core (depth 2→6, capability 0.33→0.47), with memory re-synced cheaply as
 the core drifts. The growth *decision* is neuralized (§28 Ω, matches the heuristic).
+And the AUTONOMOUS controller realises grow-AND-get-smarter by itself
+(`diag_autocap.py`): on the escalating curriculum it picks the growth timing and
+reaches mean 0.77 — beating fixed-small 0.54, grow-every 0.47 and even hand-tuned
+once-mid 0.72 (variance: 2/3 seeds strong, 1 collapsed).
 
 **Open / caveats:** 0.5B–1.5B only (not 3B+); synthetic single-token-**answer** facts;
 2–3 seeds on the real-model runs; routing validated over ≤~100-fact session banks
