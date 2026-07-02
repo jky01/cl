@@ -1,14 +1,12 @@
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 2110.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2409.57it/s]
-MEMSCALE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) sizes=[128, 512, 1024, 1200] steps=6000 kdim=128
-  usable single-token names: 120  -> up to 1200 distinct facts
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  80%|████████  | 232/290 [00:00<00:00, 1965.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2208.33it/s]
+MEMSCALE-2 full-bank training (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) sizes=[512, 1024, 1500] steps=5000 seeds=3 kdim=128
+  usable single-token names: 159 -> up to 1590 distinct facts
 
-       N |  retr@1 top8@ANN |  ans:full  ans:top1  ans:top8
-     128 |   1.000    1.000 |     1.000     1.000     1.000
-     512 |   0.967    1.000 |     0.971     0.971     0.971
-    1024 |   0.962    1.000 |     0.967     0.967     0.967
-    1200 |   0.978    1.000 |     0.032     0.032     0.032
+       N |  retr@1  ans:full  ans:top1  (mean over 3 seeds)
+     512 |   1.000     1.000     1.000   (full min 1.000)
+    1024 |   0.992     0.674     0.674   (full min 0.027)
+    1500 |   0.994     0.995     0.995   (full min 0.987)
 
-  retrieval@1 holds as N grows => router-free retrieval SCALES. If ans:full
-  collapses but ans:top1/top8 hold, full-softmax injection BLURS at scale and the
-  fix is hard top-k (ANN) injection -> ANN is needed for ACCURACY, not just speed.
+  full-bank training should keep ans:full high (no train/eval mismatch) and stable
+  across seeds at N>=1024 -> reliable router-free 1000+fact recall.
