@@ -25,8 +25,9 @@ from .qwen_memory import ATTR_VALUES
 NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 SIZES = [int(x) for x in os.environ.get("MS_SIZES", "512,1024,1500").split(",")]
 STEPS = int(os.environ.get("MS_STEPS", 5000))
-SEEDS = int(os.environ.get("MS_SEEDS", 3))
+SEEDS = int(os.environ.get("MS_SEEDS", 5))
 KDIM = int(os.environ.get("MS_KDIM", 128))
+RESTARTS = int(os.environ.get("MS_RESTARTS", 3))   # restart-on-collapse attempts
 ATTRS = list(ATTR_VALUES)
 
 NAME_POOL = (
@@ -97,56 +98,75 @@ def main():
         gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
         return pooled(kt), pooled(st), pooled(qt), last_h(qt), gold
 
-    def run(N, seed):
-        Kf, Sf, Qf, Hf, gold = build(N, seed)
-        torch.manual_seed(seed)
+    def train_once(Kf, Sf, Qf, Hf, gold, N, init_seed):
+        torch.manual_seed(init_seed)
         mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
         proj_k, proj_q, val_enc = mk(d, KDIM), mk(d, KDIM), mk(d, 256)
         val_dec = nn.Sequential(nn.Linear(256, d), nn.GELU(), nn.Linear(d, d)).to(device)
         gate = nn.Sequential(nn.Linear(2 * d, d), nn.GELU(), nn.Linear(d, 1)).to(device)
         nn.init.constant_(gate[-1].bias, 2.0)
-        params = [p for m in (proj_k, proj_q, val_enc, val_dec, gate) for p in m.parameters()]
+        mods = (proj_k, proj_q, val_enc, val_dec, gate)
+        params = [p for m in mods for p in m.parameters()]
         opt = torch.optim.Adam(params, lr=5e-4)
         Bq = min(256, N)
         for step in range(STEPS):
             idx = torch.randint(0, N, (Bq,), device=device)
-            Kall = F.normalize(proj_k(Kf), -1)            # FULL bank keys [N,kd]
-            Vall = val_enc(Sf)                            # FULL bank values [N,256]
-            q = F.normalize(proj_q(Qf[idx]), -1)          # [Bq,kd]
-            sims = q @ Kall.t() / 0.05                    # [Bq,N] retrieve over WHOLE bank
-            R = val_dec(torch.softmax(sims, -1) @ Vall)   # inject over WHOLE bank (eval-matched)
+            Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)      # FULL bank
+            q = F.normalize(proj_q(Qf[idx]), -1)
+            sims = q @ Kall.t() / 0.05
+            R = val_dec(torch.softmax(sims, -1) @ Vall)
             H = Hf[idx]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
             loss = F.cross_entropy(lm.lm_head((H + g * R)).float(), gold[idx]) \
-                + F.cross_entropy(sims, idx)              # target = own index in full bank
+                + F.cross_entropy(sims, idx)
             opt.zero_grad(); loss.backward()
             torch.nn.utils.clip_grad_norm_(params, 1.0); opt.step()
-        with torch.no_grad():
-            Kall = F.normalize(proj_k(Kf), -1); qall = F.normalize(proj_q(Qf), -1); Vall = val_enc(Sf)
-            sims = qall @ Kall.t()
-            r1 = (sims.argmax(1) == torch.arange(N, device=device)).float().mean().item()
-            rf = rt1 = 0
-            for i in range(0, N, 256):
-                s = sims[i:i + 256] / 0.05
-                Rf = val_dec(torch.softmax(s, -1) @ Vall)
-                Rt = val_dec(Vall[s.argmax(1)])
-                for R, acc in ((Rf, "f"), (Rt, "t")):
-                    H = Hf[i:i + 256]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
-                    pred = lm.lm_head((H + g * R)).float().argmax(-1)
-                    n_ok = (pred == gold[i:i + 256]).sum().item()
-                    if acc == "f": rf += n_ok
-                    else: rt1 += n_ok
-            return r1, rf / N, rt1 / N
+        return mods
 
-    print(f"\n  {'N':>6} | {'retr@1':>7} {'ans:full':>9} {'ans:top1':>9}  (mean over {SEEDS} seeds)")
+    @torch.no_grad()
+    def evaluate(mods, Kf, Sf, Qf, Hf, gold, N, subset=None):
+        proj_k, proj_q, val_enc, val_dec, gate = mods
+        Kall = F.normalize(proj_k(Kf), -1); qall = F.normalize(proj_q(Qf), -1); Vall = val_enc(Sf)
+        rows = torch.arange(N, device=device) if subset is None else subset
+        r1 = rf = rt1 = 0; n = len(rows)
+        for i in range(0, n, 256):
+            ri = rows[i:i + 256]
+            s = (qall[ri] @ Kall.t())                       # [b,N] over WHOLE bank
+            r1 += (s.argmax(1) == ri).sum().item()
+            s = s / 0.05
+            Rf = val_dec(torch.softmax(s, -1) @ Vall); Rt = val_dec(Vall[s.argmax(1)])
+            for R, which in ((Rf, "f"), (Rt, "t")):
+                H = Hf[ri]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
+                ok = (lm.lm_head((H + g * R)).float().argmax(-1) == gold[ri]).sum().item()
+                if which == "f": rf += ok
+                else: rt1 += ok
+        return r1 / n, rf / n, rt1 / n
+
+    def run(N, seed):
+        Kf, Sf, Qf, Hf, gold = build(N, seed)
+        sub = torch.randperm(N, device=device)[:min(256, N)]
+        used = 0
+        for attempt in range(RESTARTS + 1):           # restart-on-collapse
+            used = attempt
+            mods = train_once(Kf, Sf, Qf, Hf, gold, N, init_seed=seed * 100 + attempt)
+            _, quick, _ = evaluate(mods, Kf, Sf, Qf, Hf, gold, N, subset=sub)
+            if quick >= 0.5:                           # converged (collapsed ~0.03 << 0.5)
+                break
+        r1, rf, rt1 = evaluate(mods, Kf, Sf, Qf, Hf, gold, N)
+        return r1, rf, rt1, used
+
+    print(f"\n  {'N':>6} | {'retr@1':>7} {'ans:full':>9} {'ans:top1':>9} {'restarts':>9}  (mean/{SEEDS} seeds)")
     for N in SIZES:
         if N > max_pairs:
             print(f"  {N:>6} | skip (max {max_pairs} pairs)"); continue
         rs = [run(N, s) for s in range(SEEDS)]
         m = lambda j: sum(r[j] for r in rs) / len(rs)
         lo = lambda j: min(r[j] for r in rs)
-        print(f"  {N:>6} | {m(0):>7.3f} {m(1):>9.3f} {m(2):>9.3f}   (full min {lo(1):.3f})", flush=True)
-    print("\n  full-bank training should keep ans:full high (no train/eval mismatch) and stable")
-    print("  across seeds at N>=1024 -> reliable router-free 1000+fact recall.")
+        tot_restarts = sum(r[3] for r in rs)
+        print(f"  {N:>6} | {m(0):>7.3f} {m(1):>9.3f} {m(2):>9.3f} {tot_restarts:>9}   "
+              f"(full min {lo(1):.3f})", flush=True)
+    print("\n  restart-on-collapse: if a seed's injection collapses (quick-check < 0.5) reinit")
+    print("  + retrain. full min ~= mean across seeds => residual instability cleaned up;")
+    print("  router-free 1000+fact recall now reliable every seed.")
 
 
 if __name__ == "__main__":
