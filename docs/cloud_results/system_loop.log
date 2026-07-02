@@ -1,0 +1,11 @@
+SYSTEM autonomous lifelong loop (cuda) kmax=6 phases=6
+  phase 0: facts=32 depth=2 cap(K6)=0.33  | recall after-write=0.97 end=0.03
+  phase 1: facts=64 depth=2 cap(K6)=0.37  | recall after-write=0.05 end=0.75
+  phase 2: facts=96 depth=2 cap(K6)=0.42  | recall after-write=0.09 end=0.71
+  phase 3: facts=128 depth=4 cap(K6)=0.37 [GREW] | recall after-write=0.68 end=0.86
+  phase 4: facts=160 depth=6 cap(K6)=0.40 [GREW] | recall after-write=0.88 end=0.93
+  phase 5: facts=192 depth=6 cap(K6)=0.47  | recall after-write=0.91 end=0.88
+
+  final: 192 facts, depth 6, capability 0.46, recall 0.88
+  ONE loop accumulated facts (recall stays high across growth) AND grew capability
+  over its lifetime => the validated pieces compose into a single running system.
