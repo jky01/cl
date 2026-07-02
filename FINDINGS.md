@@ -79,6 +79,31 @@ gives speed, not accuracy (top-k hit-rate is already 1.0).
 - **Mean-pool value readout** and **raw-feature routing** both failed at scale and were
   replaced (answer-position readout; trained retrieval router).
 
+## Neural vs heuristic — honest audit of the "all-neural" constraint
+
+The design goal was **fully neural modulation**. Status: the **substrate is neural /
+learned**, but the **meta-control layer is still hand-coded heuristics** — so "all-neural"
+is **not yet achieved**.
+
+**Neural / learned:** key–query retriever (proj_k/proj_q + InfoNCE), value encoder/
+decoder, injection gate σ(net([H,R])), commit/admission gate, versioning ctx_enc, the
+grown branch layers, and the frozen Qwen features. Routing uses *learned* similarities
+(not rules).
+
+**Still heuristic / hand-set (NOT neural):**
+- growth controller — *when* to grow and *how much*: held-out-slope + patience
+  thresholds (`diag_controller3`), a hand rule, not a learned policy;
+- restart-on-collapse (quick-check < 0.5 → reinit): hand threshold;
+- readout / selection: top-k=32, answer-position last-token, and the discrete
+  argmax→branch swap are hand-chosen (the router is learned, the *selection* is hard);
+- hyperparameters: LTOP=2, "grow 2 layers", temperatures, lr, curriculum;
+- the capstone's growth-**oracle** column was a hand-given session-id (later *replaced*
+  by the trained router in exp C).
+
+**To close it:** the §28 meta-learned Ω controller — learn "when/how-much to grow,
+where, how to route/read out" across simulated lifelong streams — is the open piece
+that would make the modulation end-to-end neural.
+
 ## What is validated vs open
 
 **Validated (this repo):** no-forgetting on real Qwen (0.5B & 1.5B), router-free for
