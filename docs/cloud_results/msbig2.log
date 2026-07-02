@@ -1,0 +1,7 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  37%|███▋      | 107/290 [00:00<00:00, 1068.35it/s]Loading weights:  81%|████████▏ | 236/290 [00:00<00:00, 1198.32it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1050.76it/s]
+MEMSCALE-BIG (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090 Ti) sizes=[1000, 4000, 10000] steps=5000 seeds=2 kdim=256
+  name space: 4347 x 10 attrs = 43470 distinct facts
+
+        N |  retr@1  ans-recall   top32  restarts  (mean/2)
+     1000 |   0.990       0.372   1.000         4   (recall min 0.087)
