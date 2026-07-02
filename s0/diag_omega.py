@@ -22,14 +22,14 @@ from .world import World, WorldConfig
 from .core import ProxyCore, grow_deeper
 from .diag_grow_hops import gen
 
-CHUNK = 500
+CHUNK = int(os.environ.get('OM_CHUNK', 250))
 MAXL = 8
 D_MODEL = 128
 EPISODES = int(os.environ.get("OM_EPISODES", 300))
 LAMBDA = float(os.environ.get("OM_LAMBDA", 0.03))     # per-grow cost in the reward
 TRAIN_KMAX = [3, 4, 6, 7]
 TEST_KMAX = [5, 8]                                    # held-out difficulties
-BUDGETS = [4000, 7000]
+BUDGETS = [1000, 1500]
 
 
 def new_core(world, device, L):
@@ -43,7 +43,7 @@ def opt_for(core, lr=3e-3):
 POOL = {}          # kmax -> (list of train batches, eval batch); pre-generated ONCE (gen is CPU-slow)
 
 
-def build_pool(world, device, kmax, nbatch=256, B=64, neval=1024):
+def build_pool(world, device, kmax, nbatch=128, B=32, neval=512):
     batches = [gen(world, device, B, kmax=kmax) for _ in range(nbatch)]
     ev = gen(world, device, neval, kmax=kmax)
     POOL[kmax] = (batches, ev)
@@ -156,7 +156,7 @@ def main():
             accs, gr, dep = [], [], []
             for s in range(3):
                 torch.manual_seed(1000 + s)                     # core-init variation; pool fixed per kmax
-                a, g, d, _ = episode(omega, ref_world, device, kmax, 7000, mode)
+                a, g, d, _ = episode(omega, ref_world, device, kmax, 1500, mode)
                 accs.append(a); gr.append(g); dep.append(d)
             row[tag] = (sum(accs) / 3, sum(dep) / 3, sum(gr) / 3)
         print(f"  kmax={kmax}: " + "  ".join(
