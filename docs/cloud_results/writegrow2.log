@@ -1,0 +1,14 @@
+WRITE-vs-GROW cost-tradeoff gate (cuda) episodes=8000 C=0.15
+  ep     0 baseline 0.007
+  ep  2000 baseline 0.344
+  ep  4000 baseline 0.351
+  ep  6000 baseline 0.336
+  ep  7999 baseline 0.367
+
+== held-out (freq,load) grid: gate vs oracle / baselines ==
+  gate matches oracle action: 89/110 (0.81)
+  mean reward: gate 0.404 | oracle 0.417 | always-write 0.275 | always-consolidate 0.372 | fixed-heuristic 0.380
+  learned consolidate-threshold on freq:  load=0.1 -> 0.91, load=0.5 -> 0.63, load=0.9 -> 0.36  (drops with load => state-dependent)
+
+  gate ~= oracle (> fixed heuristic and >> always-one), and its consolidate-threshold
+  drops as load rises => a LEARNED state-dependent cost-tradeoff policy, not a fixed rule.
