@@ -1,0 +1,10 @@
+AUTONOMOUS cadence + REVERT-on-regression (cuda) seeds=3 refK=6
+  seed 0: depth=10 grows=4 reverts=0.6220703125 mean=0.55 K1:1.00 K2:1.00 K3:0.79 K4:0.42 K5:0.27 K6:0.24 K7:0.13
+  seed 1: depth=8 grows=3 reverts=0.9853515625 mean=0.98 K1:1.00 K2:1.00 K3:1.00 K4:0.99 K5:0.98 K6:0.97 K7:0.96
+  seed 2: depth=10 grows=4 reverts=0.990234375 mean=0.99 K1:1.00 K2:1.00 K3:1.00 K4:0.99 K5:0.99 K6:0.98 K7:0.95
+
+== robust autonomous, 3 seeds ==
+  info(depth,grows,reverts) [(10, 4, 0.6220703125), (8, 3, 0.9853515625), (10, 4, 0.990234375)] | K1:1.00 K2:1.00 K3:0.93 K4:0.80 K5:0.75 K6:0.73 K7:0.68
+  mean 0.84  WORST-seed 0.55   (vs autocap mean 0.77, worst 0.15)
+  revert-on-regression should lift the worst seed (no collapse) => grow-and-get-smarter,
+  autonomous AND robust: bad growths are rolled back, so growth never tanks the run.
