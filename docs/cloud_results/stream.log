@@ -1,0 +1,15 @@
+STREAM why-grow (cuda) seeds=3 total=7500 curriculum kmax=[3, 4, 5, 6, 7]
+  seed 0: grown 0.55  fixed-small 0.61  retrain-each 0.33  large-oracle 0.61
+  seed 1: grown 0.98  fixed-small 0.64  retrain-each 0.35  large-oracle 0.71
+  seed 2: grown 0.99  fixed-small 0.37  retrain-each 0.33  large-oracle 0.71
+
+== mean acc by K over 3 seeds (matched total compute) ==
+  arm            feasible? K1 K2 K3 K4 K5 K6 K7   mean
+  grown          yes        1.00 1.00 0.93 0.80 0.75 0.73 0.68   0.84
+  fixed-small    yes        1.00 0.83 0.74 0.50 0.31 0.22 0.17   0.54
+  retrain-each   yes*       1.00 0.49 0.30 0.21 0.15 0.12 0.11   0.34
+  large-oracle   NO(oracle) 1.00 1.00 0.94 0.71 0.53 0.35 0.22   0.68
+
+  among FEASIBLE stream strategies (grown/fixed-small/retrain-each), grown should win;
+  large-oracle (needs known final size + full replay) is an unattainable upper bound.
+  => growth is the compute-efficient way to grow-and-get-smarter in a real stream.
