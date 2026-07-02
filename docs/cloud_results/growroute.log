@@ -1,0 +1,14 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1688.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1479.62it/s]
+GROW-ROUTE router-free growth (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) SEEDS=2 K=4 PER=24 LTOP=2 STEPS=800
+  seed 0: inplace[0.38 0.21 0.42 1.00] oracle[1.00 1.00 1.00 1.00] routed[1.00 0.96 0.96 1.00] route-acc 0.979
+  seed 1: inplace[0.21 0.12 0.58 1.00] oracle[1.00 1.00 1.00 1.00] routed[1.00 1.00 1.00 1.00] route-acc 1.000
+
+== mean over 2 seeds (K=4) ==
+  in-place   mean-recall 0.490
+  oracle     mean-recall 1.000
+  routed     mean-recall 0.990
+  routing accuracy (key-NN, no oracle): 0.990
+
+  routed ~= oracle (and >> in-place) => growth's no-forgetting is ROUTER-FREE via
+  key-NN routing, closing the oracle crutch; routing acc ~ retrieval@1.
