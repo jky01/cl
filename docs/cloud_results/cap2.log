@@ -1,0 +1,16 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+CAPSTONE-2 router-free multi-seed (Qwen/Qwen2.5-0.5B, cuda, NVIDIA GeForce RTX 5090) SEEDS=3 K=6 PER=16 LTOP=2 STEPS=800 MEM_STEPS=3000
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 63/290 [00:00<00:00, 624.54it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 746.82it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 777.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 724.78it/s]
+  seed 0: in-place[S0:0.31 S1:0.06 S2:0.25 S3:0.25 S4:0.50 S5:1.00] mem[S0:1.00 S1:1.00 S2:1.00 S3:1.00 S4:1.00 S5:1.00] grow[S0:1.00 S1:1.00 S2:1.00 S3:1.00 S4:1.00 S5:1.00]
+  seed 1: in-place[S0:0.25 S1:0.00 S2:0.12 S3:0.25 S4:0.56 S5:1.00] mem[S0:0.94 S1:0.94 S2:1.00 S3:1.00 S4:1.00 S5:1.00] grow[S0:1.00 S1:1.00 S2:1.00 S3:1.00 S4:1.00 S5:1.00]
+  seed 2: in-place[S0:0.12 S1:0.31 S2:0.25 S3:0.38 S4:0.44 S5:1.00] mem[S0:1.00 S1:1.00 S2:1.00 S3:1.00 S4:1.00 S5:1.00] grow[S0:1.00 S1:1.00 S2:1.00 S3:1.00 S4:1.00 S5:1.00]
+
+== mean over 3 seeds, K=6 sessions ==
+  arm        | S0 S1 S2 S3 S4 S5 |  mean  S0(oldest)
+  in-place   | 0.23 0.12 0.21 0.29 0.50 1.00 |  0.39   0.23
+  memory     | 0.98 0.98 1.00 1.00 1.00 1.00 |  0.99   0.98
+  growth     | 1.00 1.00 1.00 1.00 1.00 1.00 |  1.00   1.00
+
+  in-place S0 collapses (catastrophic forgetting of the oldest session);
+  MEMORY (no router) stays flat -> router-free no-forgetting holds multi-seed at
+  K=6; growth+routing (oracle) is the isolated-capacity ceiling.
