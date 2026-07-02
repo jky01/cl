@@ -29,7 +29,7 @@ EPISODES = int(os.environ.get("OM_EPISODES", 300))
 LAMBDA = float(os.environ.get("OM_LAMBDA", 0.03))     # per-grow cost in the reward
 TRAIN_KMAX = [3, 4, 6, 7]
 TEST_KMAX = [5, 8]                                    # held-out difficulties
-BUDGETS = [1000, 1500]
+BUDGETS = [600, 900]
 
 
 def new_core(world, device, L):
@@ -158,7 +158,7 @@ def main():
             accs, gr, dep = [], [], []
             for s in range(3):
                 torch.manual_seed(1000 + s)                     # core-init variation; pool fixed per kmax
-                a, g, d, _ = episode(omega, ref_world, device, kmax, 1500, mode)
+                a, g, d, _ = episode(omega, ref_world, device, kmax, 900, mode)
                 accs.append(a); gr.append(g); dep.append(d)
             row[tag] = (sum(accs) / 3, sum(dep) / 3, sum(gr) / 3)
         print(f"  kmax={kmax}: " + "  ".join(
