@@ -131,6 +131,7 @@ def main():
                for pf in (p_seen, p_para)]                # multi-view (features computed once)
         Nb = len(facts); ar = torch.arange(Nb, device=device)
         mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
+        best = None                                       # keep the BEST attempt, not the last
         for attempt in range(MEMRESTART + 1):
             torch.manual_seed(seed + attempt * 911)       # fresh init each restart
             proj_k, proj_q, val_enc = mk(d, KDIM), mk(d, KDIM), mk(d, 256)
@@ -159,8 +160,11 @@ def main():
                 Rr = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))
                 gg = torch.sigmoid(gate(torch.cat([Hs, Rr], -1)))
                 ans = feat.lm_head(Hs + gg * Rr).float().argmax(-1).eq(gold).float().mean().item()
-            if ans >= COLLAPSE_THR or attempt == MEMRESTART:
+            if best is None or ans > best[3]:
+                best = (mods, Kf, Sf, ans, attempt)
+            if ans >= COLLAPSE_THR:
                 return mods, Kf, Sf, ans, attempt
+        return best                                       # none passed THR -> return best-scoring
 
     @torch.no_grad()
     def teacher_logits(feat, mods, Kf, Sf, prompts):
