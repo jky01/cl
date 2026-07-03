@@ -1,0 +1,24 @@
+LIFECYCLE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=8 facts/stream=100 grow=+1L/round steps=800 seeds=1
+  seed 0: streams=[100, 100, 100, 100, 100, 100, 100, 100]
+    [grow   replay seed 0 r0] layers=25 recall(S0..Sr)=[1.0] hop=0.201
+    [grow   replay seed 0 r1] layers=26 recall(S0..Sr)=[1.0, 1.0] hop=0.201
+    [grow   replay seed 0 r2] layers=27 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.201
+    [grow   replay seed 0 r3] layers=28 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0] hop=0.205
+    [grow   replay seed 0 r4] layers=29 recall(S0..Sr)=[1.0, 0.99, 0.99, 1.0, 1.0] hop=0.198
+    [grow   replay seed 0 r5] layers=30 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.205
+    [grow   replay seed 0 r6] layers=31 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 0.99, 1.0, 1.0] hop=0.198
+    [grow   replay seed 0 r7] layers=32 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.198
+    [nogrow replay seed 0 r0] layers=24 recall(S0..Sr)=[1.0] hop=0.212
+    [nogrow replay seed 0 r1] layers=24 recall(S0..Sr)=[1.0, 1.0] hop=0.201
+    [nogrow replay seed 0 r2] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.201
+    [nogrow replay seed 0 r3] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0] hop=0.201
+    [nogrow replay seed 0 r4] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0] hop=0.219
+    [nogrow replay seed 0 r5] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.212
+    [nogrow replay seed 0 r6] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.208
+    [nogrow replay seed 0 r7] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.191
+
+== after 8 rounds (single dense checkpoint, mean/1 seeds) ==
+  grow/replay    | oldest S0: fresh 1.000 -> final 1.000 (forgetting +0.000)  newest 1.000  all-streams 1.000  hop 0.205->0.198
+  nogrow/replay  | oldest S0: fresh 1.000 -> final 1.000 (forgetting +0.000)  newest 1.000  all-streams 1.000  hop 0.205->0.191
+
+  GROWTH ablation (both replay): oldest-S0 retention grow 1.000 vs nogrow 1.000  => replay drives retention; growth's value is capacity/compute, not retention at this scale.

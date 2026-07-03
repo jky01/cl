@@ -42,10 +42,20 @@
 > - **R30** (3-seed confirmation): the reliable loop holds across seeds — **replay all-seen
 >   0.918, oldest-S0 forget +0.017, hop preserved**; naive forgets (+0.742). Not seed-specific.
 >
-> Net: lifelong retention = **replay-based consolidation into dense weights** (works with/without
-> growth, with/without gold); the memory is a *training scaffold*, not an inference dependency;
-> its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall
-> restart. Open: an honest compute-advantage / capacity-saturation demonstration for growth itself.
+> **R31 (capacity-saturation)**: grow(+1/round) vs nogrow(fixed **1 layer**) + replay over 8
+> streams × 100 facts — **both retain all 8 streams at 1.0**. A single fixed layer + replay
+> holds 800 facts; capacity is not the bottleneck at this scale.
+>
+> **Honest bottom line (R19-R31):** the demonstrated, robust, multi-seed contribution is
+> **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
+> retained with no external memory at inference. **Growth (the "小 → 大" framing) is NOT
+> justified by any of these experiments**: R23 shows growth doesn't drive retention, R31 shows
+> it doesn't add capacity even at 800 facts through 1 layer. Justifying growth requires what
+> these synthetic fact/hop tasks don't stress — a **compute-advantage** result (grow-from-small
+> reaching a capability at <30-50% of from-scratch-large compute, the SOLAR/LiGO/LESA bar) or a
+> **capability-saturation** regime at much larger scale. That is the clear next task; until then
+> do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
+> its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall restart.
 
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
 Every number below is reproducible from a script in `s0/` with its log in
