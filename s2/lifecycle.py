@@ -133,13 +133,16 @@ def main():
             for p in lyr.parameters():
                 p.requires_grad_(True)
 
-    def run_arm(seed, streams, replay):
+    def run_arm(seed, streams, replay, mode):
         m = load_frozen()
         base_hop = hop_acc(m)
         rng = random.Random(seed * 13 + (7 if replay else 3))
         hist = []                                        # per-round: (recall_per_stream, hop)
+        if mode == "nogrow":
+            set_trainable_top(m, GROW)                   # fixed capacity: same top-GROW layers every round
         for r in range(ROUNDS):
-            grow_qwen(m, GROW); set_trainable_top(m, GROW)   # new capacity; train only newest layers
+            if mode == "grow":
+                grow_qwen(m, GROW); set_trainable_top(m, GROW)  # new capacity; train only newest layers
             opt = torch.optim.AdamW([p for p in m.parameters() if p.requires_grad], lr=LR)
             new = streams[r]; old = [f for s in streams[:r] for f in s]
             m.train()
@@ -167,7 +170,7 @@ def main():
             rec = [recall(m, streams[j]) for j in range(r + 1)]
             h = hop_acc(m)
             hist.append((rec, h))
-            print(f"    [{'replay' if replay else 'naive '} seed {seed} r{r}] layers={len(m.model.layers)} "
+            print(f"    [{mode:6s} {'replay' if replay else 'naive '} seed {seed} r{r}] layers={len(m.model.layers)} "
                   f"recall(S0..Sr)={[round(x,2) for x in rec]} hop={h:.3f}", flush=True)
         del m; torch.cuda.empty_cache()
         return base_hop, hist
@@ -178,32 +181,41 @@ def main():
     def base_logits(enc):
         return _base.lm_head(_base.model(**enc).last_hidden_state[:, -1]).float()
 
-    agg = {"naive": [], "replay": []}
+    MODES = os.environ.get("LC_MODES", "grow,nogrow").split(",")
+    REPLAYS = [False, True] if os.environ.get("LC_REPLAYS", "both") == "both" else [True]
+    agg = {}                                             # (mode, replay) -> list of (base_hop, hist)
     for seed in range(SEEDS):
         streams = make_streams(seed)
         print(f"  seed {seed}: streams={[len(s) for s in streams]}", flush=True)
-        for replay in (False, True):
-            base_hop, hist = run_arm(seed, streams, replay)
-            agg["replay" if replay else "naive"].append((base_hop, hist))
+        for mode in MODES:
+            for replay in REPLAYS:
+                base_hop, hist = run_arm(seed, streams, replay, mode)
+                agg.setdefault((mode, replay), []).append((base_hop, hist))
 
     # summary: after the FINAL round, oldest-stream recall (retention) vs newest, mean, hop
     print(f"\n== after {ROUNDS} rounds (single dense checkpoint, mean/{SEEDS} seeds) ==")
-    for arm in ("naive", "replay"):
-        runs = agg[arm]
-        s0_final = sum(r[1][-1][0][0] for r in runs) / len(runs)          # S0 recall after last round
-        s0_fresh = sum(r[1][0][0][0] for r in runs) / len(runs)          # S0 recall right after it was learned
-        newest = sum(r[1][-1][0][-1] for r in runs) / len(runs)          # newest stream recall
-        allmean = sum(sum(r[1][-1][0]) / len(r[1][-1][0]) for r in runs) / len(runs)
-        hop_f = sum(r[1][-1][1] for r in runs) / len(runs)
-        base_hop = sum(r[0] for r in runs) / len(runs)
-        print(f"  {arm:6s} | oldest S0: fresh {s0_fresh:.3f} -> final {s0_final:.3f} "
-              f"(forgetting {s0_fresh - s0_final:+.3f})  newest {newest:.3f}  all-streams {allmean:.3f}  "
-              f"hop {base_hop:.3f}->{hop_f:.3f}")
-    nv = sum(r[1][0][0][0] - r[1][-1][0][0] for r in agg["naive"]) / SEEDS
-    rp = sum(r[1][0][0][0] - r[1][-1][0][0] for r in agg["replay"]) / SEEDS
-    print(f"\n  oldest-stream forgetting: naive {nv:+.3f} vs replay {rp:+.3f}  => "
-          + ("REPLAY grow+consolidate RETAINS old streams in a single dense checkpoint (naive forgets)."
-             if nv - rp > 0.15 else "no decisive retention gap — inspect."))
+    for mode in MODES:
+        for replay in REPLAYS:
+            runs = agg.get((mode, replay))
+            if not runs:
+                continue
+            s0_final = sum(r[1][-1][0][0] for r in runs) / len(runs)      # S0 recall after last round
+            s0_fresh = sum(r[1][0][0][0] for r in runs) / len(runs)       # S0 recall right after learned
+            newest = sum(r[1][-1][0][-1] for r in runs) / len(runs)       # newest stream recall
+            allmean = sum(sum(r[1][-1][0]) / len(r[1][-1][0]) for r in runs) / len(runs)
+            hop_f = sum(r[1][-1][1] for r in runs) / len(runs)
+            base_hop = sum(r[0] for r in runs) / len(runs)
+            tag = f"{mode}/{'replay' if replay else 'naive'}"
+            print(f"  {tag:14s} | oldest S0: fresh {s0_fresh:.3f} -> final {s0_final:.3f} "
+                  f"(forgetting {s0_fresh - s0_final:+.3f})  newest {newest:.3f}  all-streams {allmean:.3f}  "
+                  f"hop {base_hop:.3f}->{hop_f:.3f}")
+    gr = agg.get(("grow", True)); ng = agg.get(("nogrow", True))
+    if gr and ng:
+        g_s0 = sum(r[1][-1][0][0] for r in gr) / len(gr)
+        n_s0 = sum(r[1][-1][0][0] for r in ng) / len(ng)
+        print(f"\n  GROWTH ablation (both replay): oldest-S0 retention grow {g_s0:.3f} vs nogrow {n_s0:.3f}  => "
+              + (f"growth ADDS retention (+{g_s0-n_s0:.3f})." if g_s0 - n_s0 > 0.1 else
+                 "replay drives retention; growth's value is capacity/compute, not retention at this scale."))
 
 
 if __name__ == "__main__":
