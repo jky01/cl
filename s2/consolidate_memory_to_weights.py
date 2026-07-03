@@ -59,6 +59,9 @@ PRESERVE = os.environ.get("CO_PRESERVE", "anchor")
 # student GENERALIZES from what the scaffold taught). Proves the memory scaffold (not gold) is
 # what carries the knowledge into dense weights. Use at a teacher-good scale (few facts).
 DISTILL_ONLY = bool(os.environ.get("CO_DISTILL_ONLY"))
+# multi-view teacher: train the memory to answer seen+para phrasings (not just seen), so a
+# no-gold distill-only student can generalize to paraphrase (closes the R22 para gap).
+MULTIVIEW = bool(os.environ.get("CO_MULTIVIEW"))
 KDIM = 256
 TOPK = 16
 Bf = 24                                               # fact-batch
@@ -86,7 +89,7 @@ def main():
     d = AutoConfig.from_pretrained(NAME).hidden_size
     print(f"CONSOLIDATE ({NAME}, {torch.cuda.get_device_name(0) if device=='cuda' else 'cpu'}) "
           f"facts={FACTS} grow=+{GROW}L mem-steps={MEM_STEPS} stu-steps={STU_STEPS} "
-          f"seeds={SEEDS} λd={LD} λp={LP} preserve={PRESERVE} distill_only={DISTILL_ONLY}")
+          f"seeds={SEEDS} λd={LD} λp={LP} preserve={PRESERVE} distill_only={DISTILL_ONLY} multiview={MULTIVIEW}")
 
     def load_frozen():
         m = AutoModelForCausalLM.from_pretrained(NAME, dtype=torch.float32).to(device).eval()
@@ -159,12 +162,16 @@ def main():
         mods = (proj_k, proj_q, val_enc, val_dec, gate)
         Kf = pooled(feat, [f"{n}'s {a}" for (n, a, _) in facts])
         Sf = last_h(feat, [f"{n}'s {a} is {v}" for (n, a, v) in facts])
-        Qf = pooled(feat, [p_seen(*f) for f in facts])
-        Hf = last_h(feat, [p_seen(*f) for f in facts])
         gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
+        # views: which query phrasings the memory is TRAINED to answer. single-view = seen only
+        # (R22); multi-view = seen+para so a no-gold distilled student can generalize to paraphrase.
+        views = [p_seen, p_para] if MULTIVIEW else [p_seen]
+        QHf = [(pooled(feat, [pf(*f) for f in facts]), last_h(feat, [pf(*f) for f in facts])) for pf in views]
         Nb = len(facts)
+        rngv = random.Random(seed)
         opt = torch.optim.Adam([p for m in mods for p in m.parameters()], lr=5e-4)
         for _ in range(MEM_STEPS):
+            Qf, Hf = QHf[rngv.randrange(len(QHf))]        # sample a phrasing view each step
             idx = torch.randint(0, Nb, (min(64, Nb),), device=device)
             Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
             q = F.normalize(proj_q(Qf[idx]), -1)
@@ -276,7 +283,8 @@ def main():
             # --- fact objective: gold CE on seen+para+reverse, distill KL to teacher on seen ---
             if DISTILL_ONLY:                              # student supervised ONLY by the teacher (no gold)
                 fi = [rng.randrange(len(facts)) for _ in range(Bf)]
-                prompts = [seen_p[i] for i in fi]         # teacher is strong on the SEEN phrasing
+                src = seen_p if (not MULTIVIEW or rng.random() < 0.5) else para_p  # multi-view: distill seen+para
+                prompts = [src[i] for i in fi]
                 e = tok(prompts, return_tensors="pt", padding=True).to(device)
                 with torch.no_grad():
                     t_lg = teacher_logits(feat, mods, Kf, Sf, prompts)
