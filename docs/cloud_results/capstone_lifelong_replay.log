@@ -1,0 +1,38 @@
+CAPSTONE-LIFELONG (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090) phases=4 facts/phase=1200 mem-steps=2500 cap-steps=1200 seeds=2
+  seed 0:
+    [dec ph0] bank=1200 mem-recall=0.949 cap-mean=0.382
+    [dec ph1] bank=2400 mem-recall=0.923 cap-mean=0.556
+    [dec ph2] bank=3600 mem-recall=0.400 cap-mean=0.719
+    [dec ph3] bank=4800 mem-recall=0.628 cap-mean=0.757
+    [mono ph0] recall=0.971 cap-mean=0.434
+    [mono ph1] recall=0.699 cap-mean=0.776
+    [mono ph2] recall=0.537 cap-mean=0.925
+    [mono ph3] recall=0.480 cap-mean=0.951
+    [mono-rep ph0] recall=0.971 cap-mean=0.434
+    [mono-rep ph1] recall=0.967 cap-mean=0.762
+    [mono-rep ph2] recall=0.963 cap-mean=0.957
+    [mono-rep ph3] recall=0.959 cap-mean=0.957
+  => seed 0: DECOMPOSED(rec 0.628, cap 0.757)  MONO(rec 0.480, cap 0.951)  MONO-REPLAY(rec 0.959, cap 0.957)
+  seed 1:
+    [dec ph0] bank=1200 mem-recall=0.033 cap-mean=0.394
+    [dec ph1] bank=2400 mem-recall=0.035 cap-mean=0.630
+    [dec ph2] bank=3600 mem-recall=0.035 cap-mean=0.795
+    [dec ph3] bank=4800 mem-recall=0.032 cap-mean=0.837
+    [mono ph0] recall=0.980 cap-mean=0.434
+    [mono ph1] recall=0.639 cap-mean=0.776
+    [mono ph2] recall=0.506 cap-mean=0.965
+    [mono ph3] recall=0.504 cap-mean=0.964
+    [mono-rep ph0] recall=0.980 cap-mean=0.434
+    [mono-rep ph1] recall=0.975 cap-mean=0.747
+    [mono-rep ph2] recall=0.980 cap-mean=0.984
+    [mono-rep ph3] recall=0.963 cap-mean=0.967
+  => seed 1: DECOMPOSED(rec 0.032, cap 0.837)  MONO(rec 0.504, cap 0.964)  MONO-REPLAY(rec 0.963, cap 0.967)
+
+== mean over 2 seeds (real Qwen lifelong) ==
+  DECOMPOSED  (curric-mem + grown-core, bounded/frozen-feature) : recall 0.330  cap 0.797
+  MONOLITH    (top-4, sequential, NO replay)                    : recall 0.492  cap 0.957
+  MONO-REPLAY (top-4, rehearse FULL bank each phase, O(lifetime)): recall 0.961  cap 0.962
+
+  no-replay monolith FORGETS; replay recovers recall but must store+rehearse ALL past facts
+  (unbounded O(lifetime) storage+compute); the decomposed memory matches replay-quality
+  no-forgetting from FROZEN features computed once + light projections => the EFFICIENT route.

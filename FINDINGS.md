@@ -176,18 +176,33 @@ once-mid 0.72 (variance: 2/3 seeds strong, 1 collapsed).
 
 **Open / caveats:** 0.5B–1.5B only (not 3B+); synthetic single-token-**answer** facts;
 2–3 seeds on the real-model runs; routing validated over ≤~100-fact session banks
-(large-session-count routing rides on the exp-D scaled retrieval); residual rare
-injection-training instability (mitigated by restart-on-collapse, not eliminated); the
+(large-session-count routing rides on the exp-D scaled retrieval); the
 growth controller signal is hand-built (not yet the meta-learned Ω of §28).
+
+**Round-17 correction (load-bearing — do not overclaim the capstone):** the clean 2-seed
+capstone re-run (`qwen_capstone_lifelong`, now with a MONO-REPLAY arm) shows the decomposed
+external MEMORY is **collapse-prone at 4800 facts**, not merely "residual rare" instability —
+recall was seed0 0.628 / seed1 0.032 (a full retrieval collapse from phase 0), mean **0.330**.
+The round-16 "0.909 / decomposed does both" was a **favorable-seed artifact** of the same
+sharp-temp cold-start InfoNCE collapse (rounds 10-11). The robust no-forgetting baseline here
+is **MONO-REPLAY (recall 0.961, stable across both seeds)**, which naive-monolith forgetting
+(0.492) and the current decomposed memory (0.330) both lose to. The decomposition's potential
+edge over replay is COST (frozen features computed once, never backprops the 0.5B backbone;
+storage O(N) for both), but that is moot until the memory trains reliably. Being fixed in
+round 18 via a robust-recipe stabilizer (temp+LR warmup + restart-on-collapse on the cold
+phase-0 stage; `qwen_mem_stability.py`).
 
 ## Next steps (in rough priority)
 
-1. **Consolidate multi-seed** the load-bearing real-model numbers (capstone, C, D) at
+1. **Stabilize the decomposed memory** (round 18) — eliminate the 4800-fact seed-fragile
+   collapse (temp+LR warmup + restart-on-collapse) so decomposed recall is reliable, THEN
+   redo the cost accounting vs replay (`qwen_cost_accounting.py`, drafted).
+2. **Consolidate multi-seed** the load-bearing real-model numbers (capstone, C, D) at
    N≥5 to tighten the estimates.
-2. **§28 meta-learned Ω** — replace the hand-built controller signal + routing/growth
+3. **§28 meta-learned Ω** — replace the hand-built controller signal + routing/growth
    decisions with a learned controller over simulated lifelong streams.
-3. **3B+ scale** and **larger session counts** for routing.
-4. A better value encoder than answer-position readout (learned pooler) to lift the 10k
+4. **3B+ scale** and **larger session counts** for routing.
+5. A better value encoder than answer-position readout (learned pooler) to lift the 10k
    recall from ~0.80 toward the 4k level (~0.97).
 
 ## Reproduce
