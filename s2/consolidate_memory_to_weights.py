@@ -54,6 +54,11 @@ LP = float(os.environ.get("CO_LP", 1.0))             # preserve weight
 # preservation set: "anchor" = generic completions only (R19a); "hopreplay" adds in-context
 # hop prompts (old-task replay) so KL-to-base protects the reasoning ability, not just LM text.
 PRESERVE = os.environ.get("CO_PRESERVE", "anchor")
+# distill-only: the student learns facts SOLELY from the teacher (base+memory) outputs on the
+# SEEN phrasing — NO gold labels, and para/reverse are NOT trained (held out to test whether the
+# student GENERALIZES from what the scaffold taught). Proves the memory scaffold (not gold) is
+# what carries the knowledge into dense weights. Use at a teacher-good scale (few facts).
+DISTILL_ONLY = bool(os.environ.get("CO_DISTILL_ONLY"))
 KDIM = 256
 TOPK = 16
 Bf = 24                                               # fact-batch
@@ -81,7 +86,7 @@ def main():
     d = AutoConfig.from_pretrained(NAME).hidden_size
     print(f"CONSOLIDATE ({NAME}, {torch.cuda.get_device_name(0) if device=='cuda' else 'cpu'}) "
           f"facts={FACTS} grow=+{GROW}L mem-steps={MEM_STEPS} stu-steps={STU_STEPS} "
-          f"seeds={SEEDS} λd={LD} λp={LP}")
+          f"seeds={SEEDS} λd={LD} λp={LP} preserve={PRESERVE} distill_only={DISTILL_ONLY}")
 
     def load_frozen():
         m = AutoModelForCausalLM.from_pretrained(NAME, dtype=torch.float32).to(device).eval()
@@ -269,22 +274,33 @@ def main():
         for step in range(STU_STEPS):
             student.train()
             # --- fact objective: gold CE on seen+para+reverse, distill KL to teacher on seen ---
-            phr = rng.choice(["seen", "para", "rev"]) if rev_facts else rng.choice(["seen", "para"])
-            if phr == "rev":
-                ri = [rng.randrange(len(rev_facts)) for _ in range(Bf)]
-                prompts = [rev_p[i] for i in ri]; gold = name_gold[torch.tensor(ri, device=device)]
-            else:
+            if DISTILL_ONLY:                              # student supervised ONLY by the teacher (no gold)
                 fi = [rng.randrange(len(facts)) for _ in range(Bf)]
-                src = seen_p if phr == "seen" else para_p
-                prompts = [src[i] for i in fi]; gold = val_gold[torch.tensor(fi, device=device)]
-            e = tok(prompts, return_tensors="pt", padding=True).to(device)
-            s_lg = student.lm_head(student.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
-            loss = F.cross_entropy(s_lg, gold)
-            if LD > 0 and phr == "seen":
+                prompts = [seen_p[i] for i in fi]         # teacher is strong on the SEEN phrasing
+                e = tok(prompts, return_tensors="pt", padding=True).to(device)
                 with torch.no_grad():
                     t_lg = teacher_logits(feat, mods, Kf, Sf, prompts)
-                loss = loss + LD * F.kl_div(F.log_softmax(s_lg, -1), F.softmax(t_lg, -1),
-                                            reduction="batchmean")
+                pseudo = t_lg.argmax(-1)                  # the memory's answer = the only supervision
+                s_lg = student.lm_head(student.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                loss = F.cross_entropy(s_lg, pseudo) + LD * F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+            else:
+                phr = rng.choice(["seen", "para", "rev"]) if rev_facts else rng.choice(["seen", "para"])
+                if phr == "rev":
+                    ri = [rng.randrange(len(rev_facts)) for _ in range(Bf)]
+                    prompts = [rev_p[i] for i in ri]; gold = name_gold[torch.tensor(ri, device=device)]
+                else:
+                    fi = [rng.randrange(len(facts)) for _ in range(Bf)]
+                    src = seen_p if phr == "seen" else para_p
+                    prompts = [src[i] for i in fi]; gold = val_gold[torch.tensor(fi, device=device)]
+                e = tok(prompts, return_tensors="pt", padding=True).to(device)
+                s_lg = student.lm_head(student.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                loss = F.cross_entropy(s_lg, gold)
+                if LD > 0 and phr == "seen":
+                    with torch.no_grad():
+                        t_lg = teacher_logits(feat, mods, Kf, Sf, prompts)
+                    loss = loss + LD * F.kl_div(F.log_softmax(s_lg, -1), F.softmax(t_lg, -1),
+                                                reduction="batchmean")
             # --- preservation: KL to base on anchor prompts (old ability / locality) ---
             # hopreplay ALSO puts old-task (in-context hop) prompts in the preserve batch so
             # the KL-to-base protects the reasoning computation, not only generic LM text.
