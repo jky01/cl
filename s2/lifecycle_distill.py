@@ -151,11 +151,16 @@ def main():
                 loss = F.cross_entropy(feat.lm_head(H + g * R).float(), gold[idx]) + F.cross_entropy(sims, idx)
                 opt.zero_grad(); loss.backward()
                 torch.nn.utils.clip_grad_norm_([p for m in mods for p in m.parameters()], 1.0); opt.step()
-            with torch.no_grad():                          # collapse probe: retr@1 on seen queries
-                r1 = (F.normalize(proj_q(QHf[0][0]), -1) @ F.normalize(proj_k(Kf), -1).t()
-                      ).argmax(1).eq(ar).float().mean().item()
-            if r1 >= COLLAPSE_THR or attempt == MEMRESTART:
-                return mods, Kf, Sf, r1, attempt
+            with torch.no_grad():                          # collapse probe: teacher ANSWER-recall (seen)
+                Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
+                Qs, Hs = QHf[0]
+                q = F.normalize(proj_q(Qs), -1); sims = q @ Kall.t() / 0.05
+                vk, ik = sims.topk(min(TOPK, Nb), 1); w = torch.softmax(vk, -1)
+                Rr = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))
+                gg = torch.sigmoid(gate(torch.cat([Hs, Rr], -1)))
+                ans = feat.lm_head(Hs + gg * Rr).float().argmax(-1).eq(gold).float().mean().item()
+            if ans >= COLLAPSE_THR or attempt == MEMRESTART:
+                return mods, Kf, Sf, ans, attempt
 
     @torch.no_grad()
     def teacher_logits(feat, mods, Kf, Sf, prompts):
@@ -261,7 +266,7 @@ def main():
             h = hop_acc(dense)
             hist.append((seen, para, h))
             print(f"    [{'replay' if replay else 'naive '} seed {seed} r{r}] layers={len(dense.model.layers)} "
-                  f"teacher-retr@1={t_r1:.2f}(restarts {n_rs}) "
+                  f"teacher-ans={t_r1:.2f}(restarts {n_rs}) "
                   f"seen={[round(x,2) for x in seen]} para={[round(x,2) for x in para]} hop={h:.3f}", flush=True)
         del dense; torch.cuda.empty_cache()
         return base_hop, hist
