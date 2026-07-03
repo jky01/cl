@@ -1,0 +1,28 @@
+##### PRESERVE=anchor #####
+CONSOLIDATE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) facts=200 grow=+4L mem-steps=800 stu-steps=1500 seeds=2 λd=1.0 λp=1.0
+    [seed 0] facts=200 rev=33 layers 24->28  TEACHER(seen 0.055 para 0.030 rev 0.000)  STUDENT-noMem(seen 0.715 para 1.000 rev 1.000)  base-seen 0.035  hop base 0.205->stu 0.010  anchor-agree 1.000  gap -0.660
+    [seed 1] facts=200 rev=30 layers 24->28  TEACHER(seen 0.075 para 0.030 rev 0.000)  STUDENT-noMem(seen 0.480 para 1.000 rev 1.000)  base-seen 0.040  hop base 0.205->stu 0.007  anchor-agree 0.938  gap -0.405
+
+== mean over 2 seeds (200 facts, real Qwen, preserve=anchor) ==
+  TEACHER (w/ memory)   : seen 0.065  para 0.030  rev 0.000
+  STUDENT (NO memory)   : seen 0.597  para 1.000  rev 1.000   <- thesis
+  base (novel facts)    : seen 0.038   (sanity floor = attr value-set chance)
+  old hop-acc           : base 0.205 -> student 0.009  (drop +0.196)
+  anchor-agreement      : 0.969  (student==base next-token on anchors; 1.0=fully preserved)
+  Consolidation Gap G   : -0.532  (teacher_seen - student_seen; smaller = better)
+
+  bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): NOT MET — inspect which term fails.
+##### PRESERVE=hopreplay #####
+CONSOLIDATE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) facts=200 grow=+4L mem-steps=800 stu-steps=1500 seeds=2 λd=1.0 λp=1.0
+    [seed 0] facts=200 rev=33 layers 24->28  TEACHER(seen 0.055 para 0.030 rev 0.000)  STUDENT-noMem(seen 0.300 para 1.000 rev 1.000)  base-seen 0.035  hop base 0.205->stu 0.198  anchor-agree 0.938  gap -0.245
+    [seed 1] facts=200 rev=30 layers 24->28  TEACHER(seen 0.075 para 0.030 rev 0.000)  STUDENT-noMem(seen 0.790 para 1.000 rev 1.000)  base-seen 0.040  hop base 0.205->stu 0.194  anchor-agree 0.938  gap -0.715
+
+== mean over 2 seeds (200 facts, real Qwen, preserve=hopreplay) ==
+  TEACHER (w/ memory)   : seen 0.065  para 0.030  rev 0.000
+  STUDENT (NO memory)   : seen 0.545  para 1.000  rev 1.000   <- thesis
+  base (novel facts)    : seen 0.038   (sanity floor = attr value-set chance)
+  old hop-acc           : base 0.205 -> student 0.196  (drop +0.009)
+  anchor-agreement      : 0.938  (student==base next-token on anchors; 1.0=fully preserved)
+  Consolidation Gap G   : -0.480  (teacher_seen - student_seen; smaller = better)
+
+  bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): NOT MET — inspect which term fails.
