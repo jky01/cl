@@ -31,9 +31,9 @@ from .pad import pad_batch
 
 SEEDS = int(os.environ.get("CP_SEEDS", 2))
 NX = 60                        # X entities; r1: X->Y, r2: Y->Z
-STEPS_FACT = 3000
+STEPS_FACT = int(os.environ.get('CP_STEPS_FACT', 3000))
 STEPS_COMP = int(os.environ.get("CP_STEPS_COMP", 4000))
-D = 128
+D = int(os.environ.get('CP_D', 128))
 HOLD = float(os.environ.get("CP_HOLD", 0.3))                     # fraction of compositions held out
 
 
