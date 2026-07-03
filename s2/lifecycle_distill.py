@@ -46,6 +46,10 @@ SEEDS = int(os.environ.get("LD_SEEDS", 2))
 KDIM = 256
 TOPK = 16
 LR = 1.5e-4
+# scaffold reliability (R26 found isolated per-stream memory collapses lose that stream):
+# restart-on-collapse — after training a stream's memory, probe retr@1; if collapsed, reinit+retrain.
+MEMRESTART = int(os.environ.get("LD_MEMRESTART", 4))
+COLLAPSE_THR = float(os.environ.get("LD_THR", 0.5))
 Bf = 24
 Ba = 16
 HOPS = [1, 2, 3]
@@ -118,34 +122,40 @@ def main():
             streams.append(s)
         return streams
 
-    # ---- transient multi-view memory scaffold for one stream ----
+    # ---- transient multi-view memory scaffold for one stream (with restart-on-collapse) ----
     def train_memory(feat, facts, seed):
-        torch.manual_seed(seed)
-        mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
-        proj_k, proj_q, val_enc = mk(d, KDIM), mk(d, KDIM), mk(d, 256)
-        val_dec = nn.Sequential(nn.Linear(256, d), nn.GELU(), nn.Linear(d, d)).to(device)
-        gate = nn.Sequential(nn.Linear(2 * d, d), nn.GELU(), nn.Linear(d, 1)).to(device)
-        nn.init.constant_(gate[-1].bias, 2.0)
-        mods = (proj_k, proj_q, val_enc, val_dec, gate)
         Kf = pooled(feat, [f"{n}'s {a}" for (n, a, _) in facts])
         Sf = last_h(feat, [f"{n}'s {a} is {v}" for (n, a, v) in facts])
         gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
         QHf = [(pooled(feat, [pf(*f) for f in facts]), last_h(feat, [pf(*f) for f in facts]))
-               for pf in (p_seen, p_para)]                # multi-view
-        Nb = len(facts); rngv = random.Random(seed)
-        opt = torch.optim.Adam([p for m in mods for p in m.parameters()], lr=5e-4)
-        for _ in range(MEMSTEPS):
-            Qf, Hf = QHf[rngv.randrange(2)]
-            idx = torch.randint(0, Nb, (min(64, Nb),), device=device)
-            Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
-            q = F.normalize(proj_q(Qf[idx]), -1); sims = q @ Kall.t() / 0.05
-            vk, ik = sims.topk(min(TOPK, Nb), 1); w = torch.softmax(vk, -1)
-            R = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))
-            H = Hf[idx]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
-            loss = F.cross_entropy(feat.lm_head(H + g * R).float(), gold[idx]) + F.cross_entropy(sims, idx)
-            opt.zero_grad(); loss.backward()
-            torch.nn.utils.clip_grad_norm_([p for m in mods for p in m.parameters()], 1.0); opt.step()
-        return mods, Kf, Sf
+               for pf in (p_seen, p_para)]                # multi-view (features computed once)
+        Nb = len(facts); ar = torch.arange(Nb, device=device)
+        mk = lambda i, o: nn.Sequential(nn.Linear(i, i), nn.GELU(), nn.Linear(i, o)).to(device)
+        for attempt in range(MEMRESTART + 1):
+            torch.manual_seed(seed + attempt * 911)       # fresh init each restart
+            proj_k, proj_q, val_enc = mk(d, KDIM), mk(d, KDIM), mk(d, 256)
+            val_dec = nn.Sequential(nn.Linear(256, d), nn.GELU(), nn.Linear(d, d)).to(device)
+            gate = nn.Sequential(nn.Linear(2 * d, d), nn.GELU(), nn.Linear(d, 1)).to(device)
+            nn.init.constant_(gate[-1].bias, 2.0)
+            mods = (proj_k, proj_q, val_enc, val_dec, gate)
+            rngv = random.Random(seed + attempt)
+            opt = torch.optim.Adam([p for m in mods for p in m.parameters()], lr=5e-4)
+            for _ in range(MEMSTEPS):
+                Qf, Hf = QHf[rngv.randrange(2)]
+                idx = torch.randint(0, Nb, (min(64, Nb),), device=device)
+                Kall = F.normalize(proj_k(Kf), -1); Vall = val_enc(Sf)
+                q = F.normalize(proj_q(Qf[idx]), -1); sims = q @ Kall.t() / 0.05
+                vk, ik = sims.topk(min(TOPK, Nb), 1); w = torch.softmax(vk, -1)
+                R = val_dec((w.unsqueeze(-1) * Vall[ik]).sum(1))
+                H = Hf[idx]; g = torch.sigmoid(gate(torch.cat([H, R], -1)))
+                loss = F.cross_entropy(feat.lm_head(H + g * R).float(), gold[idx]) + F.cross_entropy(sims, idx)
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_([p for m in mods for p in m.parameters()], 1.0); opt.step()
+            with torch.no_grad():                          # collapse probe: retr@1 on seen queries
+                r1 = (F.normalize(proj_q(QHf[0][0]), -1) @ F.normalize(proj_k(Kf), -1).t()
+                      ).argmax(1).eq(ar).float().mean().item()
+            if r1 >= COLLAPSE_THR or attempt == MEMRESTART:
+                return mods, Kf, Sf, r1, attempt
 
     @torch.no_grad()
     def teacher_logits(feat, mods, Kf, Sf, prompts):
@@ -205,7 +215,7 @@ def main():
         hist = []
         for r in range(ROUNDS):
             S = streams[r]; prior = [f for s in streams[:r] for f in s]
-            mods, Kf, Sf = train_memory(feat, S, seed * 100 + r)   # transient scaffold (multi-view)
+            mods, Kf, Sf, t_r1, n_rs = train_memory(feat, S, seed * 100 + r)  # transient scaffold + restart-on-collapse
             grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
             snap = copy.deepcopy(dense).eval() if (replay and prior) else None  # prior-knowledge ref
             for p in (snap.parameters() if snap else []):
@@ -251,6 +261,7 @@ def main():
             h = hop_acc(dense)
             hist.append((seen, para, h))
             print(f"    [{'replay' if replay else 'naive '} seed {seed} r{r}] layers={len(dense.model.layers)} "
+                  f"teacher-retr@1={t_r1:.2f}(restarts {n_rs}) "
                   f"seen={[round(x,2) for x in seen]} para={[round(x,2) for x in para]} hop={h:.3f}", flush=True)
         del dense; torch.cuda.empty_cache()
         return base_hop, hist
