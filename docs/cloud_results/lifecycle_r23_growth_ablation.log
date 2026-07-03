@@ -1,0 +1,35 @@
+LIFECYCLE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=3 facts/stream=100 grow=+2L/round steps=1000 seeds=2
+  seed 0: streams=[100, 100, 100]
+    [grow   naive  seed 0 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.024
+    [grow   naive  seed 0 r1] layers=28 recall(S0..Sr)=[0.51, 1.0] hop=0.014
+    [grow   naive  seed 0 r2] layers=30 recall(S0..Sr)=[0.36, 0.58, 1.0] hop=0.003
+    [grow   replay seed 0 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.201
+    [grow   replay seed 0 r1] layers=28 recall(S0..Sr)=[1.0, 1.0] hop=0.208
+    [grow   replay seed 0 r2] layers=30 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.205
+    [nogrow naive  seed 0 r0] layers=24 recall(S0..Sr)=[1.0] hop=0.056
+    [nogrow naive  seed 0 r1] layers=24 recall(S0..Sr)=[0.63, 1.0] hop=0.021
+    [nogrow naive  seed 0 r2] layers=24 recall(S0..Sr)=[0.43, 0.79, 1.0] hop=0.010
+    [nogrow replay seed 0 r0] layers=24 recall(S0..Sr)=[1.0] hop=0.181
+    [nogrow replay seed 0 r1] layers=24 recall(S0..Sr)=[1.0, 1.0] hop=0.215
+    [nogrow replay seed 0 r2] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.208
+  seed 1: streams=[100, 100, 100]
+    [grow   naive  seed 1 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.010
+    [grow   naive  seed 1 r1] layers=28 recall(S0..Sr)=[0.5, 1.0] hop=0.000
+    [grow   naive  seed 1 r2] layers=30 recall(S0..Sr)=[0.37, 0.59, 1.0] hop=0.000
+    [grow   replay seed 1 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.198
+    [grow   replay seed 1 r1] layers=28 recall(S0..Sr)=[1.0, 1.0] hop=0.208
+    [grow   replay seed 1 r2] layers=30 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.205
+    [nogrow naive  seed 1 r0] layers=24 recall(S0..Sr)=[1.0] hop=0.066
+    [nogrow naive  seed 1 r1] layers=24 recall(S0..Sr)=[0.69, 1.0] hop=0.010
+    [nogrow naive  seed 1 r2] layers=24 recall(S0..Sr)=[0.52, 0.76, 1.0] hop=0.003
+    [nogrow replay seed 1 r0] layers=24 recall(S0..Sr)=[1.0] hop=0.191
+    [nogrow replay seed 1 r1] layers=24 recall(S0..Sr)=[1.0, 1.0] hop=0.201
+    [nogrow replay seed 1 r2] layers=24 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.201
+
+== after 3 rounds (single dense checkpoint, mean/2 seeds) ==
+  grow/naive     | oldest S0: fresh 1.000 -> final 0.365 (forgetting +0.635)  newest 1.000  all-streams 0.650  hop 0.205->0.002
+  grow/replay    | oldest S0: fresh 1.000 -> final 1.000 (forgetting +0.000)  newest 1.000  all-streams 1.000  hop 0.205->0.205
+  nogrow/naive   | oldest S0: fresh 1.000 -> final 0.475 (forgetting +0.525)  newest 1.000  all-streams 0.750  hop 0.205->0.007
+  nogrow/replay  | oldest S0: fresh 1.000 -> final 1.000 (forgetting +0.000)  newest 1.000  all-streams 1.000  hop 0.205->0.205
+
+  GROWTH ablation (both replay): oldest-S0 retention grow 1.000 vs nogrow 1.000  => replay drives retention; growth's value is capacity/compute, not retention at this scale.
