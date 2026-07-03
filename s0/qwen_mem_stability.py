@@ -40,8 +40,7 @@ STEPS = int(os.environ.get("MS_STEPS", 2500))           # per-phase memory steps
 SEEDS = int(os.environ.get("MS_SEEDS", 6))
 KDIM = int(os.environ.get("MS_KDIM", 256))
 TOPK = 32
-PROBE_AT = int(os.environ.get("MS_PROBE_AT", 300))      # steps into phase-0 before the collapse probe
-COLLAPSE_THR = float(os.environ.get("MS_THR", 0.30))    # retrieval@1 below this at the probe = collapsed
+COLLAPSE_THR = float(os.environ.get("MS_THR", 0.30))    # end-of-phase0 retrieval@1 below this = collapsed
 MAX_RESTART = int(os.environ.get("MS_MAX_RESTART", 4))
 ATTRS = list(ATTR_VALUES)
 
@@ -59,7 +58,7 @@ def main():
         p.requires_grad_(False)
     print(f"MEM-STABILITY ({NAME}, {torch.cuda.get_device_name(0) if device=='cuda' else 'cpu'}) "
           f"phases={PHASES} facts/phase={FACTS_PER} steps/phase={STEPS} seeds={SEEDS} "
-          f"probe@{PROBE_AT} thr={COLLAPSE_THR} max_restart={MAX_RESTART}")
+          f"probe@end-phase0 thr={COLLAPSE_THR} max_restart={MAX_RESTART}")
 
     def one_tok(v):
         t = tok(" " + v, add_special_tokens=False).input_ids
@@ -157,16 +156,16 @@ def main():
         for attempt in range(MAX_RESTART + 1):
             mods = new_mem(seed * 100 + 1 + attempt * 9973)          # new init each restart
             opt = torch.optim.Adam([p for m in mods for p in m.parameters()], lr=5e-4)
-            bank = []; cache = None; gstep = 0
-            # ---- phase 0 with a collapse probe (only guard on the FIRST, hardest cold stage) ----
+            bank = []; gstep = 0
+            # ---- train phase 0 FULLY, THEN probe: healthy retr@1 ~0.9 vs collapsed ~0.0 is a
+            #      clean margin, and probing after (not during) warmup avoids false positives ----
             bank += phases_facts[0]; cache = feats(bank)
-            gstep = train_phase(mods, opt, cache, PROBE_AT, stable, gstep)
+            gstep = train_phase(mods, opt, cache, STEPS, stable, gstep)
             probe = retr_at1(mods, cache)
             if stable and probe < COLLAPSE_THR and attempt < MAX_RESTART:
-                print(f"      [seed {seed} stable] phase0 probe retr@1={probe:.3f} < {COLLAPSE_THR} "
+                print(f"      [seed {seed} stable] phase0 retr@1={probe:.3f} < {COLLAPSE_THR} "
                       f"-> RESTART {attempt+1}/{MAX_RESTART}", flush=True)
                 continue
-            gstep = train_phase(mods, opt, cache, STEPS - PROBE_AT, stable, gstep)
             for ph in range(1, PHASES):
                 bank += phases_facts[ph]; cache = feats(bank)
                 gstep = train_phase(mods, opt, cache, STEPS, stable, gstep)
