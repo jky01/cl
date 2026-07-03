@@ -30,15 +30,21 @@ def meanacc(core, world, device):
 
 
 def grown_to(world, device, L, seed):
+    import copy
     torch.manual_seed(seed); world.rng.seed(seed)
     core = ProxyCore(world.vocab_size, d_model=D, n_layers=2, n_heads=4, max_len=72).to(device)
     grows = (L - 2) // 2
     phase = T // (grows + 1)
-    train(core, world, device, KMAX, phase)
+    best_ref, best = -1.0, None
+    def track():                                    # keep-best: never keep a collapsed growth
+        nonlocal best_ref, best
+        r = meanacc(core, world, device)
+        if r > best_ref: best_ref, best = r, copy.deepcopy(core)
+    train(core, world, device, KMAX, phase); track()
     for _ in range(grows):
         grow_deeper(core, 2, trainable=True)
-        train(core, world, device, KMAX, phase)
-    return meanacc(core, world, device)
+        train(core, world, device, KMAX, phase); track()
+    return meanacc(best, world, device)
 
 
 def scratch(world, device, L, seed):
