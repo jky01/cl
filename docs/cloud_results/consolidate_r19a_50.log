@@ -1,0 +1,12 @@
+CONSOLIDATE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) facts=50 grow=+4L mem-steps=800 stu-steps=1500 seeds=2 λd=1.0 λp=1.0
+    [seed 0] layers 24->28  TEACHER(seen 1.000 para 0.143 rev 0.000)  STUDENT-noMem(seen 1.000 para 1.000 rev 1.000)  base-seen 0.086  hop base 0.205->stu 0.059  gap 0.000
+    [seed 1] layers 24->28  TEACHER(seen 1.000 para 0.176 rev 0.000)  STUDENT-noMem(seen 0.971 para 0.941 rev 0.765)  base-seen 0.029  hop base 0.205->stu 0.128  gap 0.029
+
+== mean over 2 seeds (50 facts, real Qwen) ==
+  TEACHER (w/ memory)   : seen 1.000  para 0.160  rev 0.000
+  STUDENT (NO memory)   : seen 0.985  para 0.971  rev 0.882   <- thesis
+  base (novel facts)    : seen 0.058   (sanity: should be ~0)
+  old hop-acc           : base 0.205 -> student 0.094  (drop +0.111)
+  Consolidation Gap G   : 0.015  (teacher_seen - student_seen; smaller = better)
+
+  R19a bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): NOT MET — inspect which term fails before scaling facts.

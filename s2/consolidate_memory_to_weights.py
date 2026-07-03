@@ -41,6 +41,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 from s0.qwen_grow import grow_qwen
 from s0.qwen_growcap import single_tok_names, make
 from s0.qwen_memory import ATTR_VALUES
+from s0.qwen_memscale_big import FIRST, LAST
 
 NAME = os.environ.get("QWEN_MODEL", "Qwen/Qwen2.5-0.5B")
 FACTS = int(os.environ.get("CO_FACTS", 50))
@@ -50,6 +51,9 @@ STU_STEPS = int(os.environ.get("CO_STU_STEPS", 1500)) # student consolidation st
 SEEDS = int(os.environ.get("CO_SEEDS", 2))
 LD = float(os.environ.get("CO_LD", 1.0))              # distill weight
 LP = float(os.environ.get("CO_LP", 1.0))             # preserve weight
+# preservation set: "anchor" = generic completions only (R19a); "hopreplay" adds in-context
+# hop prompts (old-task replay) so KL-to-base protects the reasoning ability, not just LM text.
+PRESERVE = os.environ.get("CO_PRESERVE", "anchor")
 KDIM = 256
 TOPK = 16
 Bf = 24                                               # fact-batch
@@ -114,22 +118,30 @@ def main():
     def p_rev(n, a, v):  return f"The person whose {a} is {v} is"
 
     def build_facts(seed):
-        names = single_tok_names(tok)
+        """Returns (facts, rev_idx). Scales to FACTS via a large multi-token name pool
+        (seen/para only need the name in the PROMPT; the single-token VALUE is the answer).
+        rev_idx marks a subset with SINGLE-TOKEN names AND globally-unique (attr,value) so the
+        reverse-query answer (the name) is a single token and unambiguous."""
         rng = random.Random(2000 + seed)
-        rng.shuffle(names)
-        facts = []
-        used_name, used_av = set(), set()
-        ni = 0
-        while len(facts) < FACTS and ni < len(names):
-            n = names[ni]; ni += 1
-            if n in used_name:
-                continue
+        st_names = single_tok_names(tok); rng.shuffle(st_names)   # reverse-eligible subjects
+        big_pool = [f"{f} {l}" for f in FIRST for l in LAST]; rng.shuffle(big_pool)  # bulk (multi-tok ok)
+        facts = []; used_na = set(); av_ct = {}
+        for n in st_names:                                # first: reverse-eligible facts (unique a,v)
             a = rng.choice(ATTRS); v = rng.choice(av[a])
-            if (a, v) in used_av:                        # keep reverse well-posed (unique a,v)
+            if (a, v) in av_ct or (n, a) in used_na:
                 continue
-            used_name.add(n); used_av.add((a, v))
-            facts.append((n, a, v))
-        return facts
+            used_na.add((n, a)); av_ct[(a, v)] = 1; facts.append((n, a, v))
+            if len(facts) >= FACTS:
+                break
+        n_rev = len(facts)                                # facts[:n_rev] are reverse-eligible
+        pi = 0                                            # then: bulk facts to reach FACTS
+        while len(facts) < FACTS and pi < len(big_pool):
+            n = big_pool[pi]; pi += 1
+            a = rng.choice(ATTRS); v = rng.choice(av[a])
+            if (n, a) in used_na:
+                continue
+            used_na.add((n, a)); facts.append((n, a, v))
+        return facts, list(range(n_rev))
 
     # ---- teacher memory (scaffold) ----
     def train_memory(feat, facts, seed):
@@ -213,6 +225,14 @@ def main():
             ok += (pred == aid).sum().item(); tot += aid.numel()
         return ok / tot
 
+    @torch.no_grad()
+    def anchor_agreement(base, stu):
+        """fraction of anchor prompts where student's next-token == base's (headroom ~1.0)."""
+        e = tok(ANCHOR_TEXT, return_tensors="pt", padding=True).to(device)
+        b = base.lm_head(base.model(**e).last_hidden_state[:, -1]).argmax(-1)
+        s = stu.lm_head(stu.model(**e).last_hidden_state[:, -1]).argmax(-1)
+        return (b == s).float().mean().item()
+
     def set_trainable_top(m, k):
         for p in m.parameters():
             p.requires_grad_(False)
@@ -222,19 +242,20 @@ def main():
 
     def run(seed):
         feat = load_frozen()                              # base / teacher backbone / preservation ref
-        facts = build_facts(seed)
+        facts, rev_idx = build_facts(seed)
         names = single_tok_names(tok)
+        rev_facts = [facts[i] for i in rev_idx]           # reverse-eligible subset (single-tok names)
         # gold ids
         seen_p = [p_seen(*f) for f in facts]; para_p = [p_para(*f) for f in facts]
-        rev_p = [p_rev(*f) for f in facts]
+        rev_p = [p_rev(*f) for f in rev_facts]
         val_gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
-        name_gold = torch.tensor([one_tok(n) for (n, _, _) in facts], device=device)
+        name_gold = torch.tensor([one_tok(n) for (n, _, _) in rev_facts], device=device)
 
         # ---- teacher scaffold ----
         mods, (Kf, Sf) = train_memory(feat, facts, seed)
         t_seen = teacher_recall(feat, mods, Kf, Sf, seen_p, val_gold)
         t_para = teacher_recall(feat, mods, Kf, Sf, para_p, val_gold)
-        t_rev = teacher_recall(feat, mods, Kf, Sf, rev_p, name_gold)
+        t_rev = teacher_recall(feat, mods, Kf, Sf, rev_p, name_gold) if rev_facts else 0.0
 
         # ---- student: base + grown identity layers, train only appended ----
         student = load_frozen()
@@ -248,14 +269,14 @@ def main():
         for step in range(STU_STEPS):
             student.train()
             # --- fact objective: gold CE on seen+para+reverse, distill KL to teacher on seen ---
-            fi = [rng.randrange(len(facts)) for _ in range(Bf)]
-            phr = rng.choice(["seen", "para", "rev"])
-            if phr == "seen":
-                prompts = [seen_p[i] for i in fi]; gold = val_gold[torch.tensor(fi, device=device)]
-            elif phr == "para":
-                prompts = [para_p[i] for i in fi]; gold = val_gold[torch.tensor(fi, device=device)]
+            phr = rng.choice(["seen", "para", "rev"]) if rev_facts else rng.choice(["seen", "para"])
+            if phr == "rev":
+                ri = [rng.randrange(len(rev_facts)) for _ in range(Bf)]
+                prompts = [rev_p[i] for i in ri]; gold = name_gold[torch.tensor(ri, device=device)]
             else:
-                prompts = [rev_p[i] for i in fi]; gold = name_gold[torch.tensor(fi, device=device)]
+                fi = [rng.randrange(len(facts)) for _ in range(Bf)]
+                src = seen_p if phr == "seen" else para_p
+                prompts = [src[i] for i in fi]; gold = val_gold[torch.tensor(fi, device=device)]
             e = tok(prompts, return_tensors="pt", padding=True).to(device)
             s_lg = student.lm_head(student.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
             loss = F.cross_entropy(s_lg, gold)
@@ -265,8 +286,12 @@ def main():
                 loss = loss + LD * F.kl_div(F.log_softmax(s_lg, -1), F.softmax(t_lg, -1),
                                             reduction="batchmean")
             # --- preservation: KL to base on anchor prompts (old ability / locality) ---
+            # hopreplay ALSO puts old-task (in-context hop) prompts in the preserve batch so
+            # the KL-to-base protects the reasoning computation, not only generic LM text.
             if LP > 0:
                 ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                if PRESERVE == "hopreplay":
+                    ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
                 ea = tok(ap, return_tensors="pt", padding=True).to(device)
                 s_a = student.lm_head(student.model(**ea, use_cache=False).last_hidden_state[:, -1]).float()
                 with torch.no_grad():
@@ -281,32 +306,34 @@ def main():
         # ---- eval: student WITHOUT memory (the thesis number) ----
         s_seen = model_recall(student, seen_p, val_gold)
         s_para = model_recall(student, para_p, val_gold)
-        s_rev = model_recall(student, rev_p, name_gold)
+        s_rev = model_recall(student, rev_p, name_gold) if rev_facts else 0.0
         b_seen = model_recall(feat, seen_p, val_gold)     # base has never seen the facts (~0 expected)
         stu_hop = hop_acc(student, names)
+        anc = anchor_agreement(feat, student)             # cleaner preservation probe (headroom ~1.0)
         gap = t_seen - s_seen
-        print(f"    [seed {seed}] layers {n0}->{len(student.model.layers)}  "
+        print(f"    [seed {seed}] facts={len(facts)} rev={len(rev_facts)} layers {n0}->{len(student.model.layers)}  "
               f"TEACHER(seen {t_seen:.3f} para {t_para:.3f} rev {t_rev:.3f})  "
               f"STUDENT-noMem(seen {s_seen:.3f} para {s_para:.3f} rev {s_rev:.3f})  "
-              f"base-seen {b_seen:.3f}  hop base {base_hop:.3f}->stu {stu_hop:.3f}  gap {gap:.3f}",
-              flush=True)
+              f"base-seen {b_seen:.3f}  hop base {base_hop:.3f}->stu {stu_hop:.3f}  "
+              f"anchor-agree {anc:.3f}  gap {gap:.3f}", flush=True)
         del feat, student; torch.cuda.empty_cache()
         return dict(t_seen=t_seen, t_para=t_para, t_rev=t_rev, s_seen=s_seen, s_para=s_para,
-                    s_rev=s_rev, b_seen=b_seen, base_hop=base_hop, stu_hop=stu_hop, gap=gap)
+                    s_rev=s_rev, b_seen=b_seen, base_hop=base_hop, stu_hop=stu_hop, anc=anc, gap=gap)
 
     R = [run(s) for s in range(SEEDS)]
     m = lambda k: sum(r[k] for r in R) / len(R)
-    print(f"\n== mean over {SEEDS} seeds ({FACTS} facts, real Qwen) ==")
+    print(f"\n== mean over {SEEDS} seeds ({FACTS} facts, real Qwen, preserve={PRESERVE}) ==")
     print(f"  TEACHER (w/ memory)   : seen {m('t_seen'):.3f}  para {m('t_para'):.3f}  rev {m('t_rev'):.3f}")
     print(f"  STUDENT (NO memory)   : seen {m('s_seen'):.3f}  para {m('s_para'):.3f}  rev {m('s_rev'):.3f}   <- thesis")
-    print(f"  base (novel facts)    : seen {m('b_seen'):.3f}   (sanity: should be ~0)")
+    print(f"  base (novel facts)    : seen {m('b_seen'):.3f}   (sanity floor = attr value-set chance)")
     print(f"  old hop-acc           : base {m('base_hop'):.3f} -> student {m('stu_hop'):.3f}  "
           f"(drop {m('base_hop')-m('stu_hop'):+.3f})")
+    print(f"  anchor-agreement      : {m('anc'):.3f}  (student==base next-token on anchors; 1.0=fully preserved)")
     print(f"  Consolidation Gap G   : {m('gap'):.3f}  (teacher_seen - student_seen; smaller = better)")
     ok = m('t_seen') > 0.95 and m('s_seen') > 0.85 and (m('base_hop') - m('stu_hop')) < 0.02
-    print(f"\n  R19a bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): "
-          + ("PASS — consolidation mechanism works; scale to 200/1000." if ok else
-             "NOT MET — inspect which term fails before scaling facts."))
+    print(f"\n  bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): "
+          + ("PASS — consolidation preserves old ability; scale facts / add lifecycle." if ok else
+             "NOT MET — inspect which term fails."))
 
 
 if __name__ == "__main__":
