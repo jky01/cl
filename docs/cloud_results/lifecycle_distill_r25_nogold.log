@@ -1,0 +1,21 @@
+LIFECYCLE-DISTILL (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=3 facts/stream=40 grow=+2L mem-steps=800 steps=1000 seeds=2 (NO GOLD)
+  seed 0: streams=[40, 40, 40] (NO GOLD)
+    [naive  seed 0 r0] layers=26 seen=[0.82] para=[0.82] hop=0.111
+    [naive  seed 0 r1] layers=28 seen=[0.4, 0.88] para=[0.35, 0.78] hop=0.087
+    [naive  seed 0 r2] layers=30 seen=[0.25, 0.53, 0.95] para=[0.17, 0.47, 0.9] hop=0.014
+    [replay seed 0 r0] layers=26 seen=[0.82] para=[0.82] hop=0.205
+    [replay seed 0 r1] layers=28 seen=[0.8, 0.88] para=[0.82, 0.78] hop=0.219
+    [replay seed 0 r2] layers=30 seen=[0.8, 0.85, 0.95] para=[0.82, 0.78, 0.9] hop=0.198
+  seed 1: streams=[40, 40, 40] (NO GOLD)
+    [naive  seed 1 r0] layers=26 seen=[0.88] para=[0.85] hop=0.000
+    [naive  seed 1 r1] layers=28 seen=[0.38, 0.88] para=[0.35, 0.82] hop=0.000
+    [naive  seed 1 r2] layers=30 seen=[0.25, 0.33, 1.0] para=[0.25, 0.33, 0.95] hop=0.000
+    [replay seed 1 r0] layers=26 seen=[0.88] para=[0.85] hop=0.194
+    [replay seed 1 r1] layers=28 seen=[0.88, 0.88] para=[0.85, 0.82] hop=0.194
+    [replay seed 1 r2] layers=30 seen=[0.88, 0.88, 1.0] para=[0.85, 0.82, 0.95] hop=0.201
+
+== after 3 rounds, single dense checkpoint, NO GOLD (mean/2 seeds) ==
+  naive  | oldest S0 seen 0.850->0.250 (forget +0.600) S0 para 0.212  all-seen 0.550 all-para 0.512  hop 0.205->0.007
+  replay | oldest S0 seen 0.850->0.838 (forget +0.012) S0 para 0.837  all-seen 0.892 all-para 0.854  hop 0.205->0.200
+
+  oldest-S0 forgetting (NO GOLD): naive +0.600 vs replay +0.012  => FAITHFUL LOOP works: transient scaffolds -> a single dense checkpoint that retains all streams with NO gold and NO memory at inference.

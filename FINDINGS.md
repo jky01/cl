@@ -1,5 +1,37 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **PIVOT (2026-07-03/04, rounds R19-R25) — Grow-and-Consolidate (`s2/`).** Per the
+> strategy doc `reference/2026.07.03.20.md`, the direction shifted from *scaling an
+> external memory* to *consolidating a transient memory scaffold into a single dense
+> checkpoint that answers everything with no memory at inference*. Arc (all real Qwen-0.5B,
+> 2 seeds, logs in `docs/cloud_results/consolidate_*` / `lifecycle*`):
+> - **R19** `consolidate_memory_to_weights.py`: grow (+4 identity layers) + consolidate — a
+>   dense student answers new facts w/o memory (seen 0.99 / para 0.97 / reverse 0.88),
+>   *generalizing beyond the teacher*. Bridge works.
+> - **R20**: naive preservation fails (old hop-acc 0.205→0.009); **old-task REPLAY in the
+>   preserve-KL fixes it** (hop 0.205→0.196) with no fact-recall cost. Anchor-agreement alone
+>   is insufficient — must replay the actual old-task distribution.
+> - **R21** `lifecycle.py`: 3-round grow+consolidate — **replay = zero forgetting** (oldest
+>   stream 1.0→1.0) vs **naive forgets** (1.0→0.40), single dense checkpoint.
+> - **R22**: faithful **distill-only (no gold)** — student reaches seen 1.0 supervised *only*
+>   by the memory teacher (gap 0), proving the scaffold carries the knowledge; generalization
+>   is bounded by teacher coverage (para 0.36).
+> - **R23** (honest ablation): **REPLAY, not GROWTH, drives retention** — a *non-growing*
+>   fixed model + replay retains identically (1.0). Growth's value is compute/capacity, not
+>   retention. (Do not claim "growth prevents forgetting.")
+> - **R24**: a **multi-view teacher** (memory answers seen+para) makes the no-gold student
+>   generalize (para 0.36→0.70, tracking the teacher exactly).
+> - **R25** `lifecycle_distill.py` (capstone): the **faithful full loop with NO GOLD anywhere**
+>   — transient per-stream multi-view scaffolds → distill into a growing dense model →
+>   self-distill prior streams (replay) → discard memory. **Replay retains** (oldest-S0 seen
+>   0.85→0.84, forget +0.01; all-seen 0.89 / all-para 0.85; hop preserved) vs **naive forgets**
+>   (+0.60), as a single dense checkpoint with no memory at inference. Softer than gold-replay
+>   (self-distill < gold-CE), the honest cost of zero gold + zero inference memory.
+>
+> Net: lifelong retention = **replay-based consolidation into dense weights** (works with/without
+> growth, with/without gold); the memory is a *training scaffold*, not an inference dependency.
+> Open: an honest compute-advantage / capacity-saturation demonstration for growth itself.
+
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
 Every number below is reproducible from a script in `s0/` with its log in
 `docs/cloud_results/`. Cloud runs: RunPod RTX 5090 / 3090Ti (Blackwell/Ampere,
