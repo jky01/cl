@@ -1,0 +1,9 @@
+COMPOSITION via distill-into-core (cuda) seeds=2 NX=60
+  seed 0:
+    A memory(single-shot): 1-hop 0.02  held-out 2-hop 0.00
+    B distill+grown core : f1 1.00 f2 1.00 comp(shown) 0.17 comp(HELD-OUT) 0.00
+    C fixed-small seq    : f1-after 0.00  comp(HELD-OUT) 0.00
+  seed 1:
+    A memory(single-shot): 1-hop 0.02  held-out 2-hop 0.00
+    B distill+grown core : f1 1.00 f2 1.00 comp(shown) 1.00 comp(HELD-OUT) 0.00
+    C fixed-small seq    : f1-after 0.00  comp(HELD-OUT) 0.00
