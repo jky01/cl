@@ -15,7 +15,8 @@ import torch
 
 from .world import World, WorldConfig
 from .core import ProxyCore, grow_deeper
-from .diag_growlarge import train, acc_by_k, EVAL_K, D
+from .diag_growlarge import train, acc_by_k, EVAL_K
+D = int(os.environ.get('DC_D', 128))
 
 SEEDS = int(os.environ.get("DC_SEEDS", 3))
 TARGETS = [4, 6, 8, 10, 12]
