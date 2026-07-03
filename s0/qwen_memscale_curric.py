@@ -48,7 +48,17 @@ def main():
     for p in lm.parameters():
         p.requires_grad_(False)
     d = lm.config.hidden_size
-    names = [f"{f} {l}" for f in FIRST for l in LAST]
+    if os.environ.get("MC_BIGPOOL"):                        # synthesize a large name pool (keys may be multi-token)
+        syl = ("ba be bi bo bu da de di do du ka ke ki ko ku la le li lo lu "
+               "ma me mi mo mu na ne ni no nu ra re ri ro ru sa se si so su "
+               "ta te ti to tu va ve vi vo vu za ze zi zo zu").split()   # 50 syllables
+        S = len(syl)
+        def synth(i):                                       # base-50 -> 3 syllables (S^3=125k distinct)
+            return syl[i % S].capitalize() + syl[(i // S) % S] + syl[(i // (S * S)) % S]
+        need = N // len(ATTRS) + 200                        # distinct names required
+        names = [f"{synth(i)} {synth(i + 60000).capitalize()}n" for i in range(need)]
+    else:
+        names = [f"{f} {l}" for f in FIRST for l in LAST]
     print(f"MEMSCALE-CURRIC ({NAME}, {torch.cuda.get_device_name(0) if device=='cuda' else 'cpu'}) "
           f"N={N} stages={STAGES} total-steps={STEPS} seeds={SEEDS} kdim={KDIM}")
 
@@ -146,14 +156,15 @@ def main():
         train_prefix(mods, opt, F_, N, STEPS)
         return evaluate(mods, F_, N)
 
+    skip_cold = bool(os.environ.get("MC_SKIP_COLD"))        # cold collapses (see rounds 10-14); skip to save wall-time at large N
     print(f"\n  {'arm':7s} | {'retr@1':>7} {'ans-recall':>11} {'top32':>7}   (mean/{SEEDS})")
     agg = {"curric": [], "cold": []}
     for seed in range(SEEDS):
         F_ = build(N, seed)
         agg["curric"].append(run_curric(F_, seed))
-        agg["cold"].append(run_cold(F_, seed))
+        agg["cold"].append((0.0, 0.0, 0.0) if skip_cold else run_cold(F_, seed))
         print(f"  seed {seed}: curric {tuple(round(x,3) for x in agg['curric'][-1])}  "
-              f"cold {tuple(round(x,3) for x in agg['cold'][-1])}", flush=True)
+              f"cold {tuple(round(x,3) for x in agg['cold'][-1])}{' (skipped)' if skip_cold else ''}", flush=True)
     for arm in ("curric", "cold"):
         rs = agg[arm]; m = lambda j: sum(r[j] for r in rs) / len(rs)
         print(f"  {arm:7s} | {m(0):>7.3f} {m(1):>11.3f} {m(2):>7.3f}")
