@@ -1,0 +1,12 @@
+FULL SYSTEM: decomposed vs monolith (cuda) seeds=3 phases=5
+  seed 0: decomposed(recall 0.96, cap 0.87)  monolith(recall 0.96, cap 0.36)
+  seed 1: decomposed(recall 0.96, cap 0.64)  monolith(recall 0.97, cap 0.42)
+  seed 2: decomposed(recall 0.92, cap 0.94)  monolith(recall 0.97, cap 0.42)
+
+== mean over 3 seeds ==
+  DECOMPOSED (mem+grown): fact-recall 0.94   capability 0.82
+  MONOLITH   (one L2)   : fact-recall 0.96   capability 0.40
+
+  decomposed HIGH on both, monolith LOW on both => the corrected vision in one system:
+  external memory keeps facts (no forgetting) + keep-best growth adds capability;
+  a monolithic small model crams both into shared weights and fails both.
