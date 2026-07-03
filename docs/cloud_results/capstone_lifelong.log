@@ -1,0 +1,36 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+CAPSTONE-LIFELONG (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090 Ti) phases=4 facts/phase=1200 mem-steps=2500 cap-steps=1200 seeds=2
+  seed 0:
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  50%|█████     | 145/290 [00:00<00:00, 948.62it/s]Loading weights:  89%|████████▉ | 259/290 [00:00<00:00, 1040.88it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1117.75it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  30%|███       | 87/290 [00:00<00:00, 794.58it/s]Loading weights:  76%|███████▌  | 221/290 [00:00<00:00, 1100.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1254.33it/s]
+    [dec ph0] bank=1200 mem-recall=0.917 cap-mean=0.359
+    [dec ph1] bank=2400 mem-recall=0.303 cap-mean=0.561
+    [dec ph2] bank=3600 mem-recall=0.841 cap-mean=0.703
+    [dec ph3] bank=4800 mem-recall=0.859 cap-mean=0.734
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 76/290 [00:00<00:00, 722.29it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 996.93it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1264.41it/s]
+    [mono ph0] recall=0.973 cap-mean=0.405
+    [mono ph1] recall=0.682 cap-mean=0.802
+    [mono ph2] recall=0.525 cap-mean=0.932
+    [mono ph3] recall=0.447 cap-mean=0.974
+  => seed 0: DECOMPOSED(recall 0.859, cap 0.734)  MONOLITH(recall 0.447, cap 0.974)
+  seed 1:
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 167/290 [00:00<00:00, 1186.38it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1671.02it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1826.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1511.11it/s]
+    [dec ph0] bank=1200 mem-recall=0.932 cap-mean=0.389
+    [dec ph1] bank=2400 mem-recall=0.692 cap-mean=0.677
+    [dec ph2] bank=3600 mem-recall=0.712 cap-mean=0.762
+    [dec ph3] bank=4800 mem-recall=0.959 cap-mean=0.818
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 1298.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1882.09it/s]
+    [mono ph0] recall=0.982 cap-mean=0.429
+    [mono ph1] recall=0.682 cap-mean=0.776
+    [mono ph2] recall=0.586 cap-mean=0.960
+    [mono ph3] recall=0.496 cap-mean=0.964
+  => seed 1: DECOMPOSED(recall 0.959, cap 0.818)  MONOLITH(recall 0.496, cap 0.964)
+
+== mean over 2 seeds (real Qwen lifelong) ==
+  DECOMPOSED (curric-mem + grown-core): fact-recall 0.909   capability 0.776
+  MONOLITH   (top-4 layers, sequential): fact-recall 0.472   capability 0.969
+
+  decomposed retains facts (0.91) while monolith forgets (0.47)
+  => the corrected vision on a real model: external curriculum-memory keeps facts +
+  keep-best growth adds capability; a monolithic small model crams both and loses facts.
