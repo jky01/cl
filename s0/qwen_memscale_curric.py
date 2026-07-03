@@ -48,15 +48,19 @@ def main():
     for p in lm.parameters():
         p.requires_grad_(False)
     d = lm.config.hidden_size
-    if os.environ.get("MC_BIGPOOL"):                        # synthesize a large name pool (keys may be multi-token)
-        syl = ("ba be bi bo bu da de di do du ka ke ki ko ku la le li lo lu "
-               "ma me mi mo mu na ne ni no nu ra re ri ro ru sa se si so su "
-               "ta te ti to tu va ve vi vo vu za ze zi zo zu").split()   # 50 syllables
-        S = len(syl)
-        def synth(i):                                       # base-50 -> 3 syllables (S^3=125k distinct)
-            return syl[i % S].capitalize() + syl[(i // S) % S] + syl[(i // (S * S)) % S]
-        need = N // len(ATTRS) + 200                        # distinct names required
-        names = [f"{synth(i)} {synth(i + 60000).capitalize()}n" for i in range(need)]
+    if os.environ.get("MC_BIGPOOL"):                        # large pool from REAL-name TRIPLES (first x middle x last)
+        need = N // len(ATTRS) + 200                        # -> discriminable keys (avoids near-duplicate gibberish)
+        names = []                                          # 68 x 68 x 64 ~= 296k distinct real-name triples
+        for f in FIRST:
+            for m in FIRST:
+                for l in LAST:
+                    names.append(f"{f} {m} {l}")
+                    if len(names) >= need:
+                        break
+                if len(names) >= need:
+                    break
+            if len(names) >= need:
+                break
     else:
         names = [f"{f} {l}" for f in FIRST for l in LAST]
     print(f"MEMSCALE-CURRIC ({NAME}, {torch.cuda.get_device_name(0) if device=='cuda' else 'cpu'}) "
