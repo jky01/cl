@@ -86,6 +86,37 @@ gives speed, not accuracy (top-k hit-rate is already 1.0).
 - **Mean-pool value readout** and **raw-feature routing** both failed at scale and were
   replaced (answer-position readout; trained retrieval router).
 
+## Does growth make it SMARTER? — the multi-round resolution
+
+The naive "grow → more capable per parameter" is false, but a precise version is TRUE.
+Established over rounds 1–6 (all in `s0/diag_growlarge*.py`, `diag_autocap*.py`,
+`diag_stream.py`, `diag_depthcross.py`, `qwen_growcap_curric.py`):
+
+- **Cadence is everything.** Growing every stage LOSES to fixed-small (re-warming burns
+  budget); ONE well-timed grow ADDS capability (once-mid 0.72 vs fixed-small 0.54).
+- **Autonomous + robust.** A controller picks the timing itself (autocap 0.77); with a
+  keep-best checkpoint it reaches 0.84 and never collapses (autocap2), beating every
+  fixed baseline including from-scratch-at-final-size.
+- **Growth wins at DEPTH.** Depth-crossover (`diag_depthcross`): from-scratch wins only
+  for shallow targets; with keep-best, incremental warm-start growth beats from-scratch
+  at **every** depth (L4 +0.08, L6 +0.32, L8 +0.29) — the toy analogue of real-LLM
+  stacking efficiency. Width-robust (reproduces at d=256).
+- **Why grow at all, if from-scratch-large wins?** Because a continual learner in a
+  STREAM cannot do from-scratch-at-final-size (unknown final size, no full replay).
+  Among FEASIBLE stream strategies grown wins decisively (`diag_stream`: 0.84 vs
+  fixed-small 0.54 vs retrain-each 0.34), and even beats the infeasible oracle when the
+  target is deep.
+- **Honest bounds.** (1) On a PRETRAINED Qwen-0.5B with a shallow trainable stack the
+  capability gain is WITHIN NOISE (multi-seed: grown 0.76 == fixed-small 0.76) — growth
+  helps only for a genuinely capacity-bound base, and a pretrained deep model with a few
+  top layers isn't that. (2) COMPOSITION-via-distill (cross-session 2-hop) does not
+  emerge at toy scale even at d=512 — that "smarter" path awaits real scale.
+
+**Net:** grow-and-get-smarter is real, specifically as *sparse, controller-timed,
+keep-best, incremental deepening* in the *streaming / continual* regime at *genuine
+depth* — not as naive frequent growth, not on an already-capable pretrained shallow
+probe, and not (yet) as latent composition.
+
 ## Neural vs heuristic — honest audit of the "all-neural" constraint
 
 The design goal was **fully neural modulation**. Status: the **substrate is neural /

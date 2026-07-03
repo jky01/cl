@@ -210,3 +210,16 @@ a real deep LM; the honest positioning is "grow to keep learning WITHOUT
 forgetting," not "grow to become more capable per parameter than training would."
 Next: §28 meta-learned Ω controller (beyond C's hand-built signal); lifelong
 no-forgetting vs sequential-LoRA on Qwen at scale (growth's actual advantage).
+
+## Grow-and-get-smarter — RESOLVED (autonomous rounds, 2026-07-03)
+
+The "does growth make it smarter?" question is settled (see FINDINGS.md "Does growth
+make it SMARTER?" for the full multi-round account): YES, but only as **sparse,
+controller-timed, keep-best, incremental deepening in the streaming/continual regime at
+genuine depth** — `diag_depthcross` (grown beats from-scratch at every depth with
+keep-best: L4 +0.08, L6 +0.32, L8 +0.29), `diag_stream` (best feasible stream strategy:
+0.84 vs fixed-small 0.54), `diag_autocap2` (autonomous + keep-best 0.84). Honest bounds:
+washes out on a pretrained-Qwen shallow probe (within noise, multi-seed), and
+composition-via-distill needs real scale (0.00 held-out even at d=512). The robust
+real-model value remains NO-FORGETTING (capstone) + router-free memory scaling to 10k.
+FINDINGS.md is now the authoritative summary.
