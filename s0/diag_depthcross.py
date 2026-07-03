@@ -19,7 +19,7 @@ from .diag_growlarge import train, acc_by_k, EVAL_K
 D = int(os.environ.get('DC_D', 128))
 
 SEEDS = int(os.environ.get("DC_SEEDS", 3))
-TARGETS = [4, 6, 8, 10, 12]
+TARGETS = [int(x) for x in os.environ.get('DC_TARGETS','4,6,8,10,12').split(',')]
 KMAX = 7
 T = 6000                           # matched total budget
 
