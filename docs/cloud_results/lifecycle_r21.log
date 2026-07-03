@@ -1,0 +1,21 @@
+LIFECYCLE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=3 facts/stream=100 grow=+2L/round steps=1200 seeds=2
+  seed 0: streams=[100, 100, 100]
+    [naive  seed 0 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.024
+    [naive  seed 0 r1] layers=28 recall(S0..Sr)=[0.55, 1.0] hop=0.007
+    [naive  seed 0 r2] layers=30 recall(S0..Sr)=[0.36, 0.55, 1.0] hop=0.000
+    [replay seed 0 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.201
+    [replay seed 0 r1] layers=28 recall(S0..Sr)=[1.0, 1.0] hop=0.205
+    [replay seed 0 r2] layers=30 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.194
+  seed 1: streams=[100, 100, 100]
+    [naive  seed 1 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.007
+    [naive  seed 1 r1] layers=28 recall(S0..Sr)=[0.52, 1.0] hop=0.000
+    [naive  seed 1 r2] layers=30 recall(S0..Sr)=[0.45, 0.62, 1.0] hop=0.003
+    [replay seed 1 r0] layers=26 recall(S0..Sr)=[1.0] hop=0.201
+    [replay seed 1 r1] layers=28 recall(S0..Sr)=[1.0, 1.0] hop=0.194
+    [replay seed 1 r2] layers=30 recall(S0..Sr)=[1.0, 1.0, 1.0] hop=0.198
+
+== after 3 rounds (single dense checkpoint, mean/2 seeds) ==
+  naive  | oldest S0: fresh 1.000 -> final 0.405 (forgetting +0.595)  newest 1.000  all-streams 0.663  hop 0.205->0.002
+  replay | oldest S0: fresh 1.000 -> final 1.000 (forgetting +0.000)  newest 1.000  all-streams 1.000  hop 0.205->0.196
+
+  oldest-stream forgetting: naive +0.595 vs replay +0.000  => REPLAY grow+consolidate RETAINS old streams in a single dense checkpoint (naive forgets).
