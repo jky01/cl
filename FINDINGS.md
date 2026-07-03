@@ -28,9 +28,23 @@
 >   (+0.60), as a single dense checkpoint with no memory at inference. Softer than gold-replay
 >   (self-distill < gold-CE), the honest cost of zero gold + zero inference memory.
 >
+> **Reliability chapter (R26-R29), longer lifetime (6 rounds):**
+> - **R26**: retention does NOT drift over 6 rounds (oldest-S0 forget +0.025), but 2 of 6
+>   streams failed to consolidate (0.03/0.05) — an isolated per-stream scaffold problem.
+> - **R27** (honest correction): a retr@1-based restart-on-collapse did NOT help — retrieval
+>   was healthy (0.82-0.98) while those streams failed. The R26 "retrieval collapse"
+>   hypothesis was **wrong**; retr@1 is a misleading proxy.
+> - **R28**: the true signal is the teacher's **answer-recall** (top-16 injection → value
+>   token). Probing that + restart rescued the failures (S3 0.03→1.0, S4 0.05→0.57).
+> - **R29**: tightening the guard (answer-recall THR 0.8 + keep the *best* scaffold across
+>   restarts) gives the reliable loop — all 6 streams consolidate (seen mean 0.88,
+>   min 0.75), S0 forget +0.025, hop preserved, no gold, no inference memory. (Seed 0;
+>   R30 = multi-seed confirmation.)
+>
 > Net: lifelong retention = **replay-based consolidation into dense weights** (works with/without
-> growth, with/without gold); the memory is a *training scaffold*, not an inference dependency.
-> Open: an honest compute-advantage / capacity-saturation demonstration for growth itself.
+> growth, with/without gold); the memory is a *training scaffold*, not an inference dependency;
+> its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall
+> restart. Open: an honest compute-advantage / capacity-saturation demonstration for growth itself.
 
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
 Every number below is reproducible from a script in `s0/` with its log in
