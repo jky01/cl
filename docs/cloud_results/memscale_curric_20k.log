@@ -1,0 +1,11 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  43%|████▎     | 124/290 [00:00<00:00, 1231.73it/s]Loading weights:  86%|████████▌ | 248/290 [00:00<00:00, 1207.81it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1329.51it/s]
+MEMSCALE-CURRIC (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) N=20000 stages=[1000, 3000, 8000, 20000] total-steps=8000 seeds=2 kdim=256
+
+  arm     |  retr@1  ans-recall   top32   (mean/2)
+  seed 0: curric (0.895, 0.912, 1.0)  cold (0.0, 0.0, 0.002)
+  seed 1: curric (0.969, 0.972, 1.0)  cold (0.0, 0.0, 0.002)
+  curric  |   0.932       0.942   1.000
+  cold    |   0.000       0.000   0.002
+
+  curric retr@1 0.932 vs cold 0.000  => CURRICULUM RESCUES 20k (collapse was an optimization-path artifact).
