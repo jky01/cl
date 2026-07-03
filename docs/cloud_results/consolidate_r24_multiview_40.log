@@ -1,0 +1,28 @@
+##### ARM=distill_singleview #####
+CONSOLIDATE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) facts=40 grow=+4L mem-steps=800 stu-steps=1500 seeds=2 λd=1.0 λp=1.0 preserve=hopreplay distill_only=True multiview=False
+    [seed 0] facts=40 rev=33 layers 24->28  TEACHER(seen 1.000 para 0.175 rev 0.000)  STUDENT-noMem(seen 1.000 para 0.250 rev 0.000)  base-seen 0.075  hop base 0.205->stu 0.194  anchor-agree 1.000  gap 0.000
+    [seed 1] facts=40 rev=30 layers 24->28  TEACHER(seen 1.000 para 0.225 rev 0.000)  STUDENT-noMem(seen 1.000 para 0.475 rev 0.000)  base-seen 0.050  hop base 0.205->stu 0.194  anchor-agree 1.000  gap 0.000
+
+== mean over 2 seeds (40 facts, real Qwen, preserve=hopreplay) ==
+  TEACHER (w/ memory)   : seen 1.000  para 0.200  rev 0.000
+  STUDENT (NO memory)   : seen 1.000  para 0.362  rev 0.000   <- thesis
+  base (novel facts)    : seen 0.062   (sanity floor = attr value-set chance)
+  old hop-acc           : base 0.205 -> student 0.194  (drop +0.010)
+  anchor-agreement      : 1.000  (student==base next-token on anchors; 1.0=fully preserved)
+  Consolidation Gap G   : 0.000  (teacher_seen - student_seen; smaller = better)
+
+  bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): PASS — consolidation preserves old ability; scale facts / add lifecycle.
+##### ARM=distill_multiview #####
+CONSOLIDATE (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) facts=40 grow=+4L mem-steps=800 stu-steps=1500 seeds=2 λd=1.0 λp=1.0 preserve=hopreplay distill_only=True multiview=True
+    [seed 0] facts=40 rev=33 layers 24->28  TEACHER(seen 0.950 para 0.800 rev 0.000)  STUDENT-noMem(seen 0.950 para 0.800 rev 0.000)  base-seen 0.075  hop base 0.205->stu 0.198  anchor-agree 0.938  gap 0.000
+    [seed 1] facts=40 rev=30 layers 24->28  TEACHER(seen 0.950 para 0.600 rev 0.000)  STUDENT-noMem(seen 0.950 para 0.600 rev 0.000)  base-seen 0.050  hop base 0.205->stu 0.205  anchor-agree 1.000  gap 0.000
+
+== mean over 2 seeds (40 facts, real Qwen, preserve=hopreplay) ==
+  TEACHER (w/ memory)   : seen 0.950  para 0.700  rev 0.000
+  STUDENT (NO memory)   : seen 0.950  para 0.700  rev 0.000   <- thesis
+  base (novel facts)    : seen 0.062   (sanity floor = attr value-set chance)
+  old hop-acc           : base 0.205 -> student 0.201  (drop +0.003)
+  anchor-agreement      : 0.969  (student==base next-token on anchors; 1.0=fully preserved)
+  Consolidation Gap G   : 0.000  (teacher_seen - student_seen; smaller = better)
+
+  bar (teacher_seen>0.95, student_seen>0.85, hop-drop<0.02): NOT MET — inspect which term fails.
