@@ -1,0 +1,10 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  30%|███       | 87/290 [00:00<00:00, 519.10it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 886.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1011.10it/s]
+MEMSCALE-BIG (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090 Ti) sizes=[20000] steps=15000 seeds=2 kdim=512
+  name space: 4347 x 10 attrs = 43470 distinct facts
+
+        N |  retr@1  ans-recall   top32  restarts  (mean/2)
+    20000 |   0.000       0.017   0.002         4   (recall min 0.000)
+
+  retrieval@1 & recall holding at 10k => router-free lifelong memory scales to a
+  real lifetime of facts; top32 ~1.0 => an ANN index preserves it at speed.
