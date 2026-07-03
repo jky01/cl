@@ -38,8 +38,9 @@
 >   token). Probing that + restart rescued the failures (S3 0.03→1.0, S4 0.05→0.57).
 > - **R29**: tightening the guard (answer-recall THR 0.8 + keep the *best* scaffold across
 >   restarts) gives the reliable loop — all 6 streams consolidate (seen mean 0.88,
->   min 0.75), S0 forget +0.025, hop preserved, no gold, no inference memory. (Seed 0;
->   R30 = multi-seed confirmation.)
+>   min 0.75), S0 forget +0.025, hop preserved, no gold, no inference memory.
+> - **R30** (3-seed confirmation): the reliable loop holds across seeds — **replay all-seen
+>   0.918, oldest-S0 forget +0.017, hop preserved**; naive forgets (+0.742). Not seed-specific.
 >
 > Net: lifelong retention = **replay-based consolidation into dense weights** (works with/without
 > growth, with/without gold); the memory is a *training scaffold*, not an inference dependency;
