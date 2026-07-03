@@ -1,0 +1,14 @@
+DEPTH CROSSOVER (cuda) seeds=3 kmax=7 budget=6000 targets=[4, 6, 8]
+  seed 0 done
+  seed 1 done
+  seed 2 done
+
+== mean acc (kmax=7) vs target depth, 3 seeds ==
+  target-L   grown-to-L   scratch-L    grown-minus-scratch
+  L=4        0.634       0.559       +0.075
+  L=6        0.710       0.388       +0.322
+  L=8        0.706       0.419       +0.287
+
+  crossover: grown starts beating scratch at L=4
+  scratch wins shallow, grown wins deep => at real (deep) sizes, INCREMENTAL growth is
+  the better route to capability than from-scratch (deep-from-scratch underfits).
