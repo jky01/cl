@@ -46,15 +46,28 @@
 > streams × 100 facts — **both retain all 8 streams at 1.0**. A single fixed layer + replay
 > holds 800 facts; capacity is not the bottleneck at this scale.
 >
-> **Honest bottom line (R19-R31):** the demonstrated, robust, multi-seed contribution is
+> **R32 (composition SOLVABILITY GATE — before any grow arms)** `s2/composition_gate.py`, 3-seed:
+> a cross-stream chain `A→B` (stream t), `B→C` (stream t+k), held-out no-memory `A→C`. **Gate A**
+> (upper bound: full-FT direct-gold all single-step edges) gives **perfect single-step recall
+> (1.000 all views) but 2-hop A→C = 0.000** (goldC-prob 2.5e-8). **Gate B** (direct 2-hop
+> supervision) **train-fits 1.000 but held-out 0.000**. So even the upper bound does **zero**
+> latent held-out composition — the two-hop curse / OOD compositionality gap at 0.5B. **This
+> closes the latent-composition avenue** (as R31 closed fact-count): grow-vs-fixed arms would be
+> 0-vs-0 and unattributable, so the gate correctly **blocked** them. Open reframes: in-distribution
+> composition *grokking* (does depth/growth change onset/ceiling?), CoT/scratchpad, or accept the
+> bottom line below.
+>
+> **Honest bottom line (R19-R32):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
 > retained with no external memory at inference. **Growth (the "小 → 大" framing) is NOT
 > justified by any of these experiments**: R23 shows growth doesn't drive retention, R31 shows
 > it doesn't add capacity even at 800 facts through 1 layer. Justifying growth requires what
 > these synthetic fact/hop tasks don't stress — a **compute-advantage** result (grow-from-small
 > reaching a capability at <30-50% of from-scratch-large compute, the SOLAR/LiGO/LESA bar) or a
-> **capability-saturation** regime at much larger scale. That is the clear next task; until then
-> do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
+> **capability-saturation** regime at much larger scale. **R32 further ruled out latent held-out
+> composition** as that stressor (the upper bound scores 0). The remaining reachable growth-necessity
+> probe is in-distribution composition *grokking* (does depth/growth shift onset/ceiling?); until a
+> result there, do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
 > its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall restart.
 
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
