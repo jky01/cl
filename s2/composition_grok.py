@@ -112,10 +112,20 @@ def main():
         atomic = [(q_r1(a), one_tok(r1[a])) for a in As] + [(q_r2(b), one_tok(r2[b])) for b in Bs]
         train2 = [(q_2hop(a), one_tok(r2[r1[a]])) for a in train_A]
         held2 = [(q_2hop(a), one_tok(r2[r1[a]])) for a in held_A]
-        # derange control: held-out prompts with a wrong (shifted) target
-        htar = [g for _, g in held2]
-        sh = htar[1:] + htar[:1]
-        derange = [(held2[i][0], sh[i]) for i in range(len(held2))]
+        # derange control: each held-out prompt gets a WRONG (per-example sampled) C target.
+        # (a simple shift leaks: multiple held-out A per bridge share the same C -> shift keeps some
+        #  targets equal to the truth; sample a distinct wrong C instead and assert no leak.)
+        allC = [one_tok(c) for c in Cs]
+        rdg = random.Random(9000 + seed)
+        derange = []; same = 0
+        for (pmt, g) in held2:
+            cand = [c for c in allC if c != g]
+            w = rdg.choice(cand) if cand else g
+            if w == g:
+                same += 1
+            derange.append((pmt, w))
+        assert same == 0, f"derange leak: {same} items keep the true target"
+        print(f"    derange_same_target_count={same} (must be 0)", flush=True)
         # leak assert: no held-out A has C as any of its atomic completions
         acomp = {}
         for a in As:
