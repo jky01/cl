@@ -57,9 +57,24 @@
 > composition *grokking* (does depth/growth change onset/ceiling?), CoT/scratchpad, or accept the
 > bottom line below.
 >
-> **Honest bottom line (R19-R32):** the demonstrated, robust, multi-seed contribution is
+> **R33 (baseline BAKEOFF — the proven loop vs standard CL)** `s2/lifecycle_bakeoff.py`, 2-seed,
+> 6 rounds × 40, shared streams/scaffold/answer-recall/eval. Arms: ours (replay-consolidation, no
+> gold, no inference memory), naive (no replay), continued-FT (GOLD new-stream, no replay),
+> LoRA-merge (per-stream adapter merged in, no replay), external-memory (persistent bank). Final
+> all-seen / oldest-S0: **ours 0.889 / 0.85 (forget +0.00)**, naive 0.373 / 0.135, continued
+> 0.429 / 0.16, LoRA-merge 0.338 / 0.11, extmem 0.869 / 0.895. Takeaways: (1) **replay-consolidation
+> is the only arm that retains the lifelong stream with no inference memory and no old-gold** — every
+> in-weights no-replay baseline forgets catastrophically (age-graded), **including continued-FT that
+> has a gold advantage** (0.429 vs 0.889 → replay, not signal, drives retention); (2) **LoRA-merge
+> both forgets and destroys base capability** (hop 0.205→0.033); (3) **ours (no memory) edges out
+> external memory** (0.889 vs 0.869) — knowledge-into-weights matches/beats a retrieval bank while
+> dropping the inference dependency. The contribution is now comparative, not just internal.
+>
+> **Honest bottom line (R19-R33):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
-> retained with no external memory at inference. **Growth (the "小 → 大" framing) is NOT
+> retained with no external memory at inference, and (R33) **it beats standard continual-learning
+> baselines** (sequential no-replay, continued-FT-with-gold, LoRA-merge) while matching external
+> memory without needing memory at inference. **Growth (the "小 → 大" framing) is NOT
 > justified by any of these experiments**: R23 shows growth doesn't drive retention, R31 shows
 > it doesn't add capacity even at 800 facts through 1 layer. Justifying growth requires what
 > these synthetic fact/hop tasks don't stress — a **compute-advantage** result (grow-from-small

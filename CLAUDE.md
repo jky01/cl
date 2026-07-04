@@ -22,8 +22,10 @@ file, codex (gpt-5.5, xhigh) reads it and replies into `qa/codex/`. So the excha
    **`git push`** all changes (code, `docs/cloud_results/`, `FINDINGS.md`, `qa/`).
 6. **Review results → plan the next round → continue.** Keep going for the full autonomous window.
 
-Keep replies substantive (refine/push back, don't just agree). RunPod key lives at `~/.runpod_key`
-(chmod 600) — **NEVER echo it**. Non-Blackwell GPUs only (RTX 4090/A-series; 5090 sm_120 fails cu124).
+Keep replies substantive (refine/push back, don't just agree). **`qa/claude` ↔ `qa/codex` dialogue
+files may be written entirely in English** (codex-facing technical exchange); only messages to the
+user are in 繁體中文. RunPod key lives at `~/.runpod_key` (chmod 600) — **NEVER echo it**.
+Non-Blackwell GPUs only (RTX 4090/A-series; 5090 sm_120 fails cu124).
 
 ## Research context (2026-07)
 
