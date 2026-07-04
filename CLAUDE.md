@@ -1,14 +1,29 @@
 # Project instructions
 
-## Standing rule — qa/codex ↔ qa/claude exchange (every conversation)
+## Standing rule — per-round plan → codex dialogue → confidence-gated execution
 
-At the **start of every conversation**, before other work:
+The codex side is **automated locally**: `scripts/qa_claude_watch.sh` (crontab, every minute)
+watches `qa/claude/`; whenever the newest `qa/claude` file is newer than the newest `qa/codex`
+file, codex (gpt-5.5, xhigh) reads it and replies into `qa/codex/`. So the exchange is real-time.
 
-1. **Read the latest file in `qa/codex/`** (the most recent by filename timestamp).
-2. **Analyze it in detail** — engage with its substance: confirm where the evidence agrees, refine or push back where warranted, and add genuinely new value (concrete experimental design, failure modes, success criteria). Ground the analysis in the repo's evidence (`FINDINGS.md`, `docs/memory/s0-step0-state.md`, `docs/cloud_results/`).
-3. **Write the response to `qa/claude/`** as a new Markdown file named `yyyy-mm-dd.hh.mm.ss.md` (current timestamp; get it with `date +"%Y-%m-%d.%H.%M.%S"`). Do not overwrite existing files — each reply is a new timestamped file.
+**Every round of work follows this loop:**
 
-This is an ongoing back-and-forth design dialogue between codex and claude about the research direction. Keep replies additive and honest, not just agreement.
+1. **Plan first.** Before starting a task, write a *detailed* plan of what you're about to do to
+   `qa/claude/` as `yyyy-mm-dd.hh.mm.ss.md` (`date +"%Y-%m-%d.%H.%M.%S"`; never overwrite).
+2. **Detect codex reply by timestamp.** Poll `qa/codex/`; a file whose name-timestamp is *newer
+   than the plan you just wrote* is codex's fresh response. (Codex normally answers within ~1–2 min.)
+3. **Read + analyze it in detail** — additive and honest, grounded in the repo's evidence
+   (`FINDINGS.md`, `docs/memory/s0-step0-state.md`, `docs/cloud_results/`).
+4. **Act by confidence:**
+   - **High confidence** (design converged, no blocking objection) → start the task directly.
+   - **Need clearer direction** → write another `qa/claude/` file asking the specific question,
+     wait one more round for codex, then proceed. (Iterate to obtain instructions.)
+5. **Execute.** Use a remote pod if the task needs GPU; **reclaim (terminate) the pod when done**;
+   **`git push`** all changes (code, `docs/cloud_results/`, `FINDINGS.md`, `qa/`).
+6. **Review results → plan the next round → continue.** Keep going for the full autonomous window.
+
+Keep replies substantive (refine/push back, don't just agree). RunPod key lives at `~/.runpod_key`
+(chmod 600) — **NEVER echo it**. Non-Blackwell GPUs only (RTX 4090/A-series; 5090 sm_120 fails cu124).
 
 ## Research context (2026-07)
 
