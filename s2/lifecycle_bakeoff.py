@@ -363,17 +363,89 @@ def main():
         return dict(base_hop=base_hop, hist=hist, opt_steps=0,
                     tparams_per_round=[0], updated_params_total=0)
 
+    # ---------------- ewc_fixed arm (canonical online-EWC, NO growth, NO replay) -----------------
+    # Codex caveat: with per-round growth the prior-round Fisher params freeze next round -> EWC is
+    # vacuous. So EWC uses a FIXED top-GROW base layer set across all rounds (standard CL setup):
+    # can a regularization-only baseline replace replay? online-EWC penalty anchors to the running
+    # params weighted by accumulated diagonal Fisher; new stream distilled from the scaffold teacher.
+    def run_ewc(seed, streams, scaffolds):
+        lam = float(os.environ.get("BK_EWC_LAMBDA", 100.0))
+        fisher_n = int(os.environ.get("BK_EWC_FISHERN", 8))
+        dense = load_frozen()
+        base_hop = hop_acc(dense)
+        set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (no growth)
+        trainable = [p for p in dense.parameters() if p.requires_grad]
+        rng = random.Random(seed * 13 + 71)
+        hist = []; opt_steps = 0
+        f_accum = [torch.zeros_like(p) for p in trainable]   # accumulated diagonal Fisher
+        theta_star = None                                    # anchor (running params)
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            opt = torch.optim.AdamW(trainable, lr=LR)
+            dense.train()
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                ea = tok(ap, return_tensors="pt", padding=True).to(device)
+                sa = dense.lm_head(dense.model(**ea, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    ba = base_logits(ea)
+                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                if theta_star is not None:                   # online-EWC quadratic penalty
+                    pen = sum((fa * (p - ts) ** 2).sum() for fa, p, ts in zip(f_accum, trainable, theta_star))
+                    loss = loss + lam * pen
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+            dense.eval()
+            # estimate diagonal Fisher on this stream (squared grads of the teacher-target loss)
+            fish = [torch.zeros_like(p) for p in trainable]
+            for _ in range(fisher_n):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                pr = [(p_seen if rng.random() < 0.5 else p_para)(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    tgt = teacher_logits(feat, mods, Kf, Sf, pr).argmax(-1)
+                fl = F.cross_entropy(s_lg, tgt)
+                opt.zero_grad(); fl.backward()
+                for i, p in enumerate(trainable):
+                    if p.grad is not None:
+                        fish[i] += p.grad.detach() ** 2
+            for i in range(len(f_accum)):
+                f_accum[i] = f_accum[i] + fish[i] / fisher_n
+            theta_star = [p.detach().clone() for p in trainable]
+            seen, para, h = eval_all(dense, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [ewc       seed {seed} r{r}] lam={lam} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        del dense; torch.cuda.empty_cache()
+        tp = n_trainable_count(trainable)
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS)
+
+    def n_trainable_count(ps):
+        return sum(p.numel() for p in ps)
+
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "naive":     dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "continued": dict(uses_gold_new=True,  uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "loramerge": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "oracle":    dict(uses_gold_new=False, uses_gold_old=True,  uses_replay=True,  uses_inference_memory=False, single_dense=True),
+        "ewc":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
-    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle"))
+    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc"))
 
     def agg(arm):
         runs = results[arm]
@@ -385,9 +457,17 @@ def main():
         newest = sum(r["hist"][-1][0][-1] for r in runs) / len(runs)
         bhop = sum(r["base_hop"] for r in runs) / len(runs)
         hop_f = sum(r["hist"][-1][2] for r in runs) / len(runs)
+        # mean forgetting across ALL streams: fresh (stream j at round j) -> final
+        def mf(run):
+            h = run["hist"]
+            return sum(h[j][0][j] - h[-1][0][j] for j in range(len(h))) / len(h)
+        mean_forget = sum(mf(r) for r in runs) / len(runs)
+        fvs = [r["hist"][-1][0] for r in runs]            # final per-stream seen vectors
+        age = [round(sum(v[j] for v in fvs) / len(fvs), 3) for j in range(len(fvs[0]))]
         return dict(
             oldest_S0_fresh=s0_fresh, oldest_S0_final=s0_fin, oldest_S0_forgetting=s0_fresh - s0_fin,
             oldest_S0_para_final=s0_para, all_seen_final=allseen, all_para_final=allpara,
+            mean_forgetting_all_streams=mean_forget, age_curve_final_seen=age,
             newest_stream_final=newest, base_hop_before=bhop, base_hop_after=hop_f,
             trainable_params_per_round=runs[0]["tparams_per_round"],
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
@@ -411,6 +491,13 @@ def main():
                   f"{a['all_para_final']:.3f}     {a['newest_stream_final']:.2f}    "
                   f"{a['base_hop_before']:.3f}->{a['base_hop_after']:.3f}  "
                   f"{str(a['uses_gold_new']):5s} {str(a['uses_replay']):7s} {str(a['uses_inference_memory'])}")
+            print(f"             mean-forget(all-streams)={a['mean_forgetting_all_streams']:+.3f} "
+                  f"age-curve(final seen S0..Sn)={a['age_curve_final_seen']}")
+        if "ours" in summary and "oracle" in summary:
+            og_s = summary["oracle"]["all_seen_final"] - summary["ours"]["all_seen_final"]
+            og_p = summary["oracle"]["all_para_final"] - summary["ours"]["all_para_final"]
+            print(f"  ORACLE_GAP (oracle-ours): seen {og_s:+.3f}  para {og_p:+.3f}  "
+                  f"(small gap => no-gold self-distill ~ gold-old upper bound)")
         with open(out, "w") as f:
             json.dump(dict(config=dict(model=NAME, rounds=ROUNDS, per=PER, grow=GROW, steps=STEPS,
                                        seeds_done=nseeds, arms=ARMS, lora_r=LORA_R), summary=summary), f, indent=2)
@@ -432,6 +519,8 @@ def main():
                 out_a = run_loramerge(seed, streams, scaffolds)
             elif arm == "extmem":
                 out_a = run_extmem(seed, streams)
+            elif arm == "ewc":
+                out_a = run_ewc(seed, streams, scaffolds)
             else:
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
