@@ -57,18 +57,20 @@
 > composition *grokking* (does depth/growth change onset/ceiling?), CoT/scratchpad, or accept the
 > bottom line below.
 >
-> **R33 (baseline BAKEOFF — the proven loop vs standard CL)** `s2/lifecycle_bakeoff.py`, 2-seed,
-> 6 rounds × 40, shared streams/scaffold/answer-recall/eval. Arms: ours (replay-consolidation, no
-> gold, no inference memory), naive (no replay), continued-FT (GOLD new-stream, no replay),
-> LoRA-merge (per-stream adapter merged in, no replay), external-memory (persistent bank). Final
-> all-seen / oldest-S0: **ours 0.889 / 0.85 (forget +0.00)**, naive 0.373 / 0.135, continued
-> 0.429 / 0.16, LoRA-merge 0.338 / 0.11, extmem 0.869 / 0.895. Takeaways: (1) **replay-consolidation
-> is the only arm that retains the lifelong stream with no inference memory and no old-gold** — every
-> in-weights no-replay baseline forgets catastrophically (age-graded), **including continued-FT that
-> has a gold advantage** (0.429 vs 0.889 → replay, not signal, drives retention); (2) **LoRA-merge
-> both forgets and destroys base capability** (hop 0.205→0.033); (3) **ours (no memory) edges out
-> external memory** (0.889 vs 0.869) — knowledge-into-weights matches/beats a retrieval bank while
-> dropping the inference dependency. The contribution is now comparative, not just internal.
+> **R33 (baseline BAKEOFF — the proven loop vs standard CL)** `s2/lifecycle_bakeoff.py`, **3-seed**,
+> 6 rounds × 40, shared per-(seed,stream) scaffold/answer-recall/eval (teacher trained once, shared
+> across arms → method-attributable). Arms: ours (replay-consolidation, no gold, no inference memory),
+> naive (no replay), continued-FT (GOLD new-stream, no replay), LoRA-merge (per-stream adapter merged
+> in, no replay), external-memory (persistent bank). all-seen / all-para / oldest-S0-forget:
+> **ours 0.914 / 0.826 / +0.00**, naive 0.408 / 0.331 / +0.71, continued 0.460 / 0.472 / +0.85,
+> LoRA-merge 0.367 / 0.312 / +0.73, extmem 0.875 / 0.690 / −0.01. Takeaways: (1) **replay-consolidation
+> is the only arm that retains the lifelong stream with no inference memory and no old-gold** (matches
+> R30's 0.918) — every in-weights no-replay baseline forgets catastrophically (age-graded), **including
+> continued-FT with a gold advantage** (0.460 vs 0.914 → replay, not signal, drives retention);
+> (2) **LoRA-merge both forgets and destroys base capability** (hop 0.205→0.062); (3) **ours (no memory)
+> beats external memory on both seen (0.914 vs 0.875) and para (0.826 vs 0.690)** — knowledge-into-weights
+> matches/beats a retrieval bank while dropping the inference dependency (extmem also transiently
+> collapses, R17-style). The contribution is now comparative, not just internal.
 >
 > **Honest bottom line (R19-R33):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
