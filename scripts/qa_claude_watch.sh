@@ -59,7 +59,7 @@ Evaluation lens:
 
 Task:
 1. Read qa/claude/$latest_claude in full.
-2. Analyze it in detail in Traditional Chinese, grounded in the repository context when relevant.
+2. Analyze it in detail, grounded in the repository context when relevant.
 3. Write a new Markdown response to qa/codex/yyyy-mm-dd.hh.mm.ss.md using the current timestamp.
 4. The Markdown must record the source file name: qa/claude/$latest_claude.
 5. Do not overwrite existing files.
