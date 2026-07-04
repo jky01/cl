@@ -238,22 +238,23 @@ def main():
     def n_trainable(m):
         return sum(p.numel() for p in m.parameters() if p.requires_grad)
 
-    # ---------------- consolidation-style arms (ours / naive / continued / loramerge) ----------
-    def run_consolidate(seed, streams, kind):
+    # ---------------- consolidation-style arms (ours / naive / continued / loramerge / oracle) ---
+    # scaffolds: shared per-(seed,stream) teacher list (train_memory once, reuse across arms).
+    def run_consolidate(seed, streams, kind, scaffolds):
         dense = load_frozen()
         base_hop = hop_acc(dense)
         rng = random.Random(seed * 13 + hash(kind) % 97)
         hist = []; opt_steps = 0; tparams = []
-        replay = (kind == "ours")
+        replay = kind in ("ours", "oracle")            # ours=self-distill(no gold); oracle=gold-old CE
         for r in range(ROUNDS):
             S = streams[r]; prior = [f for s in streams[:r] for f in s]
             mods = Kf = Sf = None
-            if kind in ("ours", "naive", "loramerge"):
-                mods, Kf, Sf, t_r1, n_rs = train_memory(feat, S, seed * 100 + r)
+            if kind in ("ours", "naive", "loramerge", "oracle"):
+                mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
             grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
             tparams.append(n_trainable(dense))
             snap = None
-            if replay and prior:
+            if kind == "ours" and prior:               # self-distill needs a pre-round snapshot
                 snap = copy.deepcopy(dense).eval()
                 for p in snap.parameters():
                     p.requires_grad_(False)
@@ -274,14 +275,18 @@ def main():
                         t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
                     loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
                         F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
-                if snap is not None:                                 # REPLAY prior streams (no gold)
+                if replay and prior:                                 # REPLAY prior streams
                     sub2 = [rng.choice(prior) for _ in range(Bf)]
                     ph2 = p_seen if rng.random() < 0.5 else p_para
                     e2 = tok([ph2(*f) for f in sub2], return_tensors="pt", padding=True).to(device)
-                    with torch.no_grad():
-                        snap_lg = snap.lm_head(snap.model(**e2, use_cache=False).last_hidden_state[:, -1]).float()
                     s2 = dense.lm_head(dense.model(**e2, use_cache=False).last_hidden_state[:, -1]).float()
-                    loss = loss + F.kl_div(F.log_softmax(s2, -1), F.softmax(snap_lg, -1), reduction="batchmean")
+                    if kind == "oracle":                             # ORACLE: old-stream GOLD CE
+                        gold2 = torch.tensor([one_tok(f[2]) for f in sub2], device=device)
+                        loss = loss + F.cross_entropy(s2, gold2)
+                    else:                                            # ours: self-distill to snapshot (NO gold)
+                        with torch.no_grad():
+                            snap_lg = snap.lm_head(snap.model(**e2, use_cache=False).last_hidden_state[:, -1]).float()
+                        loss = loss + F.kl_div(F.log_softmax(s2, -1), F.softmax(snap_lg, -1), reduction="batchmean")
                 ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
                 ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
                 ea = tok(ap, return_tensors="pt", padding=True).to(device)
@@ -302,7 +307,7 @@ def main():
                     tparams_per_round=tparams, updated_params_total=sum(tparams))
 
     # ---------------- LoRA-merge arm (fixed size, per-stream adapter merged in) -----------------
-    def run_loramerge(seed, streams):
+    def run_loramerge(seed, streams, scaffolds):
         from peft import LoraConfig, get_peft_model
         dense = load_frozen()
         base_hop = hop_acc(dense)
@@ -310,7 +315,7 @@ def main():
         hist = []; opt_steps = 0; tparams = []
         for r in range(ROUNDS):
             S = streams[r]
-            mods, Kf, Sf, t_r1, n_rs = train_memory(feat, S, seed * 100 + r)
+            mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
             cfg = LoraConfig(r=LORA_R, lora_alpha=2 * LORA_R, lora_dropout=0.0,
                              target_modules=["q_proj", "v_proj"], task_type="CAUSAL_LM")
             peft_m = get_peft_model(dense, cfg)
@@ -363,25 +368,12 @@ def main():
         "naive":     dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "continued": dict(uses_gold_new=True,  uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "loramerge": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
+        "oracle":    dict(uses_gold_new=False, uses_gold_old=True,  uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
-    for seed in range(SEEDS):
-        streams = make_streams(seed)
-        print(f"  seed {seed}: streams={[len(s) for s in streams]}", flush=True)
-        for arm in ARMS:
-            torch.cuda.reset_peak_memory_stats() if device == "cuda" else None
-            t0 = time.time()
-            if arm == "loramerge":
-                out = run_loramerge(seed, streams)
-            elif arm == "extmem":
-                out = run_extmem(seed, streams)
-            else:
-                out = run_consolidate(seed, streams, arm)
-            out["wall"] = time.time() - t0
-            out["peak_vram_mb"] = (torch.cuda.max_memory_allocated() / 1e6) if device == "cuda" else 0
-            results[arm].append(out)
+    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle"))
 
     def agg(arm):
         runs = results[arm]
@@ -403,23 +395,50 @@ def main():
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
             peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **flags[arm])
 
-    print(f"\n== BAKEOFF (mean/{SEEDS} seeds, {ROUNDS} rounds x {PER} facts) ==")
-    print(f"  {'arm':10s} {'S0 fresh->final(forget)':26s} {'all-seen':9s} {'all-para':9s} "
-          f"{'newest':7s} {'hop':13s} {'gold':5s} {'replay':7s} {'infmem':7s}")
-    summary = {}
-    for arm in ARMS:
-        a = agg(arm); summary[arm] = a
-        print(f"  {arm:10s} {a['oldest_S0_fresh']:.2f}->{a['oldest_S0_final']:.2f} "
-              f"({a['oldest_S0_forgetting']:+.3f})            {a['all_seen_final']:.3f}     "
-              f"{a['all_para_final']:.3f}     {a['newest_stream_final']:.2f}    "
-              f"{a['base_hop_before']:.3f}->{a['base_hop_after']:.3f}  "
-              f"{str(a['uses_gold_new']):5s} {str(a['uses_replay']):7s} {str(a['uses_inference_memory'])}")
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
-    with open(out, "w") as f:
-        json.dump(dict(config=dict(model=NAME, rounds=ROUNDS, per=PER, grow=GROW, steps=STEPS,
-                                   seeds=SEEDS, arms=ARMS, lora_r=LORA_R), summary=summary), f, indent=2)
-    print("\nRESULT_JSON " + json.dumps(summary))
-    print(f"[wrote {out}]", flush=True)
+
+    def dump(nseeds):
+        print(f"\n== BAKEOFF (mean/{nseeds} seeds done, {ROUNDS} rounds x {PER} facts) ==")
+        print(f"  {'arm':10s} {'S0 fresh->final(forget)':26s} {'all-seen':9s} {'all-para':9s} "
+              f"{'newest':7s} {'hop':13s} {'gold':5s} {'replay':7s} {'infmem':7s}")
+        summary = {}
+        for arm in ARMS:
+            if not results[arm]:
+                continue
+            a = agg(arm); summary[arm] = a
+            print(f"  {arm:10s} {a['oldest_S0_fresh']:.2f}->{a['oldest_S0_final']:.2f} "
+                  f"({a['oldest_S0_forgetting']:+.3f})            {a['all_seen_final']:.3f}     "
+                  f"{a['all_para_final']:.3f}     {a['newest_stream_final']:.2f}    "
+                  f"{a['base_hop_before']:.3f}->{a['base_hop_after']:.3f}  "
+                  f"{str(a['uses_gold_new']):5s} {str(a['uses_replay']):7s} {str(a['uses_inference_memory'])}")
+        with open(out, "w") as f:
+            json.dump(dict(config=dict(model=NAME, rounds=ROUNDS, per=PER, grow=GROW, steps=STEPS,
+                                       seeds_done=nseeds, arms=ARMS, lora_r=LORA_R), summary=summary), f, indent=2)
+        print(f"RESULT_JSON_{nseeds}SEED " + json.dumps(summary), flush=True)
+
+    for seed in range(SEEDS):
+        streams = make_streams(seed)
+        print(f"  seed {seed}: streams={[len(s) for s in streams]}", flush=True)
+        # train each stream's scaffold ONCE (deterministic in seed*100+r); share across arms
+        scaffolds = None
+        if need_scaffold:
+            scaffolds = [train_memory(feat, streams[r], seed * 100 + r) for r in range(ROUNDS)]
+            print(f"    scaffolds answer-recall={[round(s[3],2) for s in scaffolds]} "
+                  f"restarts={[s[4] for s in scaffolds]}", flush=True)
+        for arm in ARMS:
+            torch.cuda.reset_peak_memory_stats() if device == "cuda" else None
+            t0 = time.time()
+            if arm == "loramerge":
+                out_a = run_loramerge(seed, streams, scaffolds)
+            elif arm == "extmem":
+                out_a = run_extmem(seed, streams)
+            else:
+                out_a = run_consolidate(seed, streams, arm, scaffolds)
+            out_a["wall"] = time.time() - t0
+            out_a["peak_vram_mb"] = (torch.cuda.max_memory_allocated() / 1e6) if device == "cuda" else 0
+            results[arm].append(out_a)
+        dump(seed + 1)                                   # partial-safe: summary+JSON after EVERY seed
+    print("\n[all seeds done]", flush=True)
 
 
 if __name__ == "__main__":
