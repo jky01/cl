@@ -72,19 +72,32 @@
 > matches/beats a retrieval bank while dropping the inference dependency (extmem also transiently
 > collapses, R17-style). The contribution is now comparative, not just internal.
 >
-> **Honest bottom line (R19-R33):** the demonstrated, robust, multi-seed contribution is
+> **R34 (composition GROKKING — the last growth probe)** `s2/composition_grok.py`. R32 closed
+> *OOD* composition; R34 tests *in-distribution* composition (2 relations, small shared-bridge set so
+> held-out A's (B,C) are exercised by other A's trained 2-hop; 13k-token vocab; per-example derange
+> control). **Reachable and fast at +0**: held-out 2-hop groks to ~0.98 by step ~50-500 (unlike R32's
+> 0.0). **Depth sweep +0 vs +4** (2-seed 10k-step + 4-seed fine-onset): **growth robustly FAILS** —
+> onset tied (4-seed: +0 mean 87.5 vs +4 100, +0 marginally earlier), convergence ceiling tied
+> (+0 0.983 ≥ +4 0.979), only a transient +0.031 at 1500 steps (< the +0.10 bar, reverses by
+> convergence), and +4 is ~15% slower throughout. So composition is **OOD-impossible-for-all (R32)
+> or in-distribution-easy-for-+0 (R34)** — in both regimes growth is unjustified. 4th independent
+> growth negative (after R23 retention, R31 capacity, R32 OOD composition).
+>
+> **Honest bottom line (R19-R34):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
 > retained with no external memory at inference, and (R33) **it beats standard continual-learning
 > baselines** (sequential no-replay, continued-FT-with-gold, LoRA-merge) while matching external
 > memory without needing memory at inference. **Growth (the "小 → 大" framing) is NOT
 > justified by any of these experiments**: R23 shows growth doesn't drive retention, R31 shows
 > it doesn't add capacity even at 800 facts through 1 layer. Justifying growth requires what
-> these synthetic fact/hop tasks don't stress — a **compute-advantage** result (grow-from-small
-> reaching a capability at <30-50% of from-scratch-large compute, the SOLAR/LiGO/LESA bar) or a
-> **capability-saturation** regime at much larger scale. **R32 further ruled out latent held-out
-> composition** as that stressor (the upper bound scores 0). The remaining reachable growth-necessity
-> probe is in-distribution composition *grokking* (does depth/growth shift onset/ceiling?); until a
-> result there, do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
+> these synthetic fact/hop tasks don't stress. **Every probed growth axis at this scale is now
+> negative**: retention (R23, replay does it), capacity (R31, 1 layer holds 800 facts), OOD
+> composition (R32, impossible for all incl. the upper bound), and in-distribution composition
+> grokking (R34, +0 already ~0.98 and depth gives no onset/ceiling advantage at matched compute).
+> A growth claim would now require a genuinely different regime — a **compute-advantage** result vs
+> from-scratch-large (SOLAR/LiGO/LESA bar) or capability-saturation at **much larger (non-0.5B,
+> non-synthetic) scale**; the synthetic fact/hop/composition probes are exhausted. Until such a
+> result, do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
 > its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall restart.
 
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
