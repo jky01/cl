@@ -27,6 +27,24 @@ files may be written entirely in English** (codex-facing technical exchange); on
 user are in 繁體中文. RunPod key lives at `~/.runpod_key` (chmod 600) — **NEVER echo it**.
 Non-Blackwell GPUs only (RTX 4090/A-series; 5090 sm_120 fails cu124).
 
+## Research orientation — continual learning is an UNSOLVED frontier (standing directive)
+
+**Model continual learning is an unconquered problem; solving it may require methods that have not
+yet been discovered. Treat it as open research: be willing to try genuinely novel mechanisms, and
+discuss them in depth with codex** (via the qa/ dialogue) before and while building. Don't settle for
+polishing known techniques when the honest gap is unsolved — name where our best result stops, then
+attempt the frontier. (User directive, 2026-07-05.)
+
 ## Research context (2026-07)
 
-Current thrust is the **Grow-and-Consolidate** pivot (`s2/`): consolidate transient scaffold-memory knowledge into a single dense checkpoint (no external memory at inference). Honest bottom line so far (R19–R31): the robust, multi-seed result is **knowledge-into-weights via replay/self-distillation**; **growth is NOT yet justified** (R23: not retention; R31: not capacity) — the open task is a **cross-stream composition** saturation benchmark to test whether growth is ever necessary. See `FINDINGS.md` (top) for the full arc and `docs/memory/s0-step0-state.md` for round-by-round detail.
+Thrust: **Grow-and-Consolidate** (`s2/`) — consolidate transient scaffold-memory knowledge into a
+single dense checkpoint (no external memory at inference). Honest arc so far (R19–R35, see `FINDINGS.md`
+top + `docs/cloud_results/`): the robust multi-seed positive is **knowledge-into-weights via
+replay/self-distillation** — R33 shows it beats standard CL baselines (naive, continued-FT-with-gold,
+LoRA-merge) and external memory, no inference memory (all-seen 0.914). **Growth is NOT justified** at
+0.5B synthetic scale — four independent negatives: R23 retention, R31 capacity, R32 OOD composition,
+R34 in-distribution composition grokking. R35 brackets it (EWC ≪ replay ≪ gold-old oracle).
+**The real open problem: rehearsal-FREE continual learning** — our replay is still rehearsal; the enemy
+is *interference*. Frontier probe R36-I (`nswrite`): interference-aware null-space writing with no
+replay; growth may finally be necessary only when the interference-free write-subspace saturates
+(depth vs width/parallel-adapter growth is the phase-2 question).
