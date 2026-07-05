@@ -434,6 +434,118 @@ def main():
     def n_trainable_count(ps):
         return sum(p.numel() for p in ps)
 
+    # ---------------- nswrite arm (REHEARSAL-FORBIDDEN activation null-space writer) --------------
+    # The frontier probe (R36-I): write new-stream knowledge WITHOUT replaying old inputs, by
+    # projecting each trainable Linear's weight-gradient off the input directions that old streams
+    # read from (null space of old-stream last-token input activations). Only a low-rank basis U is
+    # kept as TRAINING state (no old prompts/answers/Kf/Sf); inference uses only the dense checkpoint.
+    # mode="act": U from old activations (the method). mode="rand": random-basis control of matched
+    # rank (attributes any gain to interference-awareness, not mere gradient shrinkage).
+    # Reports gradient OCCUPANCY ||G·UUᵀ||/||G|| — the future growth-saturation signal.
+    def run_nswrite(seed, streams, scaffolds, mode):
+        kper = int(os.environ.get("BK_NS_KPER", 40))
+        rankcap = int(os.environ.get("BK_NS_RANK", 256))
+        dense = load_frozen()
+        base_hop = hop_acc(dense)
+        set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (no growth)
+        targets = []
+        for lyr in dense.model.layers[-GROW:]:
+            for mod in lyr.modules():
+                if isinstance(mod, nn.Linear):
+                    targets.append(mod)
+                    if mod.bias is not None:
+                        mod.bias.requires_grad_(False)     # freeze bias (shared shift over all inputs)
+        trainable = [p for p in dense.parameters() if p.requires_grad]
+        Umap = {id(m): None for m in targets}
+        rng = random.Random(seed * 13 + 53)
+        hist = []; occ_hist = []; opt_steps = 0
+
+        def collect_inputs(prompts):
+            store = {id(m): [] for m in targets}
+            def mk(mid):
+                def hook(module, inp):
+                    store[mid].append(inp[0][:, -1, :].detach().float())
+                return hook
+            handles = [m.register_forward_pre_hook(mk(id(m))) for m in targets]
+            with torch.no_grad():
+                for i in range(0, len(prompts), 128):
+                    e = tok(prompts[i:i + 128], return_tensors="pt", padding=True).to(device)
+                    dense.model(**e)
+            for h in handles:
+                h.remove()
+            return {mid: torch.cat(v, 0) for mid, v in store.items()}
+
+        def basis_from(A, k):
+            if mode == "none":                            # naive_fixed: no basis, no projection
+                return None
+            if mode == "rand":
+                q, _ = torch.linalg.qr(torch.randn(A.shape[1], min(k, A.shape[1]), device=device))
+                return q
+            try:
+                _u, _s, Vh = torch.linalg.svd(A, full_matrices=False)
+            except Exception:
+                return None
+            return Vh[:min(k, Vh.shape[0])].t().contiguous()
+
+        def update_U(Uold, newB):
+            if newB is None:
+                return Uold
+            M = newB if Uold is None else torch.cat([Uold, newB], 1)
+            q, _ = torch.linalg.qr(M)
+            return q[:, :rankcap].contiguous()
+
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            opt = torch.optim.AdamW(trainable, lr=LR)
+            dense.train()
+            occ_acc = 0.0; occ_n = 0
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                ea = tok(ap, return_tensors="pt", padding=True).to(device)
+                sa = dense.lm_head(dense.model(**ea, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    ba = base_logits(ea)
+                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                opt.zero_grad(); loss.backward()
+                gn = gpn = 0.0
+                for m in targets:
+                    U = Umap[id(m)]
+                    if m.weight.grad is None:
+                        continue
+                    g = m.weight.grad
+                    if U is not None:
+                        proj = (g @ U) @ U.t()
+                        gpn += proj.pow(2).sum().item(); gn += g.pow(2).sum().item()
+                        m.weight.grad = g - proj
+                if gn > 0:
+                    occ_acc += gpn / gn; occ_n += 1
+                torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+            dense.eval()
+            if mode != "none":                            # commit: update protected basis U
+                acts = collect_inputs([p_seen(*f) for f in S] + [p_para(*f) for f in S])
+                for m in targets:
+                    Umap[id(m)] = update_U(Umap[id(m)], basis_from(acts[id(m)], kper))
+            occ_hist.append(round(occ_acc / max(occ_n, 1), 3))
+            seen, para, h = eval_all(dense, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [nswrite-{mode:4s} seed {seed} r{r}] grad-occupancy={occ_hist[-1]} "
+                  f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        del dense; torch.cuda.empty_cache()
+        tp = n_trainable_count(trainable)
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
+                    occupancy_curve=occ_hist)
+
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "naive":     dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
@@ -441,11 +553,14 @@ def main():
         "loramerge": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "oracle":    dict(uses_gold_new=False, uses_gold_old=True,  uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "ewc":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
+        "naive_fixed": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=False),
+        "nswrite":   dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "nswrite_rand": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
-    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc"))
+    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed"))
 
     def agg(arm):
         runs = results[arm]
@@ -464,7 +579,10 @@ def main():
         mean_forget = sum(mf(r) for r in runs) / len(runs)
         fvs = [r["hist"][-1][0] for r in runs]            # final per-stream seen vectors
         age = [round(sum(v[j] for v in fvs) / len(fvs), 3) for j in range(len(fvs[0]))]
+        occ = (sum(r["occupancy_curve"][-1] for r in runs) / len(runs)
+               if all("occupancy_curve" in r for r in runs) else None)
         return dict(
+            gradient_occupancy_final=occ,
             oldest_S0_fresh=s0_fresh, oldest_S0_final=s0_fin, oldest_S0_forgetting=s0_fresh - s0_fin,
             oldest_S0_para_final=s0_para, all_seen_final=allseen, all_para_final=allpara,
             mean_forgetting_all_streams=mean_forget, age_curve_final_seen=age,
@@ -521,6 +639,12 @@ def main():
                 out_a = run_extmem(seed, streams)
             elif arm == "ewc":
                 out_a = run_ewc(seed, streams, scaffolds)
+            elif arm == "nswrite":
+                out_a = run_nswrite(seed, streams, scaffolds, "act")
+            elif arm == "nswrite_rand":
+                out_a = run_nswrite(seed, streams, scaffolds, "rand")
+            elif arm == "naive_fixed":
+                out_a = run_nswrite(seed, streams, scaffolds, "none")
             else:
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
