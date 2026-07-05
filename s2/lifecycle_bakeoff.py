@@ -466,7 +466,7 @@ def main():
         Umap = {id(m): None for m in targets}             # input-side basis
         Vmap = {id(m): None for m in targets}             # output-side answer-margin basis (margin modes)
         rng = random.Random(seed * 13 + 53)
-        hist = []; occ_hist = []; eff_hist = []; opt_steps = 0
+        hist = []; occ_hist = []; eff_hist = []; leak_hist = []; opt_steps = 0
 
         def collect_inputs(prompts):
             store = {id(m): [] for m in targets}
@@ -554,12 +554,21 @@ def main():
             return q[:, :cap].contiguous()
 
         ns_lr = float(os.environ.get("BK_NS_LR", LR))     # drift sweep: lower LR = less per-step drift
+        ns_wd = float(os.environ.get("BK_NS_WD", 0.01))   # AdamW decoupled decay is an UNPROJECTED update
+        ns_sgd = int(os.environ.get("BK_NS_SGD", 0))      # SGD update stays ⊥U (Adam preconditioner rotates it)
+        if int(os.environ.get("BK_NS_LINEAR_ONLY", 0)):   # freeze non-Linear top params (norms leak, unprotected)
+            tw = {id(m.weight) for m in targets}
+            for p in list(trainable):
+                if id(p) not in tw:
+                    p.requires_grad_(False)
+            trainable = [p for p in dense.parameters() if p.requires_grad]
         for r in range(ROUNDS):
             S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
-            opt = torch.optim.AdamW(trainable, lr=ns_lr)
+            opt = (torch.optim.SGD(trainable, lr=ns_lr, momentum=0.9) if ns_sgd
+                   else torch.optim.AdamW(trainable, lr=ns_lr, weight_decay=ns_wd))
             dense.train()
             occ_acc = 0.0; occ_n = 0
-            Wstart = {id(m): m.weight.detach().clone() for m in targets} if reproject else None
+            Wstart = {id(m): m.weight.detach().clone() for m in targets}   # for realized-ΔW leak + reproject
             for _ in range(STEPS):
                 sub = [rng.choice(S) for _ in range(Bf)]
                 phrase = p_seen if rng.random() < 0.5 else p_para
@@ -614,16 +623,27 @@ def main():
             energy = occ_acc / max(occ_n, 1)              # ||G·UUᵀ||²/||G||² (gradient ENERGY fraction)
             occ_hist.append(round(energy, 3))
             eff_hist.append(round((max(0.0, 1.0 - energy)) ** 0.5, 3))  # ||G(I-UUᵀ)||/||G|| norm ratio
+            # realized-ΔW leak: fraction of the ACTUAL weight change that landed in old-input dirs U
+            with torch.no_grad():
+                dn = ln = 0.0
+                for m in targets:
+                    U = Umap[id(m)]
+                    if U is None:
+                        continue
+                    dW = m.weight.data - Wstart[id(m)]
+                    ln += ((dW @ U) @ U.t()).pow(2).sum().item(); dn += dW.pow(2).sum().item()
+                leak_hist.append(round(ln / dn, 3) if dn > 0 else 0.0)
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
             print(f"    [nswrite-{mode:4s} seed {seed} r{r}] energy-occ={occ_hist[-1]} "
-                  f"eff-grad={eff_hist[-1]} fresh={round(seen[r],2)} "
+                  f"eff-grad={eff_hist[-1]} dW-leak={leak_hist[-1]} fresh={round(seen[r],2)} "
                   f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         del dense; torch.cuda.empty_cache()
         tp = n_trainable_count(trainable)
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
-                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist)
+                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist,
+                    realized_leak_curve=leak_hist)
 
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
