@@ -147,6 +147,27 @@
 > editing don't cross it. **Replay-consolidation (R33/R35) remains the proven durable knowledge-into-weights
 > method at this scale.**
 >
+> **R36-EV (EXTERNAL VALIDITY of the replay-consolidation positive) — PASS** `s2/lifecycle_bakeoff.py`
+> `BK_DATA=kg`, 2-seed, 6 streams × 40 facts, log `docs/cloud_results/kg_bakeoff_r36ev.log`. Re-ran the
+> R33/R35 bakeoff on **KG-shaped counterfactual triples over ~80 REAL entities** (Napoleon/Einstein/…,
+> relations job/pet/drink/city/tongue, single-token objects, two natural-language surface forms per
+> relation for seen-vs-para), with a frozen-base-recall screen (base seen 0.000 / para 0.033 ≤ 0.15, so
+> the model is *not* already answering — every hit is learned). This tests whether the R33 positive was
+> an artifact of the synthetic `"{name}'s {attr} is"` template. It was not. Result (mean/2 seeds):
+> **ours (replay self-distill) all-seen 0.919 / all-para 0.802 / oldest-S0 forget +0.000**, vs
+> **naive 0.287 / 0.248 / +0.838** and **ewc 0.348 / 0.304 / +0.863**, with **oracle (gold-old) 0.954 /
+> 0.933 / +0.000**. Against codex's pre-registered pass bar (`qa/codex/2026-07-06.03.14.20.md`): ours
+> beats naive/ewc all-seen by **+0.63 / +0.57** (bar ≥ +0.25) ✅; oldest forget +0.000 (≤ +0.10) ✅;
+> all-seen 0.919 ≥ 0.75 ✅, all-para 0.802 ≥ 0.60 ✅; base-hop 0.205→0.201 drop 0.003 (≤ 0.03) ✅;
+> ORACLE_GAP seen +0.035 / para +0.131 (≈ R35 scale, self-distill ≈ gold-old upper bound) ✅; single
+> dense, no gold-old, no inference memory ✅. **The replay-consolidation positive is NOT template-specific
+> — it holds on real-entity KG-shaped counterfactuals.** Honest caveats: (a) newest-stream fresh recall
+> 0.75 (< the 0.91–1.0 of earlier streams) — one harder stream / seed variance, teacher-fresh mean ~0.93;
+> (b) the oracle gap is **para-dominated** (+0.131 para vs +0.035 seen): self-distillation without gold
+> trails the gold-old oracle specifically on *paraphrase generalization*, the known honest cost of
+> zero-gold self-distill (R25/R35). Net: R33/R35 external validity confirmed; replay-consolidation is the
+> robust positive across both synthetic and KG-shaped data.
+>
 > **Honest bottom line (R19-R36):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
 > retained with no external memory at inference, and (R33) **it beats standard continual-learning
