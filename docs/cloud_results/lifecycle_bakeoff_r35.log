@@ -1,0 +1,40 @@
+LIFECYCLE BAKEOFF — R35 (oracle/EWC brackets) — s2/lifecycle_bakeoff.py
+Qwen/Qwen2.5-0.5B, RTX 4090, 6 rounds x 40, 2 SEEDS, PYTHONHASHSEED=0, scaffold-shared.
+Adds the upper/lower brackets around R33's replay-consolidation, per codex:
+- oracle  = gold-old replay UPPER bracket (old streams replayed with gold answer CE; sequential,
+  NOT full joint retraining; uses_gold_old=True).
+- ewc     = ewc_fixed (canonical online-EWC on a FIXED top-GROW base layer set, no growth, no
+  replay; diagonal Fisher penalty lambda=100) — tests if regularization can replace replay.
+New metrics: ORACLE_GAP, mean_forgetting across ALL streams, age_curve (final per-stream seen).
+
+================= 2-SEED SUMMARY =================
+  arm        all-seen  all-para  oldest-S0-forget  mean-forget  base-hop      flags
+  oracle     0.994     0.983     -0.150            -0.106       0.205->0.205  gold-old replay (ceiling)
+  ours       0.890     0.827     +0.000            +0.000       0.205->0.205  no-gold replay
+  continued  0.460     0.438     +0.825            +0.540       0.205->0.207  gold-new, no replay
+  ewc        0.456     0.448     +0.662            +0.431       0.205->0.214  online-EWC, no replay
+  naive      0.390     0.335     +0.675            +0.498       0.205->0.201  no replay
+  loramerge  0.367     0.346     +0.700            +0.521       0.205->0.068  adapter-merge, no replay
+
+ORACLE_GAP (oracle - ours): seen +0.104, para +0.156.
+age_curve (final per-stream seen, S0..S5):
+  ours    [0.863,0.875,0.975,0.938,0.725,0.963]  (flat — no age gradient)
+  oracle  [1.0,1.0,1.0,1.0,1.0,0.963]            (near-perfect)
+  ewc     [0.188,0.3,0.3,0.462,0.525,0.963]      (age-graded, milder than naive)
+  naive   [0.175,0.213,0.35,0.35,0.287,0.963]    (age-graded)
+
+INTERPRETATION (R35):
+- BRACKET: floor (naive/loramerge ~0.37-0.39) < EWC/continued (~0.46) < ours (0.890) < oracle (0.994).
+- EWC (a real anti-forgetting regularizer) beats naive (0.456 vs 0.390) but is CRUSHED by replay
+  (0.890): regularization-only is NOT sufficient to replace rehearsal; EWC still shows an age gradient.
+  => replay-consolidation's dominance over standard CL is not an artifact of weak baselines.
+- ORACLE_GAP +0.10 seen / +0.16 para: no-gold self-distill replay is close to but NOT within the
+  0.03-0.05 "essentially matched" band of the gold-old upper bound. Honest reading: having old gold
+  still buys ~0.10-0.16; the no-gold approximation's bottleneck is scaffold/teacher answer quality and
+  self-distill snapshot fidelity, not the replay principle. Improving the scaffold guard / replay
+  sampling is the lever to close it. This does NOT overturn R33 (ours still dominates all rehearsal-free
+  and regularizer baselines and needs no gold/no inference memory), it sharpens where the headroom is.
+
+BOTTOM LINE: R35 closes the replay-consolidation chapter's brackets — ours sits well above every
+rehearsal-free / regularizer baseline and within ~0.10 of the gold-old ceiling. The remaining open
+problem is rehearsal-FREE continual learning (no replay at all), which R36-I attacks. Pod terminated.

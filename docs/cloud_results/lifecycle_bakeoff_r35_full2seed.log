@@ -1,0 +1,115 @@
+== R35 mode=real arms=ours,naive,continued,loramerge,oracle,ewc ==
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours', 'naive', 'continued', 'loramerge', 'oracle', 'ewc'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.88, 0.95, 1.0, 0.57, 0.93] restarts=[0, 0, 0, 1, 1, 0]
+    [ours      seed 0 r0] L=26 seen=[0.85] hop=0.208
+    [ours      seed 0 r1] L=28 seen=[0.85, 0.88] hop=0.212
+    [ours      seed 0 r2] L=30 seen=[0.85, 0.88, 0.95] hop=0.201
+    [ours      seed 0 r3] L=32 seen=[0.85, 0.88, 0.95, 1.0] hop=0.205
+    [ours      seed 0 r4] L=34 seen=[0.85, 0.88, 0.95, 1.0, 0.57] hop=0.201
+    [ours      seed 0 r5] L=36 seen=[0.85, 0.88, 0.95, 1.0, 0.57, 0.93] hop=0.212
+    [naive     seed 0 r0] L=26 seen=[0.82] hop=0.212
+    [naive     seed 0 r1] L=28 seen=[0.28, 0.88] hop=0.201
+    [naive     seed 0 r2] L=30 seen=[0.12, 0.45, 0.95] hop=0.208
+    [naive     seed 0 r3] L=32 seen=[0.17, 0.42, 0.53, 1.0] hop=0.198
+    [naive     seed 0 r4] L=34 seen=[0.23, 0.2, 0.35, 0.28, 0.57] hop=0.205
+    [naive     seed 0 r5] L=36 seen=[0.12, 0.2, 0.35, 0.35, 0.17, 0.93] hop=0.198
+    [continued seed 0 r0] L=26 seen=[1.0] hop=0.201
+    [continued seed 0 r1] L=28 seen=[0.4, 1.0] hop=0.201
+    [continued seed 0 r2] L=30 seen=[0.25, 0.6, 1.0] hop=0.201
+    [continued seed 0 r3] L=32 seen=[0.25, 0.42, 0.7, 1.0] hop=0.205
+    [continued seed 0 r4] L=34 seen=[0.15, 0.1, 0.28, 0.35, 1.0] hop=0.205
+    [continued seed 0 r5] L=36 seen=[0.2, 0.23, 0.38, 0.35, 0.6, 1.0] hop=0.205
+    [loramerge seed 0 r0] seen=[0.82] hop=0.128
+    [loramerge seed 0 r1] seen=[0.2, 0.88] hop=0.090
+    [loramerge seed 0 r2] seen=[0.17, 0.53, 0.95] hop=0.097
+    [loramerge seed 0 r3] seen=[0.1, 0.42, 0.47, 1.0] hop=0.128
+    [loramerge seed 0 r4] seen=[0.1, 0.3, 0.23, 0.28, 0.57] hop=0.066
+    [loramerge seed 0 r5] seen=[0.1, 0.28, 0.2, 0.3, 0.23, 0.93] hop=0.052
+    [oracle    seed 0 r0] L=26 seen=[0.82] hop=0.208
+    [oracle    seed 0 r1] L=28 seen=[1.0, 0.88] hop=0.205
+    [oracle    seed 0 r2] L=30 seen=[1.0, 1.0, 0.95] hop=0.198
+    [oracle    seed 0 r3] L=32 seen=[1.0, 1.0, 1.0, 1.0] hop=0.215
+    [oracle    seed 0 r4] L=34 seen=[1.0, 1.0, 1.0, 1.0, 0.57] hop=0.208
+    [oracle    seed 0 r5] L=36 seen=[1.0, 1.0, 1.0, 1.0, 1.0, 0.93] hop=0.208
+    [ewc       seed 0 r0] lam=100.0 seen=[0.82] hop=0.194
+    [ewc       seed 0 r1] lam=100.0 seen=[0.3, 0.88] hop=0.194
+    [ewc       seed 0 r2] lam=100.0 seen=[0.33, 0.57, 0.95] hop=0.201
+    [ewc       seed 0 r3] lam=100.0 seen=[0.2, 0.53, 0.78, 1.0] hop=0.198
+    [ewc       seed 0 r4] lam=100.0 seen=[0.2, 0.17, 0.35, 0.17, 0.57] hop=0.198
+    [ewc       seed 0 r5] lam=100.0 seen=[0.12, 0.23, 0.3, 0.35, 0.35, 0.93] hop=0.212
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.85->0.85 (+0.000)            0.862     0.817     0.93    0.205->0.212  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[0.85, 0.875, 0.95, 1.0, 0.575, 0.925]
+  naive      0.82->0.12 (+0.700)            0.354     0.283     0.93    0.205->0.198  False False   False
+             mean-forget(all-streams)=+0.504 age-curve(final seen S0..Sn)=[0.125, 0.2, 0.35, 0.35, 0.175, 0.925]
+  continued  1.00->0.20 (+0.800)            0.458     0.438     1.00    0.205->0.205  True  False   False
+             mean-forget(all-streams)=+0.542 age-curve(final seen S0..Sn)=[0.2, 0.225, 0.375, 0.35, 0.6, 1.0]
+  loramerge  0.82->0.10 (+0.725)            0.338     0.317     0.93    0.205->0.052  False False   False
+             mean-forget(all-streams)=+0.521 age-curve(final seen S0..Sn)=[0.1, 0.275, 0.2, 0.3, 0.225, 0.925]
+  oracle     0.82->1.00 (-0.175)            0.987     0.971     0.93    0.205->0.208  False True    False
+             mean-forget(all-streams)=-0.129 age-curve(final seen S0..Sn)=[1.0, 1.0, 1.0, 1.0, 1.0, 0.925]
+  ewc        0.82->0.12 (+0.700)            0.379     0.362     0.93    0.205->0.212  False False   False
+             mean-forget(all-streams)=+0.479 age-curve(final seen S0..Sn)=[0.125, 0.225, 0.3, 0.35, 0.35, 0.925]
+  ORACLE_GAP (oracle-ours): seen +0.125  para +0.154  (small gap => no-gold self-distill ~ gold-old upper bound)
+RESULT_JSON_1SEED {"ours": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.85, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.825, "all_seen_final": 0.8624999999999999, "all_para_final": 0.8166666666666668, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [0.85, 0.875, 0.95, 1.0, 0.575, 0.925], "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1322.9733383655548, "peak_vram_mb": 9426.741248, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.7, "oldest_S0_para_final": 0.075, "all_seen_final": 0.3541666666666667, "all_para_final": 0.2833333333333333, "mean_forgetting_all_streams": 0.5041666666666667, "age_curve_final_seen": [0.125, 0.2, 0.35, 0.35, 0.175, 0.925], "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19791666666666666, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1060.381376028061, "peak_vram_mb": 6625.399296, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "continued": {"oldest_S0_fresh": 1.0, "oldest_S0_final": 0.2, "oldest_S0_forgetting": 0.8, "oldest_S0_para_final": 0.175, "all_seen_final": 0.4583333333333333, "all_para_final": 0.4375, "mean_forgetting_all_streams": 0.5416666666666666, "age_curve_final_seen": [0.2, 0.225, 0.375, 0.35, 0.6, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 794.7866718769073, "peak_vram_mb": 6583.886336, "uses_gold_new": true, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "loramerge": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.1, "oldest_S0_forgetting": 0.725, "oldest_S0_para_final": 0.125, "all_seen_final": 0.3375000000000001, "all_para_final": 0.3166666666666667, "mean_forgetting_all_streams": 0.5208333333333334, "age_curve_final_seen": [0.1, 0.275, 0.2, 0.3, 0.225, 0.925], "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.052083333333333336, "trainable_params_per_round": [540672, 540672, 540672, 540672, 540672, 540672], "updated_params_total": 3244032.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 868.3566799163818, "peak_vram_mb": 5010.957312, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "oracle": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 1.0, "oldest_S0_forgetting": -0.17500000000000004, "oldest_S0_para_final": 1.0, "all_seen_final": 0.9874999999999999, "all_para_final": 0.9708333333333333, "mean_forgetting_all_streams": -0.12916666666666668, "age_curve_final_seen": [1.0, 1.0, 1.0, 1.0, 1.0, 0.925], "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.20833333333333334, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1199.272428035736, "peak_vram_mb": 6699.741696, "uses_gold_new": false, "uses_gold_old": true, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "ewc": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.7, "oldest_S0_para_final": 0.175, "all_seen_final": 0.37916666666666665, "all_para_final": 0.3625, "mean_forgetting_all_streams": 0.4791666666666667, "age_curve_final_seen": [0.125, 0.225, 0.3, 0.35, 0.35, 0.925], "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 972.6144723892212, "peak_vram_mb": 5704.257024, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.88, 0.88, 1.0, 0.88, 0.88, 1.0] restarts=[0, 0, 0, 0, 2, 2]
+    [ours      seed 1 r0] L=26 seen=[0.88] hop=0.198
+    [ours      seed 1 r1] L=28 seen=[0.88, 0.88] hop=0.201
+    [ours      seed 1 r2] L=30 seen=[0.88, 0.88, 1.0] hop=0.201
+    [ours      seed 1 r3] L=32 seen=[0.88, 0.88, 1.0, 0.88] hop=0.198
+    [ours      seed 1 r4] L=34 seen=[0.88, 0.88, 1.0, 0.88, 0.88] hop=0.205
+    [ours      seed 1 r5] L=36 seen=[0.88, 0.88, 1.0, 0.88, 0.88, 1.0] hop=0.198
+    [naive     seed 1 r0] L=26 seen=[0.88] hop=0.201
+    [naive     seed 1 r1] L=28 seen=[0.4, 0.88] hop=0.201
+    [naive     seed 1 r2] L=30 seen=[0.28, 0.53, 1.0] hop=0.205
+    [naive     seed 1 r3] L=32 seen=[0.3, 0.33, 0.68, 0.88] hop=0.201
+    [naive     seed 1 r4] L=34 seen=[0.17, 0.25, 0.38, 0.55, 0.88] hop=0.198
+    [naive     seed 1 r5] L=36 seen=[0.23, 0.23, 0.35, 0.35, 0.4, 1.0] hop=0.205
+    [continued seed 1 r0] L=26 seen=[1.0] hop=0.208
+    [continued seed 1 r1] L=28 seen=[0.65, 1.0] hop=0.198
+    [continued seed 1 r2] L=30 seen=[0.45, 0.57, 1.0] hop=0.205
+    [continued seed 1 r3] L=32 seen=[0.23, 0.45, 0.47, 1.0] hop=0.205
+    [continued seed 1 r4] L=34 seen=[0.17, 0.38, 0.35, 0.72, 1.0] hop=0.208
+    [continued seed 1 r5] L=36 seen=[0.15, 0.33, 0.28, 0.45, 0.57, 1.0] hop=0.208
+    [loramerge seed 1 r0] seen=[0.88] hop=0.125
+    [loramerge seed 1 r1] seen=[0.47, 0.88] hop=0.101
+    [loramerge seed 1 r2] seen=[0.3, 0.25, 1.0] hop=0.101
+    [loramerge seed 1 r3] seen=[0.17, 0.25, 0.6, 0.88] hop=0.094
+    [loramerge seed 1 r4] seen=[0.3, 0.33, 0.25, 0.35, 0.88] hop=0.076
+    [loramerge seed 1 r5] seen=[0.2, 0.12, 0.28, 0.33, 0.45, 1.0] hop=0.083
+    [oracle    seed 1 r0] L=26 seen=[0.88] hop=0.198
+    [oracle    seed 1 r1] L=28 seen=[1.0, 0.88] hop=0.198
+    [oracle    seed 1 r2] L=30 seen=[1.0, 1.0, 1.0] hop=0.188
+    [oracle    seed 1 r3] L=32 seen=[1.0, 1.0, 1.0, 0.88] hop=0.194
+    [oracle    seed 1 r4] L=34 seen=[1.0, 1.0, 1.0, 1.0, 0.88] hop=0.201
+    [oracle    seed 1 r5] L=36 seen=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] hop=0.201
+    [ewc       seed 1 r0] lam=100.0 seen=[0.88] hop=0.184
+    [ewc       seed 1 r1] lam=100.0 seen=[0.6, 0.88] hop=0.191
+    [ewc       seed 1 r2] lam=100.0 seen=[0.35, 0.5, 1.0] hop=0.201
+    [ewc       seed 1 r3] lam=100.0 seen=[0.25, 0.33, 0.53, 0.88] hop=0.194
+    [ewc       seed 1 r4] lam=100.0 seen=[0.33, 0.3, 0.28, 0.47, 0.88] hop=0.201
+    [ewc       seed 1 r5] lam=100.0 seen=[0.25, 0.38, 0.3, 0.57, 0.7, 1.0] hop=0.215
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.86->0.86 (+0.000)            0.890     0.827     0.96    0.205->0.205  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[0.863, 0.875, 0.975, 0.938, 0.725, 0.963]
+  naive      0.85->0.17 (+0.675)            0.390     0.335     0.96    0.205->0.201  False False   False
+             mean-forget(all-streams)=+0.498 age-curve(final seen S0..Sn)=[0.175, 0.213, 0.35, 0.35, 0.287, 0.963]
+  continued  1.00->0.17 (+0.825)            0.460     0.438     1.00    0.205->0.207  True  False   False
+             mean-forget(all-streams)=+0.540 age-curve(final seen S0..Sn)=[0.175, 0.275, 0.325, 0.4, 0.587, 1.0]
+  loramerge  0.85->0.15 (+0.700)            0.367     0.346     0.96    0.205->0.068  False False   False
+             mean-forget(all-streams)=+0.521 age-curve(final seen S0..Sn)=[0.15, 0.2, 0.238, 0.312, 0.338, 0.963]
+  oracle     0.85->1.00 (-0.150)            0.994     0.983     0.96    0.205->0.205  False True    False
+             mean-forget(all-streams)=-0.106 age-curve(final seen S0..Sn)=[1.0, 1.0, 1.0, 1.0, 1.0, 0.963]
+  ewc        0.85->0.19 (+0.662)            0.456     0.448     0.96    0.205->0.214  False False   False
+             mean-forget(all-streams)=+0.431 age-curve(final seen S0..Sn)=[0.188, 0.3, 0.3, 0.462, 0.525, 0.963]
+  ORACLE_GAP (oracle-ours): seen +0.104  para +0.156  (small gap => no-gold self-distill ~ gold-old upper bound)
+RESULT_JSON_2SEED {"ours": {"oldest_S0_fresh": 0.8625, "oldest_S0_final": 0.8625, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.8374999999999999, "all_seen_final": 0.8895833333333333, "all_para_final": 0.8270833333333334, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [0.863, 0.875, 0.975, 0.938, 0.725, 0.963], "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1321.5264883041382, "peak_vram_mb": 9426.741248, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.175, "oldest_S0_forgetting": 0.675, "oldest_S0_para_final": 0.1625, "all_seen_final": 0.38958333333333334, "all_para_final": 0.3354166666666667, "mean_forgetting_all_streams": 0.4979166666666667, "age_curve_final_seen": [0.175, 0.213, 0.35, 0.35, 0.287, 0.963], "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1058.6127971410751, "peak_vram_mb": 6625.399296, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "continued": {"oldest_S0_fresh": 1.0, "oldest_S0_final": 0.175, "oldest_S0_forgetting": 0.825, "oldest_S0_para_final": 0.16249999999999998, "all_seen_final": 0.46041666666666664, "all_para_final": 0.4375, "mean_forgetting_all_streams": 0.5395833333333333, "age_curve_final_seen": [0.175, 0.275, 0.325, 0.4, 0.587, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2065972222222222, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 794.5810203552246, "peak_vram_mb": 6583.886336, "uses_gold_new": true, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "loramerge": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.15000000000000002, "oldest_S0_forgetting": 0.7, "oldest_S0_para_final": 0.1375, "all_seen_final": 0.3666666666666667, "all_para_final": 0.3458333333333333, "mean_forgetting_all_streams": 0.5208333333333334, "age_curve_final_seen": [0.15, 0.2, 0.238, 0.312, 0.338, 0.963], "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.06770833333333333, "trainable_params_per_round": [540672, 540672, 540672, 540672, 540672, 540672], "updated_params_total": 3244032.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 877.1964535713196, "peak_vram_mb": 5010.957312, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "oracle": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 1.0, "oldest_S0_forgetting": -0.15000000000000002, "oldest_S0_para_final": 1.0, "all_seen_final": 0.9937499999999999, "all_para_final": 0.9833333333333333, "mean_forgetting_all_streams": -0.10625000000000001, "age_curve_final_seen": [1.0, 1.0, 1.0, 1.0, 1.0, 0.963], "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1200.0894347429276, "peak_vram_mb": 6699.741696, "uses_gold_new": false, "uses_gold_old": true, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "ewc": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.1875, "oldest_S0_forgetting": 0.6625, "oldest_S0_para_final": 0.25, "all_seen_final": 0.45625, "all_para_final": 0.44791666666666663, "mean_forgetting_all_streams": 0.43125, "age_curve_final_seen": [0.188, 0.3, 0.3, 0.462, 0.525, 0.963], "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21354166666666669, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 972.9370894432068, "peak_vram_mb": 5704.257024, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+== DONE real ==

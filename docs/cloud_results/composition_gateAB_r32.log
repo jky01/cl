@@ -1,0 +1,38 @@
+COMPOSITION SOLVABILITY GATE (R32) — s2/composition_gate.py
+Qwen/Qwen2.5-0.5B, RTX 4090, 3 seeds, L=3 (2-hop), full-FT direct-gold single-step, LR=2e-5, 1000 steps
+Purpose: before running grow-vs-fixed arms on cross-stream composition, verify the task is
+achievable AT ALL by an upper-bound model. If even the upper bound can't compose, arms would be
+0-vs-0 and must NOT be read as "growth useless".
+
+n_chains=22  n_edges=44  (single-token non-source pool = 44)
+
+== GATE A (mean/3 seeds), no-memory single-step-only upper bound ==
+  single-step seen: A->B=1.000 B->C=1.000 | para: A->B=1.000 B->C=1.000  (knowledge fully in weights)
+  2-hop A->C : seen=0.000 para=0.000 | derange-ctrl=0.000 base-untrained=0.000 goldC-prob=2.5e-8
+  => GATE A FAIL (thr=0.30; need single-step(all views)>0.8 and 2hop>>control)
+
+== GATE B (single-step knowledge present; direct 2-hop supervised on 70% train chains) ==
+  [seed 0] direct-2hop train-fit=1.000 held-out=0.000
+  [seed 1] direct-2hop train-fit=1.000 held-out=0.000
+  [seed 2] direct-2hop train-fit=1.000 held-out=0.000
+  direct-2hop: train-fit=1.000 held-out=0.000
+  => GATE B: train-fits perfectly but held-out=0 -> composition operator does NOT generalize to
+     new chains even with direct 2-hop supervision (OOD compositionality gap).
+
+RESULT_JSON {"script": "s2/composition_gate.py", "source_config": {"model": "Qwen/Qwen2.5-0.5B", "L": 3, "steps": 1000, "gateb_steps": 1000, "seeds": 3, "lr": 2e-05, "bs": 32, "grow": 0, "gateA_thr": 0.3}, "n_chains": 22, "n_edges": 44, "single_step_seen_A_B": 1.0, "single_step_seen_B_C": 1.0, "single_step_para_A_B": 1.0, "single_step_para_B_C": 1.0, "compose_2hop_seen": 0.0, "compose_2hop_para": 0.0, "compose_2hop_derange_control": 0.0, "base_untrained_on_task": 0.0, "gold_C_meanprob": 2.55e-08, "gateA_pass": false, "leakage_assertions_passed": true, "wall_clock_seconds": 381.7, "gateB_train_fit": 1.0, "gateB_heldout_seen": 0.0}
+
+INTERPRETATION (R32):
+- Atomic knowledge is perfectly in weights (single-step 1.0 all views), yet latent no-CoT 2-hop
+  composition to held-out endpoints is exactly 0.0. Direct 2-hop supervision memorizes trained
+  pairs (train-fit 1.0) but yields 0.0 on held-out chains -> no general composition operator.
+- This is the two-hop curse / OOD compositionality gap: latent multi-hop to held-out entities does
+  not generalize at 0.5B / this budget. Both A and B FAIL.
+- CONSEQUENCE: cross-stream *latent held-out* composition is NOT a viable stressor to justify
+  growth at this scale — the upper bound itself scores 0, so grow-vs-fixed arms would be
+  uninterpretable. The gate prevented an unattributable 0-vs-0 experiment (its intended job).
+- This closes the latent-composition avenue much like R31 closed the fact-count avenue.
+- OPEN next: (a) IN-DISTRIBUTION grokking regime (atomic facts of held-out (A,C) still seen;
+  composition query held out) — literature says this DOES grok in-distribution; test whether
+  depth/growth changes grokking onset/ceiling (reachable growth-necessity test); or
+  (b) CoT/scratchpad composition; or (c) accept honest bottom line = knowledge-into-weights via
+  replay (R25/R30), growth still unjustified.

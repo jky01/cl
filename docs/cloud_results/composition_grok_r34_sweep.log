@@ -1,0 +1,97 @@
+== grok mode=sweep ==
+COMPOSITION-GROK (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) bridge=60 A/bridge=6 hold=0.3 steps=10000 seeds=2 grows=[0, 4] | single-tok pool=13262
+    derange_same_target_count=0 (must be 0)
+  seed 0: n_train2=240 n_held2=120
+    [grow+0 seed 0 step 500] atomic 0.99/0.98 train2 1.00 held2 0.867 derange 0.000
+    [grow+0 seed 0 step 1000] atomic 1.00/1.00 train2 1.00 held2 0.883 derange 0.000
+    [grow+0 seed 0 step 1500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+0 seed 0 step 2000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+0 seed 0 step 2500] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+0 seed 0 step 3000] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+0 seed 0 step 3500] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+0 seed 0 step 4000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 4500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 5000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 5500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 6000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 6500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 7000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 7500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 8000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 8500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 9000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 9500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+0 seed 0 step 10000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+  => grow+0 seed 0: onset=500 final held2=0.9916666666666667 (wall 1252s)
+    [grow+4 seed 0 step 500] atomic 0.99/0.98 train2 1.00 held2 0.875 derange 0.000
+    [grow+4 seed 0 step 1000] atomic 1.00/0.98 train2 1.00 held2 0.967 derange 0.008
+    [grow+4 seed 0 step 1500] atomic 0.99/1.00 train2 0.99 held2 0.942 derange 0.000
+    [grow+4 seed 0 step 2000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 2500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 3000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 3500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 4000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 4500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 5000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 5500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 6000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 6500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 7000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 7500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 8000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 8500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 9000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 9500] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 0 step 10000] atomic 1.00/1.00 train2 1.00 held2 0.967 derange 0.000
+  => grow+4 seed 0: onset=500 final held2=0.9666666666666667 (wall 1420s)
+    derange_same_target_count=0 (must be 0)
+  seed 1: n_train2=240 n_held2=120
+    [grow+0 seed 1 step 500] atomic 0.98/1.00 train2 1.00 held2 0.942 derange 0.000
+    [grow+0 seed 1 step 1000] atomic 1.00/1.00 train2 1.00 held2 0.958 derange 0.000
+    [grow+0 seed 1 step 1500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 2000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 2500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 3000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 3500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 4000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 4500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 5000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 5500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 6000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 6500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 7000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 7500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 8000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 8500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 9000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 9500] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+    [grow+0 seed 1 step 10000] atomic 1.00/1.00 train2 1.00 held2 0.975 derange 0.000
+  => grow+0 seed 1: onset=500 final held2=0.975 (wall 1252s)
+    [grow+4 seed 1 step 500] atomic 0.99/1.00 train2 0.98 held2 0.875 derange 0.008
+    [grow+4 seed 1 step 1000] atomic 0.98/1.00 train2 1.00 held2 0.958 derange 0.000
+    [grow+4 seed 1 step 1500] atomic 0.99/0.97 train2 1.00 held2 0.967 derange 0.000
+    [grow+4 seed 1 step 2000] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+4 seed 1 step 2500] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+4 seed 1 step 3000] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+4 seed 1 step 3500] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+4 seed 1 step 4000] atomic 1.00/1.00 train2 1.00 held2 0.983 derange 0.000
+    [grow+4 seed 1 step 4500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 5000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 5500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 6000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 6500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 7000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 7500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 8000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 8500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 9000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 9500] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+    [grow+4 seed 1 step 10000] atomic 1.00/1.00 train2 1.00 held2 0.992 derange 0.000
+  => grow+4 seed 1: onset=500 final held2=0.9916666666666667 (wall 1415s)
+
+== GROKKING SUMMARY ==
+  grow+0: mean onset=500.0 mean final held2=0.983 (2/2 seeds grokked)
+  grow+4: mean onset=500.0 mean final held2=0.979 (2/2 seeds grokked)
+  growth-necessity: claim ONLY if grow cuts onset >=30% OR lifts final held2 >=0.10 at matched compute, with atomic recall not dropping. Else growth still unproven.
+[wrote composition_grok_result.json]
+== DONE sweep ==

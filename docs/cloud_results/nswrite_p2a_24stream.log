@@ -1,0 +1,34 @@
+R36-I PHASE-2a — nswrite SATURATION-FAILURE SEARCH (24 streams) — s2/lifecycle_bakeoff.py
+Qwen/Qwen2.5-0.5B, RTX 3090, 24 rounds x 40, 1 seed, PYTHONHASHSEED=0.
+Question: does fixed-size interference-aware writing (nswrite) hit a write-space CAPACITY wall at a
+long horizon (eff-grad -> 0 AND newest drops), which would justify growth? Arms: naive_fixed, nswrite,
+nswrite_rand. Reports per-stream energy-occupancy, eff-grad = sqrt(1-energy), fresh(diagonal newest).
+
+================= 24-STREAM SUMMARY (1 seed) =================
+  arm          all-seen  all-para  mean-forget  newest  base-hop
+  nswrite       0.356     0.352     +0.527       0.97    0.205->0.201
+  nswrite_rand  0.283     0.277     +0.600       0.97    0.205->0.205
+  naive_fixed   0.276     0.280     +0.607       0.97    0.205->0.215
+
+nswrite eff-grad curve (per stream): 1.0, 0.52, 0.42, 0.36, 0.30, 0.28, 0.23, 0.24, 0.23, 0.24, 0.22,
+  0.24, 0.22, 0.22, 0.22, 0.23, 0.23, 0.22, 0.25, 0.22, 0.23, 0.23, 0.21, 0.21   (PLATEAUS ~0.22, not ->0)
+nswrite energy-occ: rises 0.73 -> ~0.95 then flat.
+fresh (newest) all arms: 0.68-1.0 throughout (new-stream writing never fails).
+
+VERDICT — box B: NOT a capacity wall.
+- eff-grad plateaus at ~0.22 and does NOT collapse to 0; newest stays high (~0.9) -> the fixed model
+  keeps writing new knowledge into weights. Writable gradient is not exhausted.
+- Yet old retention degrades: nswrite all-seen 0.79 (6 streams, prior run) -> 0.356 (24 streams),
+  monotone age gradient, no sharp kink at the rank cap (cap hit ~stream 7 under old-first update_U).
+- update_U is old-first QR truncation (admission-favoring OLD bases), so the oldest streams are the
+  MOST-protected yet forget the MOST -> the protected object is wrong: input-activation null-space
+  preserves the hidden response, not the answer-token margin; per-round drift accumulates.
+=> This is PROTECTION-QUALITY failure, not capacity, not eviction. GROWTH IS OFF (no failure to rescue).
+
+ATTRIBUTION still holds at 24 streams: nswrite 0.356 > nswrite_rand 0.283 ~= naive_fixed 0.276. The
+activation basis still helps (random basis does ~nothing, eff-grad ~0.88), but the gain shrinks with
+horizon (+0.30 at 6 streams -> +0.08 at 24) — the mechanism is real but incomplete and degrades.
+
+NEXT (running): answer-margin-safe writing (margin bilinear arm, protect V_out V_outᵀ·G·U_in U_inᵀ)
+to attack the protection-quality residual directly; + cap/no-evict as isolation. Growth returns only
+if a best fixed writer produces eff-grad->0 + newest failure. Pod e3a0mfn8tuf64y terminated.

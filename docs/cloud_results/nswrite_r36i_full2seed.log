@@ -1,0 +1,97 @@
+== R36-I mode=real arms=ours,naive_fixed,ewc,nswrite,nswrite_rand ==
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours', 'naive_fixed', 'ewc', 'nswrite', 'nswrite_rand'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.95, 0.98, 0.95, 0.98, 0.8, 1.0] restarts=[0, 0, 2, 1, 2, 0]
+    [ours      seed 0 r0] L=26 seen=[0.95] hop=0.205
+    [ours      seed 0 r1] L=28 seen=[0.95, 0.97] hop=0.208
+    [ours      seed 0 r2] L=30 seen=[0.95, 0.97, 0.95] hop=0.201
+    [ours      seed 0 r3] L=32 seen=[0.95, 0.97, 0.95, 0.97] hop=0.198
+    [ours      seed 0 r4] L=34 seen=[0.95, 0.97, 0.95, 0.97, 0.8] hop=0.201
+    [ours      seed 0 r5] L=36 seen=[0.95, 0.97, 0.95, 0.97, 0.8, 1.0] hop=0.201
+    [nswrite-none seed 0 r0] grad-occupancy=0.0 seen=[0.95] hop=0.215
+    [nswrite-none seed 0 r1] grad-occupancy=0.0 seen=[0.45, 0.97] hop=0.201
+    [nswrite-none seed 0 r2] grad-occupancy=0.0 seen=[0.35, 0.72, 0.95] hop=0.198
+    [nswrite-none seed 0 r3] grad-occupancy=0.0 seen=[0.2, 0.45, 0.72, 0.97] hop=0.191
+    [nswrite-none seed 0 r4] grad-occupancy=0.0 seen=[0.4, 0.17, 0.38, 0.35, 0.8] hop=0.198
+    [nswrite-none seed 0 r5] grad-occupancy=0.0 seen=[0.12, 0.28, 0.45, 0.42, 0.55, 1.0] hop=0.222
+    [ewc       seed 0 r0] lam=100.0 seen=[0.95] hop=0.194
+    [ewc       seed 0 r1] lam=100.0 seen=[0.38, 0.97] hop=0.208
+    [ewc       seed 0 r2] lam=100.0 seen=[0.35, 0.6, 0.95] hop=0.191
+    [ewc       seed 0 r3] lam=100.0 seen=[0.2, 0.47, 0.78, 0.97] hop=0.198
+    [ewc       seed 0 r4] lam=100.0 seen=[0.4, 0.23, 0.42, 0.25, 0.8] hop=0.198
+    [ewc       seed 0 r5] lam=100.0 seen=[0.12, 0.28, 0.47, 0.33, 0.6, 1.0] hop=0.201
+    [nswrite-act  seed 0 r0] grad-occupancy=0.0 seen=[0.95] hop=0.215
+    [nswrite-act  seed 0 r1] grad-occupancy=0.729 seen=[0.93, 0.97] hop=0.194
+    [nswrite-act  seed 0 r2] grad-occupancy=0.826 seen=[0.9, 0.97, 0.95] hop=0.188
+    [nswrite-act  seed 0 r3] grad-occupancy=0.869 seen=[0.68, 0.88, 0.95, 0.97] hop=0.205
+    [nswrite-act  seed 0 r4] grad-occupancy=0.912 seen=[0.82, 0.88, 0.85, 0.85, 0.8] hop=0.188
+    [nswrite-act  seed 0 r5] grad-occupancy=0.921 seen=[0.47, 0.8, 0.8, 0.88, 0.75, 1.0] hop=0.208
+    [nswrite-rand seed 0 r0] grad-occupancy=0.0 seen=[0.95] hop=0.215
+    [nswrite-rand seed 0 r1] grad-occupancy=0.035 seen=[0.42, 0.97] hop=0.208
+    [nswrite-rand seed 0 r2] grad-occupancy=0.084 seen=[0.38, 0.75, 0.95] hop=0.205
+    [nswrite-rand seed 0 r3] grad-occupancy=0.137 seen=[0.25, 0.6, 0.72, 0.97] hop=0.184
+    [nswrite-rand seed 0 r4] grad-occupancy=0.14 seen=[0.45, 0.23, 0.42, 0.4, 0.8] hop=0.191
+    [nswrite-rand seed 0 r5] grad-occupancy=0.206 seen=[0.2, 0.23, 0.47, 0.45, 0.53, 1.0] hop=0.198
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.95->0.95 (+0.000)            0.942     0.850     1.00    0.205->0.201  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[0.95, 0.975, 0.95, 0.975, 0.8, 1.0]
+  naive_fixed 0.95->0.12 (+0.825)            0.471     0.417     1.00    0.205->0.222  False False   False
+             mean-forget(all-streams)=+0.471 age-curve(final seen S0..Sn)=[0.125, 0.275, 0.45, 0.425, 0.55, 1.0]
+  ewc        0.95->0.12 (+0.825)            0.467     0.429     1.00    0.205->0.201  False False   False
+             mean-forget(all-streams)=+0.475 age-curve(final seen S0..Sn)=[0.125, 0.275, 0.475, 0.325, 0.6, 1.0]
+  nswrite    0.95->0.47 (+0.475)            0.783     0.713     1.00    0.205->0.208  False False   False
+             mean-forget(all-streams)=+0.158 age-curve(final seen S0..Sn)=[0.475, 0.8, 0.8, 0.875, 0.75, 1.0]
+  nswrite_rand 0.95->0.20 (+0.750)            0.479     0.463     1.00    0.205->0.198  False False   False
+             mean-forget(all-streams)=+0.462 age-curve(final seen S0..Sn)=[0.2, 0.225, 0.475, 0.45, 0.525, 1.0]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "oldest_S0_fresh": 0.95, "oldest_S0_final": 0.95, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.9, "all_seen_final": 0.9416666666666668, "all_para_final": 0.85, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [0.95, 0.975, 0.95, 0.975, 0.8, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 2017.1176092624664, "peak_vram_mb": 9422.567424, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive_fixed": {"gradient_occupancy_final": 0.0, "oldest_S0_fresh": 0.95, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.825, "oldest_S0_para_final": 0.1, "all_seen_final": 0.4708333333333334, "all_para_final": 0.4166666666666667, "mean_forgetting_all_streams": 0.4708333333333334, "age_curve_final_seen": [0.125, 0.275, 0.45, 0.425, 0.55, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2222222222222222, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1564.0661735534668, "peak_vram_mb": 5308.842496, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": false}, "ewc": {"gradient_occupancy_final": null, "oldest_S0_fresh": 0.95, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.825, "oldest_S0_para_final": 0.15, "all_seen_final": 0.4666666666666666, "all_para_final": 0.4291666666666667, "mean_forgetting_all_streams": 0.47500000000000003, "age_curve_final_seen": [0.125, 0.275, 0.475, 0.325, 0.6, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1582.3132910728455, "peak_vram_mb": 5703.618048, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "nswrite": {"gradient_occupancy_final": 0.921, "oldest_S0_fresh": 0.95, "oldest_S0_final": 0.475, "oldest_S0_forgetting": 0.475, "oldest_S0_para_final": 0.5, "all_seen_final": 0.7833333333333333, "all_para_final": 0.7125, "mean_forgetting_all_streams": 0.1583333333333333, "age_curve_final_seen": [0.475, 0.8, 0.8, 0.875, 0.75, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.20833333333333334, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1573.6359841823578, "peak_vram_mb": 5366.399488, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}, "nswrite_rand": {"gradient_occupancy_final": 0.206, "oldest_S0_fresh": 0.95, "oldest_S0_final": 0.2, "oldest_S0_forgetting": 0.75, "oldest_S0_para_final": 0.125, "all_seen_final": 0.4791666666666667, "all_para_final": 0.4625000000000001, "mean_forgetting_all_streams": 0.46249999999999997, "age_curve_final_seen": [0.2, 0.225, 0.475, 0.45, 0.525, 1.0], "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19791666666666666, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1535.877474308014, "peak_vram_mb": 5368.136192, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.93, 0.98, 0.65, 0.95, 0.82, 0.95] restarts=[0, 2, 1, 1, 0, 0]
+    [ours      seed 1 r0] L=26 seen=[0.93] hop=0.194
+    [ours      seed 1 r1] L=28 seen=[0.93, 0.97] hop=0.198
+    [ours      seed 1 r2] L=30 seen=[0.93, 0.97, 0.65] hop=0.194
+    [ours      seed 1 r3] L=32 seen=[0.93, 0.97, 0.65, 0.95] hop=0.198
+    [ours      seed 1 r4] L=34 seen=[0.93, 0.97, 0.65, 0.95, 0.82] hop=0.201
+    [ours      seed 1 r5] L=36 seen=[0.93, 0.97, 0.65, 0.95, 0.82, 0.95] hop=0.205
+    [nswrite-none seed 1 r0] grad-occupancy=0.0 seen=[0.93] hop=0.212
+    [nswrite-none seed 1 r1] grad-occupancy=0.0 seen=[0.6, 0.97] hop=0.205
+    [nswrite-none seed 1 r2] grad-occupancy=0.0 seen=[0.17, 0.28, 0.65] hop=0.194
+    [nswrite-none seed 1 r3] grad-occupancy=0.0 seen=[0.28, 0.33, 0.45, 0.95] hop=0.184
+    [nswrite-none seed 1 r4] grad-occupancy=0.0 seen=[0.2, 0.1, 0.25, 0.47, 0.82] hop=0.198
+    [nswrite-none seed 1 r5] grad-occupancy=0.0 seen=[0.23, 0.28, 0.35, 0.62, 0.57, 0.95] hop=0.201
+    [ewc       seed 1 r0] lam=100.0 seen=[0.93] hop=0.205
+    [ewc       seed 1 r1] lam=100.0 seen=[0.55, 0.97] hop=0.184
+    [ewc       seed 1 r2] lam=100.0 seen=[0.17, 0.3, 0.65] hop=0.208
+    [ewc       seed 1 r3] lam=100.0 seen=[0.28, 0.38, 0.47, 0.95] hop=0.181
+    [ewc       seed 1 r4] lam=100.0 seen=[0.23, 0.28, 0.2, 0.47, 0.82] hop=0.205
+    [ewc       seed 1 r5] lam=100.0 seen=[0.23, 0.33, 0.4, 0.6, 0.62, 0.95] hop=0.208
+    [nswrite-act  seed 1 r0] grad-occupancy=0.0 seen=[0.93] hop=0.212
+    [nswrite-act  seed 1 r1] grad-occupancy=0.745 seen=[0.9, 0.97] hop=0.191
+    [nswrite-act  seed 1 r2] grad-occupancy=0.807 seen=[0.4, 0.68, 0.65] hop=0.212
+    [nswrite-act  seed 1 r3] grad-occupancy=0.869 seen=[0.75, 0.93, 0.68, 0.95] hop=0.201
+    [nswrite-act  seed 1 r4] grad-occupancy=0.901 seen=[0.78, 0.9, 0.6, 0.93, 0.82] hop=0.205
+    [nswrite-act  seed 1 r5] grad-occupancy=0.918 seen=[0.65, 0.82, 0.62, 0.95, 0.8, 0.95] hop=0.215
+    [nswrite-rand seed 1 r0] grad-occupancy=0.0 seen=[0.93] hop=0.212
+    [nswrite-rand seed 1 r1] grad-occupancy=0.031 seen=[0.68, 0.97] hop=0.208
+    [nswrite-rand seed 1 r2] grad-occupancy=0.056 seen=[0.2, 0.3, 0.65] hop=0.208
+    [nswrite-rand seed 1 r3] grad-occupancy=0.114 seen=[0.23, 0.3, 0.47, 0.95] hop=0.188
+    [nswrite-rand seed 1 r4] grad-occupancy=0.151 seen=[0.2, 0.23, 0.35, 0.53, 0.82] hop=0.198
+    [nswrite-rand seed 1 r5] grad-occupancy=0.2 seen=[0.25, 0.25, 0.33, 0.62, 0.6, 0.95] hop=0.215
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.94->0.94 (+0.000)            0.910     0.800     0.97    0.205->0.203  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[0.938, 0.975, 0.8, 0.962, 0.812, 0.975]
+  naive_fixed 0.94->0.17 (+0.762)            0.485     0.450     0.97    0.205->0.212  False False   False
+             mean-forget(all-streams)=+0.425 age-curve(final seen S0..Sn)=[0.175, 0.275, 0.4, 0.525, 0.562, 0.975]
+  ewc        0.94->0.17 (+0.762)            0.494     0.467     0.97    0.205->0.205  False False   False
+             mean-forget(all-streams)=+0.417 age-curve(final seen S0..Sn)=[0.175, 0.3, 0.438, 0.463, 0.613, 0.975]
+  nswrite    0.94->0.56 (+0.375)            0.792     0.723     0.97    0.205->0.212  False False   False
+             mean-forget(all-streams)=+0.119 age-curve(final seen S0..Sn)=[0.562, 0.812, 0.713, 0.912, 0.775, 0.975]
+  nswrite_rand 0.94->0.23 (+0.713)            0.490     0.469     0.97    0.205->0.207  False False   False
+             mean-forget(all-streams)=+0.421 age-curve(final seen S0..Sn)=[0.225, 0.237, 0.4, 0.537, 0.562, 0.975]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "oldest_S0_fresh": 0.9375, "oldest_S0_final": 0.9375, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.8, "all_seen_final": 0.9104166666666668, "all_para_final": 0.8, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [0.938, 0.975, 0.8, 0.962, 0.812, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.203125, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 2019.3917324543, "peak_vram_mb": 9424.738304, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive_fixed": {"gradient_occupancy_final": 0.0, "oldest_S0_fresh": 0.9375, "oldest_S0_final": 0.175, "oldest_S0_forgetting": 0.7625, "oldest_S0_para_final": 0.1625, "all_seen_final": 0.4854166666666667, "all_para_final": 0.45000000000000007, "mean_forgetting_all_streams": 0.42500000000000004, "age_curve_final_seen": [0.175, 0.275, 0.4, 0.525, 0.562, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555555, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1550.3104201555252, "peak_vram_mb": 5309.702656, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": false}, "ewc": {"gradient_occupancy_final": null, "oldest_S0_fresh": 0.9375, "oldest_S0_final": 0.175, "oldest_S0_forgetting": 0.7625, "oldest_S0_para_final": 0.175, "all_seen_final": 0.49375, "all_para_final": 0.46666666666666673, "mean_forgetting_all_streams": 0.41666666666666674, "age_curve_final_seen": [0.175, 0.3, 0.438, 0.463, 0.613, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1569.660059094429, "peak_vram_mb": 5704.060416, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "nswrite": {"gradient_occupancy_final": 0.9195, "oldest_S0_fresh": 0.9375, "oldest_S0_final": 0.5625, "oldest_S0_forgetting": 0.375, "oldest_S0_para_final": 0.525, "all_seen_final": 0.7916666666666666, "all_para_final": 0.7229166666666667, "mean_forgetting_all_streams": 0.11874999999999998, "age_curve_final_seen": [0.562, 0.812, 0.713, 0.912, 0.775, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555558, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1571.6477814912796, "peak_vram_mb": 5366.399488, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}, "nswrite_rand": {"gradient_occupancy_final": 0.203, "oldest_S0_fresh": 0.9375, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.7125, "oldest_S0_para_final": 0.1625, "all_seen_final": 0.48958333333333337, "all_para_final": 0.46875000000000006, "mean_forgetting_all_streams": 0.4208333333333333, "age_curve_final_seen": [0.225, 0.237, 0.4, 0.537, 0.562, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2065972222222222, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1553.8408954143524, "peak_vram_mb": 5368.136192, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}}
+
+[all seeds done]
+== DONE real ==

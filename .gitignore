@@ -7,3 +7,6 @@ __pycache__/
 # local scratch / logs
 *.log
 .codex/qa-claude-watch.lock
+
+# cloud result artifacts are intentional (override *.log)
+!docs/cloud_results/*.log

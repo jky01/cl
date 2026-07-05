@@ -1,0 +1,128 @@
+== mode=real python=/usr/bin/python ==
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=3 arms=['ours', 'naive', 'continued', 'loramerge', 'extmem'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.88, 0.95, 1.0, 0.57, 0.93] restarts=[0, 0, 0, 1, 1, 0]
+    [ours      seed 0 r0] L=26 seen=[0.85] hop=0.198
+    [ours      seed 0 r1] L=28 seen=[0.85, 0.88] hop=0.201
+    [ours      seed 0 r2] L=30 seen=[0.85, 0.88, 0.95] hop=0.201
+    [ours      seed 0 r3] L=32 seen=[0.85, 0.88, 0.95, 1.0] hop=0.205
+    [ours      seed 0 r4] L=34 seen=[0.85, 0.88, 0.95, 1.0, 0.55] hop=0.198
+    [ours      seed 0 r5] L=36 seen=[0.85, 0.88, 0.95, 1.0, 0.53, 0.93] hop=0.201
+    [naive     seed 0 r0] L=26 seen=[0.82] hop=0.198
+    [naive     seed 0 r1] L=28 seen=[0.4, 0.88] hop=0.205
+    [naive     seed 0 r2] L=30 seen=[0.35, 0.62, 0.95] hop=0.205
+    [naive     seed 0 r3] L=32 seen=[0.17, 0.45, 0.57, 1.0] hop=0.201
+    [naive     seed 0 r4] L=34 seen=[0.2, 0.17, 0.3, 0.42, 0.57] hop=0.201
+    [naive     seed 0 r5] L=36 seen=[0.07, 0.15, 0.42, 0.42, 0.28, 0.93] hop=0.198
+    [continued seed 0 r0] L=26 seen=[1.0] hop=0.198
+    [continued seed 0 r1] L=28 seen=[0.42, 1.0] hop=0.208
+    [continued seed 0 r2] L=30 seen=[0.28, 0.6, 1.0] hop=0.201
+    [continued seed 0 r3] L=32 seen=[0.17, 0.33, 0.57, 1.0] hop=0.201
+    [continued seed 0 r4] L=34 seen=[0.15, 0.15, 0.33, 0.45, 1.0] hop=0.201
+    [continued seed 0 r5] L=36 seen=[0.07, 0.17, 0.3, 0.42, 0.6, 1.0] hop=0.201
+    [loramerge seed 0 r0] seen=[0.82] hop=0.128
+    [loramerge seed 0 r1] seen=[0.2, 0.88] hop=0.090
+    [loramerge seed 0 r2] seen=[0.17, 0.53, 0.95] hop=0.097
+    [loramerge seed 0 r3] seen=[0.1, 0.42, 0.47, 1.0] hop=0.128
+    [loramerge seed 0 r4] seen=[0.1, 0.3, 0.23, 0.28, 0.57] hop=0.066
+    [loramerge seed 0 r5] seen=[0.1, 0.28, 0.2, 0.3, 0.23, 0.93] hop=0.052
+    [extmem    seed 0 r0] seen=[0.82]
+    [extmem    seed 0 r1] seen=[0.3, 0.42]
+    [extmem    seed 0 r2] seen=[0.5, 0.65, 0.6]
+    [extmem    seed 0 r3] seen=[0.9, 0.88, 0.82, 0.75]
+    [extmem    seed 0 r4] seen=[0.93, 0.93, 0.88, 0.82, 0.9]
+    [extmem    seed 0 r5] seen=[0.97, 0.88, 0.97, 0.9, 0.95, 0.88]
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.85->0.85 (+0.000)            0.854     0.817     0.93    0.205->0.201  False True    False
+  naive      0.82->0.07 (+0.750)            0.379     0.308     0.93    0.205->0.198  False False   False
+  continued  1.00->0.07 (+0.925)            0.429     0.467     1.00    0.205->0.201  True  False   False
+  loramerge  0.82->0.10 (+0.725)            0.338     0.317     0.93    0.205->0.052  False False   False
+  extmem     0.82->0.97 (-0.150)            0.925     0.746     0.88    0.205->0.205  False False   True
+RESULT_JSON_1SEED {"ours": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.85, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.8, "all_seen_final": 0.8541666666666666, "all_para_final": 0.8166666666666668, "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 2587.115326166153, "peak_vram_mb": 9424.173056, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.075, "oldest_S0_forgetting": 0.75, "oldest_S0_para_final": 0.175, "all_seen_final": 0.3791666666666667, "all_para_final": 0.30833333333333335, "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19791666666666666, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1694.1361684799194, "peak_vram_mb": 6624.788992, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "continued": {"oldest_S0_fresh": 1.0, "oldest_S0_final": 0.075, "oldest_S0_forgetting": 0.925, "oldest_S0_para_final": 0.125, "all_seen_final": 0.4291666666666667, "all_para_final": 0.4666666666666666, "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1355.227044582367, "peak_vram_mb": 6577.766912, "uses_gold_new": true, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "loramerge": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.1, "oldest_S0_forgetting": 0.725, "oldest_S0_para_final": 0.125, "all_seen_final": 0.3375000000000001, "all_para_final": 0.3166666666666667, "newest_stream_final": 0.925, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.052083333333333336, "trainable_params_per_round": [540672, 540672, 540672, 540672, 540672, 540672], "updated_params_total": 3244032.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1863.6921565532684, "peak_vram_mb": 5011.03104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "extmem": {"oldest_S0_fresh": 0.825, "oldest_S0_final": 0.975, "oldest_S0_forgetting": -0.15000000000000002, "oldest_S0_para_final": 0.725, "all_seen_final": 0.9249999999999999, "all_para_final": 0.7458333333333335, "newest_stream_final": 0.875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [0], "updated_params_total": 0.0, "optimizer_steps": 0.0, "wall_clock_seconds": 159.624192237854, "peak_vram_mb": 2638.447104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": true, "single_dense": false}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.88, 0.88, 1.0, 0.88, 0.88, 1.0] restarts=[0, 0, 0, 0, 2, 2]
+    [ours      seed 1 r0] L=26 seen=[0.88] hop=0.198
+    [ours      seed 1 r1] L=28 seen=[0.88, 0.88] hop=0.201
+    [ours      seed 1 r2] L=30 seen=[0.88, 0.88, 1.0] hop=0.198
+    [ours      seed 1 r3] L=32 seen=[0.88, 0.88, 1.0, 0.88] hop=0.198
+    [ours      seed 1 r4] L=34 seen=[0.88, 0.88, 1.0, 0.88, 0.88] hop=0.205
+    [ours      seed 1 r5] L=36 seen=[0.88, 0.88, 1.0, 0.88, 0.88, 1.0] hop=0.201
+    [naive     seed 1 r0] L=26 seen=[0.88] hop=0.198
+    [naive     seed 1 r1] L=28 seen=[0.4, 0.88] hop=0.188
+    [naive     seed 1 r2] L=30 seen=[0.25, 0.47, 1.0] hop=0.201
+    [naive     seed 1 r3] L=32 seen=[0.23, 0.42, 0.75, 0.88] hop=0.194
+    [naive     seed 1 r4] L=34 seen=[0.2, 0.3, 0.47, 0.53, 0.88] hop=0.198
+    [naive     seed 1 r5] L=36 seen=[0.28, 0.2, 0.38, 0.28, 0.45, 1.0] hop=0.194
+    [continued seed 1 r0] L=26 seen=[1.0] hop=0.194
+    [continued seed 1 r1] L=28 seen=[0.42, 1.0] hop=0.208
+    [continued seed 1 r2] L=30 seen=[0.28, 0.62, 1.0] hop=0.205
+    [continued seed 1 r3] L=32 seen=[0.28, 0.33, 0.55, 1.0] hop=0.194
+    [continued seed 1 r4] L=34 seen=[0.28, 0.23, 0.35, 0.57, 1.0] hop=0.205
+    [continued seed 1 r5] L=36 seen=[0.23, 0.23, 0.33, 0.45, 0.65, 1.0] hop=0.201
+    [loramerge seed 1 r0] seen=[0.88] hop=0.125
+    [loramerge seed 1 r1] seen=[0.47, 0.88] hop=0.101
+    [loramerge seed 1 r2] seen=[0.3, 0.25, 1.0] hop=0.101
+    [loramerge seed 1 r3] seen=[0.17, 0.25, 0.6, 0.88] hop=0.094
+    [loramerge seed 1 r4] seen=[0.3, 0.33, 0.25, 0.35, 0.88] hop=0.076
+    [loramerge seed 1 r5] seen=[0.2, 0.12, 0.28, 0.33, 0.45, 1.0] hop=0.083
+    [extmem    seed 1 r0] seen=[0.88]
+    [extmem    seed 1 r1] seen=[0.65, 0.82]
+    [extmem    seed 1 r2] seen=[0.9, 0.88, 0.85]
+    [extmem    seed 1 r3] seen=[0.9, 0.97, 0.95, 0.97]
+    [extmem    seed 1 r4] seen=[0.85, 0.97, 0.82, 0.95, 0.85]
+    [extmem    seed 1 r5] seen=[0.82, 0.8, 0.8, 0.72, 0.93, 0.8]
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.86->0.86 (+0.000)            0.885     0.827     0.96    0.205->0.201  False True    False
+  naive      0.85->0.18 (+0.675)            0.404     0.340     0.96    0.205->0.196  False False   False
+  continued  1.00->0.15 (+0.850)            0.454     0.469     1.00    0.205->0.201  True  False   False
+  loramerge  0.85->0.15 (+0.700)            0.367     0.346     0.96    0.205->0.068  False False   False
+  extmem     0.85->0.90 (-0.050)            0.869     0.700     0.84    0.205->0.205  False False   True
+RESULT_JSON_2SEED {"ours": {"oldest_S0_fresh": 0.8625, "oldest_S0_final": 0.8625, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.825, "all_seen_final": 0.8854166666666666, "all_para_final": 0.8270833333333334, "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 2620.1765990257263, "peak_vram_mb": 9424.173056, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.17500000000000002, "oldest_S0_forgetting": 0.6749999999999999, "oldest_S0_para_final": 0.2, "all_seen_final": 0.4041666666666667, "all_para_final": 0.33958333333333335, "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1781.248543381691, "peak_vram_mb": 6625.116672, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "continued": {"oldest_S0_fresh": 1.0, "oldest_S0_final": 0.15, "oldest_S0_forgetting": 0.85, "oldest_S0_para_final": 0.1625, "all_seen_final": 0.4541666666666667, "all_para_final": 0.46875, "newest_stream_final": 1.0, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1337.204313993454, "peak_vram_mb": 6580.118016, "uses_gold_new": true, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "loramerge": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.15000000000000002, "oldest_S0_forgetting": 0.7, "oldest_S0_para_final": 0.1375, "all_seen_final": 0.3666666666666667, "all_para_final": 0.3458333333333333, "newest_stream_final": 0.9625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.06770833333333333, "trainable_params_per_round": [540672, 540672, 540672, 540672, 540672, 540672], "updated_params_total": 3244032.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1885.4582699537277, "peak_vram_mb": 5011.03104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "extmem": {"oldest_S0_fresh": 0.85, "oldest_S0_final": 0.8999999999999999, "oldest_S0_forgetting": -0.04999999999999993, "oldest_S0_para_final": 0.6875, "all_seen_final": 0.8687499999999999, "all_para_final": 0.7000000000000001, "newest_stream_final": 0.8375, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [0], "updated_params_total": 0.0, "optimizer_steps": 0.0, "wall_clock_seconds": 168.64723420143127, "peak_vram_mb": 2638.447104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": true, "single_dense": false}}
+  seed 2: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.98, 1.0, 1.0, 1.0, 1.0, 0.85] restarts=[0, 1, 0, 0, 0, 0]
+    [ours      seed 2 r0] L=26 seen=[0.97] hop=0.205
+    [ours      seed 2 r1] L=28 seen=[0.97, 0.97] hop=0.212
+    [ours      seed 2 r2] L=30 seen=[0.97, 1.0, 1.0] hop=0.205
+    [ours      seed 2 r3] L=32 seen=[0.97, 1.0, 1.0, 1.0] hop=0.205
+    [ours      seed 2 r4] L=34 seen=[0.97, 1.0, 1.0, 1.0, 1.0] hop=0.205
+    [ours      seed 2 r5] L=36 seen=[0.97, 1.0, 1.0, 1.0, 1.0, 0.85] hop=0.198
+    [naive     seed 2 r0] L=26 seen=[0.97] hop=0.198
+    [naive     seed 2 r1] L=28 seen=[0.45, 1.0] hop=0.208
+    [naive     seed 2 r2] L=30 seen=[0.4, 0.72, 1.0] hop=0.205
+    [naive     seed 2 r3] L=32 seen=[0.25, 0.38, 0.53, 1.0] hop=0.194
+    [naive     seed 2 r4] L=34 seen=[0.2, 0.28, 0.25, 0.45, 1.0] hop=0.201
+    [naive     seed 2 r5] L=36 seen=[0.2, 0.25, 0.17, 0.35, 0.68, 0.85] hop=0.198
+    [continued seed 2 r0] L=26 seen=[1.0] hop=0.201
+    [continued seed 2 r1] L=28 seen=[0.6, 1.0] hop=0.201
+    [continued seed 2 r2] L=30 seen=[0.5, 0.6, 1.0] hop=0.194
+    [continued seed 2 r3] L=32 seen=[0.25, 0.35, 0.55, 1.0] hop=0.205
+    [continued seed 2 r4] L=34 seen=[0.23, 0.15, 0.35, 0.6, 1.0] hop=0.194
+    [continued seed 2 r5] L=36 seen=[0.15, 0.33, 0.23, 0.6, 0.53, 1.0] hop=0.198
+    [loramerge seed 2 r0] seen=[0.97] hop=0.156
+    [loramerge seed 2 r1] seen=[0.33, 1.0] hop=0.181
+    [loramerge seed 2 r2] seen=[0.23, 0.45, 1.0] hop=0.146
+    [loramerge seed 2 r3] seen=[0.17, 0.4, 0.72, 1.0] hop=0.149
+    [loramerge seed 2 r4] seen=[0.12, 0.17, 0.3, 0.4, 1.0] hop=0.090
+    [loramerge seed 2 r5] seen=[0.17, 0.25, 0.15, 0.23, 0.55, 0.85] hop=0.052
+    [extmem    seed 2 r0] seen=[0.97]
+    [extmem    seed 2 r1] seen=[0.95, 0.85]
+    [extmem    seed 2 r2] seen=[0.38, 0.33, 0.25]
+    [extmem    seed 2 r3] seen=[0.1, 0.15, 0.1, 0.17]
+    [extmem    seed 2 r4] seen=[0.93, 0.88, 0.88, 0.9, 0.85]
+    [extmem    seed 2 r5] seen=[0.9, 0.9, 0.85, 0.85, 0.93, 0.9]
+
+== BAKEOFF (mean/3 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.90->0.90 (+0.000)            0.914     0.826     0.92    0.205->0.200  False True    False
+  naive      0.89->0.18 (+0.708)            0.408     0.331     0.92    0.205->0.197  False False   False
+  continued  1.00->0.15 (+0.850)            0.460     0.472     1.00    0.205->0.200  True  False   False
+  loramerge  0.89->0.16 (+0.733)            0.367     0.312     0.92    0.205->0.062  False False   False
+  extmem     0.89->0.90 (-0.008)            0.875     0.690     0.86    0.205->0.205  False False   True
+RESULT_JSON_3SEED {"ours": {"oldest_S0_fresh": 0.9, "oldest_S0_final": 0.9, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.8249999999999998, "all_seen_final": 0.9138888888888888, "all_para_final": 0.826388888888889, "newest_stream_final": 0.9249999999999999, "base_hop_before": 0.20486111111111108, "base_hop_after": 0.20023148148148148, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 2595.3047300974526, "peak_vram_mb": 9424.173056, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}, "naive": {"oldest_S0_fresh": 0.8916666666666666, "oldest_S0_final": 0.18333333333333335, "oldest_S0_forgetting": 0.7083333333333333, "oldest_S0_para_final": 0.17500000000000002, "all_seen_final": 0.4083333333333334, "all_para_final": 0.33055555555555555, "newest_stream_final": 0.9249999999999999, "base_hop_before": 0.20486111111111108, "base_hop_after": 0.19675925925925927, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1784.5993056297302, "peak_vram_mb": 6625.116672, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "continued": {"oldest_S0_fresh": 1.0, "oldest_S0_final": 0.15, "oldest_S0_forgetting": 0.85, "oldest_S0_para_final": 0.16666666666666666, "all_seen_final": 0.4597222222222222, "all_para_final": 0.47222222222222227, "newest_stream_final": 1.0, "base_hop_before": 0.20486111111111108, "base_hop_after": 0.20023148148148148, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1315.2064898014069, "peak_vram_mb": 6581.436928, "uses_gold_new": true, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "loramerge": {"oldest_S0_fresh": 0.8916666666666666, "oldest_S0_final": 0.15833333333333335, "oldest_S0_forgetting": 0.7333333333333333, "oldest_S0_para_final": 0.13333333333333333, "all_seen_final": 0.3666666666666667, "all_para_final": 0.3125, "newest_stream_final": 0.9249999999999999, "base_hop_before": 0.20486111111111108, "base_hop_after": 0.0625, "trainable_params_per_round": [540672, 540672, 540672, 540672, 540672, 540672], "updated_params_total": 3244032.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1897.007088104884, "peak_vram_mb": 5011.03104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "extmem": {"oldest_S0_fresh": 0.8916666666666666, "oldest_S0_final": 0.8999999999999999, "oldest_S0_forgetting": -0.008333333333333304, "oldest_S0_para_final": 0.7333333333333334, "all_seen_final": 0.875, "all_para_final": 0.6902777777777779, "newest_stream_final": 0.8583333333333334, "base_hop_before": 0.20486111111111108, "base_hop_after": 0.20486111111111108, "trainable_params_per_round": [0], "updated_params_total": 0.0, "optimizer_steps": 0.0, "wall_clock_seconds": 166.24319887161255, "peak_vram_mb": 2638.447104, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": true, "single_dense": false}}
+
+[all seeds done]
+== DONE real ==
