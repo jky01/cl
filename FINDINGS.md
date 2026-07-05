@@ -93,13 +93,20 @@
 > lever to close, not a refutation. Closes the replay chapter; the remaining open problem is
 > rehearsal-FREE CL (R36-I).
 >
-> **R36-I (frontier: rehearsal-free interference-aware writing)** `nswrite` arm — write new-stream
-> knowledge with NO replay by projecting each fixed trainable Linear's gradient off the null space of
-> old-stream input activations (per-module low-rank basis kept as training state only; bias frozen;
-> single dense checkpoint at inference). Controls: `naive_fixed` (no projection) and `nswrite_rand`
-> (matched-rank random basis). Early instrumentation (smoke): the new-stream gradient's energy under
-> the activation basis is **0.919 vs 0.026 under a random basis** — interference is real, large, and
-> structured along old-activation directions (35× the random control). [running]
+> **R36-I (frontier: rehearsal-free interference-aware writing) — POSITIVE** `nswrite`, 2-seed. Write
+> new-stream knowledge with NO replay by projecting each fixed trainable Linear's gradient off the null
+> space of old-stream input activations (per-module low-rank basis, training-state only; bias frozen;
+> single dense checkpoint). Result (all-seen / mean-forget / newest): **nswrite 0.792 / +0.119 / 0.975**
+> vs naive_fixed 0.485 / +0.425, ewc 0.494, and the matched-rank **random-basis control 0.490** (≈ naive).
+> Four clean findings: (1) rehearsal-free nswrite beats the no-projection floor by **+0.30 all-seen**,
+> closing ~40% of the gap to replay (0.910) with **no replay**; (2) **attributable to interference-
+> awareness** — the random-basis control does nothing (0.490≈naive) while the activation basis captures
+> **35× the gradient energy** (occupancy 0.92 vs 0.20) and gives the whole gain; (3) **zero plasticity
+> cost** — newest tied at 0.975 across all arms, so nswrite *dominates* the stability–plasticity frontier;
+> (4) **occupancy saturates 0.74→0.92** over rounds and the residual forgetting tracks it — the first
+> *measured* write-subspace-saturation signal, i.e. the principled point where growth becomes necessary
+> (phase-2: depth vs width/parallel-adapter growth). First attributable, replay-free, plasticity-preserving
+> reduction of catastrophic forgetting in this project; still below replay (not a full solution).
 >
 > **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
@@ -112,11 +119,17 @@
 > negative**: retention (R23, replay does it), capacity (R31, 1 layer holds 800 facts), OOD
 > composition (R32, impossible for all incl. the upper bound), and in-distribution composition
 > grokking (R34, +0 already ~0.98 and depth gives no onset/ceiling advantage at matched compute).
-> A growth claim would now require a genuinely different regime — a **compute-advantage** result vs
-> from-scratch-large (SOLAR/LiGO/LESA bar) or capability-saturation at **much larger (non-0.5B,
-> non-synthetic) scale**; the synthetic fact/hop/composition probes are exhausted. Until such a
-> result, do not claim growth helps. The memory is a *training scaffold* (not an inference dependency);
-> its one reliability knob is the scaffold's **answer** quality, guarded by an answer-recall restart.
+> Those synthetic *capability/capacity* probes are exhausted. **But R36-I re-opens growth on a
+> principled footing**: once you attack forgetting rehearsal-free (interference-aware `nswrite`, which
+> reduces forgetting +0.30 over the floor with zero plasticity cost), the **interference-free write
+> subspace measurably saturates** (occupancy 0.74→0.92) — and *that* saturation, not fact-count, is the
+> first candidate regime where function-preserving growth could be genuinely necessary. Phase 2 tests it:
+> grow-on-saturation, **depth vs width/parallel-adapter growth** at matched compute — the first principled
+> test of *what kind* of growth CL needs. Until that result, still do not *claim* growth helps.
+> The memory is a *training scaffold* (not an inference dependency); its one reliability knob is the
+> scaffold's **answer** quality, guarded by an answer-recall restart. **Frontier status: rehearsal-free
+> CL is partly cracked (nswrite ≫ floor, attributable, plasticity-free) but not solved (still < replay);
+> the live thread is nswrite + growth-on-saturation.**
 
 Consolidated report of the proxy (toy) + real-model (Qwen2.5-0.5B/1.5B) experiments.
 Every number below is reproducible from a script in `s0/` with its log in
