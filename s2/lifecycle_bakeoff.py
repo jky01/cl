@@ -91,8 +91,44 @@ def main():
             p.requires_grad_(False)
         return m
 
-    def p_seen(n, a, v): return f"{n}'s {a} is"
-    def p_para(n, a, v): return f"The {a} of {n} is"
+    # ---- data mode: "attr" (synthetic FIRST×LAST + ATTR) or "kg" (KG-shaped COUNTERFACTUAL triples) ----
+    DATA = os.environ.get("BK_DATA", "attr")
+    KG_SUBJECTS = (
+        "Napoleon Einstein Gandhi Shakespeare Mozart Darwin Newton Tesla Lincoln Churchill Cleopatra "
+        "Aristotle Galileo Beethoven Picasso Columbus Socrates Caesar Hannibal Copernicus Voltaire "
+        "Rousseau Kepler Faraday Pasteur Edison Franklin Jefferson Washington Napoleon Homer Plato "
+        "Dante Chaucer Milton Tolstoy Dickens Austen Byron Keats Wagner Chopin Rembrandt Vermeer "
+        "Monet Renoir Cezanne Matisse Gauguin Raphael Titian Bach Handel Haydn Verdi Puccini Rossini "
+        "Hugo Balzac Flaubert Proust Kafka Goethe Schiller Nietzsche Kant Hegel Descartes Pascal "
+        "Leibniz Spinoza Hume Locke Hobbes Euclid Archimedes Ptolemy Pythagoras Hippocrates").split()
+    KG_REL = {   # relation: (seen_template, para_template) ending right before the single-token object
+        "job":  ("{s}'s current job is that of a", "By trade {s} works as a"),
+        "pet":  ("{s}'s pet is a", "The animal kept by {s} is a"),
+        "drink": ("{s}'s favorite drink is", "The beverage preferred by {s} is"),
+        "city": ("{s} now lives in", "The home city of {s} is"),
+        "tongue": ("{s} natively speaks", "The native language of {s} is"),
+    }
+    KG_OBJS = {   # single-token object candidates per relation (filtered to single-token at runtime)
+        "job":  "chef nurse pilot actor singer farmer judge poet monk clerk baker tutor sailor tailor".split(),
+        "pet":  "dog cat fish horse goat frog mouse snake duck rabbit sheep pig hen owl".split(),
+        "drink": "coffee tea water juice wine beer milk cola cider cocoa lemonade whiskey".split(),
+        "city": "Paris Rome Tokyo Cairo Lima Oslo Bern Doha Nice Vienna Madrid Boston Dublin Prague".split(),
+        "tongue": "French German Spanish Latin Greek Dutch Arabic Thai Hindi Polish Czech Danish".split(),
+    }
+    KG_RELS = list(KG_REL)
+    kg_objs = {r: [o for o in KG_OBJS[r] if one_tok(o) is not None] for r in KG_RELS}  # single-token only
+
+    def p_seen(n, a, v):
+        return KG_REL[a][0].format(s=n) if DATA == "kg" else f"{n}'s {a} is"
+
+    def p_para(n, a, v):
+        return KG_REL[a][1].format(s=n) if DATA == "kg" else f"The {a} of {n} is"
+
+    def kstem(f):   # retrieval-key stem
+        return p_seen(*f) if DATA == "kg" else f"{f[0]}'s {f[1]}"
+
+    def vfull(f):   # full prompt including the answer token (for value features)
+        return p_seen(*f) + " " + f[2] if DATA == "kg" else f"{f[0]}'s {f[1]} is {f[2]}"
 
     @torch.no_grad()
     def pooled(m, texts, bs=128):
@@ -112,7 +148,19 @@ def main():
         return torch.cat(outs, 0)
 
     def make_streams(seed):
-        rng = random.Random(3000 + seed); pool = big_pool[:]; rng.shuffle(pool)
+        rng = random.Random(3000 + seed)
+        if DATA == "kg":                              # KG-shaped COUNTERFACTUAL triples
+            pairs = [(s, r) for s in KG_SUBJECTS for r in KG_RELS]
+            rng.shuffle(pairs)
+            streams = []; pi = 0
+            for _ in range(ROUNDS):
+                s = []
+                while len(s) < PER and pi < len(pairs):
+                    subj, rel = pairs[pi]; pi += 1
+                    s.append((subj, rel, rng.choice(kg_objs[rel])))   # counterfactual object
+                streams.append(s)
+            return streams
+        pool = big_pool[:]; rng.shuffle(pool)
         streams = []; used = set(); pi = 0
         for r in range(ROUNDS):
             s = []
@@ -125,8 +173,8 @@ def main():
         return streams
 
     def train_memory(feat, facts, seed):
-        Kf = pooled(feat, [f"{n}'s {a}" for (n, a, _) in facts])
-        Sf = last_h(feat, [f"{n}'s {a} is {v}" for (n, a, v) in facts])
+        Kf = pooled(feat, [kstem(f) for f in facts])
+        Sf = last_h(feat, [vfull(f) for f in facts])
         gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
         QHf = [(pooled(feat, [pf(*f) for f in facts]), last_h(feat, [pf(*f) for f in facts]))
                for pf in (p_seen, p_para)]
@@ -737,6 +785,11 @@ def main():
     for seed in range(SEEDS):
         streams = make_streams(seed)
         print(f"  seed {seed}: streams={[len(s) for s in streams]}", flush=True)
+        if DATA == "kg":                              # base-knowledge screen (codex: require <=0.15)
+            allf = [f for s in streams for f in s]
+            bseen = recall(feat, allf, p_seen); bpar = recall(feat, allf, p_para)
+            print(f"    [KG base-recall screen] frozen-base seen={bseen:.3f} para={bpar:.3f} "
+                  f"({'OK <=0.15' if bseen <= 0.15 else 'WARNING: base already knows facts'})", flush=True)
         # train each stream's scaffold ONCE (deterministic in seed*100+r); share across arms
         scaffolds = None
         if need_scaffold:
