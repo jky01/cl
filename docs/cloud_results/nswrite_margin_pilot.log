@@ -1,0 +1,31 @@
+R36-I MARGIN-BILINEAR PILOT (NEGATIVE) — s2/lifecycle_bakeoff.py
+Qwen/Qwen2.5-0.5B, RTX 3090, 12 rounds x 40, 1 seed, PYTHONHASHSEED=0.
+Hypothesis (codex+claude): nswrite's residual forgetting is protection-QUALITY — the input-activation
+null space preserves the hidden response but not the answer-token MARGIN. Fix: bilinear projection
+V_out V_outᵀ·G·U_in U_inᵀ that removes only gradient acting on old inputs AND moving old answer-margin
+output directions (V_out = SVD of d(margin)/d(y_last) over committed-correct old facts, eval-only).
+
+================= 12-STREAM RESULT (r11, matched newest=0.85) =================
+  arm         all-seen  eff-grad (fraction of grad kept)   note
+  nswrite      0.474     0.237  (removes 94% of grad energy)  input-only null space
+  margin       0.369     0.616  (removes only 38%)            BILINEAR (surgical)
+  naive_fixed  0.336     1.0    (removes 0%)                   no projection
+  (marginrandv control: terminated at r9, ~floor; not needed since margin did not win)
+
+VERDICT — the margin-bilinear hypothesis is FALSIFIED.
+- margin (0.369) is WORSE than input-only nswrite (0.474) and barely above the floor (0.336), at
+  matched newest (0.85) — so it is not a plasticity trade, it is genuinely less retention.
+- Mechanism: the bilinear projection removes only the old-input × old-margin-output INTERSECTION (38%
+  of grad), i.e. it protects LESS than blunt input-only projection (94%). Less protection -> less
+  retention. Targeting the answer-margin subspace gave NO benefit; it only under-protected.
+- So the shared "wrong-target" hypothesis (input-protection preserves hidden but not the token margin)
+  is not supported. Blunt input-direction protection already captures the dangerous gradient better
+  than the margin-refined subspace. The residual forgetting is protection INCOMPLETENESS / accumulated
+  drift of the surviving ~6% gradient over many steps, NOT a wrong protected object.
+
+IMPLICATION: "protect-by-direction" writers (input or margin) appear to plateau around all-seen ~0.47
+(12 streams) rehearsal-free, well below replay (~0.91). Neither margin nor (predicted) rank/no-evict is
+likely to close it, because more protection kills newest and less protection forgets. The next
+genuinely different primitive is closed-form FUNCTIONAL editing (constrain the actual old key->value
+outputs, ROME/MEMIT-style), or attacking the per-step DRIFT directly — not more direction-protection.
+Honest negative; refines the frontier. Pod ysx7zun9bc5vuh terminated.

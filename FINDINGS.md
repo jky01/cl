@@ -109,9 +109,13 @@
 > input-activation null space preserves the hidden response but not the answer-token margin; per-round
 > drift accumulates worst for the oldest, which — under old-first `update_U` — is the *most*-protected
 > stream). So occupancy alone is NOT a growth-necessity signal (needs occupancy + low eff-grad + newest
-> failure, which don't co-occur here). **Growth is off**; the next line is answer-margin-safe writing
-> (`margin` bilinear arm: protect `V_out V_outᵀ·G·U_in U_inᵀ`) + cap/no-evict. First attributable,
-> replay-free, plasticity-preserving forgetting reduction in this project; still below replay.
+> failure, which don't co-occur here). **Growth is off.** **Margin-bilinear FALSIFIED:** protecting the
+> answer-margin subspace (`V_out V_outᵀ·G·U_in U_inᵀ`, removes 38% of grad) does WORSE (all-seen 0.369)
+> than blunt input-only nswrite (removes 94%, 0.474) at matched newest — more protection retains better,
+> so the residual is protection *incompleteness/drift*, NOT a wrong protected object. "Protect-by-direction"
+> writers plateau ~0.47 (12 streams) rehearsal-free, below replay ~0.91; the next different primitive is
+> closed-form FUNCTIONAL editing (constrain old key→value outputs) or attacking per-step drift.
+> nswrite remains the first attributable replay-free plasticity-preserving forgetting reduction; partial.
 >
 > **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream

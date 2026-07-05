@@ -1,0 +1,50 @@
+== MARGIN mode=pilot arms=naive_fixed,nswrite,margin,marginrandv ==
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 3090) rounds=12 per=40 grow=+2L mem=800 steps=1000 seeds=1 arms=['naive_fixed', 'nswrite', 'margin', 'marginrandv'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.95, 0.98, 0.95, 0.98, 0.8, 1.0, 0.78, 0.98, 1.0, 1.0, 0.82, 0.85] restarts=[0, 0, 2, 1, 2, 0, 0, 0, 0, 1, 3, 0]
+    [nswrite-none seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.95 seen=[0.95] hop=0.215
+    [nswrite-none seed 0 r1] energy-occ=0.0 eff-grad=1.0 fresh=0.97 seen=[0.45, 0.97] hop=0.201
+    [nswrite-none seed 0 r2] energy-occ=0.0 eff-grad=1.0 fresh=0.95 seen=[0.35, 0.72, 0.95] hop=0.198
+    [nswrite-none seed 0 r3] energy-occ=0.0 eff-grad=1.0 fresh=0.97 seen=[0.2, 0.45, 0.72, 0.97] hop=0.191
+    [nswrite-none seed 0 r4] energy-occ=0.0 eff-grad=1.0 fresh=0.8 seen=[0.4, 0.17, 0.38, 0.35, 0.8] hop=0.198
+    [nswrite-none seed 0 r5] energy-occ=0.0 eff-grad=1.0 fresh=1.0 seen=[0.12, 0.28, 0.45, 0.42, 0.55, 1.0] hop=0.222
+    [nswrite-none seed 0 r6] energy-occ=0.0 eff-grad=1.0 fresh=0.78 seen=[0.17, 0.25, 0.15, 0.28, 0.3, 0.55, 0.78] hop=0.205
+    [nswrite-none seed 0 r7] energy-occ=0.0 eff-grad=1.0 fresh=0.97 seen=[0.17, 0.4, 0.28, 0.28, 0.33, 0.38, 0.68, 0.97] hop=0.198
+    [nswrite-none seed 0 r8] energy-occ=0.0 eff-grad=1.0 fresh=1.0 seen=[0.23, 0.3, 0.33, 0.2, 0.33, 0.3, 0.4, 0.68, 1.0] hop=0.191
+    [nswrite-none seed 0 r9] energy-occ=0.0 eff-grad=1.0 fresh=1.0 seen=[0.17, 0.25, 0.25, 0.35, 0.38, 0.3, 0.45, 0.53, 0.95, 1.0] hop=0.208
+    [nswrite-none seed 0 r10] energy-occ=0.0 eff-grad=1.0 fresh=0.82 seen=[0.23, 0.1, 0.15, 0.17, 0.2, 0.17, 0.28, 0.15, 0.3, 0.38, 0.82] hop=0.198
+    [nswrite-none seed 0 r11] energy-occ=0.0 eff-grad=1.0 fresh=0.85 seen=[0.12, 0.28, 0.25, 0.25, 0.2, 0.28, 0.35, 0.25, 0.28, 0.35, 0.57, 0.85] hop=0.205
+    [nswrite-act  seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.95 seen=[0.95] hop=0.215
+    [nswrite-act  seed 0 r1] energy-occ=0.729 eff-grad=0.521 fresh=0.97 seen=[0.93, 0.97] hop=0.194
+    [nswrite-act  seed 0 r2] energy-occ=0.826 eff-grad=0.417 fresh=0.95 seen=[0.9, 0.97, 0.95] hop=0.188
+    [nswrite-act  seed 0 r3] energy-occ=0.869 eff-grad=0.361 fresh=0.97 seen=[0.68, 0.88, 0.95, 0.97] hop=0.205
+    [nswrite-act  seed 0 r4] energy-occ=0.912 eff-grad=0.297 fresh=0.8 seen=[0.82, 0.88, 0.85, 0.85, 0.8] hop=0.188
+    [nswrite-act  seed 0 r5] energy-occ=0.921 eff-grad=0.281 fresh=1.0 seen=[0.47, 0.8, 0.8, 0.88, 0.75, 1.0] hop=0.208
+    [nswrite-act  seed 0 r6] energy-occ=0.947 eff-grad=0.229 fresh=0.78 seen=[0.53, 0.78, 0.45, 0.65, 0.7, 0.82, 0.78] hop=0.201
+    [nswrite-act  seed 0 r7] energy-occ=0.942 eff-grad=0.241 fresh=0.97 seen=[0.65, 0.72, 0.68, 0.68, 0.55, 0.88, 0.78, 0.97] hop=0.205
+    [nswrite-act  seed 0 r8] energy-occ=0.945 eff-grad=0.234 fresh=1.0 seen=[0.57, 0.57, 0.6, 0.65, 0.55, 0.85, 0.68, 0.93, 1.0] hop=0.194
+    [nswrite-act  seed 0 r9] energy-occ=0.944 eff-grad=0.237 fresh=1.0 seen=[0.55, 0.53, 0.53, 0.55, 0.65, 0.8, 0.72, 0.7, 0.97, 1.0] hop=0.198
+    [nswrite-act  seed 0 r10] energy-occ=0.951 eff-grad=0.221 fresh=0.82 seen=[0.38, 0.4, 0.28, 0.3, 0.5, 0.45, 0.55, 0.33, 0.53, 0.78, 0.82] hop=0.191
+    [nswrite-act  seed 0 r11] energy-occ=0.944 eff-grad=0.237 fresh=0.85 seen=[0.25, 0.45, 0.28, 0.38, 0.28, 0.57, 0.45, 0.35, 0.4, 0.65, 0.78, 0.85] hop=0.201
+    [nswrite-margin seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.95 seen=[0.95] hop=0.215
+    [nswrite-margin seed 0 r1] energy-occ=0.198 eff-grad=0.896 fresh=0.97 seen=[0.65, 0.97] hop=0.208
+    [nswrite-margin seed 0 r2] energy-occ=0.25 eff-grad=0.866 fresh=0.95 seen=[0.55, 0.85, 0.95] hop=0.215
+    [nswrite-margin seed 0 r3] energy-occ=0.326 eff-grad=0.821 fresh=0.97 seen=[0.25, 0.68, 0.85, 0.97] hop=0.188
+    [nswrite-margin seed 0 r4] energy-occ=0.635 eff-grad=0.604 fresh=0.8 seen=[0.53, 0.47, 0.57, 0.53, 0.8] hop=0.212
+    [nswrite-margin seed 0 r5] energy-occ=0.434 eff-grad=0.752 fresh=1.0 seen=[0.2, 0.33, 0.55, 0.47, 0.55, 1.0] hop=0.205
+    [nswrite-margin seed 0 r6] energy-occ=0.675 eff-grad=0.57 fresh=0.78 seen=[0.25, 0.4, 0.3, 0.45, 0.5, 0.75, 0.78] hop=0.198
+    [nswrite-margin seed 0 r7] energy-occ=0.497 eff-grad=0.71 fresh=0.97 seen=[0.28, 0.42, 0.33, 0.38, 0.42, 0.53, 0.78, 0.97] hop=0.194
+    [nswrite-margin seed 0 r8] energy-occ=0.537 eff-grad=0.68 fresh=1.0 seen=[0.33, 0.28, 0.33, 0.2, 0.42, 0.5, 0.53, 0.7, 1.0] hop=0.188
+    [nswrite-margin seed 0 r9] energy-occ=0.485 eff-grad=0.718 fresh=1.0 seen=[0.25, 0.28, 0.28, 0.47, 0.38, 0.42, 0.55, 0.57, 0.9, 1.0] hop=0.198
+    [nswrite-margin seed 0 r10] energy-occ=0.721 eff-grad=0.529 fresh=0.82 seen=[0.2, 0.15, 0.17, 0.23, 0.17, 0.2, 0.33, 0.23, 0.38, 0.33, 0.82] hop=0.212
+    [nswrite-margin seed 0 r11] energy-occ=0.621 eff-grad=0.616 fresh=0.85 seen=[0.17, 0.33, 0.28, 0.23, 0.25, 0.35, 0.38, 0.23, 0.38, 0.33, 0.65, 0.85] hop=0.208
+    [nswrite-marginrandv seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.95 seen=[0.95] hop=0.215
+    [nswrite-marginrandv seed 0 r1] energy-occ=0.03 eff-grad=0.985 fresh=0.97 seen=[0.45, 0.97] hop=0.205
+    [nswrite-marginrandv seed 0 r2] energy-occ=0.072 eff-grad=0.964 fresh=0.95 seen=[0.4, 0.8, 0.95] hop=0.191
+    [nswrite-marginrandv seed 0 r3] energy-occ=0.121 eff-grad=0.937 fresh=0.97 seen=[0.25, 0.53, 0.7, 0.97] hop=0.191
+    [nswrite-marginrandv seed 0 r4] energy-occ=0.164 eff-grad=0.915 fresh=0.8 seen=[0.4, 0.25, 0.45, 0.4, 0.8] hop=0.194
+    [nswrite-marginrandv seed 0 r5] energy-occ=0.209 eff-grad=0.889 fresh=1.0 seen=[0.17, 0.28, 0.47, 0.47, 0.53, 1.0] hop=0.205
+    [nswrite-marginrandv seed 0 r6] energy-occ=0.238 eff-grad=0.873 fresh=0.78 seen=[0.17, 0.3, 0.12, 0.33, 0.33, 0.6, 0.78] hop=0.191
+    [nswrite-marginrandv seed 0 r7] energy-occ=0.272 eff-grad=0.853 fresh=0.97 seen=[0.23, 0.42, 0.28, 0.35, 0.33, 0.4, 0.7, 0.97] hop=0.194
+    [nswrite-marginrandv seed 0 r8] energy-occ=0.276 eff-grad=0.851 fresh=1.0 seen=[0.3, 0.25, 0.35, 0.25, 0.38, 0.4, 0.53, 0.72, 1.0] hop=0.191
+    [nswrite-marginrandv seed 0 r9] energy-occ=0.275 eff-grad=0.851 fresh=1.0 seen=[0.25, 0.23, 0.3, 0.4, 0.33, 0.35, 0.47, 0.53, 0.9, 1.0] hop=0.201
