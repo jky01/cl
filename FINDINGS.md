@@ -132,10 +132,22 @@
 > FUNDAMENTALLY INSUFFICIENT — the limiter is representational (preserving each layer's linear response
 > to old inputs ≠ preserving the end-to-end answer through nonlinearity), not leakage/capacity. The whole
 > input-direction-protection family (nswrite/drift/margin/reproject) tops out ~0.65@12 / ~0.40@24 streams
-> rehearsal-free vs replay ~0.91. Next primitive: functional editing preserving old OUTPUTS (store
-> Y_old=W_commit·X_old, constrain W_new·X_old≈Y_old) — strictly stronger; or accept a rehearsal-free ceiling.
+> rehearsal-free vs replay ~0.91. **Value-anchored functional editing is algebraically bounded by this:**
+> enforcing `W_new·U = W_commit·U` is identically `ΔW·U=0` (= the reproject/full-fix constraint, already
+> tested → 0.402@24); the output-projected `Vᵀ W U = C` form is strictly *weaker* (margin class); only a
+> paired old-activation/value sketch is stronger, and that is compressed activation *rehearsal*, not
+> rehearsal-free. So the input-direction / local-linear-summary family is a mapped, bounded frontier —
+> **no free lunch in the compressed local class.**
 >
-> **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
+> **REHEARSAL-FREE FRONTIER (R36-I) — mapped, bounded (honest result, not a failure):**
+> `naive no-replay  <  nswrite / input-direction protection  <<  replay-consolidation  ≤  gold-old oracle`.
+> nswrite is the first attributable rehearsal-free, no-inference-memory improvement over naive writing;
+> write-budgeting adds a big short-horizon gain; but the whole family has a long-horizon representational
+> ceiling (~0.40@24) far below replay; optimizer-leakage and capacity are ruled out; margin and functional
+> editing don't cross it. **Replay-consolidation (R33/R35) remains the proven durable knowledge-into-weights
+> method at this scale.**
+>
+> **Honest bottom line (R19-R36):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
 > retained with no external memory at inference, and (R33) **it beats standard continual-learning
 > baselines** (sequential no-replay, continued-FT-with-gold, LoRA-merge) while matching external
