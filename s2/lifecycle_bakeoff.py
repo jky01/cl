@@ -450,6 +450,7 @@ def main():
         kper = int(os.environ.get("BK_NS_KPER", 40))
         rankcap = int(os.environ.get("BK_NS_RANK", 256))
         cap_policy = os.environ.get("BK_NS_CAP_POLICY", "old_first")
+        reproject = int(os.environ.get("BK_NS_REPROJECT", 0))  # enforce accumulated ΔW ⊥ U each step
         margin_mode = mode in ("margin", "marginrandv")
         dense = load_frozen()
         base_hop = hop_acc(dense)
@@ -558,6 +559,7 @@ def main():
             opt = torch.optim.AdamW(trainable, lr=ns_lr)
             dense.train()
             occ_acc = 0.0; occ_n = 0
+            Wstart = {id(m): m.weight.detach().clone() for m in targets} if reproject else None
             for _ in range(STEPS):
                 sub = [rng.choice(S) for _ in range(Bf)]
                 phrase = p_seen if rng.random() < 0.5 else p_para
@@ -592,6 +594,14 @@ def main():
                 if gn > 0:
                     occ_acc += gpn / gn; occ_n += 1
                 torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+                if reproject:                             # enforce accumulated ΔW ⊥ U (immune to Adam rotation)
+                    with torch.no_grad():
+                        for m in targets:
+                            U = Umap[id(m)]
+                            if U is None:
+                                continue
+                            dW = m.weight.data - Wstart[id(m)]
+                            m.weight.data.sub_((dW @ U) @ U.t())
             dense.eval()
             if mode != "none":                            # commit: update protected basis U (and V_out)
                 acts = collect_inputs([p_seen(*f) for f in S] + [p_para(*f) for f in S])
