@@ -1,0 +1,30 @@
+R36-I REPROJECT + LEAK ISOLATION — is nswrite's long-horizon forgetting optimizer leakage?
+Qwen/Qwen2.5-0.5B, RTX 4090, 12 & 24 rounds x 40, 1 seed, PYTHONHASHSEED=0, low-drift (STEPS=300, LR=7.5e-5).
+Hypothesis (claude): gradient projection G(I-UUᵀ) is undone by AdamW's elementwise m/√v preconditioner
+(and decoupled weight decay), so the REALIZED ΔW is not ⊥U -> drift. Test: measure realized-ΔW leak
+||(ΔW U)Uᵀ||²/||ΔW||² and enforce ΔW⊥U (reproject) / remove all leakage (linear_only+reproject+wd=0).
+
+================= RESULT =================
+  config                                   all-seen(12)  all-seen(24)  dW-leak
+  nswrite baseline (AdamW wd=0.01)          0.652         0.385         0.033
+  nswrite + reproject (ΔW⊥U each step)      0.681         0.389         ~0
+  nswrite full-fix (linear_only+reproj+wd0) 0.648         0.402         0.0
+
+VERDICT — leakage is NOT the limiter (hypothesis FALSIFIED).
+- Realized-ΔW leak is TINY even at baseline (0.033) — gradient projection already keeps ~97% of the
+  actual weight change ⊥U under AdamW. So AdamW-preconditioner + weight-decay leakage was never
+  significant; there was almost nothing for reproject to fix (+0.03 @12, ~0 @24).
+- Removing ALL leakage (dW-leak=0.0, norm params frozen, no weight decay) gives NO retention gain
+  (24: 0.402 vs 0.385, +0.017; 12 slightly worse). Realized ΔW EXACTLY ⊥U still forgets at long horizon.
+- => Constraining the Linear weight change to be ⊥ old-INPUT directions is FUNDAMENTALLY INSUFFICIENT
+  for long-horizon rehearsal-free retention. The limiter is REPRESENTATIONAL, not optimizer leakage:
+  preserving each layer's LINEAR response to stored old inputs does not preserve the END-TO-END answer
+  token (attention softmax / downstream layers / LM-head argmax are nonlinear), and U is an incomplete,
+  first-order, input-side summary of the old function.
+
+IMPLICATION: the whole "protect the input-direction subspace" family (nswrite, drift-control, margin,
+reproject) tops out ~0.65 @12 / ~0.40 @24 streams rehearsal-free, far below replay ~0.91. The next
+primitive must preserve the old OUTPUT (functional editing: store Y_old = W_commit·X_old and constrain
+W_new·X_old ≈ Y_old), which — with the frozen lower stack chaining preservation through the trainable
+block — is strictly stronger than input-direction protection. Alternatively, accept an honest
+rehearsal-free ceiling for a fixed dense model at this scale. Pod terminated.

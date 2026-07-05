@@ -125,8 +125,15 @@
 > +0.03) — the +0.18 short-horizon gain shrinks to +0.03. Cumulative drift over many writes + imperfect
 > input-null-space protection dominate long-horizon; write-budgeting alone does NOT scale. So drift-control
 > is a real but partial component; the long-horizon rehearsal-free gap to replay stays large (0.385 vs 0.91
-> at 24 streams). Next primitive for the long horizon: closed-form FUNCTIONAL editing (constrain old
-> key→value outputs), not more write-budget tuning.
+> at 24 streams). **Optimizer-leakage ruled OUT (diagnostic):** hypothesised AdamW preconditioner/weight-
+> decay undoing the projection — but the realized-ΔW leak `‖(ΔW·U)Uᵀ‖²/‖ΔW‖²` is tiny even at baseline
+> (0.033), and removing ALL leakage (reproject → ΔW exactly ⊥U, freeze norms, wd=0) gives no retention
+> gain (24: 0.402 vs 0.385). So constraining the Linear weight change ⊥ old-INPUT directions is
+> FUNDAMENTALLY INSUFFICIENT — the limiter is representational (preserving each layer's linear response
+> to old inputs ≠ preserving the end-to-end answer through nonlinearity), not leakage/capacity. The whole
+> input-direction-protection family (nswrite/drift/margin/reproject) tops out ~0.65@12 / ~0.40@24 streams
+> rehearsal-free vs replay ~0.91. Next primitive: functional editing preserving old OUTPUTS (store
+> Y_old=W_commit·X_old, constrain W_new·X_old≈Y_old) — strictly stronger; or accept a rehearsal-free ceiling.
 >
 > **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
