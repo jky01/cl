@@ -83,7 +83,25 @@
 > or in-distribution-easy-for-+0 (R34)** — in both regimes growth is unjustified. 4th independent
 > growth negative (after R23 retention, R31 capacity, R32 OOD composition).
 >
-> **Honest bottom line (R19-R34):** the demonstrated, robust, multi-seed contribution is
+> **R35 (oracle/EWC brackets)** `s2/lifecycle_bakeoff.py`, 2-seed, around R33's replay-consolidation.
+> Bracket (all-seen): naive/loramerge 0.37-0.39 < **EWC 0.456 ≈ continued-gold 0.460** < **ours 0.890**
+> < **oracle (gold-old replay) 0.994**. Two clean reads: (1) a real regularizer (online-EWC) beats
+> naive but is *crushed* by replay (0.456 vs 0.890) and still shows an age gradient — regularization
+> can't replace rehearsal, so ours's dominance isn't a weak-baseline artifact; (2) **ORACLE_GAP =
+> +0.10 seen / +0.16 para** — no-gold self-distill is close to but not *within* the gold-old ceiling;
+> having old gold still buys ~0.10-0.16 (bottleneck = scaffold answer quality / snapshot fidelity), a
+> lever to close, not a refutation. Closes the replay chapter; the remaining open problem is
+> rehearsal-FREE CL (R36-I).
+>
+> **R36-I (frontier: rehearsal-free interference-aware writing)** `nswrite` arm — write new-stream
+> knowledge with NO replay by projecting each fixed trainable Linear's gradient off the null space of
+> old-stream input activations (per-module low-rank basis kept as training state only; bias frozen;
+> single dense checkpoint at inference). Controls: `naive_fixed` (no projection) and `nswrite_rand`
+> (matched-rank random basis). Early instrumentation (smoke): the new-stream gradient's energy under
+> the activation basis is **0.919 vs 0.026 under a random basis** — interference is real, large, and
+> structured along old-activation directions (35× the random control). [running]
+>
+> **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
 > retained with no external memory at inference, and (R33) **it beats standard continual-learning
 > baselines** (sequential no-replay, continued-FT-with-gold, LoRA-merge) while matching external
