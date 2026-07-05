@@ -120,8 +120,13 @@
 > wrong-target. Writing LESS (LD_STEPS 1000→300, LR 1.5e-4→7.5e-5) lifts 12-stream all-seen **0.474→0.652
 > (+0.18)** while newest *rises* 0.85→0.97 (so not under-fit — genuine drift reduction: 1000 steps
 > massively over-writes a 40-fact stream, the excess just drifts old knowledge). Rehearsal-free retention
-> now 0.652 vs replay ~0.91, purely by write-budgeting — no new mechanism, no replay, no growth. Next:
-> adaptive write-budget (early-stop per stream at a recall target) + verify at 24 streams.
+> now 0.652 vs replay ~0.91, purely by write-budgeting — no new mechanism, no replay, no growth. **But it
+> ATTENUATES with horizon:** at 24 streams the same low-drift config gives only 0.385 (vs 0.356 high-drift,
+> +0.03) — the +0.18 short-horizon gain shrinks to +0.03. Cumulative drift over many writes + imperfect
+> input-null-space protection dominate long-horizon; write-budgeting alone does NOT scale. So drift-control
+> is a real but partial component; the long-horizon rehearsal-free gap to replay stays large (0.385 vs 0.91
+> at 24 streams). Next primitive for the long horizon: closed-form FUNCTIONAL editing (constrain old
+> key→value outputs), not more write-budget tuning.
 >
 > **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream
