@@ -458,7 +458,7 @@ def main():
         trainable = [p for p in dense.parameters() if p.requires_grad]
         Umap = {id(m): None for m in targets}
         rng = random.Random(seed * 13 + 53)
-        hist = []; occ_hist = []; opt_steps = 0
+        hist = []; occ_hist = []; eff_hist = []; opt_steps = 0
 
         def collect_inputs(prompts):
             store = {id(m): [] for m in targets}
@@ -535,16 +535,19 @@ def main():
                 acts = collect_inputs([p_seen(*f) for f in S] + [p_para(*f) for f in S])
                 for m in targets:
                     Umap[id(m)] = update_U(Umap[id(m)], basis_from(acts[id(m)], kper))
-            occ_hist.append(round(occ_acc / max(occ_n, 1), 3))
+            energy = occ_acc / max(occ_n, 1)              # ||G·UUᵀ||²/||G||² (gradient ENERGY fraction)
+            occ_hist.append(round(energy, 3))
+            eff_hist.append(round((max(0.0, 1.0 - energy)) ** 0.5, 3))  # ||G(I-UUᵀ)||/||G|| norm ratio
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [nswrite-{mode:4s} seed {seed} r{r}] grad-occupancy={occ_hist[-1]} "
+            print(f"    [nswrite-{mode:4s} seed {seed} r{r}] energy-occ={occ_hist[-1]} "
+                  f"eff-grad={eff_hist[-1]} fresh={round(seen[r],2)} "
                   f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         del dense; torch.cuda.empty_cache()
         tp = n_trainable_count(trainable)
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
-                    occupancy_curve=occ_hist)
+                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist)
 
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
@@ -579,10 +582,19 @@ def main():
         mean_forget = sum(mf(r) for r in runs) / len(runs)
         fvs = [r["hist"][-1][0] for r in runs]            # final per-stream seen vectors
         age = [round(sum(v[j] for v in fvs) / len(fvs), 3) for j in range(len(fvs[0]))]
-        occ = (sum(r["occupancy_curve"][-1] for r in runs) / len(runs)
-               if all("occupancy_curve" in r for r in runs) else None)
+        nst = len(runs[0]["hist"])
+        fresh_diag = [round(sum(r["hist"][j][0][j] for r in runs) / len(runs), 3) for j in range(nst)]
+        has_occ = all("occupancy_curve" in r for r in runs)
+        has_eff = all("effective_grad_curve" in r for r in runs)
+        occ = sum(r["occupancy_curve"][-1] for r in runs) / len(runs) if has_occ else None
+        eff = sum(r["effective_grad_curve"][-1] for r in runs) / len(runs) if has_eff else None
+        occ_curve = ([round(sum(r["occupancy_curve"][j] for r in runs) / len(runs), 3)
+                      for j in range(nst)] if has_occ else None)
+        eff_curve = ([round(sum(r["effective_grad_curve"][j] for r in runs) / len(runs), 3)
+                      for j in range(nst)] if has_eff else None)
         return dict(
-            gradient_occupancy_final=occ,
+            gradient_occupancy_final=occ, effective_grad_final=eff,
+            occupancy_curve=occ_curve, effective_grad_curve=eff_curve, fresh_diagonal=fresh_diag,
             oldest_S0_fresh=s0_fresh, oldest_S0_final=s0_fin, oldest_S0_forgetting=s0_fresh - s0_fin,
             oldest_S0_para_final=s0_para, all_seen_final=allseen, all_para_final=allpara,
             mean_forgetting_all_streams=mean_forget, age_curve_final_seen=age,
@@ -611,6 +623,9 @@ def main():
                   f"{str(a['uses_gold_new']):5s} {str(a['uses_replay']):7s} {str(a['uses_inference_memory'])}")
             print(f"             mean-forget(all-streams)={a['mean_forgetting_all_streams']:+.3f} "
                   f"age-curve(final seen S0..Sn)={a['age_curve_final_seen']}")
+            if a.get("gradient_occupancy_final") is not None:
+                print(f"             energy-occ={a['occupancy_curve']} eff-grad={a['effective_grad_curve']} "
+                      f"fresh-diag={a['fresh_diagonal']}")
         if "ours" in summary and "oracle" in summary:
             og_s = summary["oracle"]["all_seen_final"] - summary["ours"]["all_seen_final"]
             og_p = summary["oracle"]["all_para_final"] - summary["ours"]["all_para_final"]
