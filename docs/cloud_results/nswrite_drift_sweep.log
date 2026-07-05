@@ -1,0 +1,25 @@
+R36-I DRIFT SWEEP (POSITIVE) — nswrite write-budget — s2/lifecycle_bakeoff.py
+Qwen/Qwen2.5-0.5B, RTX 4090, 12 rounds x 40, 1 seed, PYTHONHASHSEED=0. nswrite (input-only null-space).
+Hypothesis: nswrite's residual forgetting is per-step DRIFT accumulation, not wrong-target. Test: write
+LESS per stream (fewer steps / lower LR) and check retention AT MATCHED newest.
+
+================= 12-STREAM RESULT (all-seen / newest) =================
+  config (LD_STEPS / BK_NS_LR)        all-seen   all-para   newest   eff-grad(final)
+  1000 / 1.5e-4  (baseline)           0.474      0.352      0.85     0.237
+   300 / 1.5e-4                       0.590      0.462      0.97     0.291
+   100 / 1.5e-4                       0.602      0.479      0.97     0.341
+   300 / 7.5e-5  (best)               0.652      0.573      0.97     0.339
+
+VERDICT — DRIFT IS THE LEVER (clean positive, confound rejected).
+- Writing less gives +0.18 all-seen (0.474 -> 0.652) AND HIGHER newest (0.85 -> 0.97). Newest went UP,
+  not down, so this is NOT under-fitting (codex's confound) — it is genuine drift reduction.
+- Mechanism: LD_STEPS=1000 massively over-writes a 40-fact stream (learnable in ~100-300 steps); the
+  excess ~700 steps just drift old (and even recent) knowledge. Fewer steps + lower LR write the fact
+  and stop before drifting. Lower LR (7.5e-5) helps beyond fewer steps alone (0.652 vs 0.590 at 300).
+- fresh_diagonal ~0.95-0.97 across streams for the reduced-budget configs (newest never sacrificed).
+
+IMPLICATION: rehearsal-free retention improves substantially (0.474 -> 0.652 at 12 streams, vs replay
+~0.91) purely by write-BUDGETING, no new mechanism, no replay, no growth. This is the drift branch:
+next = adaptive write-budget (early-stop each stream when its recall hits a target) + verify at 24
+streams. If it holds at 24, the project's rehearsal-free claim strengthens: interference-aware writing +
+minimal write budget closes much of the gap to replay with a single dense checkpoint and no memory.

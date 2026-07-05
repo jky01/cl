@@ -1,0 +1,72 @@
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=12 per=40 grow=+2L mem=800 steps=300 seeds=1 arms=['nswrite'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.88, 0.95, 1.0, 0.57, 0.93, 0.78, 0.85, 0.98, 0.9, 0.85, 0.98] restarts=[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1]
+    [nswrite-act  seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.82 seen=[0.82] hop=0.184
+    [nswrite-act  seed 0 r1] energy-occ=0.72 eff-grad=0.529 fresh=0.88 seen=[0.75, 0.88] hop=0.194
+    [nswrite-act  seed 0 r2] energy-occ=0.805 eff-grad=0.441 fresh=0.95 seen=[0.8, 0.88, 0.95] hop=0.205
+    [nswrite-act  seed 0 r3] energy-occ=0.836 eff-grad=0.404 fresh=1.0 seen=[0.82, 0.8, 0.95, 1.0] hop=0.205
+    [nswrite-act  seed 0 r4] energy-occ=0.897 eff-grad=0.321 fresh=0.57 seen=[0.6, 0.7, 0.7, 0.8, 0.57] hop=0.226
+    [nswrite-act  seed 0 r5] energy-occ=0.899 eff-grad=0.318 fresh=0.93 seen=[0.45, 0.62, 0.68, 0.8, 0.57, 0.93] hop=0.208
+    [nswrite-act  seed 0 r6] energy-occ=0.906 eff-grad=0.306 fresh=0.78 seen=[0.53, 0.53, 0.57, 0.88, 0.6, 0.9, 0.78] hop=0.205
+    [nswrite-act  seed 0 r7] energy-occ=0.912 eff-grad=0.297 fresh=0.85 seen=[0.6, 0.6, 0.68, 0.82, 0.57, 0.88, 0.72, 0.85] hop=0.208
+    [nswrite-act  seed 0 r8] energy-occ=0.912 eff-grad=0.296 fresh=0.97 seen=[0.57, 0.55, 0.57, 0.5, 0.38, 0.72, 0.68, 0.7, 0.97] hop=0.208
+    [nswrite-act  seed 0 r9] energy-occ=0.909 eff-grad=0.302 fresh=0.9 seen=[0.42, 0.5, 0.42, 0.5, 0.42, 0.57, 0.62, 0.62, 0.93, 0.9] hop=0.215
+    [nswrite-act  seed 0 r10] energy-occ=0.911 eff-grad=0.298 fresh=0.85 seen=[0.4, 0.38, 0.42, 0.42, 0.45, 0.62, 0.55, 0.55, 0.75, 0.82, 0.85] hop=0.201
+    [nswrite-act  seed 0 r11] energy-occ=0.915 eff-grad=0.291 fresh=0.97 seen=[0.42, 0.42, 0.4, 0.5, 0.35, 0.6, 0.53, 0.53, 0.78, 0.75, 0.82, 0.97] hop=0.212
+
+== BAKEOFF (mean/1 seeds done, 12 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  nswrite    0.82->0.42 (+0.400)            0.590     0.462     0.97    0.205->0.212  False False   False
+             mean-forget(all-streams)=+0.283 age-curve(final seen S0..Sn)=[0.425, 0.425, 0.4, 0.5, 0.35, 0.6, 0.525, 0.525, 0.775, 0.75, 0.825, 0.975]
+             energy-occ=[0.0, 0.72, 0.805, 0.836, 0.897, 0.899, 0.906, 0.912, 0.912, 0.909, 0.911, 0.915] eff-grad=[1.0, 0.529, 0.441, 0.404, 0.321, 0.318, 0.306, 0.297, 0.296, 0.302, 0.298, 0.291] fresh-diag=[0.825, 0.875, 0.95, 1.0, 0.575, 0.925, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975]
+RESULT_JSON_1SEED {"nswrite": {"gradient_occupancy_final": 0.915, "effective_grad_final": 0.291, "occupancy_curve": [0.0, 0.72, 0.805, 0.836, 0.897, 0.899, 0.906, 0.912, 0.912, 0.909, 0.911, 0.915], "effective_grad_curve": [1.0, 0.529, 0.441, 0.404, 0.321, 0.318, 0.306, 0.297, 0.296, 0.302, 0.298, 0.291], "fresh_diagonal": [0.825, 0.875, 0.95, 1.0, 0.575, 0.925, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975], "oldest_S0_fresh": 0.825, "oldest_S0_final": 0.425, "oldest_S0_forgetting": 0.39999999999999997, "oldest_S0_para_final": 0.35, "all_seen_final": 0.5895833333333333, "all_para_final": 0.46249999999999997, "mean_forgetting_all_streams": 0.2833333333333334, "age_curve_final_seen": [0.425, 0.425, 0.4, 0.5, 0.35, 0.6, 0.525, 0.525, 0.775, 0.75, 0.825, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555555, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 357869568.0, "optimizer_steps": 3600.0, "wall_clock_seconds": 933.7964506149292, "peak_vram_mb": 5649.801728, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}}
+
+[all seeds done]
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=12 per=40 grow=+2L mem=800 steps=100 seeds=1 arms=['nswrite'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.88, 0.95, 1.0, 0.57, 0.93, 0.78, 0.85, 0.98, 0.9, 0.85, 0.98] restarts=[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1]
+    [nswrite-act  seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.8 seen=[0.8] hop=0.201
+    [nswrite-act  seed 0 r1] energy-occ=0.683 eff-grad=0.563 fresh=0.88 seen=[0.78, 0.88] hop=0.198
+    [nswrite-act  seed 0 r2] energy-occ=0.741 eff-grad=0.509 fresh=0.95 seen=[0.75, 0.8, 0.95] hop=0.208
+    [nswrite-act  seed 0 r3] energy-occ=0.8 eff-grad=0.447 fresh=1.0 seen=[0.6, 0.72, 0.9, 1.0] hop=0.208
+    [nswrite-act  seed 0 r4] energy-occ=0.836 eff-grad=0.405 fresh=0.57 seen=[0.53, 0.68, 0.65, 0.9, 0.57] hop=0.208
+    [nswrite-act  seed 0 r5] energy-occ=0.86 eff-grad=0.374 fresh=0.9 seen=[0.42, 0.55, 0.65, 0.85, 0.57, 0.9] hop=0.222
+    [nswrite-act  seed 0 r6] energy-occ=0.888 eff-grad=0.334 fresh=0.78 seen=[0.5, 0.57, 0.57, 0.85, 0.5, 0.9, 0.78] hop=0.226
+    [nswrite-act  seed 0 r7] energy-occ=0.883 eff-grad=0.342 fresh=0.85 seen=[0.5, 0.65, 0.7, 0.9, 0.5, 0.9, 0.72, 0.85] hop=0.208
+    [nswrite-act  seed 0 r8] energy-occ=0.879 eff-grad=0.348 fresh=0.97 seen=[0.45, 0.53, 0.68, 0.75, 0.4, 0.8, 0.68, 0.85, 0.97] hop=0.208
+    [nswrite-act  seed 0 r9] energy-occ=0.877 eff-grad=0.351 fresh=0.9 seen=[0.5, 0.5, 0.42, 0.62, 0.38, 0.68, 0.68, 0.78, 0.95, 0.9] hop=0.201
+    [nswrite-act  seed 0 r10] energy-occ=0.882 eff-grad=0.343 fresh=0.85 seen=[0.45, 0.4, 0.42, 0.5, 0.38, 0.62, 0.57, 0.57, 0.85, 0.78, 0.85] hop=0.215
+    [nswrite-act  seed 0 r11] energy-occ=0.884 eff-grad=0.341 fresh=0.97 seen=[0.45, 0.5, 0.4, 0.47, 0.38, 0.5, 0.57, 0.6, 0.85, 0.72, 0.8, 0.97] hop=0.205
+
+== BAKEOFF (mean/1 seeds done, 12 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  nswrite    0.80->0.45 (+0.350)            0.602     0.479     0.97    0.205->0.205  False False   False
+             mean-forget(all-streams)=+0.267 age-curve(final seen S0..Sn)=[0.45, 0.5, 0.4, 0.475, 0.375, 0.5, 0.575, 0.6, 0.85, 0.725, 0.8, 0.975]
+             energy-occ=[0.0, 0.683, 0.741, 0.8, 0.836, 0.86, 0.888, 0.883, 0.879, 0.877, 0.882, 0.884] eff-grad=[1.0, 0.563, 0.509, 0.447, 0.405, 0.374, 0.334, 0.342, 0.348, 0.351, 0.343, 0.341] fresh-diag=[0.8, 0.875, 0.95, 1.0, 0.575, 0.9, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975]
+RESULT_JSON_1SEED {"nswrite": {"gradient_occupancy_final": 0.884, "effective_grad_final": 0.341, "occupancy_curve": [0.0, 0.683, 0.741, 0.8, 0.836, 0.86, 0.888, 0.883, 0.879, 0.877, 0.882, 0.884], "effective_grad_curve": [1.0, 0.563, 0.509, 0.447, 0.405, 0.374, 0.334, 0.342, 0.348, 0.351, 0.343, 0.341], "fresh_diagonal": [0.8, 0.875, 0.95, 1.0, 0.575, 0.9, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975], "oldest_S0_fresh": 0.8, "oldest_S0_final": 0.45, "oldest_S0_forgetting": 0.35000000000000003, "oldest_S0_para_final": 0.325, "all_seen_final": 0.6020833333333333, "all_para_final": 0.4791666666666667, "mean_forgetting_all_streams": 0.26666666666666666, "age_curve_final_seen": [0.45, 0.5, 0.4, 0.475, 0.375, 0.5, 0.575, 0.6, 0.85, 0.725, 0.8, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 357869568.0, "optimizer_steps": 1200.0, "wall_clock_seconds": 328.3955476284027, "peak_vram_mb": 5648.859648, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}}
+
+[all seeds done]
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 4090) rounds=12 per=40 grow=+2L mem=800 steps=300 seeds=1 arms=['nswrite'] lora_r=8
+  seed 0: streams=[40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.88, 0.95, 1.0, 0.57, 0.93, 0.78, 0.85, 0.98, 0.9, 0.85, 0.98] restarts=[0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1]
+    [nswrite-act  seed 0 r0] energy-occ=0.0 eff-grad=1.0 fresh=0.82 seen=[0.82] hop=0.205
+    [nswrite-act  seed 0 r1] energy-occ=0.691 eff-grad=0.556 fresh=0.88 seen=[0.75, 0.88] hop=0.229
+    [nswrite-act  seed 0 r2] energy-occ=0.763 eff-grad=0.487 fresh=0.95 seen=[0.75, 0.88, 0.95] hop=0.194
+    [nswrite-act  seed 0 r3] energy-occ=0.806 eff-grad=0.441 fresh=1.0 seen=[0.68, 0.9, 0.9, 1.0] hop=0.198
+    [nswrite-act  seed 0 r4] energy-occ=0.884 eff-grad=0.341 fresh=0.57 seen=[0.75, 0.8, 0.7, 0.78, 0.57] hop=0.208
+    [nswrite-act  seed 0 r5] energy-occ=0.886 eff-grad=0.338 fresh=0.93 seen=[0.62, 0.82, 0.72, 0.85, 0.55, 0.93] hop=0.191
+    [nswrite-act  seed 0 r6] energy-occ=0.881 eff-grad=0.344 fresh=0.78 seen=[0.65, 0.7, 0.75, 0.9, 0.57, 0.9, 0.78] hop=0.208
+    [nswrite-act  seed 0 r7] energy-occ=0.89 eff-grad=0.332 fresh=0.85 seen=[0.57, 0.72, 0.75, 0.93, 0.5, 0.82, 0.8, 0.85] hop=0.201
+    [nswrite-act  seed 0 r8] energy-occ=0.886 eff-grad=0.338 fresh=0.97 seen=[0.55, 0.75, 0.68, 0.6, 0.47, 0.85, 0.78, 0.85, 0.97] hop=0.198
+    [nswrite-act  seed 0 r9] energy-occ=0.893 eff-grad=0.327 fresh=0.9 seen=[0.45, 0.57, 0.38, 0.55, 0.4, 0.7, 0.68, 0.68, 0.95, 0.9] hop=0.208
+    [nswrite-act  seed 0 r10] energy-occ=0.909 eff-grad=0.302 fresh=0.85 seen=[0.57, 0.53, 0.55, 0.55, 0.5, 0.68, 0.57, 0.68, 0.88, 0.8, 0.85] hop=0.194
+    [nswrite-act  seed 0 r11] energy-occ=0.885 eff-grad=0.339 fresh=0.97 seen=[0.5, 0.62, 0.47, 0.6, 0.45, 0.68, 0.57, 0.5, 0.82, 0.8, 0.82, 0.97] hop=0.212
+
+== BAKEOFF (mean/1 seeds done, 12 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  nswrite    0.82->0.50 (+0.325)            0.652     0.573     0.97    0.205->0.212  False False   False
+             mean-forget(all-streams)=+0.221 age-curve(final seen S0..Sn)=[0.5, 0.625, 0.475, 0.6, 0.45, 0.675, 0.575, 0.5, 0.825, 0.8, 0.825, 0.975]
+             energy-occ=[0.0, 0.691, 0.763, 0.806, 0.884, 0.886, 0.881, 0.89, 0.886, 0.893, 0.909, 0.885] eff-grad=[1.0, 0.556, 0.487, 0.441, 0.341, 0.338, 0.344, 0.332, 0.338, 0.327, 0.302, 0.339] fresh-diag=[0.825, 0.875, 0.95, 1.0, 0.575, 0.925, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975]
+RESULT_JSON_1SEED {"nswrite": {"gradient_occupancy_final": 0.885, "effective_grad_final": 0.339, "occupancy_curve": [0.0, 0.691, 0.763, 0.806, 0.884, 0.886, 0.881, 0.89, 0.886, 0.893, 0.909, 0.885], "effective_grad_curve": [1.0, 0.556, 0.487, 0.441, 0.341, 0.338, 0.344, 0.332, 0.338, 0.327, 0.302, 0.339], "fresh_diagonal": [0.825, 0.875, 0.95, 1.0, 0.575, 0.925, 0.775, 0.85, 0.975, 0.9, 0.85, 0.975], "oldest_S0_fresh": 0.825, "oldest_S0_final": 0.5, "oldest_S0_forgetting": 0.32499999999999996, "oldest_S0_para_final": 0.45, "all_seen_final": 0.6520833333333333, "all_para_final": 0.5729166666666667, "mean_forgetting_all_streams": 0.22083333333333333, "age_curve_final_seen": [0.5, 0.625, 0.475, 0.6, 0.45, 0.675, 0.575, 0.5, 0.825, 0.8, 0.825, 0.975], "newest_stream_final": 0.975, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.21180555555555555, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 357869568.0, "optimizer_steps": 3600.0, "wall_clock_seconds": 935.1222729682922, "peak_vram_mb": 5649.998336, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}}
+
+[all seeds done]
