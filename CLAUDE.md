@@ -22,9 +22,13 @@ file, codex (gpt-5.5, xhigh) reads it and replies into `qa/codex/`. So the excha
    **`git push`** all changes (code, `docs/cloud_results/`, `FINDINGS.md`, `qa/`).
 6. **Review results → plan the next round → continue.** Keep going for the full autonomous window.
 
-Keep replies substantive (refine/push back, don't just agree). **`qa/claude` ↔ `qa/codex` dialogue
-files may be written entirely in English** (codex-facing technical exchange); only messages to the
-user are in 繁體中文. RunPod key lives at `~/.runpod_key` (chmod 600) — **NEVER echo it**.
+Keep replies substantive (refine/push back, don't just agree). **codex is a peer, not an authority —
+its answers can be WRONG.** Critically evaluate every codex claim: verify the math/logic, check it
+against the repo's evidence, and push back or propose alternatives when it's mistaken or when a
+question is genuinely open. Treat open research questions as peer discussion to reason through
+together, not as instructions to implement. Don't defer by default; don't agree by default either.
+**`qa/claude` ↔ `qa/codex` dialogue files may be written entirely in English** (codex-facing technical
+exchange); only messages to the user are in 繁體中文. RunPod key lives at `~/.runpod_key` (chmod 600) — **NEVER echo it**.
 Non-Blackwell GPUs only (RTX 4090/A-series; 5090 sm_120 fails cu124).
 
 ## Research orientation — continual learning is an UNSOLVED frontier (standing directive)
