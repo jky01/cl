@@ -552,9 +552,10 @@ def main():
             cap = M.shape[1] if cap_policy == "noevict" else rankcap
             return q[:, :cap].contiguous()
 
+        ns_lr = float(os.environ.get("BK_NS_LR", LR))     # drift sweep: lower LR = less per-step drift
         for r in range(ROUNDS):
             S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
-            opt = torch.optim.AdamW(trainable, lr=LR)
+            opt = torch.optim.AdamW(trainable, lr=ns_lr)
             dense.train()
             occ_acc = 0.0; occ_n = 0
             for _ in range(STEPS):
