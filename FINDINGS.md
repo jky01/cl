@@ -103,10 +103,15 @@
 > awareness** — the random-basis control does nothing (0.490≈naive) while the activation basis captures
 > **35× the gradient energy** (occupancy 0.92 vs 0.20) and gives the whole gain; (3) **zero plasticity
 > cost** — newest tied at 0.975 across all arms, so nswrite *dominates* the stability–plasticity frontier;
-> (4) **occupancy saturates 0.74→0.92** over rounds and the residual forgetting tracks it — the first
-> *measured* write-subspace-saturation signal, i.e. the principled point where growth becomes necessary
-> (phase-2: depth vs width/parallel-adapter growth). First attributable, replay-free, plasticity-preserving
-> reduction of catastrophic forgetting in this project; still below replay (not a full solution).
+> (4) occupancy rises 0.74→0.92, but **R36-I phase-2a (24 streams) shows this is NOT a capacity wall**:
+> eff-grad stays ~0.22 (not →0) and newest stays high (0.68–1.0) while old retention degrades to ~0.33 —
+> i.e. writable gradient and plasticity are intact; the failure is **protection-quality** (the
+> input-activation null space preserves the hidden response but not the answer-token margin; per-round
+> drift accumulates worst for the oldest, which — under old-first `update_U` — is the *most*-protected
+> stream). So occupancy alone is NOT a growth-necessity signal (needs occupancy + low eff-grad + newest
+> failure, which don't co-occur here). **Growth is off**; the next line is answer-margin-safe writing
+> (`margin` bilinear arm: protect `V_out V_outᵀ·G·U_in U_inᵀ`) + cap/no-evict. First attributable,
+> replay-free, plasticity-preserving forgetting reduction in this project; still below replay.
 >
 > **Honest bottom line (R19-R35+):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream

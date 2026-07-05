@@ -442,9 +442,15 @@ def main():
     # mode="act": U from old activations (the method). mode="rand": random-basis control of matched
     # rank (attributes any gain to interference-awareness, not mere gradient shrinkage).
     # Reports gradient OCCUPANCY ||G·UUᵀ||/||G|| — the future growth-saturation signal.
+    # margin modes ("margin"/"marginrandv") also protect the OUTPUT directions the old answer-margin is
+    # sensitive to: bilinear projection V_out V_outᵀ·G·U_in U_inᵀ removes only gradient that both acts on
+    # old inputs AND moves old answer-margin directions (targets the token, not just the hidden response).
+    # cap_policy: "old_first" (current QR-truncation) or "noevict" (keep full union rank).
     def run_nswrite(seed, streams, scaffolds, mode):
         kper = int(os.environ.get("BK_NS_KPER", 40))
         rankcap = int(os.environ.get("BK_NS_RANK", 256))
+        cap_policy = os.environ.get("BK_NS_CAP_POLICY", "old_first")
+        margin_mode = mode in ("margin", "marginrandv")
         dense = load_frozen()
         base_hop = hop_acc(dense)
         set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (no growth)
@@ -456,7 +462,8 @@ def main():
                     if mod.bias is not None:
                         mod.bias.requires_grad_(False)     # freeze bias (shared shift over all inputs)
         trainable = [p for p in dense.parameters() if p.requires_grad]
-        Umap = {id(m): None for m in targets}
+        Umap = {id(m): None for m in targets}             # input-side basis
+        Vmap = {id(m): None for m in targets}             # output-side answer-margin basis (margin modes)
         rng = random.Random(seed * 13 + 53)
         hist = []; occ_hist = []; eff_hist = []; opt_steps = 0
 
@@ -475,6 +482,56 @@ def main():
                 h.remove()
             return {mid: torch.cat(v, 0) for mid, v in store.items()}
 
+        def collect_Vout(facts, k):
+            # per-module d(margin)/d(y_last) over COMMITTED-CORRECT old facts (eval-only training state);
+            # SVD of the stacked (not averaged) sensitivity vectors -> low-rank output basis V_out.
+            items = []
+            for f in facts:
+                gt = one_tok(f[2])
+                items.append((p_seen(*f), gt)); items.append((p_para(*f), gt))
+            store = {id(m): [] for m in targets}
+            for i in range(0, len(items), 64):
+                chunk = items[i:i + 64]
+                e = tok([p for p, _ in chunk], return_tensors="pt", padding=True).to(device)
+                gold = torch.tensor([g for _, g in chunk], device=device)
+                cap = {}
+                def mk(mid):
+                    def hook(module, inp, output):
+                        output.retain_grad(); cap[mid] = output
+                    return hook
+                handles = [m.register_forward_hook(mk(id(m))) for m in targets]
+                logits = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                gl = logits.gather(1, gold[:, None]).squeeze(1)
+                masked = logits.clone(); masked.scatter_(1, gold[:, None], float("-inf"))
+                correct = (logits.argmax(1) == gold)
+                margin = ((gl - masked.max(1).values) * correct.float()).sum()
+                dense.zero_grad()
+                if margin.requires_grad:
+                    margin.backward()
+                for m in targets:
+                    y = cap.get(id(m))
+                    if y is not None and y.grad is not None:
+                        gy = y.grad[:, -1, :].detach().float()[correct]
+                        if gy.shape[0] > 0:
+                            store[id(m)].append(gy)
+                for hh in handles:
+                    hh.remove()
+            out = {}
+            for mid, lst in store.items():
+                if not lst:
+                    out[mid] = None; continue
+                A = torch.cat(lst, 0)
+                if mode == "marginrandv":
+                    q, _ = torch.linalg.qr(torch.randn(A.shape[1], min(k, A.shape[1]), device=device))
+                    out[mid] = q
+                else:
+                    try:
+                        _u, _s, Vh = torch.linalg.svd(A, full_matrices=False)
+                        out[mid] = Vh[:min(k, Vh.shape[0])].t().contiguous()
+                    except Exception:
+                        out[mid] = None
+            return out
+
         def basis_from(A, k):
             if mode == "none":                            # naive_fixed: no basis, no projection
                 return None
@@ -492,7 +549,8 @@ def main():
                 return Uold
             M = newB if Uold is None else torch.cat([Uold, newB], 1)
             q, _ = torch.linalg.qr(M)
-            return q[:, :rankcap].contiguous()
+            cap = M.shape[1] if cap_policy == "noevict" else rankcap
+            return q[:, :cap].contiguous()
 
         for r in range(ROUNDS):
             S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
@@ -520,21 +578,28 @@ def main():
                 gn = gpn = 0.0
                 for m in targets:
                     U = Umap[id(m)]
-                    if m.weight.grad is None:
+                    if m.weight.grad is None or U is None:
                         continue
                     g = m.weight.grad
-                    if U is not None:
+                    V = Vmap[id(m)]
+                    if margin_mode and V is not None:         # bilinear: only old-input × old-margin-output
+                        proj = V @ ((V.t() @ g) @ U) @ U.t()
+                    else:                                     # input-only null space
                         proj = (g @ U) @ U.t()
-                        gpn += proj.pow(2).sum().item(); gn += g.pow(2).sum().item()
-                        m.weight.grad = g - proj
+                    gpn += proj.pow(2).sum().item(); gn += g.pow(2).sum().item()
+                    m.weight.grad = g - proj
                 if gn > 0:
                     occ_acc += gpn / gn; occ_n += 1
                 torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
             dense.eval()
-            if mode != "none":                            # commit: update protected basis U
+            if mode != "none":                            # commit: update protected basis U (and V_out)
                 acts = collect_inputs([p_seen(*f) for f in S] + [p_para(*f) for f in S])
                 for m in targets:
                     Umap[id(m)] = update_U(Umap[id(m)], basis_from(acts[id(m)], kper))
+                if margin_mode:
+                    vout = collect_Vout(S, kper)
+                    for m in targets:
+                        Vmap[id(m)] = update_U(Vmap[id(m)], vout[id(m)])
             energy = occ_acc / max(occ_n, 1)              # ||G·UUᵀ||²/||G||² (gradient ENERGY fraction)
             occ_hist.append(round(energy, 3))
             eff_hist.append(round((max(0.0, 1.0 - energy)) ** 0.5, 3))  # ||G(I-UUᵀ)||/||G|| norm ratio
@@ -559,11 +624,13 @@ def main():
         "naive_fixed": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=False),
         "nswrite":   dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "nswrite_rand": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "margin":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "marginrandv": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
-    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed"))
+    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed", "margin", "marginrandv"))
 
     def agg(arm):
         runs = results[arm]
@@ -660,6 +727,10 @@ def main():
                 out_a = run_nswrite(seed, streams, scaffolds, "rand")
             elif arm == "naive_fixed":
                 out_a = run_nswrite(seed, streams, scaffolds, "none")
+            elif arm == "margin":
+                out_a = run_nswrite(seed, streams, scaffolds, "margin")
+            elif arm == "marginrandv":
+                out_a = run_nswrite(seed, streams, scaffolds, "marginrandv")
             else:
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
