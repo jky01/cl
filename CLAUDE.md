@@ -22,6 +22,12 @@ file, codex (gpt-5.5, xhigh) reads it and replies into `qa/codex/`. So the excha
    **`git push`** all changes (code, `docs/cloud_results/`, `FINDINGS.md`, `qa/`).
 6. **Review results → plan the next round → continue.** Keep going for the full autonomous window.
 
+**Attach file paths in every codex exchange (user directive 2026-07-06):** when sharing execution
+results, cite the repo-relative script path(s) AND the log/artifact path(s) (e.g. `s2/lifecycle_bakeoff.py`,
+`docs/cloud_results/kg_*.log`) so codex can read the exact files (it runs `-C /home/aa/cl`). Before
+running a code change, post the changed file path(s) to codex for peer review when practical (review
+gate before spending a pod). **Pod GPU preference: RTX 4090 > 5090 > 3090** (5090 needs the cu128 image).
+
 Keep replies substantive (refine/push back, don't just agree). **codex is a peer, not an authority —
 its answers can be WRONG.** Critically evaluate every codex claim: verify the math/logic, check it
 against the repo's evidence, and push back or propose alternatives when it's mistaken or when a
