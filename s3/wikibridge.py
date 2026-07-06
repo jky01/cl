@@ -131,7 +131,7 @@ def build_squad(seed, base):
     rng = random.Random(3000 + seed); rng.shuffle(titles)
     kept_articles = []
     for title in titles:
-        if len(kept_articles) >= STREAMS * ARTS:
+        if len(kept_articles) >= STREAMS * ARTS * 3:      # over-select; para-screen prunes hard
             break
         rows = by_title[title]
         # one long context = first paragraph(s); collect candidate QAs with short answers
