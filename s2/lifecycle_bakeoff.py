@@ -693,6 +693,141 @@ def main():
                     occupancy_curve=occ_hist, effective_grad_curve=eff_hist,
                     realized_leak_curve=leak_hist)
 
+    # ---------------- ogd arm (answer-level Orthogonal Gradient Descent, rehearsal-free) ----------
+    # R36-C: the STRONGEST rehearsal-free primitive, distinct from nswrite. Instead of protecting each
+    # Linear's LOCAL input response (ΔW·U≈0, per-module), store a low-rank basis Q of the old-stream
+    # ANSWER-MARGIN gradients w.r.t. ALL trainable params jointly, and project the flattened update off Q
+    # (g <- g - Q Qᵀ g). This is a FIRST-ORDER protection of the old ANSWER objective itself: the stored
+    # directions route through the later nonlinearity, norms, residual stream and lm_head — coupling that
+    # the per-module V⊗U factorization (nswrite/margin) cannot represent. NOTE (design decision, see
+    # qa/claude 2026-07-06): blockwise per-tensor OGD is NOT run — a linear layer's per-sample margin grad
+    # is outer(g_y, x), so a per-tensor basis spans a SUBSET of margin-mode's V_out⊗U_in, which R36-I
+    # already showed retains WORSE than blunt input-only nswrite. Only the JOINT flattened basis is a
+    # genuinely different (stronger) test. Memory: Q is [P≈29.8M, R] fp16 on GPU (R=64 → 3.8GB); per-stream
+    # merge uses a Gram/eigh trick to avoid any giant SVD/QR. Only Q survives across rounds (training state,
+    # no old prompts/answers/gold); inference is the single dense checkpoint.
+    def run_ogd(seed, streams, scaffolds):
+        kper = int(os.environ.get("BK_OGD_KPER", 24))     # new basis dirs kept per stream
+        rankcap = int(os.environ.get("BK_OGD_RANK", 64))  # total Q rank cap (memory: 119MB/rank fp32)
+        ncollect = int(os.environ.get("BK_OGD_NCOL", 48)) # committed-correct margin samples per stream
+        ogd_lr = float(os.environ.get("BK_OGD_LR", LR))
+        dense = load_frozen()
+        base_hop = hop_acc(dense)
+        set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (all params protected)
+        trainable = [p for p in dense.parameters() if p.requires_grad]
+        shapes = [p.shape for p in trainable]
+        sizes = [p.numel() for p in trainable]
+        P = sum(sizes); offs = [0]
+        for s in sizes:
+            offs.append(offs[-1] + s)
+        rng = random.Random(seed * 13 + 71)
+        hist = []; occ_hist = []; eff_hist = []; opt_steps = 0
+        Q = None                                          # [P, R] fp16 orthonormal answer-grad basis
+
+        def flat_grad():
+            return torch.cat([(p.grad if p.grad is not None else torch.zeros_like(p)).reshape(-1)
+                              for p in trainable]).float()
+
+        def write_grad(g):
+            for p, a, b in zip(trainable, offs[:-1], offs[1:]):
+                p.grad = g[a:b].view_as(p).clone()
+
+        def margin_grad(prompt, gold):
+            # d(gold_margin)/d(theta_trainable) for ONE committed-correct old fact -> flattened [P] fp16
+            e = tok([prompt], return_tensors="pt", padding=True).to(device)
+            logits = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()[0]
+            if logits.argmax().item() != gold:            # only protect what the model actually knows
+                return None
+            masked = logits.clone(); masked[gold] = float("-inf")
+            margin = logits[gold] - masked.max()
+            dense.zero_grad()
+            margin.backward()
+            v = flat_grad()
+            dense.zero_grad()
+            n = v.norm()
+            return (v / n).half() if n > 0 else None
+
+        def collect_Q(S):
+            items = []
+            for f in S:
+                gt = one_tok(f[2])
+                items += [(p_seen(*f), gt), (p_para(*f), gt)]
+            rng.shuffle(items)
+            cols = []
+            for pr, gt in items:
+                if len(cols) >= ncollect:
+                    break
+                v = margin_grad(pr, gt)
+                if v is not None:
+                    cols.append(v)
+            if not cols:
+                return None
+            A = torch.stack(cols, 1)                       # [P, n] fp16
+            G = (A.transpose(0, 1) @ A).float()            # [n, n] (fp32-accumulated)
+            evals, evecs = torch.linalg.eigh(G)
+            k = min(kper, A.shape[1])
+            E = evecs[:, -k:]; s = evals[-k:].clamp_min(1e-8).sqrt()
+            return ((A @ E.half()) / s.half()).contiguous()  # [P, k] fp16, ~orthonormal
+
+        def merge_Q(Qold, Qnew):
+            if Qnew is None:
+                return Qold
+            C = Qnew if Qold is None else torch.cat([Qold, Qnew], 1)   # [P, m] fp16
+            G = (C.transpose(0, 1) @ C).float()
+            evals, evecs = torch.linalg.eigh(G)
+            k = min(rankcap, C.shape[1])
+            E = evecs[:, -k:]; s = evals[-k:].clamp_min(1e-8).sqrt()
+            return ((C @ E.half()) / s.half()).contiguous()
+
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            opt = torch.optim.AdamW(trainable, lr=ogd_lr, weight_decay=0.01)
+            dense.train()
+            occ_acc = 0.0; occ_n = 0
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                ea = tok(ap, return_tensors="pt", padding=True).to(device)
+                sa = dense.lm_head(dense.model(**ea, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    ba = base_logits(ea)
+                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                opt.zero_grad(); loss.backward()
+                if Q is not None:                          # OGD: project joint gradient off old-answer basis
+                    g = flat_grad()
+                    gn = g.pow(2).sum().item()
+                    coef = Q.transpose(0, 1) @ g.half()    # [R]
+                    proj = (Q @ coef).float()
+                    g = g - proj
+                    write_grad(g)
+                    if gn > 0:
+                        occ_acc += proj.pow(2).sum().item() / gn; occ_n += 1
+                torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+            dense.eval()
+            Q = merge_Q(Q, collect_Q(S))                   # commit: fold this stream's answer dirs into Q
+            energy = occ_acc / max(occ_n, 1)
+            occ_hist.append(round(energy, 3))
+            eff_hist.append(round((max(0.0, 1.0 - energy)) ** 0.5, 3))
+            seen, para, h = eval_all(dense, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [ogd       seed {seed} r{r}] rank={0 if Q is None else Q.shape[1]} "
+                  f"energy-occ={occ_hist[-1]} eff-grad={eff_hist[-1]} fresh={round(seen[r],2)} "
+                  f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        del dense, Q; torch.cuda.empty_cache()
+        tp = n_trainable_count(trainable)
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
+                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist)
+
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "naive":     dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
@@ -705,11 +840,12 @@ def main():
         "nswrite_rand": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "margin":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "marginrandv": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
-    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed", "margin", "marginrandv"))
+    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed", "margin", "marginrandv", "ogd"))
 
     def agg(arm):
         runs = results[arm]
@@ -815,6 +951,8 @@ def main():
                 out_a = run_nswrite(seed, streams, scaffolds, "margin")
             elif arm == "marginrandv":
                 out_a = run_nswrite(seed, streams, scaffolds, "marginrandv")
+            elif arm == "ogd":
+                out_a = run_ogd(seed, streams, scaffolds)
             else:
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
