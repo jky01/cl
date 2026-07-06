@@ -288,7 +288,7 @@ def main():
 
     # ---------------- consolidation-style arms (ours / naive / continued / loramerge / oracle) ---
     # scaffolds: shared per-(seed,stream) teacher list (train_memory once, reuse across arms).
-    def run_consolidate(seed, streams, kind, scaffolds):
+    def run_consolidate(seed, streams, kind, scaffolds, replay_k=None):
         dense = load_frozen()
         base_hop = hop_acc(dense)
         rng = random.Random(seed * 13 + abs(hash(kind)) % 97)
@@ -298,7 +298,7 @@ def main():
         # (BK_REPLAY_K). K=-1 (default) = full replay (unchanged ours/oracle). K=0 => empty pool => naive
         # within the consolidate loop. Fixed subset (stable per-stream RNG, NOT hash-based) so the stored
         # footprint is exactly K/stream, not a stochastic approximation to full replay.
-        REPLAY_K = int(os.environ.get("BK_REPLAY_K", -1))
+        REPLAY_K = replay_k if replay_k is not None else int(os.environ.get("BK_REPLAY_K", -1))
         replay_subset = None
         if REPLAY_K >= 0:
             replay_subset = []
@@ -909,7 +909,9 @@ def main():
     }
 
     results = {a: [] for a in ARMS}
-    need_scaffold = any(a in ARMS for a in ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand", "naive_fixed", "margin", "marginrandv", "ogd"))
+    _scaf_arms = ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand",
+                  "naive_fixed", "margin", "marginrandv", "ogd")
+    need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") for a in ARMS)
 
     def agg(arm):
         runs = results[arm]
@@ -958,7 +960,8 @@ def main():
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
-            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **flags[arm])
+            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep,
+            **(flags["ours"] if arm.startswith("ours_k") else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
 
@@ -1026,7 +1029,9 @@ def main():
                 out_a = run_nswrite(seed, streams, scaffolds, "marginrandv")
             elif arm == "ogd":
                 out_a = run_ogd(seed, streams, scaffolds)
-            else:
+            elif arm.startswith("ours_k"):               # R36-A: ours_k<K> = ours with fixed-K replay,
+                out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_k=int(arm[6:]))
+            else:                                          # sweep all K in ONE process (scaffolds shared)
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
             out_a["peak_vram_mb"] = (torch.cuda.max_memory_allocated() / 1e6) if device == "cuda" else 0
