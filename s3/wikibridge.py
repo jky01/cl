@@ -308,11 +308,12 @@ def main():
     print("[done]", flush=True)
 
 def run_ingest(base, streams, arm, seed):
-    use_qa = arm == "compact_cpt_qa"
+    use_qa = arm.startswith("compact_cpt_qa")          # ..._k<K> footprint variants are still QA arms
     replay = arm.startswith("compact")
     M = load_model()                                  # M_0 = base copy (trainable)
     rng = random.Random(seed * 100003 + sum(bytes(arm, "utf8")))   # stable seed (no PYTHONHASHSEED dep)
-    REPLAY_K = int(os.environ.get("WB_REPLAY_K", -1))  # -1=replay ALL committed; K>=0 = K QA/article
+    # -1=replay ALL committed; K>=0 = K committed QA/article (footprint). arm suffix _k<K> overrides env.
+    REPLAY_K = int(arm.split("_k")[-1]) if "_k" in arm else int(os.environ.get("WB_REPLAY_K", -1))
     committed = []; replay_pool = []; nonreplay_pool = []   # committed old QA; footprint split
     per_stream = []
     for t in range(len(streams)):
@@ -398,6 +399,9 @@ def dump(results, nseeds):
             return round(sum(r.get(k, 0) for r in rs) / len(rs), 3)
         summ[arm] = dict(final_em=av("final_em"), final_f1=av("final_f1"),
                          final_para_em=av("final_para_em"), final_para_f1=av("final_para_f1"),
+                         replay_k=rs[-1].get("replay_k"), n_replayed=rs[-1].get("n_replayed"),
+                         n_nonreplayed=rs[-1].get("n_nonreplayed"),
+                         replayed_para_em=av("replayed_para_em"), nonreplayed_para_em=av("nonreplayed_para_em"),
                          per_stream=rs[-1].get("per_stream"))
     json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS,
                               actual_streams=ACTUAL_STREAMS, survived_articles=SURVIVED_ARTS),
