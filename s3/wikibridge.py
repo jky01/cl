@@ -97,7 +97,7 @@ def score(model, qas, template=QT, rag=False):
 # ------------------------- data: SQuAD hard-tail streams (base-screened) -------------------------
 def build_squad(seed, base):
     from datasets import load_dataset
-    ds = load_dataset("squad", split="train")
+    ds = load_dataset("rajpurkar/squad", split="train")
     by_title = collections.defaultdict(list)
     for r in ds:
         by_title[r["title"]].append(r)
@@ -145,7 +145,7 @@ def build_cf(seed, base):
     """Take base-hard-ish SQuAD numeric-answer QAs, replace the numeric answer in context+answer with a
     fake number -> the edited answer cannot be pre-known. Reports original-answer lure separately."""
     from datasets import load_dataset
-    ds = load_dataset("squad", split="train")
+    ds = load_dataset("rajpurkar/squad", split="train")
     rng = random.Random(7000 + seed)
     by_title = collections.defaultdict(list)
     for r in ds:
