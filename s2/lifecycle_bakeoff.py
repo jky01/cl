@@ -288,10 +288,13 @@ def main():
 
     # ---------------- consolidation-style arms (ours / naive / continued / loramerge / oracle) ---
     # scaffolds: shared per-(seed,stream) teacher list (train_memory once, reuse across arms).
+    # stable per-kind RNG offset (script-local determinism; not dependent on PYTHONHASHSEED / string hash)
+    KIND_OFFSET = {"ours": 11, "naive": 17, "continued": 19, "loramerge": 23, "oracle": 29}
+
     def run_consolidate(seed, streams, kind, scaffolds, replay_k=None):
         dense = load_frozen()
         base_hop = hop_acc(dense)
-        rng = random.Random(seed * 13 + abs(hash(kind)) % 97)
+        rng = random.Random(seed * 13 + KIND_OFFSET.get(kind, 41))
         hist = []; opt_steps = 0; tparams = []
         replay = kind in ("ours", "oracle")            # ours=self-distill(no gold); oracle=gold-old CE
         # R36-A minimal-footprint rehearsal: replay only a FIXED committed K-subset per prior stream
