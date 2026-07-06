@@ -144,8 +144,12 @@
 > nswrite is the first attributable rehearsal-free, no-inference-memory improvement over naive writing;
 > write-budgeting adds a big short-horizon gain; but the whole family has a long-horizon representational
 > ceiling (~0.40@24) far below replay; optimizer-leakage and capacity are ruled out; margin and functional
-> editing don't cross it. **Replay-consolidation (R33/R35) remains the proven durable knowledge-into-weights
-> method at this scale.**
+> editing don't cross it. **R36-C now also rules out the strongest first-order primitive** — global
+> answer-gradient OGD (both margin and canonical CE-to-gold, exact realized-ΔΘ semantics) is ≈ naive
+> (all-seen 0.408 vs naive 0.390 vs nswrite 0.673) because it captures only ~5% of the write-gradient at
+> the standard config and is rank-inefficient + memory-bound. So the *entire* first-order protect-by-
+> direction family is bounded well below replay. **Replay-consolidation (R33/R35/EV) remains the proven
+> durable knowledge-into-weights method at this scale; next primitive = minimal-footprint rehearsal (A).**
 >
 > **R36-EV (EXTERNAL VALIDITY of the replay-consolidation positive) — PASS** `s2/lifecycle_bakeoff.py`
 > `BK_DATA=kg`, 2-seed, 6 streams × 40 facts, log `docs/cloud_results/kg_bakeoff_r36ev.log`. Re-ran the
@@ -167,6 +171,39 @@
 > trails the gold-old oracle specifically on *paraphrase generalization*, the known honest cost of
 > zero-gold self-distill (R25/R35). Net: R33/R35 external validity confirmed; replay-consolidation is the
 > robust positive across both synthetic and KG-shaped data.
+>
+> **R36-C (rehearsal-free: answer-level OGD — the STRONGEST first-order primitive) — CLEAN NEGATIVE**
+> `s2/lifecycle_bakeoff.py` `run_ogd`, logs `docs/cloud_results/ogd_ce_pilot_r36c.log` (+ smoke/rank
+> scans `ogd_{ce_smoke,rank64,rank96,rankscan}_r36c.log`), 2-seed 6×40. To close (not strawman) the
+> rehearsal-free frontier, we tested the one primitive genuinely *different* from nswrite's per-module
+> input-null-space: **joint flattened Orthogonal Gradient Descent** — store a low-rank basis `Q` of the
+> old-answer gradient w.r.t. ALL trainable params jointly, project `g ← g − QQᵀg` (routes through the
+> nonlinearity/norms/residual/lm_head; couples modules, which the per-module `V⊗U` factorization cannot).
+> Two objects: `margin` (logit_gold−runnerup) and **`ce_gold`** (−logP(gold), the canonical OGD old-task
+> loss). **codex review-gate caught a real confound** — projecting the gradient then AdamW (precond +
+> decoupled decay) does NOT keep the *realized* ΔΘ ⊥ Q — fixed by reprojecting the actual ΔΘ each step
+> (exact-OGD; `upd-leak ≈ 0.01`, so results are not a semantics artifact). **Result: OGD ≈ naive.** At the
+> standard 6×40 config: **ogd_ce all-seen 0.408 / oldest-forget +0.762** vs **naive_fixed 0.390 / +0.762**
+> (Δ +0.018, far below the +0.15-vs-naive lower-bound gate and the +0.05-vs-nswrite gate), while
+> **nswrite 0.673 / +0.500** (occ 0.925) protects and **ours(replay) 0.877 / −0.013** is the reference.
+> `margin`-OGD is the same (occ 0.052 ≈ naive). Mechanism: at 6×40 the joint answer-gradient basis
+> captures only **~5% of the write-gradient energy** (occ curve ~0.03–0.05, flat as Q grows to rank 64) —
+> the direction that reduces new-stream loss barely overlaps the old-answer-gradient subspace, so
+> projecting it off changes ~nothing (eff-grad 0.975, plasticity untouched; newest tied 0.887). **Two
+> structural limits:** (1) *rank-inefficiency* — a rank-64 GLOBAL basis is negligible in 29.8M-dim (occ
+> IS ~36,000× a random subspace, so structure exists, but covering the write direction needs many hundreds
+> of dims); a per=80 diagnostic reached occ 0.18 but retention there was untested and per=40 is the
+> program's standard config. (2) *memory-bound* — the per-stream basis merge is O(P·rank); rank 96/160
+> **OOM on 32 GB**, and even rank-64 OGD peaks **23 GB** (vs nswrite 5.5 GB). So flattened OGD cannot
+> cheaply reach nswrite's factorized coverage (occ 0.925 at 5.5 GB). **Label hygiene:** OGD uses no old
+> replay and no inference memory, but builds `Q` from committed old prompts + **answer identities at commit
+> time** (`uses_commit_answers=true`) — less label-clean than nswrite, and it still fails. **Conclusion:**
+> the entire *first-order protect-by-direction* rehearsal-free family — per-module input null-space
+> (nswrite), margin-bilinear, and now global answer-gradient OGD — tops out well below replay; the harmful
+> forgetting is nonlinear/higher-order motion no first-order gradient-orthogonality constraint intercepts
+> at affordable rank. This **earns** (not assumes) the rehearsal-free bound and motivates the pivot to
+> **Option A: minimal-footprint rehearsal** (how small can training-time rehearsal get — K stored/
+> self-generated probes per old stream — while retaining), the practical successor to a bounded frontier.
 >
 > **Honest bottom line (R19-R36):** the demonstrated, robust, multi-seed contribution is
 > **consolidation-via-replay into a single dense checkpoint** — a lifelong no-gold stream

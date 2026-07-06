@@ -1,0 +1,96 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['naive_fixed', 'nswrite', 'ogd', 'ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  94%|█████████▍| 272/290 [00:00<00:00, 2707.01it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2687.84it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 1661.07it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2046.88it/s]
+    [nswrite-none seed 0 r0] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=1.0 seen=[1.0] hop=0.226
+    [nswrite-none seed 0 r1] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.97 seen=[0.35, 0.97] hop=0.219
+    [nswrite-none seed 0 r2] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.85 seen=[0.23, 0.53, 0.85] hop=0.198
+    [nswrite-none seed 0 r3] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.97 seen=[0.17, 0.65, 0.75, 0.97] hop=0.194
+    [nswrite-none seed 0 r4] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.72 seen=[0.23, 0.17, 0.15, 0.2, 0.72] hop=0.201
+    [nswrite-none seed 0 r5] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.82 seen=[0.1, 0.25, 0.28, 0.47, 0.47, 0.82] hop=0.205
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 2426.22it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2552.23it/s]
+    [nswrite-act  seed 0 r0] energy-occ=0.0 eff-grad=1.0 dW-leak=0.187 fresh=1.0 seen=[1.0] hop=0.226
+    [nswrite-act  seed 0 r1] energy-occ=0.721 eff-grad=0.528 dW-leak=0.3 fresh=0.97 seen=[1.0, 0.97] hop=0.201
+    [nswrite-act  seed 0 r2] energy-occ=0.835 eff-grad=0.406 dW-leak=0.434 fresh=0.85 seen=[0.68, 0.9, 0.85] hop=0.194
+    [nswrite-act  seed 0 r3] energy-occ=0.865 eff-grad=0.368 dW-leak=0.314 fresh=0.97 seen=[0.85, 0.95, 0.85, 0.97] hop=0.212
+    [nswrite-act  seed 0 r4] energy-occ=0.906 eff-grad=0.307 dW-leak=0.465 fresh=0.72 seen=[0.6, 0.7, 0.8, 0.8, 0.72] hop=0.188
+    [nswrite-act  seed 0 r5] energy-occ=0.935 eff-grad=0.255 dW-leak=0.529 fresh=0.82 seen=[0.42, 0.65, 0.65, 0.68, 0.68, 0.82] hop=0.194
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3037.58it/s]
+    [ogd-ce_gold seed 0 r0] rank=24 ncol=78 energy-occ=0.0 eff-grad=1.0 upd-leak=0.0 fresh=1.0 seen=[1.0] hop=0.215
+    [ogd-ce_gold seed 0 r1] rank=48 ncol=69 energy-occ=0.058 eff-grad=0.971 upd-leak=0.006 fresh=0.97 seen=[0.45, 0.97] hop=0.219
+    [ogd-ce_gold seed 0 r2] rank=64 ncol=62 energy-occ=0.035 eff-grad=0.982 upd-leak=0.0074 fresh=0.85 seen=[0.23, 0.57, 0.85] hop=0.201
+    [ogd-ce_gold seed 0 r3] rank=64 ncol=73 energy-occ=0.029 eff-grad=0.986 upd-leak=0.0067 fresh=0.97 seen=[0.23, 0.68, 0.7, 0.97] hop=0.191
+    [ogd-ce_gold seed 0 r4] rank=64 ncol=54 energy-occ=0.045 eff-grad=0.977 upd-leak=0.0082 fresh=0.72 seen=[0.28, 0.15, 0.2, 0.28, 0.72] hop=0.188
+    [ogd-ce_gold seed 0 r5] rank=64 ncol=62 energy-occ=0.061 eff-grad=0.969 upd-leak=0.0116 fresh=0.82 seen=[0.12, 0.28, 0.25, 0.4, 0.55, 0.82] hop=0.191
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  52%|█████▏    | 152/290 [00:00<00:00, 1519.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2088.19it/s]
+    [ours      seed 0 r0] L=26 seen=[1.0] hop=0.201
+    [ours      seed 0 r1] L=28 seen=[1.0, 0.97] hop=0.212
+    [ours      seed 0 r2] L=30 seen=[1.0, 0.97, 0.85] hop=0.205
+    [ours      seed 0 r3] L=32 seen=[1.0, 0.97, 0.85, 0.97] hop=0.208
+    [ours      seed 0 r4] L=34 seen=[1.0, 0.97, 0.85, 0.97, 0.72] hop=0.198
+    [ours      seed 0 r5] L=36 seen=[1.0, 0.97, 0.85, 0.97, 0.72, 0.82] hop=0.208
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  naive_fixed 1.00->0.10 (+0.900)            0.400     0.350     0.82    0.205->0.205  False False   False
+             mean-forget(all-streams)=+0.492 age-curve(final seen S0..Sn)=[0.1, 0.25, 0.275, 0.475, 0.475, 0.825]
+             energy-occ=[0.0, 0.0, 0.0, 0.0, 0.0, 0.0] eff-grad=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] fresh-diag=[1.0, 0.975, 0.85, 0.975, 0.725, 0.825]
+  nswrite    1.00->0.42 (+0.575)            0.650     0.517     0.82    0.205->0.194  False False   False
+             mean-forget(all-streams)=+0.242 age-curve(final seen S0..Sn)=[0.425, 0.65, 0.65, 0.675, 0.675, 0.825]
+             energy-occ=[0.0, 0.721, 0.835, 0.865, 0.906, 0.935] eff-grad=[1.0, 0.528, 0.406, 0.368, 0.307, 0.255] fresh-diag=[1.0, 0.975, 0.85, 0.975, 0.725, 0.825]
+  ogd        1.00->0.12 (+0.875)            0.404     0.388     0.82    0.205->0.191  False False   False
+             mean-forget(all-streams)=+0.487 age-curve(final seen S0..Sn)=[0.125, 0.275, 0.25, 0.4, 0.55, 0.825]
+             energy-occ=[0.0, 0.058, 0.035, 0.029, 0.045, 0.061] eff-grad=[1.0, 0.971, 0.982, 0.986, 0.977, 0.969] fresh-diag=[1.0, 0.975, 0.85, 0.975, 0.725, 0.825]
+  ours       1.00->1.00 (+0.000)            0.892     0.767     0.82    0.205->0.208  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[1.0, 0.975, 0.85, 0.975, 0.725, 0.825]
+RESULT_JSON_1SEED {"naive_fixed": {"gradient_occupancy_final": 0.0, "effective_grad_final": 1.0, "occupancy_curve": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "effective_grad_curve": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.1, "oldest_S0_forgetting": 0.9, "oldest_S0_para_final": 0.175, "all_seen_final": 0.4000000000000001, "all_para_final": 0.3499999999999999, "mean_forgetting_all_streams": 0.4916666666666667, "age_curve_final_seen": [0.1, 0.25, 0.275, 0.475, 0.475, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 876.7091932296753, "peak_vram_mb": 5420.663296, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": false}, "nswrite": {"gradient_occupancy_final": 0.935, "effective_grad_final": 0.255, "occupancy_curve": [0.0, 0.721, 0.835, 0.865, 0.906, 0.935], "effective_grad_curve": [1.0, 0.528, 0.406, 0.368, 0.307, 0.255], "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.425, "oldest_S0_forgetting": 0.575, "oldest_S0_para_final": 0.3, "all_seen_final": 0.65, "all_para_final": 0.5166666666666667, "mean_forgetting_all_streams": 0.2416666666666666, "age_curve_final_seen": [0.425, 0.65, 0.65, 0.675, 0.675, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19444444444444445, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 879.4649941921234, "peak_vram_mb": 5495.898624, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}, "ogd": {"gradient_occupancy_final": 0.061, "effective_grad_final": 0.969, "occupancy_curve": [0.0, 0.058, 0.035, 0.029, 0.045, 0.061], "effective_grad_curve": [1.0, 0.971, 0.982, 0.986, 0.977, 0.969], "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.875, "oldest_S0_para_final": 0.1, "all_seen_final": 0.4041666666666666, "all_para_final": 0.3875, "mean_forgetting_all_streams": 0.4875, "age_curve_final_seen": [0.125, 0.275, 0.25, 0.4, 0.55, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.1909722222222222, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 964.5526404380798, "peak_vram_mb": 23283.333632, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true, "uses_commit_answers": true}, "ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 1.0, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.95, "all_seen_final": 0.8916666666666667, "all_para_final": 0.7666666666666666, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.20833333333333334, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1207.9507825374603, "peak_vram_mb": 9407.731712, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 221/290 [00:00<00:00, 2208.66it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2396.34it/s]
+    [nswrite-none seed 1 r0] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.82 seen=[0.82] hop=0.212
+    [nswrite-none seed 1 r1] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.95 seen=[0.45, 0.95] hop=0.208
+    [nswrite-none seed 1 r2] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.97 seen=[0.23, 0.47, 0.97] hop=0.215
+    [nswrite-none seed 1 r3] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.7 seen=[0.23, 0.28, 0.53, 0.7] hop=0.188
+    [nswrite-none seed 1 r4] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.75 seen=[0.3, 0.23, 0.23, 0.4, 0.75] hop=0.205
+    [nswrite-none seed 1 r5] energy-occ=0.0 eff-grad=1.0 dW-leak=0.0 fresh=0.95 seen=[0.2, 0.23, 0.28, 0.33, 0.3, 0.95] hop=0.184
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  79%|███████▉  | 229/290 [00:00<00:00, 2241.49it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2367.92it/s]
+    [nswrite-act  seed 1 r0] energy-occ=0.0 eff-grad=1.0 dW-leak=0.251 fresh=0.82 seen=[0.82] hop=0.212
+    [nswrite-act  seed 1 r1] energy-occ=0.741 eff-grad=0.509 dW-leak=0.337 fresh=0.95 seen=[0.82, 0.95] hop=0.191
+    [nswrite-act  seed 1 r2] energy-occ=0.828 eff-grad=0.414 dW-leak=0.312 fresh=0.97 seen=[0.75, 0.95, 0.97] hop=0.194
+    [nswrite-act  seed 1 r3] energy-occ=0.864 eff-grad=0.369 dW-leak=0.388 fresh=0.7 seen=[0.42, 0.82, 0.9, 0.7] hop=0.194
+    [nswrite-act  seed 1 r4] energy-occ=0.902 eff-grad=0.312 dW-leak=0.436 fresh=0.75 seen=[0.57, 0.8, 0.93, 0.7, 0.75] hop=0.191
+    [nswrite-act  seed 1 r5] energy-occ=0.915 eff-grad=0.291 dW-leak=0.472 fresh=0.95 seen=[0.4, 0.72, 0.72, 0.68, 0.7, 0.95] hop=0.208
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 2296.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2517.33it/s]
+    [ogd-ce_gold seed 1 r0] rank=24 ncol=52 energy-occ=0.0 eff-grad=1.0 upd-leak=0.0 fresh=0.82 seen=[0.82] hop=0.198
+    [ogd-ce_gold seed 1 r1] rank=48 ncol=75 energy-occ=0.03 eff-grad=0.985 upd-leak=0.0074 fresh=0.95 seen=[0.45, 0.95] hop=0.174
+    [ogd-ce_gold seed 1 r2] rank=64 ncol=76 energy-occ=0.027 eff-grad=0.986 upd-leak=0.0078 fresh=0.97 seen=[0.35, 0.72, 0.97] hop=0.194
+    [ogd-ce_gold seed 1 r3] rank=64 ncol=53 energy-occ=0.031 eff-grad=0.984 upd-leak=0.0085 fresh=0.7 seen=[0.25, 0.45, 0.62, 0.7] hop=0.181
+    [ogd-ce_gold seed 1 r4] rank=64 ncol=59 energy-occ=0.029 eff-grad=0.986 upd-leak=0.0078 fresh=0.75 seen=[0.35, 0.35, 0.33, 0.45, 0.75] hop=0.201
+    [ogd-ce_gold seed 1 r5] rank=64 ncol=74 energy-occ=0.037 eff-grad=0.981 upd-leak=0.008 fresh=0.95 seen=[0.17, 0.25, 0.35, 0.38, 0.38, 0.95] hop=0.201
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  92%|█████████▏| 268/290 [00:00<00:00, 2670.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2703.35it/s]
+    [ours      seed 1 r0] L=26 seen=[0.82] hop=0.194
+    [ours      seed 1 r1] L=28 seen=[0.82, 0.95] hop=0.194
+    [ours      seed 1 r2] L=30 seen=[0.82, 0.95, 0.97] hop=0.201
+    [ours      seed 1 r3] L=32 seen=[0.85, 0.95, 0.97, 0.7] hop=0.194
+    [ours      seed 1 r4] L=34 seen=[0.85, 0.95, 0.97, 0.7, 0.75] hop=0.205
+    [ours      seed 1 r5] L=36 seen=[0.85, 0.95, 0.97, 0.7, 0.75, 0.95] hop=0.194
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  naive_fixed 0.91->0.15 (+0.762)            0.390     0.348     0.89    0.205->0.194  False False   False
+             mean-forget(all-streams)=+0.485 age-curve(final seen S0..Sn)=[0.15, 0.237, 0.275, 0.4, 0.387, 0.887]
+             energy-occ=[0.0, 0.0, 0.0, 0.0, 0.0, 0.0] eff-grad=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0] fresh-diag=[0.912, 0.962, 0.912, 0.837, 0.738, 0.887]
+  nswrite    0.91->0.41 (+0.500)            0.673     0.602     0.89    0.205->0.201  False False   False
+             mean-forget(all-streams)=+0.202 age-curve(final seen S0..Sn)=[0.412, 0.688, 0.688, 0.675, 0.688, 0.887]
+             energy-occ=[0.0, 0.731, 0.831, 0.865, 0.904, 0.925] eff-grad=[1.0, 0.518, 0.41, 0.368, 0.309, 0.273] fresh-diag=[0.912, 0.962, 0.912, 0.837, 0.738, 0.887]
+  ogd        0.91->0.15 (+0.762)            0.408     0.408     0.89    0.205->0.196  False False   False
+             mean-forget(all-streams)=+0.467 age-curve(final seen S0..Sn)=[0.15, 0.263, 0.3, 0.388, 0.463, 0.887]
+             energy-occ=[0.0, 0.044, 0.031, 0.03, 0.037, 0.049] eff-grad=[1.0, 0.978, 0.984, 0.985, 0.982, 0.975] fresh-diag=[0.912, 0.962, 0.912, 0.837, 0.738, 0.887]
+  ours       0.91->0.93 (-0.013)            0.877     0.765     0.89    0.205->0.201  False True    False
+             mean-forget(all-streams)=-0.002 age-curve(final seen S0..Sn)=[0.925, 0.962, 0.912, 0.837, 0.738, 0.887]
+RESULT_JSON_2SEED {"naive_fixed": {"gradient_occupancy_final": 0.0, "effective_grad_final": 1.0, "occupancy_curve": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "effective_grad_curve": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.15000000000000002, "oldest_S0_forgetting": 0.7625, "oldest_S0_para_final": 0.16249999999999998, "all_seen_final": 0.3895833333333334, "all_para_final": 0.34791666666666665, "mean_forgetting_all_streams": 0.4854166666666667, "age_curve_final_seen": [0.15, 0.237, 0.275, 0.4, 0.387, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19444444444444445, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 872.6887508630753, "peak_vram_mb": 5420.663296, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": false}, "nswrite": {"gradient_occupancy_final": 0.925, "effective_grad_final": 0.273, "occupancy_curve": [0.0, 0.731, 0.831, 0.865, 0.904, 0.925], "effective_grad_curve": [1.0, 0.518, 0.41, 0.368, 0.309, 0.273], "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.4125, "oldest_S0_forgetting": 0.5, "oldest_S0_para_final": 0.3625, "all_seen_final": 0.6729166666666667, "all_para_final": 0.6020833333333333, "mean_forgetting_all_streams": 0.20208333333333328, "age_curve_final_seen": [0.412, 0.688, 0.688, 0.675, 0.688, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29822464, 29822464, 29822464, 29822464, 29822464, 29822464], "updated_params_total": 178934784.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 879.9822299480438, "peak_vram_mb": 5495.898624, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true}, "ogd": {"gradient_occupancy_final": 0.049, "effective_grad_final": 0.975, "occupancy_curve": [0.0, 0.044, 0.031, 0.03, 0.037, 0.049], "effective_grad_curve": [1.0, 0.978, 0.984, 0.985, 0.982, 0.975], "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.15, "oldest_S0_forgetting": 0.7625, "oldest_S0_para_final": 0.15000000000000002, "all_seen_final": 0.40833333333333327, "all_para_final": 0.4083333333333333, "mean_forgetting_all_streams": 0.4666666666666667, "age_curve_final_seen": [0.15, 0.263, 0.3, 0.388, 0.463, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 962.2829743623734, "peak_vram_mb": 23283.333632, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true, "uses_commit_answers": true}, "ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.925, "oldest_S0_forgetting": -0.012500000000000067, "oldest_S0_para_final": 0.7124999999999999, "all_seen_final": 0.8770833333333333, "all_para_final": 0.7645833333333334, "mean_forgetting_all_streams": -0.002083333333333335, "age_curve_final_seen": [0.925, 0.962, 0.912, 0.837, 0.738, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1224.803287267685, "peak_vram_mb": 9407.731712, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+== OGD CE PILOT DONE rc=0 ==
