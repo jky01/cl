@@ -1,0 +1,319 @@
+### REF naive,oracle ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['naive', 'oracle'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  24%|██▍       | 69/290 [00:00<00:00, 689.91it/s]Loading weights:  48%|████▊     | 138/290 [00:00<00:00, 663.59it/s]Loading weights:  71%|███████   | 205/290 [00:00<00:00, 486.91it/s]Loading weights:  89%|████████▉ | 258/290 [00:00<00:00, 496.89it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 574.72it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:30,  9.62it/s]Loading weights:  26%|██▌       | 75/290 [00:00<00:00, 432.25it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 555.27it/s]Loading weights:  70%|███████   | 203/290 [00:00<00:00, 550.45it/s]Loading weights:  89%|████████▉ | 259/290 [00:00<00:00, 538.17it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 480.20it/s]
+    [naive         seed 0 r0] L=26 seen=[1.0] hop=0.201
+    [naive         seed 0 r1] L=28 seen=[0.45, 0.97] hop=0.208
+    [naive         seed 0 r2] L=30 seen=[0.15, 0.57, 0.85] hop=0.205
+    [naive         seed 0 r3] L=32 seen=[0.2, 0.35, 0.47, 0.97] hop=0.201
+    [naive         seed 0 r4] L=34 seen=[0.25, 0.15, 0.2, 0.35, 0.72] hop=0.198
+    [naive         seed 0 r5] L=36 seen=[0.12, 0.25, 0.35, 0.47, 0.35, 0.82] hop=0.205
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:37,  7.75it/s]Loading weights:  40%|████      | 117/290 [00:00<00:00, 607.85it/s]Loading weights:  86%|████████▌ | 249/290 [00:00<00:00, 911.44it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 841.91it/s]
+    [oracle        seed 0 r0] L=26 seen=[1.0] hop=0.198
+    [oracle        seed 0 r1] L=28 seen=[0.95, 0.9] hop=0.198
+    [oracle        seed 0 r2] L=30 seen=[1.0, 1.0, 0.85] hop=0.198
+    [oracle        seed 0 r3] L=32 seen=[1.0, 1.0, 1.0, 0.97] hop=0.205
+    [oracle        seed 0 r4] L=34 seen=[1.0, 1.0, 1.0, 1.0, 0.72] hop=0.208
+    [oracle        seed 0 r5] L=36 seen=[1.0, 0.97, 1.0, 1.0, 1.0, 0.82] hop=0.205
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  naive      1.00->0.12 (+0.875)            0.396     0.367     0.82    0.205->0.205  False False   False
+             mean-forget(all-streams)=+0.496 age-curve(final seen S0..Sn)=[0.125, 0.25, 0.35, 0.475, 0.35, 0.825]
+  oracle     1.00->1.00 (+0.000)            0.967     0.950     0.82    0.205->0.205  False True    False
+             mean-forget(all-streams)=-0.088 age-curve(final seen S0..Sn)=[1.0, 0.975, 1.0, 1.0, 1.0, 0.825]
+RESULT_JSON_1SEED {"naive": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.875, "oldest_S0_para_final": 0.15, "all_seen_final": 0.3958333333333333, "all_para_final": 0.3666666666666667, "mean_forgetting_all_streams": 0.49583333333333335, "age_curve_final_seen": [0.125, 0.25, 0.35, 0.475, 0.35, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 808.5830380916595, "peak_vram_mb": 6613.705216, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "oracle": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.9, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 1.0, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 1.0, "all_seen_final": 0.9666666666666667, "all_para_final": 0.9499999999999998, "mean_forgetting_all_streams": -0.08750000000000001, "age_curve_final_seen": [1.0, 0.975, 1.0, 1.0, 1.0, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 912.0087747573853, "peak_vram_mb": 6686.634496, "uses_gold_new": false, "uses_gold_old": true, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:34,  8.50it/s]Loading weights:  34%|███▍      | 99/290 [00:00<00:00, 540.21it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 723.65it/s]Loading weights:  93%|█████████▎| 271/290 [00:00<00:00, 713.78it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 671.48it/s]
+    [naive         seed 1 r0] L=26 seen=[0.82] hop=0.201
+    [naive         seed 1 r1] L=28 seen=[0.23, 0.95] hop=0.205
+    [naive         seed 1 r2] L=30 seen=[0.23, 0.5, 0.97] hop=0.208
+    [naive         seed 1 r3] L=32 seen=[0.15, 0.33, 0.47, 0.7] hop=0.198
+    [naive         seed 1 r4] L=34 seen=[0.28, 0.38, 0.42, 0.35, 0.75] hop=0.201
+    [naive         seed 1 r5] L=36 seen=[0.17, 0.12, 0.2, 0.25, 0.38, 0.95] hop=0.191
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:41,  6.97it/s]Loading weights:  47%|████▋     | 137/290 [00:00<00:00, 681.85it/s]Loading weights:  78%|███████▊  | 227/290 [00:00<00:00, 772.39it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 657.37it/s]
+    [oracle        seed 1 r0] L=26 seen=[0.82] hop=0.201
+    [oracle        seed 1 r1] L=28 seen=[1.0, 0.95] hop=0.208
+    [oracle        seed 1 r2] L=30 seen=[1.0, 1.0, 0.97] hop=0.198
+    [oracle        seed 1 r3] L=32 seen=[1.0, 1.0, 1.0, 0.7] hop=0.198
+    [oracle        seed 1 r4] L=34 seen=[1.0, 1.0, 1.0, 1.0, 0.75] hop=0.205
+    [oracle        seed 1 r5] L=36 seen=[1.0, 1.0, 1.0, 1.0, 1.0, 0.93] hop=0.188
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  naive      0.91->0.15 (+0.762)            0.371     0.340     0.89    0.205->0.198  False False   False
+             mean-forget(all-streams)=+0.504 age-curve(final seen S0..Sn)=[0.15, 0.188, 0.275, 0.362, 0.362, 0.887]
+  oracle     0.91->1.00 (-0.088)            0.977     0.965     0.88    0.205->0.196  False True    False
+             mean-forget(all-streams)=-0.110 age-curve(final seen S0..Sn)=[1.0, 0.988, 1.0, 1.0, 1.0, 0.875]
+RESULT_JSON_2SEED {"naive": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.15, "oldest_S0_forgetting": 0.7625, "oldest_S0_para_final": 0.15, "all_seen_final": 0.37083333333333335, "all_para_final": 0.33958333333333335, "mean_forgetting_all_streams": 0.5041666666666667, "age_curve_final_seen": [0.15, 0.188, 0.275, 0.362, 0.362, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19791666666666666, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 809.4753917455673, "peak_vram_mb": 6613.705216, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}, "oracle": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.925, 0.912, 0.837, 0.738, 0.875], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 1.0, "oldest_S0_forgetting": -0.08750000000000002, "oldest_S0_para_final": 1.0, "all_seen_final": 0.9770833333333333, "all_para_final": 0.9645833333333332, "mean_forgetting_all_streams": -0.11041666666666669, "age_curve_final_seen": [1.0, 0.988, 1.0, 1.0, 1.0, 0.875], "newest_stream_final": 0.875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 912.1930285692215, "peak_vram_mb": 6686.634496, "uses_gold_new": false, "uses_gold_old": true, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=40 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   2%|▏         | 5/290 [00:00<00:05, 48.88it/s]Loading weights:  49%|████▉     | 142/290 [00:00<00:00, 817.36it/s]Loading weights:  78%|███████▊  | 225/290 [00:00<00:00, 597.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 589.68it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:56,  5.15it/s]Loading weights:  25%|██▌       | 73/290 [00:00<00:00, 308.19it/s]Loading weights:  41%|████▏     | 120/290 [00:00<00:00, 368.51it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 417.94it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 436.77it/s]Loading weights:  92%|█████████▏| 268/290 [00:00<00:00, 453.84it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 412.49it/s]
+    [ours     K40  seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K40  seed 0 r1] L=28 seen=[1.0, 0.97] hop=0.198
+    [ours     K40  seed 0 r2] L=30 seen=[1.0, 0.97, 0.85] hop=0.198
+    [ours     K40  seed 0 r3] L=32 seen=[1.0, 0.97, 0.85, 0.97] hop=0.198
+    [ours     K40  seed 0 r4] L=34 seen=[1.0, 0.97, 0.85, 0.97, 0.72] hop=0.188
+    [ours     K40  seed 0 r5] L=36 seen=[1.0, 0.97, 0.85, 0.97, 0.72, 0.82] hop=0.201
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->1.00 (+0.000)            0.892     0.767     0.82    0.205->0.201  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[1.0, 0.975, 0.85, 0.975, 0.725, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 1.0, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.95, "all_seen_final": 0.8916666666666667, "all_para_final": 0.7666666666666666, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1002.0341417789459, "peak_vram_mb": 9407.731712, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 123/290 [00:00<00:00, 1217.67it/s]Loading weights:  84%|████████▍ | 245/290 [00:00<00:00, 1186.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 976.12it/s] 
+    [ours     K40  seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K40  seed 1 r1] L=28 seen=[0.82, 0.95] hop=0.198
+    [ours     K40  seed 1 r2] L=30 seen=[0.82, 0.95, 0.97] hop=0.198
+    [ours     K40  seed 1 r3] L=32 seen=[0.82, 0.95, 0.97, 0.7] hop=0.191
+    [ours     K40  seed 1 r4] L=34 seen=[0.82, 0.95, 0.97, 0.7, 0.75] hop=0.191
+    [ours     K40  seed 1 r5] L=36 seen=[0.82, 0.95, 0.97, 0.7, 0.75, 0.95] hop=0.194
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.91 (+0.000)            0.875     0.765     0.89    0.205->0.198  False True    False
+             mean-forget(all-streams)=+0.000 age-curve(final seen S0..Sn)=[0.912, 0.962, 0.912, 0.837, 0.738, 0.887]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.9125, "oldest_S0_forgetting": 0.0, "oldest_S0_para_final": 0.7124999999999999, "all_seen_final": 0.875, "all_para_final": 0.7645833333333334, "mean_forgetting_all_streams": 0.0, "age_curve_final_seen": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19791666666666669, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1003.9637118577957, "peak_vram_mb": 9407.731712, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=16 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:29,  9.73it/s]Loading weights:  29%|██▊       | 83/290 [00:00<00:00, 479.78it/s]Loading weights:  47%|████▋     | 135/290 [00:00<00:00, 495.95it/s]Loading weights:  67%|██████▋   | 193/290 [00:00<00:00, 527.86it/s]Loading weights:  85%|████████▍ | 246/290 [00:00<00:00, 518.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 481.86it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:35,  8.16it/s]Loading weights:  20%|██        | 59/290 [00:00<00:00, 315.03it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 403.32it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 432.35it/s]Loading weights:  76%|███████▌  | 221/290 [00:00<00:00, 497.72it/s]Loading weights:  96%|█████████▌| 277/290 [00:00<00:00, 516.25it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 461.88it/s]
+    [ours     K16  seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K16  seed 0 r1] L=28 seen=[0.8, 0.97] hop=0.201
+    [ours     K16  seed 0 r2] L=30 seen=[0.57, 0.9, 0.85] hop=0.201
+    [ours     K16  seed 0 r3] L=32 seen=[0.55, 0.78, 0.7, 0.97] hop=0.194
+    [ours     K16  seed 0 r4] L=34 seen=[0.6, 0.8, 0.65, 0.82, 0.72] hop=0.194
+    [ours     K16  seed 0 r5] L=36 seen=[0.53, 0.62, 0.62, 0.78, 0.7, 0.8] hop=0.205
+    [ours K16 seed 0] REPLAYED seen=0.925 para=0.8125 | NON-REPLAYED seen=0.4666666666666667 para=0.4083333333333333 (n_rep=80 n_non=120)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.53 (+0.475)            0.675     0.596     0.80    0.205->0.205  False True    False
+             mean-forget(all-streams)=+0.212 age-curve(final seen S0..Sn)=[0.525, 0.625, 0.625, 0.775, 0.7, 0.8]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.8], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.525, "oldest_S0_forgetting": 0.475, "oldest_S0_para_final": 0.575, "all_seen_final": 0.6749999999999999, "all_para_final": 0.5958333333333333, "mean_forgetting_all_streams": 0.2125, "age_curve_final_seen": [0.525, 0.625, 0.625, 0.775, 0.7, 0.8], "newest_stream_final": 0.8, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1001.6116225719452, "peak_vram_mb": 9407.731712, "replay_k": 16, "replayed_seen": 0.925, "replayed_para": 0.8125, "nonreplayed_seen": 0.4667, "nonreplayed_para": 0.4083, "n_replayed": 80, "n_nonreplayed": 120, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  56%|█████▌    | 161/290 [00:00<00:00, 1607.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 963.18it/s] 
+    [ours     K16  seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K16  seed 1 r1] L=28 seen=[0.47, 0.95] hop=0.191
+    [ours     K16  seed 1 r2] L=30 seen=[0.5, 0.75, 0.97] hop=0.198
+    [ours     K16  seed 1 r3] L=32 seen=[0.47, 0.72, 0.85, 0.7] hop=0.198
+    [ours     K16  seed 1 r4] L=34 seen=[0.5, 0.7, 0.7, 0.62, 0.75] hop=0.201
+    [ours     K16  seed 1 r5] L=36 seen=[0.45, 0.57, 0.57, 0.55, 0.6, 0.95] hop=0.205
+    [ours K16 seed 1] REPLAYED seen=0.8875 para=0.7125 | NON-REPLAYED seen=0.325 para=0.4 (n_rep=80 n_non=120)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.49 (+0.425)            0.646     0.592     0.88    0.205->0.205  False True    False
+             mean-forget(all-streams)=+0.227 age-curve(final seen S0..Sn)=[0.488, 0.6, 0.6, 0.663, 0.65, 0.875]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.875], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.48750000000000004, "oldest_S0_forgetting": 0.42499999999999993, "oldest_S0_para_final": 0.4375, "all_seen_final": 0.6458333333333333, "all_para_final": 0.5916666666666667, "mean_forgetting_all_streams": 0.2270833333333333, "age_curve_final_seen": [0.488, 0.6, 0.6, 0.663, 0.65, 0.875], "newest_stream_final": 0.875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2048611111111111, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1003.1790449619293, "peak_vram_mb": 9407.731712, "replay_k": 16, "replayed_seen": 0.9062, "replayed_para": 0.7625, "nonreplayed_seen": 0.3958, "nonreplayed_para": 0.4042, "n_replayed": 80, "n_nonreplayed": 120, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=8 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  13%|█▎        | 39/290 [00:00<00:00, 388.75it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 582.29it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 588.66it/s]Loading weights:  79%|███████▉  | 230/290 [00:00<00:00, 582.89it/s]Loading weights: 100%|█████████▉| 289/290 [00:00<00:00, 576.65it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 569.85it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:29,  9.72it/s]Loading weights:  26%|██▌       | 75/290 [00:00<00:00, 432.83it/s]Loading weights:  50%|█████     | 145/290 [00:00<00:00, 553.80it/s]Loading weights:  71%|███████   | 206/290 [00:00<00:00, 575.02it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 581.14it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 565.39it/s]
+    [ours     K8   seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K8   seed 0 r1] L=28 seen=[0.57, 0.97] hop=0.201
+    [ours     K8   seed 0 r2] L=30 seen=[0.38, 0.68, 0.85] hop=0.198
+    [ours     K8   seed 0 r3] L=32 seen=[0.3, 0.55, 0.57, 0.97] hop=0.201
+    [ours     K8   seed 0 r4] L=34 seen=[0.33, 0.5, 0.47, 0.6, 0.72] hop=0.194
+    [ours     K8   seed 0 r5] L=36 seen=[0.33, 0.45, 0.55, 0.62, 0.57, 0.82] hop=0.191
+    [ours K8 seed 0] REPLAYED seen=0.9 para=0.8 | NON-REPLAYED seen=0.40625 para=0.3125 (n_rep=40 n_non=160)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.33 (+0.675)            0.558     0.462     0.82    0.205->0.191  False True    False
+             mean-forget(all-streams)=+0.333 age-curve(final seen S0..Sn)=[0.325, 0.45, 0.55, 0.625, 0.575, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.325, "oldest_S0_forgetting": 0.675, "oldest_S0_para_final": 0.375, "all_seen_final": 0.5583333333333335, "all_para_final": 0.46249999999999997, "mean_forgetting_all_streams": 0.3333333333333333, "age_curve_final_seen": [0.325, 0.45, 0.55, 0.625, 0.575, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.1909722222222222, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1003.5346803665161, "peak_vram_mb": 9407.731712, "replay_k": 8, "replayed_seen": 0.9, "replayed_para": 0.8, "nonreplayed_seen": 0.4062, "nonreplayed_para": 0.3125, "n_replayed": 40, "n_nonreplayed": 160, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 1901.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1365.72it/s]
+    [ours     K8   seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K8   seed 1 r1] L=28 seen=[0.4, 0.95] hop=0.205
+    [ours     K8   seed 1 r2] L=30 seen=[0.35, 0.55, 0.97] hop=0.201
+    [ours     K8   seed 1 r3] L=32 seen=[0.33, 0.35, 0.75, 0.7] hop=0.201
+    [ours     K8   seed 1 r4] L=34 seen=[0.47, 0.45, 0.6, 0.5, 0.75] hop=0.194
+    [ours     K8   seed 1 r5] L=36 seen=[0.3, 0.35, 0.57, 0.47, 0.55, 0.95] hop=0.208
+    [ours K8 seed 1] REPLAYED seen=0.875 para=0.8 | NON-REPLAYED seen=0.34375 para=0.35 (n_rep=40 n_non=160)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.31 (+0.600)            0.546     0.490     0.89    0.205->0.200  False True    False
+             mean-forget(all-streams)=+0.329 age-curve(final seen S0..Sn)=[0.312, 0.4, 0.562, 0.55, 0.562, 0.887]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.3125, "oldest_S0_forgetting": 0.6, "oldest_S0_para_final": 0.3125, "all_seen_final": 0.5458333333333334, "all_para_final": 0.48958333333333337, "mean_forgetting_all_streams": 0.32916666666666666, "age_curve_final_seen": [0.312, 0.4, 0.562, 0.55, 0.562, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.1996527777777778, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1002.4666793346405, "peak_vram_mb": 9407.731712, "replay_k": 8, "replayed_seen": 0.8875, "replayed_para": 0.8, "nonreplayed_seen": 0.375, "nonreplayed_para": 0.3312, "n_replayed": 40, "n_nonreplayed": 160, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=4 ###
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  27%|██▋       | 77/290 [00:00<00:00, 769.68it/s]Loading weights:  53%|█████▎    | 154/290 [00:00<00:00, 737.48it/s]Loading weights:  79%|███████▊  | 228/290 [00:00<00:00, 531.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 680.69it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:38,  7.60it/s]Loading weights:  24%|██▍       | 71/290 [00:00<00:00, 367.53it/s]Loading weights:  46%|████▌     | 132/290 [00:00<00:00, 470.44it/s]Loading weights:  65%|██████▌   | 189/290 [00:00<00:00, 507.97it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 516.21it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 462.06it/s]
+    [ours     K4   seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K4   seed 0 r1] L=28 seen=[0.53, 0.97] hop=0.201
+    [ours     K4   seed 0 r2] L=30 seen=[0.33, 0.65, 0.85] hop=0.194
+    [ours     K4   seed 0 r3] L=32 seen=[0.33, 0.55, 0.53, 0.97] hop=0.191
+    [ours     K4   seed 0 r4] L=34 seen=[0.3, 0.3, 0.25, 0.42, 0.72] hop=0.198
+    [ours     K4   seed 0 r5] L=36 seen=[0.23, 0.33, 0.42, 0.55, 0.33, 0.82] hop=0.194
+    [ours K4 seed 0] REPLAYED seen=1.0 para=0.9 | NON-REPLAYED seen=0.3 para=0.26666666666666666 (n_rep=20 n_non=180)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.23 (+0.775)            0.446     0.396     0.82    0.205->0.194  False True    False
+             mean-forget(all-streams)=+0.446 age-curve(final seen S0..Sn)=[0.225, 0.325, 0.425, 0.55, 0.325, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.775, "oldest_S0_para_final": 0.225, "all_seen_final": 0.4458333333333333, "all_para_final": 0.3958333333333333, "mean_forgetting_all_streams": 0.4458333333333333, "age_curve_final_seen": [0.225, 0.325, 0.425, 0.55, 0.325, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19444444444444445, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 999.1868484020233, "peak_vram_mb": 9407.731712, "replay_k": 4, "replayed_seen": 1.0, "replayed_para": 0.9, "nonreplayed_seen": 0.3, "nonreplayed_para": 0.2667, "n_replayed": 20, "n_nonreplayed": 180, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 155/290 [00:00<00:00, 1522.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 948.49it/s] 
+    [ours     K4   seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K4   seed 1 r1] L=28 seen=[0.47, 0.95] hop=0.198
+    [ours     K4   seed 1 r2] L=30 seen=[0.3, 0.57, 0.97] hop=0.198
+    [ours     K4   seed 1 r3] L=32 seen=[0.25, 0.35, 0.6, 0.7] hop=0.201
+    [ours     K4   seed 1 r4] L=34 seen=[0.33, 0.38, 0.47, 0.42, 0.75] hop=0.198
+    [ours     K4   seed 1 r5] L=36 seen=[0.25, 0.25, 0.35, 0.35, 0.5, 0.97] hop=0.198
+    [ours K4 seed 1] REPLAYED seen=0.9 para=0.75 | NON-REPLAYED seen=0.2777777777777778 para=0.26666666666666666 (n_rep=20 n_non=180)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.24 (+0.675)            0.446     0.404     0.90    0.205->0.196  False True    False
+             mean-forget(all-streams)=+0.431 age-curve(final seen S0..Sn)=[0.237, 0.287, 0.387, 0.45, 0.412, 0.9]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.9], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.2375, "oldest_S0_forgetting": 0.675, "oldest_S0_para_final": 0.225, "all_seen_final": 0.4458333333333333, "all_para_final": 0.4041666666666667, "mean_forgetting_all_streams": 0.43125, "age_curve_final_seen": [0.237, 0.287, 0.387, 0.45, 0.412, 0.9], "newest_stream_final": 0.8999999999999999, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 998.8007227182388, "peak_vram_mb": 9407.731712, "replay_k": 4, "replayed_seen": 0.95, "replayed_para": 0.825, "nonreplayed_seen": 0.2889, "nonreplayed_para": 0.2667, "n_replayed": 20, "n_nonreplayed": 180, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=2 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:38,  7.58it/s]Loading weights:  28%|██▊       | 81/290 [00:00<00:00, 415.11it/s]Loading weights:  47%|████▋     | 135/290 [00:00<00:00, 465.92it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 498.84it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 503.46it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 457.17it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:31,  9.31it/s]Loading weights:  18%|█▊        | 51/290 [00:00<00:00, 288.89it/s]Loading weights:  40%|████      | 117/290 [00:00<00:00, 454.88it/s]Loading weights:  57%|█████▋    | 166/290 [00:00<00:00, 468.54it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 489.44it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 489.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 466.28it/s]
+    [ours     K2   seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K2   seed 0 r1] L=28 seen=[0.47, 0.97] hop=0.201
+    [ours     K2   seed 0 r2] L=30 seen=[0.3, 0.53, 0.85] hop=0.194
+    [ours     K2   seed 0 r3] L=32 seen=[0.23, 0.53, 0.4, 0.97] hop=0.198
+    [ours     K2   seed 0 r4] L=34 seen=[0.2, 0.28, 0.23, 0.33, 0.72] hop=0.201
+    [ours     K2   seed 0 r5] L=36 seen=[0.23, 0.28, 0.33, 0.47, 0.38, 0.82] hop=0.194
+    [ours K2 seed 0] REPLAYED seen=1.0 para=0.9 | NON-REPLAYED seen=0.3 para=0.2631578947368421 (n_rep=10 n_non=190)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.23 (+0.775)            0.417     0.367     0.82    0.205->0.194  False True    False
+             mean-forget(all-streams)=+0.475 age-curve(final seen S0..Sn)=[0.225, 0.275, 0.325, 0.475, 0.375, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.775, "oldest_S0_para_final": 0.25, "all_seen_final": 0.4166666666666667, "all_para_final": 0.36666666666666664, "mean_forgetting_all_streams": 0.47500000000000003, "age_curve_final_seen": [0.225, 0.275, 0.325, 0.475, 0.375, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19444444444444445, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1006.2584159374237, "peak_vram_mb": 9402.274816, "replay_k": 2, "replayed_seen": 1.0, "replayed_para": 0.9, "nonreplayed_seen": 0.3, "nonreplayed_para": 0.2632, "n_replayed": 10, "n_nonreplayed": 190, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 1464.68it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 964.99it/s] 
+    [ours     K2   seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K2   seed 1 r1] L=28 seen=[0.42, 0.95] hop=0.198
+    [ours     K2   seed 1 r2] L=30 seen=[0.33, 0.68, 0.97] hop=0.188
+    [ours     K2   seed 1 r3] L=32 seen=[0.3, 0.4, 0.55, 0.7] hop=0.191
+    [ours     K2   seed 1 r4] L=34 seen=[0.42, 0.35, 0.38, 0.4, 0.75] hop=0.194
+    [ours     K2   seed 1 r5] L=36 seen=[0.23, 0.28, 0.3, 0.23, 0.4, 0.95] hop=0.198
+    [ours K2 seed 1] REPLAYED seen=0.8 para=0.7 | NON-REPLAYED seen=0.2578947368421053 para=0.22631578947368422 (n_rep=10 n_non=190)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.23 (+0.688)            0.406     0.362     0.89    0.205->0.196  False True    False
+             mean-forget(all-streams)=+0.469 age-curve(final seen S0..Sn)=[0.225, 0.275, 0.312, 0.35, 0.388, 0.887]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.6875, "oldest_S0_para_final": 0.2375, "all_seen_final": 0.40625, "all_para_final": 0.3625, "mean_forgetting_all_streams": 0.46875, "age_curve_final_seen": [0.225, 0.275, 0.312, 0.35, 0.388, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1005.683315038681, "peak_vram_mb": 9407.731712, "replay_k": 2, "replayed_seen": 0.9, "replayed_para": 0.8, "nonreplayed_seen": 0.2789, "nonreplayed_para": 0.2447, "n_replayed": 10, "n_nonreplayed": 190, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=1 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   4%|▍         | 13/290 [00:00<00:02, 129.96it/s]Loading weights:  31%|███       | 89/290 [00:00<00:00, 500.43it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 531.35it/s]Loading weights:  69%|██████▉   | 201/290 [00:00<00:00, 533.34it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 539.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 562.31it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:29,  9.83it/s]Loading weights:  26%|██▌       | 76/290 [00:00<00:00, 441.86it/s]Loading weights:  54%|█████▍    | 157/290 [00:00<00:00, 609.06it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 704.37it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 582.85it/s]
+    [ours     K1   seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K1   seed 0 r1] L=28 seen=[0.45, 0.97] hop=0.198
+    [ours     K1   seed 0 r2] L=30 seen=[0.28, 0.53, 0.85] hop=0.201
+    [ours     K1   seed 0 r3] L=32 seen=[0.23, 0.42, 0.42, 0.97] hop=0.201
+    [ours     K1   seed 0 r4] L=34 seen=[0.2, 0.23, 0.23, 0.35, 0.72] hop=0.198
+    [ours     K1   seed 0 r5] L=36 seen=[0.23, 0.15, 0.3, 0.42, 0.38, 0.82] hop=0.201
+    [ours K1 seed 0] REPLAYED seen=1.0 para=1.0 | NON-REPLAYED seen=0.27692307692307694 para=0.2358974358974359 (n_rep=5 n_non=195)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.23 (+0.775)            0.383     0.333     0.82    0.205->0.201  False True    False
+             mean-forget(all-streams)=+0.508 age-curve(final seen S0..Sn)=[0.225, 0.15, 0.3, 0.425, 0.375, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.775, "oldest_S0_para_final": 0.2, "all_seen_final": 0.3833333333333333, "all_para_final": 0.3333333333333333, "mean_forgetting_all_streams": 0.5083333333333334, "age_curve_final_seen": [0.225, 0.15, 0.3, 0.425, 0.375, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1020.4204540252686, "peak_vram_mb": 9402.274816, "replay_k": 1, "replayed_seen": 1.0, "replayed_para": 1.0, "nonreplayed_seen": 0.2769, "nonreplayed_para": 0.2359, "n_replayed": 5, "n_nonreplayed": 195, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  87%|████████▋ | 251/290 [00:00<00:00, 1931.89it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2036.48it/s]
+    [ours     K1   seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K1   seed 1 r1] L=28 seen=[0.42, 0.95] hop=0.201
+    [ours     K1   seed 1 r2] L=30 seen=[0.35, 0.55, 0.97] hop=0.201
+    [ours     K1   seed 1 r3] L=32 seen=[0.17, 0.28, 0.57, 0.7] hop=0.198
+    [ours     K1   seed 1 r4] L=34 seen=[0.23, 0.3, 0.42, 0.35, 0.75] hop=0.201
+    [ours     K1   seed 1 r5] L=36 seen=[0.17, 0.2, 0.2, 0.23, 0.35, 0.95] hop=0.198
+    [ours K1 seed 1] REPLAYED seen=0.8 para=0.6 | NON-REPLAYED seen=0.2153846153846154 para=0.27692307692307694 (n_rep=5 n_non=195)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.20 (+0.712)            0.367     0.360     0.89    0.205->0.200  False True    False
+             mean-forget(all-streams)=+0.508 age-curve(final seen S0..Sn)=[0.2, 0.175, 0.25, 0.325, 0.362, 0.887]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.2, "oldest_S0_forgetting": 0.7124999999999999, "oldest_S0_para_final": 0.225, "all_seen_final": 0.3666666666666666, "all_para_final": 0.36041666666666666, "mean_forgetting_all_streams": 0.5083333333333333, "age_curve_final_seen": [0.2, 0.175, 0.25, 0.325, 0.362, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.1996527777777778, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1019.4205278158188, "peak_vram_mb": 9402.274816, "replay_k": 1, "replayed_seen": 0.9, "replayed_para": 0.8, "nonreplayed_seen": 0.2462, "nonreplayed_para": 0.2564, "n_replayed": 5, "n_nonreplayed": 195, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+### K=0 ###
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['ours'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   1%|▏         | 4/290 [00:00<00:07, 38.73it/s]Loading weights:  30%|███       | 87/290 [00:00<00:00, 497.57it/s]Loading weights:  48%|████▊     | 138/290 [00:00<00:00, 494.74it/s]Loading weights:  65%|██████▍   | 188/290 [00:00<00:00, 495.74it/s]Loading weights:  83%|████████▎ | 241/290 [00:00<00:00, 505.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 476.97it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.78it/s]Loading weights:  18%|█▊        | 51/290 [00:00<00:01, 228.60it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 371.23it/s]Loading weights:  59%|█████▊    | 170/290 [00:00<00:00, 448.12it/s]Loading weights:  78%|███████▊  | 225/290 [00:00<00:00, 482.16it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 492.24it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 424.42it/s]
+    [ours     K0   seed 0 r0] L=26 seen=[1.0] hop=0.205
+    [ours     K0   seed 0 r1] L=28 seen=[0.5, 0.97] hop=0.208
+    [ours     K0   seed 0 r2] L=30 seen=[0.25, 0.45, 0.85] hop=0.201
+    [ours     K0   seed 0 r3] L=32 seen=[0.17, 0.4, 0.47, 0.97] hop=0.201
+    [ours     K0   seed 0 r4] L=34 seen=[0.3, 0.25, 0.17, 0.3, 0.72] hop=0.191
+    [ours     K0   seed 0 r5] L=36 seen=[0.23, 0.25, 0.35, 0.38, 0.4, 0.82] hop=0.194
+    [ours K0 seed 0] REPLAYED seen=None para=None | NON-REPLAYED seen=0.32 para=0.265 (n_rep=0 n_non=200)
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       1.00->0.23 (+0.775)            0.404     0.342     0.82    0.205->0.194  False True    False
+             mean-forget(all-streams)=+0.487 age-curve(final seen S0..Sn)=[0.225, 0.25, 0.35, 0.375, 0.4, 0.825]
+RESULT_JSON_1SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.225, "oldest_S0_forgetting": 0.775, "oldest_S0_para_final": 0.15, "all_seen_final": 0.4041666666666666, "all_para_final": 0.3416666666666666, "mean_forgetting_all_streams": 0.4875, "age_curve_final_seen": [0.225, 0.25, 0.35, 0.375, 0.4, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19444444444444445, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 808.9632339477539, "peak_vram_mb": 6613.705216, "replay_k": 0, "replayed_seen": null, "replayed_para": null, "nonreplayed_seen": 0.32, "nonreplayed_para": 0.265, "n_replayed": 0, "n_nonreplayed": 200, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:38,  7.51it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 572.74it/s]Loading weights:  61%|██████    | 177/290 [00:00<00:00, 604.44it/s]Loading weights:  83%|████████▎ | 242/290 [00:00<00:00, 614.67it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 541.04it/s]
+    [ours     K0   seed 1 r0] L=26 seen=[0.82] hop=0.205
+    [ours     K0   seed 1 r1] L=28 seen=[0.3, 0.95] hop=0.201
+    [ours     K0   seed 1 r2] L=30 seen=[0.28, 0.5, 0.97] hop=0.198
+    [ours     K0   seed 1 r3] L=32 seen=[0.15, 0.3, 0.45, 0.7] hop=0.194
+    [ours     K0   seed 1 r4] L=34 seen=[0.15, 0.25, 0.3, 0.17, 0.75] hop=0.205
+    [ours     K0   seed 1 r5] L=36 seen=[0.1, 0.07, 0.3, 0.23, 0.38, 0.95] hop=0.198
+    [ours K0 seed 1] REPLAYED seen=None para=None | NON-REPLAYED seen=0.215 para=0.245 (n_rep=0 n_non=200)
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ours       0.91->0.16 (+0.750)            0.371     0.348     0.89    0.205->0.196  False True    False
+             mean-forget(all-streams)=+0.504 age-curve(final seen S0..Sn)=[0.163, 0.163, 0.325, 0.3, 0.388, 0.887]
+RESULT_JSON_2SEED {"ours": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.1625, "oldest_S0_forgetting": 0.75, "oldest_S0_para_final": 0.1375, "all_seen_final": 0.3708333333333333, "all_para_final": 0.34791666666666665, "mean_forgetting_all_streams": 0.5041666666666667, "age_curve_final_seen": [0.163, 0.163, 0.325, 0.3, 0.388, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.19618055555555555, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 809.7467045783997, "peak_vram_mb": 6613.705216, "replay_k": 0, "replayed_seen": null, "replayed_para": null, "nonreplayed_seen": 0.2675, "nonreplayed_para": 0.255, "n_replayed": 0, "n_nonreplayed": 200, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": true, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+== A SWEEP DONE rc=0 ==

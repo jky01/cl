@@ -172,6 +172,41 @@
 > zero-gold self-distill (R25/R35). Net: R33/R35 external validity confirmed; replay-consolidation is the
 > robust positive across both synthetic and KG-shaped data.
 >
+> **R36-A (minimal-footprint rehearsal — is a TINY committed replay set enough?) — NEGATIVE (item
+> rehearsal, not stream protection)** `s2/lifecycle_bakeoff.py` `BK_REPLAY_K`, log
+> `docs/cloud_results/replayk_sweep_r36a.log`, 2-seed 6×40. After bounding rehearsal-*free* CL (R36-I/C),
+> the practical question is how *small* training-time rehearsal can be: replay only a **fixed nested
+> committed K-subset per prior stream** (self-distill to the pre-round snapshot, no gold-old, single dense,
+> no inference memory), sweeping `K ∈ {0,1,2,4,8,16,40}`. The decisive readout is **replayed vs
+> NON-replayed** old-fact recall — do a few probes protect the *whole* stream, or only the rehearsed
+> items? Result (2-seed):
+>
+> | K | all-seen | oldest-forget | REPLAYED-seen | NON-REPLAYED-seen |
+> |---|----------|---------------|---------------|-------------------|
+> | naive | 0.371 | +0.762 | — | — |
+> | 0 | 0.371 | +0.750 | — | 0.268 |
+> | 1 | 0.367 | +0.712 | 0.900 | 0.246 |
+> | 2 | 0.406 | +0.688 | 0.900 | 0.279 |
+> | 4 | 0.446 | +0.675 | 0.950 | 0.289 |
+> | 8 | 0.546 | +0.600 | 0.887 | 0.375 |
+> | 16 | 0.646 | +0.425 | 0.906 | 0.396 |
+> | 40 (full ours) | 0.875 | +0.000 | — | — |
+> | oracle | 0.977 | −0.088 | — | — |
+>
+> **Sanity gates pass** (K=0 all-seen 0.371 = `naive` 0.371; K=40 = full-ours 0.875 ≈ historical 0.877 —
+> reproducibility confirmed). **The result is a clean negative:** REPLAYED items are always retained
+> (~0.89–0.95) but **NON-REPLAYED items are forgotten as badly as naive** — 0.375 at K=8, only 0.396 even
+> at K=16 (40% of the stream rehearsed), vs naive 0.371 and full-ours ~0.88. `all-seen` rises with K
+> **purely as a mixture** (the rehearsed fraction is saved, the rest is not); there is **no within-stream
+> generalization** from rehearsing some items to protecting their stream-mates. Fails codex's decisive
+> gate (NON-REPLAYED within 0.08 of full-ours): K=8 gap is ~0.50. **Interpretation:** replay-consolidation's
+> anti-forgetting is **item-specific, not stream-distributional** at this scale — to protect the stream you
+> must essentially rehearse the stream. So *random* minimal-footprint rehearsal does NOT compress the R33/R35
+> positive; footprint ≈ O(PER·T), not O(K·T). This is a useful refutation of the "few probes protect the
+> stream" hypothesis and points the next lever at **non-random coverage**: coreset/diversity subset
+> selection or **key/relation-conditioned self-generated probes** that span the stream's distribution
+> rather than memorizing K fixed items (R36-A2). (No growth claim: growth fixed throughout; R23/R31 stand.)
+>
 > **R36-C (rehearsal-free: answer-level OGD — the STRONGEST first-order primitive) — CLEAN NEGATIVE**
 > `s2/lifecycle_bakeoff.py` `run_ogd`, logs `docs/cloud_results/ogd_ce_pilot_r36c.log` (+ smoke/rank
 > scans `ogd_{ce_smoke,rank64,rank96,rankscan}_r36c.log`), 2-seed 6×40. To close (not strawman) the
