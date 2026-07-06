@@ -716,6 +716,7 @@ def main():
         # exact-OGD: reproject the REALIZED ΔΘ ⊥ Q each step (AdamW precond/decay do NOT commute with the
         # gradient projection, so Qᵀg=0 does NOT imply Qᵀ ΔΘ=0 — same realized-leak issue as nswrite).
         reproject = int(os.environ.get("BK_OGD_REPROJECT", 1))
+        obj = os.environ.get("BK_OGD_OBJ", "ce_gold")     # ce_gold=canonical OGD (old task loss); margin=thin
         dense = load_frozen()
         base_hop = hop_acc(dense)
         set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (all params protected)
@@ -744,16 +745,23 @@ def main():
             for p, a, b in zip(trainable, offs[:-1], offs[1:]):
                 p.data.add_(delta[a:b].view_as(p))
 
-        def margin_grad(prompt, gold):
-            # d(gold_margin)/d(theta_trainable) for ONE committed-correct old fact -> flattened [P] fp16
+        def old_obj_grad(prompt, gold):
+            # d(old_answer_objective)/d(theta_trainable) for ONE committed-correct fact -> flattened [P] fp16.
+            # obj="ce_gold": CE(-logP(gold)) = the canonical OGD old-TASK-LOSS gradient (shares structure
+            #   with the new write CE-to-teacher-argmax term). obj="margin": logit_gold - runnerup (thin,
+            #   ranking-only; diagnostic contrast). NOTE: KL-to-committed is NOT usable here — at commit
+            #   p_theta==p_committed so its gradient is 0 (needs a Fisher/Jacobian basis, deferred).
             e = tok([prompt], return_tensors="pt", padding=True).to(device)
             logits = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()[0]
             if logits.argmax().item() != gold:            # only protect what the model actually knows
                 return None
-            masked = logits.clone(); masked[gold] = float("-inf")
-            margin = logits[gold] - masked.max()
+            if obj == "margin":
+                masked = logits.clone(); masked[gold] = float("-inf")
+                old = logits[gold] - masked.max()
+            else:                                          # ce_gold (default)
+                old = F.cross_entropy(logits[None, :], torch.tensor([gold], device=device))
             dense.zero_grad()
-            margin.backward()
+            old.backward()
             v = flat_grad()
             dense.zero_grad()
             n = v.norm()
@@ -770,7 +778,7 @@ def main():
             for pr, gt in items:
                 if n >= ncollect:
                     break
-                v = margin_grad(pr, gt)
+                v = old_obj_grad(pr, gt)
                 if v is not None:
                     A[:, n] = v; n += 1
             if n == 0:
@@ -843,7 +851,7 @@ def main():
             leak_hist.append(round(uleak_acc / uleak_n, 4) if uleak_n else 0.0)  # realized ΔΘ leak (~0 = clean)
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [ogd       seed {seed} r{r}] rank={0 if Q is None else Q.shape[1]} ncol={ncol} "
+            print(f"    [ogd-{obj:7s} seed {seed} r{r}] rank={0 if Q is None else Q.shape[1]} ncol={ncol} "
                   f"energy-occ={occ_hist[-1]} eff-grad={eff_hist[-1]} upd-leak={leak_hist[-1]} "
                   f"fresh={round(seen[r],2)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         del dense, Q; torch.cuda.empty_cache()
@@ -865,7 +873,7 @@ def main():
         "nswrite_rand": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "margin":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "marginrandv": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
-        "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True, uses_commit_answers=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
