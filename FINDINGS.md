@@ -207,6 +207,37 @@
 > selection or **key/relation-conditioned self-generated probes** that span the stream's distribution
 > rather than memorizing K fixed items (R36-A2). (No growth claim: growth fixed throughout; R23/R31 stand.)
 >
+> **R36-A2 (compact/precomputed replay TARGET — cheaper replay-consolidation) — POSITIVE** `run_consolidate`
+> `BK_REPLAY_TGT` / `ours_tgt_*`, log `docs/cloud_results/r36a2_compact_targets.log` (+ JSON), 2-seed 6×40.
+> R36-A ruled out *fewer* replayed facts (independent facts ⇒ footprint O(#facts)). The surviving lever is
+> *less per fact / less compute*: replace live self-distillation (a resident pre-round **snapshot** model
+> + a teacher forward **every** replay step) with a **compact per-fact target captured once at commit** and
+> replayed cheaply. Result (all cover every fact, single dense, no gold-old, no inference memory):
+>
+> | arm | all-seen | all-para | oldest-forget | replay-teacher-fwd | peak VRAM | snapshot |
+> |-----|----------|----------|---------------|--------------------|-----------|----------|
+> | naive | 0.387 | 0.348 | +0.738 | 0 | — | — |
+> | ours (snapshot KL) | 0.875 | 0.765 | +0.000 | **5000** | 9407 MB | yes |
+> | **ours_tgt_answerid** | **0.875** | **0.765** | **+0.000** | **0** | **6711 MB** | **no** |
+> | ours_tgt_topk8 | 0.873 | 0.765 | +0.000 | 0 | 6711 MB | no |
+> | ours_tgt_current (control) | 0.317 | 0.304 | +0.750 | 0 | — | no |
+>
+> **`answerid` matches `ours` exactly** (0.875/0.765/+0.000, identical age-curve) — a **single committed
+> answer token per (fact,view)**, stored once at each stream's commit and replayed via CE, fully replaces
+> snapshot self-distillation while eliminating the resident snapshot model (**−29% peak VRAM: 9407→6711 MB**)
+> and **all replay-time teacher forwards (5000→0)**. `topk8` (soft top-8 sketch) is equivalent (0.873) at
+> more bytes. The circular control `current` (self-target the model's live argmax) collapses to naive
+> (0.317, forget +0.750) — proving the **stored target information** does the work, not mere old-prompt
+> exposure. All codex gates pass (all-seen ≥0.84, all-para ≥0.70, oldest-forget ≤0.06, newest within 0.03,
+> base-hop drop ≤0.03, teacher-fwd 0, no snapshot). **Label hygiene:** the target is the *committed dense
+> model's* answer at commit time (`target_source=committed_dense_argmax`), i.e. a committed-teacher signal
+> — for already-correct facts it equals the counterfactual value, but no old **dataset gold** is read
+> during replay. **Contribution:** replay-consolidation's per-fact information requirement (R36-A lower
+> bound) can be met by a **1-token committed target**, making the proven in-weights consolidation strictly
+> cheaper (no teacher model resident, no replay-time teacher compute) with zero retention/plasticity cost.
+> Storage stays O(#facts) — as it must for independent facts — but per-fact cost is minimal and the
+> training-time teacher is removed. (Growth still fixed; no growth claim.)
+>
 > **R36-C (rehearsal-free: answer-level OGD — the STRONGEST first-order primitive) — CLEAN NEGATIVE**
 > `s2/lifecycle_bakeoff.py` `run_ogd`, logs `docs/cloud_results/ogd_ce_pilot_r36c.log` (+ smoke/rank
 > scans `ogd_{ce_smoke,rank64,rank96,rankscan}_r36c.log`), 2-seed 6×40. To close (not strawman) the
