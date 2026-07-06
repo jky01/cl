@@ -32,6 +32,7 @@ OUT = os.environ.get("WB_OUT", "wikibridge_result.json")
 MANIFEST = os.environ.get("WB_MANIFEST", "wikibridge_manifest.json")
 MAXNEW = int(os.environ.get("WB_MAXNEW", 12))
 device = "cuda" if torch.cuda.is_available() else "cpu"
+ACTUAL_STREAMS = SURVIVED_ARTS = 0
 
 tok = AutoTokenizer.from_pretrained(NAME)
 if tok.pad_token is None:
@@ -282,18 +283,22 @@ def main():
         print(f"  seed {seed}: streams={[len(s) for s in streams]} total_qa={len(allqa)}", flush=True)
         if not allqa:
             print("  NO QA — abort seed", flush=True); continue
+        global ACTUAL_STREAMS, SURVIVED_ARTS
+        ACTUAL_STREAMS = len(streams); SURVIVED_ARTS = sum(len(s) for s in streams)
         b_em, b_f1 = score(base, allqa, key="question")
-        bp_em, _ = score(base, allqa, key="eval_question")
+        bp_em, bp_f1 = score(base, allqa, key="eval_question")
         r_em, r_f1 = score(base, allqa, key="question", rag=True)
-        rp_em, _ = score(base, allqa, key="eval_question", rag=True)
-        print(f"    base closed-book O/P EM={b_em:.3f}/{bp_em:.3f} | RAG-gold O/P EM={r_em:.3f}/{rp_em:.3f}", flush=True)
+        rp_em, rp_f1 = score(base, allqa, key="eval_question", rag=True)
+        n_art = sum(len(s) for s in streams)
+        print(f"    actual_streams={len(streams)} survived_articles={n_art} | "
+              f"base closed-book O/P EM={b_em:.3f}/{bp_em:.3f} | RAG-gold O/P EM={r_em:.3f}/{rp_em:.3f}", flush=True)
 
         for arm in ARMS:
             t0 = time.time()
             if arm == "base_no_ingest":
-                res = dict(final_em=b_em, final_f1=b_f1, final_para_em=bp_em, final_para_f1=0.0)
+                res = dict(final_em=b_em, final_f1=b_f1, final_para_em=bp_em, final_para_f1=bp_f1)
             elif arm == "rag_gold_passage":
-                res = dict(final_em=r_em, final_f1=r_f1, final_para_em=rp_em, final_para_f1=0.0)
+                res = dict(final_em=r_em, final_f1=r_f1, final_para_em=rp_em, final_para_f1=rp_f1)
             else:
                 res = run_ingest(base, streams, arm, seed)
             res["wall"] = round(time.time() - t0, 1)
@@ -306,7 +311,7 @@ def run_ingest(base, streams, arm, seed):
     use_qa = arm == "compact_cpt_qa"
     replay = arm.startswith("compact")
     M = load_model()                                  # M_0 = base copy (trainable)
-    rng = random.Random(seed * 13 + hash(arm) % 100)
+    rng = random.Random(seed * 100003 + sum(bytes(arm, "utf8")))   # stable seed (no PYTHONHASHSEED dep)
     committed = []                                     # list of committed old QA {question, answers}
     per_stream = []
     for t in range(len(streams)):
@@ -380,7 +385,8 @@ def dump(results, nseeds):
         summ[arm] = dict(final_em=av("final_em"), final_f1=av("final_f1"),
                          final_para_em=av("final_para_em"), final_para_f1=av("final_para_f1"),
                          per_stream=rs[-1].get("per_stream"))
-    json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS),
+    json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS,
+                              actual_streams=ACTUAL_STREAMS, survived_articles=SURVIVED_ARTS),
                "summary": summ}, open(OUT, "w"), indent=1)
     print("RESULT_JSON " + json.dumps({a: {"final_em": summ[a]["final_em"],
                                            "final_para_em": summ[a]["final_para_em"]} for a in summ}), flush=True)

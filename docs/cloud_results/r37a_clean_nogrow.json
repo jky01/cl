@@ -1,0 +1,80 @@
+{
+  "config": {
+    "model": "Qwen/Qwen2.5-0.5B",
+    "rounds": 6,
+    "per": 40,
+    "grow": 2,
+    "steps": 1000,
+    "seeds_done": 2,
+    "arms": [
+      "grow_local_decoy"
+    ],
+    "lora_r": 8
+  },
+  "summary": {
+    "grow_local_decoy": {
+      "gradient_occupancy_final": null,
+      "effective_grad_final": null,
+      "occupancy_curve": null,
+      "effective_grad_curve": null,
+      "fresh_diagonal": [
+        0.912,
+        0.962,
+        0.912,
+        0.837,
+        0.738,
+        0.887
+      ],
+      "oldest_S0_fresh": 0.9125,
+      "oldest_S0_final": 0.125,
+      "oldest_S0_forgetting": 0.7875,
+      "oldest_S0_para_final": 0.1125,
+      "all_seen_final": 0.325,
+      "all_para_final": 0.29374999999999996,
+      "mean_forgetting_all_streams": 0.55,
+      "age_curve_final_seen": [
+        0.125,
+        0.163,
+        0.213,
+        0.263,
+        0.3,
+        0.887
+      ],
+      "newest_stream_final": 0.8875,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.2013888888888889,
+      "trainable_params_per_round": [
+        29824768,
+        29824768,
+        29824768,
+        29824768,
+        29824768,
+        29824768
+      ],
+      "updated_params_total": 178948608.0,
+      "optimizer_steps": 6000.0,
+      "wall_clock_seconds": 1094.1388758420944,
+      "peak_vram_mb": 5431.187456,
+      "local_lambda": 1.0,
+      "ref_mode": "decoy",
+      "nogrow": true,
+      "delta_new_final": 0.0567,
+      "delta_anchor_final": 0.0056,
+      "delta_decoy_final": 0.0023,
+      "delta_old_final": 0.0312,
+      "delta_old_curve": [
+        0.0,
+        0.0297,
+        0.0222,
+        0.0298,
+        0.0263,
+        0.0312
+      ],
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true
+    }
+  }
+}

@@ -272,6 +272,41 @@
 > Storage stays O(#facts) — as it must for independent facts — but per-fact cost is minimal and the
 > training-time teacher is removed. (Growth still fixed; no growth claim.)
 >
+> **R37-A (localized-write growth isolation — rehearsal-free by minimal forward footprint) — PARTIAL
+> POSITIVE + first GROWTH-NECESSARY result** `s2/lifecycle_bakeoff.py` `run_grow_local`, logs
+> `docs/cloud_results/r37a_grow_local.log` (confounded) + `r37a_clean.{log,json}` + `r37a_clean_nogrow.json`,
+> 2-seed 6×40. `naive` is already grow+freeze+isolate+no-replay (every old prompt READS the newest always-on
+> block ⇒ it forgets +0.74). New lever: penalize each grown block's **relative last-token forward footprint**
+> `‖Δh‖²/‖h‖²` on a NON-new reference so the block fires only on new keys, ~0 (identity) on old prompts ⇒
+> can't perturb them. No router, no replay, single dense. **codex caught a confound** (base-anchor KL was
+> also hitting old counterfactual prompts = anti-memory) — after splitting base-KL (anchors only) from the
+> locality reference, clean 2-seed:
+>
+> | arm | all-seen | oldest-forget |
+> |---|---|---|
+> | naive (grow+freeze, no replay) | 0.387 | +0.738 |
+> | grow_local_decoy (same-template unlabeled coverage) | **0.608** | +0.425 |
+> | grow_local_decoy **NOGROW** (fixed capacity) | 0.325 | +0.787 |
+> | grow_local_oracle (old-prompt coverage — INVALID upper bound) | **0.835** | +0.062 |
+> | nswrite (best prior rehearsal-free) | 0.673 | +0.500 |
+> | replay (ceiling) | 0.875 | +0.000 |
+>
+> **Two real results.** (1) Forward-footprint locality is a **genuinely new, competitive rehearsal-free
+> mechanism**: `decoy` 0.608 (same-template *unlabeled* coverage, no replay/router/old-labels) beats naive
+> by +0.22 and approaches `nswrite` 0.673; and the `oracle` upper bound (footprint-identity on the actual
+> old prompts) reaches **0.835, nearly matching replay (0.875)** — so the mechanism can nearly close the
+> replay gap *if old-prompt coverage improves*; the decoy→oracle gap is a **coverage** gap, not a mechanism
+> ceiling. The earlier "oracle paradox" (oracle destroyed old recall) was purely the base-KL confound —
+> **footprint-identity on old prompts preserves recall**, overturning my initial "footprint ≠ answer
+> preservation" read. (2) **First GROWTH-NECESSARY result in the whole arc**: fixed-capacity + same locality
+> loss (`NOGROW` 0.325) is *worse than naive*, while per-round growth + locality (0.608) works — the
+> localized write **requires fresh grown capacity** to write into (R23/R31/R32/R34 all found growth useless;
+> here it is load-bearing *for this mechanism*). **Honest bound:** decoy (0.608) is still **below replay
+> (0.875)**, so this is not a growth-justification for retention *in general* — it is a competitive
+> rehearsal-free mechanism whose specific form needs growth. Same-template coverage is unlabeled generated
+> data (within contract, not old replay). Open: close the coverage gap (better generated / relation-
+> conditioned coverage) to push decoy → oracle → replay.
+>
 > **R36-C (rehearsal-free: answer-level OGD — the STRONGEST first-order primitive) — CLEAN NEGATIVE**
 > `s2/lifecycle_bakeoff.py` `run_ogd`, logs `docs/cloud_results/ogd_ce_pilot_r36c.log` (+ smoke/rank
 > scans `ogd_{ce_smoke,rank64,rank96,rankscan}_r36c.log`), 2-seed 6×40. To close (not strawman) the
