@@ -131,7 +131,7 @@ def build_squad(seed, base):
     rng = random.Random(3000 + seed); rng.shuffle(titles)
     kept_articles = []
     for title in titles:
-        if len(kept_articles) >= STREAMS * ARTS * 3:      # over-select; para-screen prunes hard
+        if len(kept_articles) >= STREAMS * ARTS * 5:      # over-select; para-screen prunes hard
             break
         rows = by_title[title]
         # one long context = first paragraph(s); collect candidate QAs with short answers
@@ -173,9 +173,10 @@ def build_squad(seed, base):
             final_articles.append({"title": a["title"], "context": a["context"], "qas": keep})
         if len(final_articles) >= STREAMS * ARTS:
             break
-    if len(final_articles) < STREAMS * ARTS:
-        print(f"  WARN: only {len(final_articles)} articles survived para-screen (< {STREAMS*ARTS})", flush=True)
-    streams = [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(STREAMS)]
+    nstream = min(STREAMS, len(final_articles) // ARTS)   # only COMPLETE streams — never an empty stream
+    if nstream < STREAMS:
+        print(f"  WARN: {len(final_articles)} articles survived para-screen -> {nstream} streams (< {STREAMS})", flush=True)
+    streams = [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
     return streams
 
 # ------------------------- counterfactual edited passages (base-ignorance guaranteed) ------------
@@ -219,7 +220,8 @@ def build_cf(seed, base):
     allq = [q for a in arts for q in a["qas"]]        # held-out paraphrase eval surface (answer unchanged)
     for q, p in zip(allq, gen_paraphrases([q["question"] for q in allq])):
         q["eval_question"] = p
-    streams = [arts[i * ARTS:(i + 1) * ARTS] for i in range(STREAMS)]
+    nstream = min(STREAMS, len(arts) // ARTS)
+    streams = [arts[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
     return streams
 
 # ------------------------- training helpers -------------------------
