@@ -448,6 +448,7 @@ def main():
     def run_grow_local(seed, streams, scaffolds, ref_mode):
         LAMBDA = float(os.environ.get("BK_LOCAL_LAMBDA", 1.0))
         NOGROW = int(os.environ.get("BK_LOCAL_NOGROW", 0))     # fixed-capacity control (grow once, reuse)
+        METRIC = os.environ.get("BK_LOCAL_METRIC", "hidden")   # hidden=new-block Δ norm; logit=KL(dense‖snap)
         dense = load_frozen(); base_hop = hop_acc(dense)
         rng = random.Random(seed * 13 + 61)
         used_names = {f[0] for s in streams for f in s}    # exclude ALL used subjects (codex: strict disjoint)
@@ -486,6 +487,11 @@ def main():
             if not NOGROW:
                 grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
             tparams.append(n_trainable(dense))
+            lsnap = None                                       # logit-metric: freeze pre-round output dist
+            if METRIC == "logit":
+                lsnap = copy.deepcopy(dense).eval()
+                for p in lsnap.parameters():
+                    p.requires_grad_(False)
             opt = torch.optim.AdamW([p for p in dense.parameters() if p.requires_grad], lr=LR)
             dense.train()
             for _ in range(STEPS):
@@ -504,10 +510,15 @@ def main():
                     extra = decoys if ref_mode == "decoy" else (prior or decoys)
                     ap += [(p_seen if rng.random() < 0.5 else p_para)(*rng.choice(extra))
                            for _ in range(Ba)]
-                sa, local = fwd_delta(ap, want_grad=True)       # anchor logits + locality penalty
+                sa, local = fwd_delta(ap, want_grad=True)       # anchor logits + hidden-Δ (diagnostic/penalty)
+                ap_e = tok(ap, return_tensors="pt", padding=True).to(device)
                 with torch.no_grad():
-                    ba = base_logits(tok(ap, return_tensors="pt", padding=True).to(device))
+                    ba = base_logits(ap_e)
                 loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                if METRIC == "logit":                           # penalize OUTPUT-dist drift vs pre-round snap
+                    with torch.no_grad():
+                        ls = lsnap.lm_head(lsnap.model(**ap_e, use_cache=False).last_hidden_state[:, -1]).float()
+                    local = F.kl_div(F.log_softmax(sa, -1), F.softmax(ls, -1), reduction="batchmean")
                 loss = loss + LAMBDA * local
                 opt.zero_grad(); loss.backward()
                 torch.nn.utils.clip_grad_norm_([p for p in dense.parameters() if p.requires_grad], 1.0)
@@ -523,15 +534,17 @@ def main():
             diag.append(dict(delta_new=dmean(S), delta_anchor=round(float(
                 fwd_delta([ANCHOR_TEXT[i % len(ANCHOR_TEXT)] for i in range(32)], False)[1]), 4),
                 delta_decoy=dmean(decoys[:64]), delta_old=dmean(prior)))
+            del lsnap; torch.cuda.empty_cache()
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [gl-{ref_mode:6s}{'/nogrow' if NOGROW else '':7s} seed {seed} r{r}] "
+            print(f"    [gl-{ref_mode:6s}/{METRIC:6s}{'/nogrow' if NOGROW else '':7s} seed {seed} r{r}] "
                   f"L={len(dense.model.layers)} d_new={diag[-1]['delta_new']} d_old={diag[-1]['delta_old']} "
                   f"d_anc={diag[-1]['delta_anchor']} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         del dense; torch.cuda.empty_cache()
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=tparams, updated_params_total=sum(tparams),
-                    footprint_diag=diag, local_lambda=LAMBDA, ref_mode=ref_mode, nogrow=bool(NOGROW))
+                    footprint_diag=diag, local_lambda=LAMBDA, ref_mode=ref_mode, nogrow=bool(NOGROW),
+                    local_metric=METRIC)
 
     # ---------------- LoRA-merge arm (fixed size, per-stream adapter merged in) -----------------
     def run_loramerge(seed, streams, scaffolds):
