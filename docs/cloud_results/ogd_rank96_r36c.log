@@ -1,0 +1,23 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=2 per=160 grow=+2L mem=400 steps=500 seeds=1 arms=['ogd'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 2187.24it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2338.07it/s]
+  seed 0: streams=[160, 160]
+    scaffolds answer-recall=[0.58, 0.78] restarts=[0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 1588.76it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2045.72it/s]
+    [ogd-ce_gold seed 0 r0] rank=96 ncol=96 energy-occ=0.0 eff-grad=1.0 upd-leak=0.0 fresh=0.57 seen=[0.57] hop=0.184
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/cl/s2/lifecycle_bakeoff.py", line 999, in <module>
+    main()
+  File "/workspace/cl/s2/lifecycle_bakeoff.py", line 988, in main
+    out_a = run_ogd(seed, streams, scaffolds)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cl/s2/lifecycle_bakeoff.py", line 846, in run_ogd
+    Qnew, ncol = collect_Q(S)                       # commit: fold this stream's answer dirs into Q
+                 ^^^^^^^^^^^^
+  File "/workspace/cl/s2/lifecycle_bakeoff.py", line 791, in collect_Q
+    return ((A @ E.half()) / s.half()).contiguous(), n  # [P, k] fp16, ~orthonormal
+            ~~~~~~~~~~~~~~~^~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 5.33 GiB. GPU 0 has a total capacity of 31.36 GiB of which 4.48 GiB is free. Including non-PyTorch memory, this process has 26.87 GiB memory in use. Of the allocated memory 26.01 GiB is allocated by PyTorch, and 208.16 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+== RANK96 DONE rc=1 ==

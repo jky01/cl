@@ -1,0 +1,18 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=2 per=80 grow=+2L mem=400 steps=400 seeds=1 arms=['ogd'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1819.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2155.25it/s]
+  seed 0: streams=[80, 80]
+    scaffolds answer-recall=[0.86, 0.65] restarts=[1, 1]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  50%|█████     | 145/290 [00:00<00:00, 1449.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2040.72it/s]
+    [ogd-ce_gold seed 0 r0] rank=32 ncol=80 energy-occ=0.0 eff-grad=1.0 upd-leak=0.0 fresh=0.86 seen=[0.86] hop=0.194
+    [ogd-ce_gold seed 0 r1] rank=64 ncol=80 energy-occ=0.179 eff-grad=0.906 upd-leak=0.0018 fresh=0.66 seen=[0.49, 0.66] hop=0.184
+
+== BAKEOFF (mean/1 seeds done, 2 rounds x 80 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  ogd        0.86->0.49 (+0.375)            0.575     0.463     0.66    0.205->0.184  False False   False
+             mean-forget(all-streams)=+0.188 age-curve(final seen S0..Sn)=[0.487, 0.662]
+             energy-occ=[0.0, 0.179] eff-grad=[1.0, 0.906] fresh-diag=[0.863, 0.662]
+RESULT_JSON_1SEED {"ogd": {"gradient_occupancy_final": 0.179, "effective_grad_final": 0.906, "occupancy_curve": [0.0, 0.179], "effective_grad_curve": [1.0, 0.906], "fresh_diagonal": [0.863, 0.662], "oldest_S0_fresh": 0.8625, "oldest_S0_final": 0.4875, "oldest_S0_forgetting": 0.37500000000000006, "oldest_S0_para_final": 0.3375, "all_seen_final": 0.575, "all_para_final": 0.4625, "mean_forgetting_all_streams": 0.18750000000000003, "age_curve_final_seen": [0.487, 0.662], "newest_stream_final": 0.6625, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.1840277777777778, "trainable_params_per_round": [29824768, 29824768], "updated_params_total": 59649536.0, "optimizer_steps": 800.0, "wall_clock_seconds": 125.1139132976532, "peak_vram_mb": 20235.822592, "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true, "uses_training_state": true, "uses_commit_answers": true}}
+
+[all seeds done]
+== RANK64 DONE rc=0 ==
