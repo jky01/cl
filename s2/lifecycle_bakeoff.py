@@ -437,6 +437,98 @@ def main():
                     tparams_per_round=tparams, updated_params_total=sum(tparams),
                     **rep_metrics, **tgt_metrics)
 
+    # ---------------- R37-A grow-local: LOCALIZED-WRITE growth isolation (no router, no replay) ----
+    # naive already = frozen growth isolation and forgets because every old prompt READS the newest
+    # always-on blocks. Fix without routing/replay: penalize each NEW block's residual FORWARD FOOTPRINT
+    # (relative last-token delta ||Δh||²/||h||²) on a NON-new reference distribution, so the block fires
+    # only on its own new-stream keys and stays ~0 (identity) elsewhere -> can't perturb old prompts.
+    # ref_mode: "anchor"=anchor+base-hop only; "decoy"=+same-template unlabeled decoy prompts (unused
+    # subjects, NO labels, NOT old/future facts); "oracle"=+actual prior-stream prompts (INVALID upper
+    # bound, uses old data). Diagnostics: mean new-block Δ on new / anchor / decoy / old-eval prompts.
+    def run_grow_local(seed, streams, scaffolds, ref_mode):
+        LAMBDA = float(os.environ.get("BK_LOCAL_LAMBDA", 1.0))
+        NOGROW = int(os.environ.get("BK_LOCAL_NOGROW", 0))     # fixed-capacity control (grow once, reuse)
+        dense = load_frozen(); base_hop = hop_acc(dense)
+        rng = random.Random(seed * 13 + 61)
+        used = {(f[0], f[1]) for s in streams for f in s}
+        dec_pool = [n for n in big_pool if (n, ATTRS[0]) not in used][:2000]
+        decoys = [(rng.choice(dec_pool), rng.choice(ATTRS), None) for _ in range(400)]
+        hist = []; opt_steps = 0; tparams = []; diag = []
+        if NOGROW:                                             # fixed capacity: grow once up front
+            grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
+
+        def fwd_delta(prompts, want_grad):                     # forward + per-new-layer relative last-tok Δ
+            nl = dense.model.layers[-GROW:]
+            store = []
+            def mk():
+                def hook(mod, inp, out):
+                    hi = inp[0][:, -1]; ho = (out[0] if isinstance(out, tuple) else out)[:, -1]
+                    store.append((ho - hi).pow(2).sum(-1) / (hi.pow(2).sum(-1) + 1e-6))   # [B]
+                return hook
+            handles = [l.register_forward_hook(mk()) for l in nl]
+            e = tok(prompts, return_tensors="pt", padding=True).to(device)
+            ctx = torch.enable_grad() if want_grad else torch.no_grad()
+            with ctx:
+                hs = dense.model(**e, use_cache=False).last_hidden_state
+                logits = dense.lm_head(hs[:, -1]).float()
+            for h in handles:
+                h.remove()
+            local = torch.stack(store).mean() if store else torch.zeros((), device=device)
+            return logits, local
+
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            prior = [f for s in streams[:r] for f in s]
+            if not NOGROW:
+                grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
+            tparams.append(n_trainable(dense))
+            opt = torch.optim.AdamW([p for p in dense.parameters() if p.requires_grad], lr=LR)
+            dense.train()
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                if ref_mode in ("decoy", "oracle"):            # broaden the locality reference distribution
+                    extra = decoys if ref_mode == "decoy" else (prior or decoys)
+                    ap += [(p_seen if rng.random() < 0.5 else p_para)(*rng.choice(extra))
+                           for _ in range(Ba)]
+                sa, local = fwd_delta(ap, want_grad=True)       # anchor logits + locality penalty
+                with torch.no_grad():
+                    ba = base_logits(tok(ap, return_tensors="pt", padding=True).to(device))
+                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                loss = loss + LAMBDA * local
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_([p for p in dense.parameters() if p.requires_grad], 1.0)
+                opt.step(); opt_steps += 1
+            dense.eval()
+            # forward-footprint diagnostics (eval-only): mean new-block Δ on each distribution
+            def dmean(facts):
+                if not facts:
+                    return None
+                fs = facts[:64]
+                _, d = fwd_delta([(p_seen if i % 2 else p_para)(*f) for i, f in enumerate(fs)], False)
+                return round(float(d), 4)
+            diag.append(dict(delta_new=dmean(S), delta_anchor=round(float(
+                fwd_delta([ANCHOR_TEXT[i % len(ANCHOR_TEXT)] for i in range(32)], False)[1]), 4),
+                delta_decoy=dmean(decoys[:64]), delta_old=dmean(prior)))
+            seen, para, h = eval_all(dense, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [gl-{ref_mode:6s}{'/nogrow' if NOGROW else '':7s} seed {seed} r{r}] "
+                  f"L={len(dense.model.layers)} d_new={diag[-1]['delta_new']} d_old={diag[-1]['delta_old']} "
+                  f"d_anc={diag[-1]['delta_anchor']} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        del dense; torch.cuda.empty_cache()
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=tparams, updated_params_total=sum(tparams),
+                    footprint_diag=diag, local_lambda=LAMBDA, ref_mode=ref_mode, nogrow=bool(NOGROW))
+
     # ---------------- LoRA-merge arm (fixed size, per-stream adapter merged in) -----------------
     def run_loramerge(seed, streams, scaffolds):
         from peft import LoraConfig, get_peft_model
@@ -957,13 +1049,15 @@ def main():
         "margin":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "marginrandv": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True, uses_commit_answers=True),
+        "grow_local": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
     _scaf_arms = ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand",
                   "naive_fixed", "margin", "marginrandv", "ogd")
-    need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") or a.startswith("ours_tgt_") for a in ARMS)
+    need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") or a.startswith("ours_tgt_")
+                        or a.startswith("grow_local_") for a in ARMS)
 
     def agg(arm):
         runs = results[arm]
@@ -1019,7 +1113,8 @@ def main():
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
             peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt,
-            **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_")) else flags[arm]))
+            **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_"))
+               else flags["grow_local"] if arm.startswith("grow_local_") else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
 
@@ -1091,6 +1186,8 @@ def main():
                 out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_k=int(arm[6:]))
             elif arm.startswith("ours_tgt_"):             # R36-A2: ours_tgt_<mode> = ours with compact target
                 out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_tgt=arm[len("ours_tgt_"):])
+            elif arm.startswith("grow_local_"):           # R37-A: localized-write growth isolation
+                out_a = run_grow_local(seed, streams, scaffolds, arm[len("grow_local_"):])
             else:                                          # sweep all K/targets in ONE process (shared scaffolds)
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
