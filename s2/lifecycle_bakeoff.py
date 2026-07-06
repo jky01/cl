@@ -291,11 +291,27 @@ def main():
     def run_consolidate(seed, streams, kind, scaffolds):
         dense = load_frozen()
         base_hop = hop_acc(dense)
-        rng = random.Random(seed * 13 + hash(kind) % 97)
+        rng = random.Random(seed * 13 + abs(hash(kind)) % 97)
         hist = []; opt_steps = 0; tparams = []
         replay = kind in ("ours", "oracle")            # ours=self-distill(no gold); oracle=gold-old CE
+        # R36-A minimal-footprint rehearsal: replay only a FIXED committed K-subset per prior stream
+        # (BK_REPLAY_K). K=-1 (default) = full replay (unchanged ours/oracle). K=0 => empty pool => naive
+        # within the consolidate loop. Fixed subset (stable per-stream RNG, NOT hash-based) so the stored
+        # footprint is exactly K/stream, not a stochastic approximation to full replay.
+        REPLAY_K = int(os.environ.get("BK_REPLAY_K", -1))
+        replay_subset = None
+        if REPLAY_K >= 0:
+            replay_subset = []
+            for j, s in enumerate(streams):
+                sr = random.Random(seed * 100003 + j * 31 + 7)
+                idx = list(range(len(s))); sr.shuffle(idx)
+                replay_subset.append([s[i] for i in idx[:REPLAY_K]])
         for r in range(ROUNDS):
-            S = streams[r]; prior = [f for s in streams[:r] for f in s]
+            S = streams[r]
+            if REPLAY_K >= 0:                          # subsampled fixed-K replay pool
+                prior = [f for j in range(r) for f in replay_subset[j]]
+            else:
+                prior = [f for s in streams[:r] for f in s]
             mods = Kf = Sf = None
             if kind in ("ours", "naive", "loramerge", "oracle"):
                 mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
@@ -348,11 +364,26 @@ def main():
             dense.eval(); del snap; torch.cuda.empty_cache()
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [{kind:9s} seed {seed} r{r}] L={len(dense.model.layers)} "
-                  f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+            print(f"    [{kind:9s}{('K'+str(REPLAY_K)) if REPLAY_K>=0 else '':4s} seed {seed} r{r}] "
+                  f"L={len(dense.model.layers)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        # R36-A: replayed vs NON-replayed old-fact recall (the decisive test — do K probes protect the
+        # WHOLE stream, or only the rehearsed items?). Over streams that were actually rehearsed (j<ROUNDS-1).
+        rep_metrics = {}
+        if replay_subset is not None and 0 <= REPLAY_K < PER:
+            rep = [f for j in range(ROUNDS - 1) for f in replay_subset[j]]
+            nonrep = [f for j in range(ROUNDS - 1) for f in streams[j] if f not in replay_subset[j]]
+            rep_metrics = dict(
+                replay_k=REPLAY_K, n_replayed=len(rep), n_nonreplayed=len(nonrep),
+                replayed_seen=(recall(dense, rep, p_seen) if rep else None),
+                replayed_para=(recall(dense, rep, p_para) if rep else None),
+                nonreplayed_seen=(recall(dense, nonrep, p_seen) if nonrep else None),
+                nonreplayed_para=(recall(dense, nonrep, p_para) if nonrep else None))
+            print(f"    [{kind} K{REPLAY_K} seed {seed}] REPLAYED seen={rep_metrics['replayed_seen']} "
+                  f"para={rep_metrics['replayed_para']} | NON-REPLAYED seen={rep_metrics['nonreplayed_seen']} "
+                  f"para={rep_metrics['nonreplayed_para']} (n_rep={len(rep)} n_non={len(nonrep)})", flush=True)
         del dense; torch.cuda.empty_cache()
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
-                    tparams_per_round=tparams, updated_params_total=sum(tparams))
+                    tparams_per_round=tparams, updated_params_total=sum(tparams), **rep_metrics)
 
     # ---------------- LoRA-merge arm (fixed size, per-stream adapter merged in) -----------------
     def run_loramerge(seed, streams, scaffolds):
@@ -907,6 +938,15 @@ def main():
                       for j in range(nst)] if has_occ else None)
         eff_curve = ([round(sum(r["effective_grad_curve"][j] for r in runs) / len(runs), 3)
                       for j in range(nst)] if has_eff else None)
+        rep = {}
+        if all("replay_k" in r for r in runs):            # R36-A minimal-footprint rehearsal extras
+            def avg(k):
+                vals = [r[k] for r in runs if r.get(k) is not None]
+                return round(sum(vals) / len(vals), 4) if vals else None
+            rep = dict(replay_k=runs[0]["replay_k"],
+                       replayed_seen=avg("replayed_seen"), replayed_para=avg("replayed_para"),
+                       nonreplayed_seen=avg("nonreplayed_seen"), nonreplayed_para=avg("nonreplayed_para"),
+                       n_replayed=runs[0].get("n_replayed"), n_nonreplayed=runs[0].get("n_nonreplayed"))
         return dict(
             gradient_occupancy_final=occ, effective_grad_final=eff,
             occupancy_curve=occ_curve, effective_grad_curve=eff_curve, fresh_diagonal=fresh_diag,
@@ -918,7 +958,7 @@ def main():
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
-            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **flags[arm])
+            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **flags[arm])
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
 
