@@ -504,21 +504,26 @@ def main():
                     t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
                 loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
                     F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
-                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
-                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
-                if ref_mode in ("decoy", "oracle"):            # broaden the locality reference distribution
-                    extra = decoys if ref_mode == "decoy" else (prior or decoys)
-                    ap += [(p_seen if rng.random() < 0.5 else p_para)(*rng.choice(extra))
-                           for _ in range(Ba)]
-                sa, local = fwd_delta(ap, want_grad=True)       # anchor logits + hidden-Δ (diagnostic/penalty)
-                ap_e = tok(ap, return_tensors="pt", padding=True).to(device)
+                # base-anchor KL ONLY on true base-like anchors (NEVER on old counterfactual prompts —
+                # codex: base-KL on old prompts is an anti-memory loss; that confounded the old oracle arm)
+                anch = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                anch += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                sa, la = fwd_delta(anch, want_grad=True)
                 with torch.no_grad():
-                    ba = base_logits(ap_e)
+                    ba = base_logits(tok(anch, return_tensors="pt", padding=True).to(device))
                 loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                # locality penalty on the reference manifold (NO base-KL on it)
+                if ref_mode == "anchor":
+                    lref = anch; lsa, local = sa, la
+                else:
+                    extra = decoys if ref_mode == "decoy" else (prior or decoys)
+                    lref = [(p_seen if rng.random() < 0.5 else p_para)(*rng.choice(extra)) for _ in range(Ba)]
+                    lsa, local = fwd_delta(lref, want_grad=True)
                 if METRIC == "logit":                           # penalize OUTPUT-dist drift vs pre-round snap
                     with torch.no_grad():
-                        ls = lsnap.lm_head(lsnap.model(**ap_e, use_cache=False).last_hidden_state[:, -1]).float()
-                    local = F.kl_div(F.log_softmax(sa, -1), F.softmax(ls, -1), reduction="batchmean")
+                        le = tok(lref, return_tensors="pt", padding=True).to(device)
+                        ls = lsnap.lm_head(lsnap.model(**le, use_cache=False).last_hidden_state[:, -1]).float()
+                    local = F.kl_div(F.log_softmax(lsa, -1), F.softmax(ls, -1), reduction="batchmean")
                 loss = loss + LAMBDA * local
                 opt.zero_grad(); loss.backward()
                 torch.nn.utils.clip_grad_norm_([p for p in dense.parameters() if p.requires_grad], 1.0)
