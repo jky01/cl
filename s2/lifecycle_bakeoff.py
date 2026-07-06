@@ -426,8 +426,12 @@ def main():
         # R36-A2 footprint accounting: extra stored bytes/fact (beyond the (key,relation) tuple all modes
         # need) and replay-time teacher forward passes (0 for precomputed modes = the compute win).
         bpf = {"snapshot": 0, "answerid": 2 * 4, "topk8": 2 * 8 * 6,
-               "topk16": 2 * 16 * 6, "current": 0}.get(REPLAY_TGT, 0)
-        tgt_metrics = dict(replay_tgt=REPLAY_TGT, replay_teacher_forwards=replay_fwd,
+               "topk16": 2 * 16 * 6, "current": 0}.get(REPLAY_TGT, 0)   # serialized/theoretical bytes/fact
+        tsrc = {"snapshot": "pre_round_snapshot_kl", "answerid": "committed_dense_argmax",
+                "topk8": "committed_dense_topk_logits", "topk16": "committed_dense_topk_logits",
+                "current": "live_student_argmax"}.get(REPLAY_TGT, "?")
+        tgt_metrics = dict(replay_tgt=REPLAY_TGT, target_source=tsrc,
+                           replay_teacher_forwards=replay_fwd,       # count of replay-time teacher BATCHES
                            extra_bytes_per_fact=bpf, uses_snapshot_teacher=(REPLAY_TGT == "snapshot"))
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=tparams, updated_params_total=sum(tparams),
@@ -997,6 +1001,12 @@ def main():
                        replayed_seen=avg("replayed_seen"), replayed_para=avg("replayed_para"),
                        nonreplayed_seen=avg("nonreplayed_seen"), nonreplayed_para=avg("nonreplayed_para"),
                        n_replayed=runs[0].get("n_replayed"), n_nonreplayed=runs[0].get("n_nonreplayed"))
+        tgt = {}
+        if all("replay_tgt" in r for r in runs):          # R36-A2 compact-target audit fields
+            tgt = dict(replay_tgt=runs[0]["replay_tgt"], target_source=runs[0].get("target_source"),
+                       replay_teacher_forwards=sum(r["replay_teacher_forwards"] for r in runs) / len(runs),
+                       extra_bytes_per_fact=runs[0]["extra_bytes_per_fact"],
+                       uses_snapshot_teacher=runs[0]["uses_snapshot_teacher"])
         return dict(
             gradient_occupancy_final=occ, effective_grad_final=eff,
             occupancy_curve=occ_curve, effective_grad_curve=eff_curve, fresh_diagonal=fresh_diag,
@@ -1008,7 +1018,7 @@ def main():
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
-            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep,
+            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt,
             **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_")) else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
