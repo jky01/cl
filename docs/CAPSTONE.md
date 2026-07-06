@@ -6,9 +6,11 @@ results ≥2 seeds unless noted. Harness: `s2/lifecycle_bakeoff.py`. Logs: `docs
 ## Headline
 
 > **Sequential no-gold scaffold distillation + compact committed-target replay** writes new facts into a
-> **single dense checkpoint**, retains a lifelong stream **without catastrophic forgetting**, uses **no
-> external memory at inference**, and avoids **joint full retraining**. It **beats standard no-replay
-> continual-learning baselines** in the same harness, and (R36-A2) removes the expensive resident snapshot
+> **single dense checkpoint**, retains a **lifelong-style 6-stream factual stream at 0.5B scale**
+> **without catastrophic forgetting**, uses **no external memory at inference**, and avoids **joint full
+> retraining**. It **beats standard in-weights no-replay continual-learning baselines** in the same
+> sequential harness (including a continued-FT baseline that has gold new-stream labels but no old replay),
+> and (R36-A2) removes the expensive resident snapshot
 > teacher and all replay-time teacher forwards — a concrete compute/VRAM win at zero retention cost.
 
 This is a *cheap, memory-free, in-weights* continual-learning result. It is **not** a claim that continual
@@ -32,8 +34,8 @@ scaffold is **discarded** — inference is the dense checkpoint alone.
 |---|---|
 | **R19–R25** faithful no-gold loop | scaffold→distill→self-distill replay retains (oldest-S0 forget +0.01) vs naive forgets (+0.60); single dense, no inference memory |
 | **R26–R30** reliability + 3-seed | answer-recall restart guard → all streams consolidate; replay all-seen **0.918**, oldest forget +0.017; not seed-specific |
-| **R33** vs standard CL | replay-consolidation **beats** sequential-no-replay, continued-FT-with-gold, LoRA-merge, and matches external memory **without inference memory** (all-seen **0.914**) |
-| **R35** brackets | **EWC ≪ replay ≤ gold-old oracle** — replay is near the gold-old upper bound with no gold |
+| **R33** vs standard CL (3-seed) | replay-consolidation all-seen **0.914** **beats** in-weights no-replay baselines: sequential-naive **0.408**, continued-FT-**with-gold**-new **0.460**, LoRA-merge **0.367**; matches external memory (0.875) **without inference memory**. Even gold-new continued-FT forgets; compact committed replay retains without old gold. |
+| **R35** brackets | **EWC ≪ replay < gold-old oracle**: replay (0.890) far above regularization/no-replay (EWC 0.456) but still **below** the gold-old replay ceiling (oracle 0.994; gap **+0.104 seen / +0.156 para** — the honest no-gold self-distill headroom) |
 | **R36-EV** external validity | holds on **KG-shaped real-entity counterfactuals** (~80 real subjects, 5 relations, 2 surface forms, frozen-base screen): all-seen **0.919**, oldest forget **+0.000**, oracle-gap seen +0.035 — **not a template artifact** |
 | **R36-A2** cheaper | a **1 committed answer token / (fact,view)**, stored once at commit, replayed via CE, **== full snapshot self-distill** (0.875/0.765/+0.000) while removing the resident snapshot and **5000→0** replay teacher forwards (**peak VRAM 9407→6711 MB, −29%**) |
 
@@ -54,8 +56,11 @@ Each was a genuine attempt at the frontier, closed with the *right* experiment (
   rank-inefficient and memory-bound.
 - **Sublinear-fact rehearsal is item rehearsal, not stream protection (R36-A).** Replaying a random K-subset
   retains the rehearsed items (~0.9) but leaves non-rehearsed stream-mates at ~naive (0.375@K8). For
-  **independent** counterfactual facts this is information-theoretically forced: fact A carries zero
-  information about unrelated fact B, so retention footprint is **irreducibly O(#facts)**.
+  **independent** counterfactual facts, random sublinear coverage does not protect non-replayed items:
+  fact A carries zero information about unrelated fact B, so the retained information must scale with the
+  number of independent facts preserved — an **O(#facts) information-footprint** result for arbitrary
+  independent facts. (This is not a universal lower bound on all structured-data coresets or
+  self-generated coverage schemes, nor an exact per-round replay-frequency bound.)
 
 ## 3. Honest limits (what we did NOT prove)
 
@@ -80,12 +85,20 @@ bank at inference; one un-routed checkpoint), with gates: `all_seen` materially 
 above naive; `all_para` high (no prompt memorization); oldest forget ≤0.10; newest within 0.03 of the
 replay reference; base-hop drop ≤0.03; report parameter growth and inference FLOPs against fixed-capacity
 and large-from-start controls. Routed variants (`iso_oracle_route`, `iso_key_route`) are upper bounds
-only, not project-valid claims.
+only, not project-valid claims. **A routed arm can diagnose whether isolation itself has value, but it is
+not a project-valid solution unless the isolated knowledge can be merged into one un-routed dense path
+without replay-like historical supervision** — otherwise "growth works" quietly means "routing works."
 
 Other appendix-level probes: curvature-aware protection (K-FAC Fisher — likely a bounded negative, a
 stronger surrogate than the failed diagonal EWC but still a local approximation, not old-loss
 optimization); structured/redundant-data regimes where coreset replay *can* generalize (a different
 theorem boundary, not arbitrary-fact lifelong retention).
+
+**Next frontier (R37 roadmap):** **R37-A** strict no-router growth isolation (only if the harness can
+enforce the no-task-ID / no-key-bank / un-routed-inference contract cleanly); **R37-B** structured/
+generative replay coverage (reduce O(#facts) prompt storage without losing independent-fact retention);
+**R37-C** better committed-target / scaffold quality to close the para-dominated oracle gap (+0.131 para
+at R36-EV). These are named as the open program, not run before closing R19–R36.
 
 ## 5. Reproducibility
 
@@ -101,8 +114,9 @@ theorem boundary, not arbitrary-fact lifelong retention).
 
 Replay-consolidation is a robust, externally-valid, now-cheap method for writing independent factual
 knowledge into a single dense model with no inference memory and no joint retraining, and it beats standard
-CL baselines. The cheaper dreams around it — rehearsal-free protection and sublinear-fact rehearsal — are
-mapped and bounded. Growth remains unproven and is scoped as strict-contract future work. Continual
-learning is **not solved**; this is an honest, reproducible advance on the *in-weights, memory-free* corner
-of it, with the open frontiers (a genuinely-new rehearsal-free mechanism; no-router growth isolation)
-named rather than overclaimed.
+in-weights no-replay CL baselines. The cheaper dreams around it — rehearsal-free protection and
+sublinear-fact rehearsal — are mapped and bounded. Continual learning is **not solved**; this is an honest,
+reproducible advance on the *in-weights, memory-free* corner of it. **Replay-consolidation is the closed
+positive; first-order rehearsal-free protection and random sublinear replay are bounded negatives; growth
+remains an explicitly unproven future frontier that must win under a strict no-router, matched-compute
+isolation test before it can be claimed as part of the solution.**
