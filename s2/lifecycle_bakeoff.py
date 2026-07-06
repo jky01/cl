@@ -450,9 +450,13 @@ def main():
         NOGROW = int(os.environ.get("BK_LOCAL_NOGROW", 0))     # fixed-capacity control (grow once, reuse)
         dense = load_frozen(); base_hop = hop_acc(dense)
         rng = random.Random(seed * 13 + 61)
-        used = {(f[0], f[1]) for s in streams for f in s}
-        dec_pool = [n for n in big_pool if (n, ATTRS[0]) not in used][:2000]
-        decoys = [(rng.choice(dec_pool), rng.choice(ATTRS), None) for _ in range(400)]
+        used_names = {f[0] for s in streams for f in s}    # exclude ALL used subjects (codex: strict disjoint)
+        if DATA == "kg":
+            dec_pool = [n for n in KG_SUBJECTS if n not in used_names]
+            decoys = [(rng.choice(dec_pool), rng.choice(KG_RELS), None) for _ in range(400)] if dec_pool else []
+        else:
+            dec_pool = [n for n in big_pool if n not in used_names][:2000]
+            decoys = [(rng.choice(dec_pool), rng.choice(ATTRS), None) for _ in range(400)] if dec_pool else []
         hist = []; opt_steps = 0; tparams = []; diag = []
         if NOGROW:                                             # fixed capacity: grow once up front
             grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
@@ -1095,6 +1099,19 @@ def main():
                        replayed_seen=avg("replayed_seen"), replayed_para=avg("replayed_para"),
                        nonreplayed_seen=avg("nonreplayed_seen"), nonreplayed_para=avg("nonreplayed_para"),
                        n_replayed=runs[0].get("n_replayed"), n_nonreplayed=runs[0].get("n_nonreplayed"))
+        gl = {}
+        if all("footprint_diag" in r for r in runs):       # R37-A localized-write footprint diagnostics
+            def dcurve(key):
+                return [round(sum((r["footprint_diag"][j].get(key) or 0.0) for r in runs) / len(runs), 4)
+                        for j in range(len(runs[0]["footprint_diag"]))]
+            def dfin(key):
+                vs = [r["footprint_diag"][-1].get(key) for r in runs if r["footprint_diag"][-1].get(key) is not None]
+                return round(sum(vs) / len(vs), 4) if vs else None
+            gl = dict(local_lambda=runs[0].get("local_lambda"), ref_mode=runs[0].get("ref_mode"),
+                      nogrow=runs[0].get("nogrow"),
+                      delta_new_final=dfin("delta_new"), delta_anchor_final=dfin("delta_anchor"),
+                      delta_decoy_final=dfin("delta_decoy"), delta_old_final=dfin("delta_old"),
+                      delta_old_curve=dcurve("delta_old"))
         tgt = {}
         if all("replay_tgt" in r for r in runs):          # R36-A2 compact-target audit fields
             tgt = dict(replay_tgt=runs[0]["replay_tgt"], target_source=runs[0].get("target_source"),
@@ -1112,7 +1129,7 @@ def main():
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
-            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt,
+            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt, **gl,
             **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_"))
                else flags["grow_local"] if arm.startswith("grow_local_") else flags[arm]))
 
