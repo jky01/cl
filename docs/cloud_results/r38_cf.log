@@ -1,0 +1,17 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WIKIBRIDGE (Qwen/Qwen2.5-0.5B, cuda) source=cf streams=3x4art x4qa cpt=200 cons=300 seeds=1 arms=['base_no_ingest', 'rag_gold_passage', 'naive_cpt', 'compact_cpt_qa']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2962.66it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  60%|██████    | 261/434 [00:00<00:00, 2584.35it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 2461.07it/s]
+  seed 0: streams=[4] total_qa=16
+    base closed-book O/P EM=0.000/0.000 | RAG-gold O/P EM=0.562/0.188
+    [base_no_ingest] {"final_em": 0.0, "final_f1": 0.0, "final_para_em": 0.0, "final_para_f1": 0.0, "wall": 0.0}
+    [rag_gold_passage] {"final_em": 0.5625, "final_f1": 0.625, "final_para_em": 0.1875, "final_para_f1": 0.0, "wall": 0.0}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3112.98it/s]
+      [naive_cpt s0 t0] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/16 old O/P=None/None
+    [naive_cpt] {"final_em": 0.0, "final_f1": 0.012, "final_para_em": 0.0, "final_para_f1": 0.012, "wall": 50.3}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 2559.43it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2694.59it/s]
+      [compact_cpt_qa s0 t0] scaffold O/P=0.94/0.62 M_new O/P=0.94/0.50 committed=15/16 old O/P=None/None
+    [compact_cpt_qa] {"final_em": 0.938, "final_f1": 0.938, "final_para_em": 0.5, "final_para_f1": 0.5, "wall": 246.2}
+RESULT_JSON {"base_no_ingest": {"final_em": 0.0, "final_para_em": 0.0}, "rag_gold_passage": {"final_em": 0.562, "final_para_em": 0.188}, "naive_cpt": {"final_em": 0.0, "final_para_em": 0.0}, "compact_cpt_qa": {"final_em": 0.938, "final_para_em": 0.5}}
+[done]
+== R38CF DONE rc=0 ==

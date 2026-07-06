@@ -1,0 +1,67 @@
+{
+ "config": {
+  "source": "cf",
+  "streams": 3,
+  "arts": 4,
+  "qa": 4,
+  "seeds": 1,
+  "arms": [
+   "base_no_ingest",
+   "rag_gold_passage",
+   "naive_cpt",
+   "compact_cpt_qa"
+  ]
+ },
+ "summary": {
+  "base_no_ingest": {
+   "final_em": 0.0,
+   "final_f1": 0.0,
+   "final_para_em": 0.0,
+   "final_para_f1": 0.0,
+   "per_stream": null
+  },
+  "rag_gold_passage": {
+   "final_em": 0.562,
+   "final_f1": 0.625,
+   "final_para_em": 0.188,
+   "final_para_f1": 0.0,
+   "per_stream": null
+  },
+  "naive_cpt": {
+   "final_em": 0.0,
+   "final_f1": 0.012,
+   "final_para_em": 0.0,
+   "final_para_f1": 0.012,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 0.0,
+     "scaffold_new_para": 0.0,
+     "M_new_orig": 0.0,
+     "M_new_para": 0.0,
+     "n_committed": 0,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  },
+  "compact_cpt_qa": {
+   "final_em": 0.938,
+   "final_f1": 0.938,
+   "final_para_em": 0.5,
+   "final_para_f1": 0.5,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 0.938,
+     "scaffold_new_para": 0.625,
+     "M_new_orig": 0.938,
+     "M_new_para": 0.5,
+     "n_committed": 15,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  }
+ }
+}
