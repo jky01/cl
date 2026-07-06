@@ -85,15 +85,40 @@ def gen(model, prompts, max_new=MAXNEW):
             outs.append(txt.split("\n")[0].strip())
     return outs
 
-def score(model, qas, template=QT, rag=False):
+def score(model, qas, key="question", template=QT, rag=False):
     if not qas:
         return 0.0, 0.0
-    prompts = [(RT.format(c=q["context"], q=q["question"]) if rag else template.format(q=q["question"]))
-               for q in qas]
+    prompts = [(RT.format(c=q["context"], q=q[key]) if rag else template.format(q=q[key])) for q in qas]
     preds = gen(model, prompts)
     e = sum(em(p, q["answers"]) for p, q in zip(preds, qas)) / len(qas)
     ff = sum(f1(p, q["answers"]) for p, q in zip(preds, qas)) / len(qas)
     return e, ff
+
+WB_PARA = os.environ.get("WB_PARA_MODEL", "Qwen/Qwen2.5-3B-Instruct")
+
+def gen_paraphrases(questions):
+    """Generate ONE held-out paraphrase per question via an instruct model (data-prep only, then freed).
+    The paraphrase preserves meaning+answer but changes surface — the real internalization eval surface."""
+    pm = AutoModelForCausalLM.from_pretrained(WB_PARA, dtype=torch.bfloat16).to(device).eval()
+    pt = AutoTokenizer.from_pretrained(WB_PARA)
+    out = []
+    sys = ("Reword the question so it has the SAME meaning and the SAME answer but DIFFERENT wording. "
+           "Output only the reworded question, nothing else.")
+    for i in range(0, len(questions), 16):
+        chunk = questions[i:i + 16]
+        msgs = [[{"role": "system", "content": sys}, {"role": "user", "content": q}] for q in chunk]
+        texts = [pt.apply_chat_template(m, tokenize=False, add_generation_prompt=True) for m in msgs]
+        pt.padding_side = "left"
+        if pt.pad_token is None:
+            pt.pad_token = pt.eos_token
+        e = pt(texts, return_tensors="pt", padding=True).to(device)
+        with torch.no_grad():
+            g = pm.generate(**e, max_new_tokens=40, do_sample=False, pad_token_id=pt.pad_token_id)
+        for j in range(g.shape[0]):
+            txt = pt.decode(g[j, e["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+            out.append(txt.split("\n")[0].strip() or chunk[j])
+    del pm; torch.cuda.empty_cache()
+    return out
 
 # ------------------------- data: SQuAD hard-tail streams (base-screened) -------------------------
 def build_squad(seed, base):
@@ -131,11 +156,26 @@ def build_squad(seed, base):
         e2 = [em(p, q["answers"]) for p, q in zip(gen(base, [QT2.format(q=q["question"]) for q in cand]), cand)]
         er = [em(p, q["answers"]) for p, q in zip(gen(base, [RT.format(c=q["context"], q=q["question"]) for q in cand]), cand)]
         hard = [q for q, a, b, r in zip(cand, e1, e2, er) if a == 0 and b == 0 and r == 1]
-        if len(hard) >= QA_PER:
-            kept_articles.append({"title": title, "context": ctx, "qas": hard[:QA_PER]})
-    if len(kept_articles) < STREAMS * ARTS:
-        print(f"  WARN: only {len(kept_articles)} hard articles found (< {STREAMS*ARTS})", flush=True)
-    streams = [kept_articles[i * ARTS:(i + 1) * ARTS] for i in range(STREAMS)]
+        if len(hard) >= QA_PER + 1:                # over-select; paraphrase screen will prune
+            kept_articles.append({"title": title, "context": ctx, "qas": hard})
+    # ---- paraphrase pass: generate 1 held-out paraphrase/QA, keep those base-hard AND RAG-answerable ----
+    allq = [q for a in kept_articles for q in a["qas"]]
+    paras = gen_paraphrases([q["question"] for q in allq])
+    for q, p in zip(allq, paras):
+        q["eval_question"] = p
+    bp = [em(pr, q["answers"]) for pr, q in zip(gen(base, [QT.format(q=q["eval_question"]) for q in allq]), allq)]
+    rp = [em(pr, q["answers"]) for pr, q in zip(gen(base, [RT.format(c=q["context"], q=q["eval_question"]) for q in allq]), allq)]
+    ok = {id(q) for q, b, r in zip(allq, bp, rp) if b == 0 and r == 1}   # base fails para, RAG answers para
+    final_articles = []
+    for a in kept_articles:
+        keep = [q for q in a["qas"] if id(q) in ok][:QA_PER]
+        if len(keep) >= QA_PER:
+            final_articles.append({"title": a["title"], "context": a["context"], "qas": keep})
+        if len(final_articles) >= STREAMS * ARTS:
+            break
+    if len(final_articles) < STREAMS * ARTS:
+        print(f"  WARN: only {len(final_articles)} articles survived para-screen (< {STREAMS*ARTS})", flush=True)
+    streams = [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(STREAMS)]
     return streams
 
 # ------------------------- counterfactual edited passages (base-ignorance guaranteed) ------------
@@ -174,6 +214,11 @@ def build_cf(seed, base):
                 break
         if len(qas) >= QA_PER:
             arts.append({"title": title, "context": qas[0]["context"], "qas": qas[:QA_PER]})
+        if len(arts) >= STREAMS * ARTS:
+            break
+    allq = [q for a in arts for q in a["qas"]]        # held-out paraphrase eval surface (answer unchanged)
+    for q, p in zip(allq, gen_paraphrases([q["question"] for q in allq])):
+        q["eval_question"] = p
     streams = [arts[i * ARTS:(i + 1) * ARTS] for i in range(STREAMS)]
     return streams
 
@@ -235,16 +280,18 @@ def main():
         print(f"  seed {seed}: streams={[len(s) for s in streams]} total_qa={len(allqa)}", flush=True)
         if not allqa:
             print("  NO QA — abort seed", flush=True); continue
-        b_em, b_f1 = score(base, allqa)
-        r_em, r_f1 = score(base, allqa, rag=True)
-        print(f"    base closed-book EM={b_em:.3f} F1={b_f1:.3f} | RAG-gold EM={r_em:.3f} F1={r_f1:.3f}", flush=True)
+        b_em, b_f1 = score(base, allqa, key="question")
+        bp_em, _ = score(base, allqa, key="eval_question")
+        r_em, r_f1 = score(base, allqa, key="question", rag=True)
+        rp_em, _ = score(base, allqa, key="eval_question", rag=True)
+        print(f"    base closed-book O/P EM={b_em:.3f}/{bp_em:.3f} | RAG-gold O/P EM={r_em:.3f}/{rp_em:.3f}", flush=True)
 
         for arm in ARMS:
             t0 = time.time()
             if arm == "base_no_ingest":
-                res = dict(final_em=b_em, final_f1=b_f1)
+                res = dict(final_em=b_em, final_f1=b_f1, final_para_em=bp_em, final_para_f1=0.0)
             elif arm == "rag_gold_passage":
-                res = dict(final_em=r_em, final_f1=r_f1)
+                res = dict(final_em=r_em, final_f1=r_f1, final_para_em=rp_em, final_para_f1=0.0)
             else:
                 res = run_ingest(base, streams, arm, seed)
             res["wall"] = round(time.time() - t0, 1)
@@ -274,7 +321,8 @@ def run_ingest(base, streams, arm, seed):
             opt.zero_grad(); loss.backward()
             torch.nn.utils.clip_grad_norm_(S.parameters(), 1.0); opt.step()
         S.eval()
-        s_em, _ = score(S, new_qa)                     # DIAGNOSTIC: can the scaffold answer new QA?
+        s_em, _ = score(S, new_qa, key="question")     # DIAGNOSTIC: scaffold on ORIG question
+        s_pa, _ = score(S, new_qa, key="eval_question")  # scaffold on held-out PARAPHRASE (internalization)
         # ---- consolidate into M_t: distill S_t on new + replay OLD committed CE + neutral anchor ----
         if arm == "naive_cpt":                         # naive: M becomes the continued-PT model, no replay
             M = S
@@ -296,25 +344,28 @@ def run_ingest(base, streams, arm, seed):
                 torch.nn.utils.clip_grad_norm_(M.parameters(), 1.0); opt.step()
             M.eval()
         del S; torch.cuda.empty_cache()
-        # commit: store compact targets for committed-correct new QA
+        # commit: store compact targets for committed-correct new QA (by ORIG question — training surface)
         M.eval()
-        m_em, m_f1 = score(M, new_qa)
+        m_em, _ = score(M, new_qa, key="question")
+        m_pa, _ = score(M, new_qa, key="eval_question")     # M on held-out PARAPHRASE = internalization
         correct = [q for q, p in zip(new_qa, gen(M, [QT.format(q=q["question"]) for q in new_qa]))
                    if em(p, q["answers"]) == 1]
         committed += correct
-        # retention: score all OLD streams' QA (0..t-1) on current M
+        # retention: OLD streams' QA (0..t-1) on M — both ORIG and PARAPHRASE surfaces
         old_qa = [q for tt in range(t) for a in streams[tt] for q in a["qas"]]
-        o_em, _ = score(M, old_qa) if old_qa else (None, None)
-        nb_em, _ = score(base, [{"question": "The capital of France is what", "answers": ["paris"], "context": ""}])
-        per_stream.append(dict(t=t, scaffold_new_em=round(s_em, 3), M_new_em=round(m_em, 3),
-                               M_new_f1=round(m_f1, 3), n_committed=len(correct), old_em=(round(o_em, 3) if o_em is not None else None)))
-        print(f"      [{arm} s{seed} t{t}] scaffold_new={s_em:.2f} M_new={m_em:.2f} "
-              f"committed={len(correct)}/{len(new_qa)} old={o_em if o_em is None else round(o_em,2)}", flush=True)
+        o_em = round(score(M, old_qa, key="question")[0], 3) if old_qa else None
+        o_pa = round(score(M, old_qa, key="eval_question")[0], 3) if old_qa else None
+        per_stream.append(dict(t=t, scaffold_new_orig=round(s_em, 3), scaffold_new_para=round(s_pa, 3),
+                               M_new_orig=round(m_em, 3), M_new_para=round(m_pa, 3),
+                               n_committed=len(correct), old_orig=o_em, old_para=o_pa))
+        print(f"      [{arm} s{seed} t{t}] scaffold O/P={s_em:.2f}/{s_pa:.2f} M_new O/P={m_em:.2f}/{m_pa:.2f} "
+              f"committed={len(correct)}/{len(new_qa)} old O/P={o_em}/{o_pa}", flush=True)
     allqa = [q for s in streams for a in s for q in a["qas"]]
-    f_em, f_f1 = score(M, allqa)
-    # base-capability preservation: neutral-prompt agreement with base (proxy)
+    f_em, f_f1 = score(M, allqa, key="question")
+    fp_em, fp_f1 = score(M, allqa, key="eval_question")     # FINAL held-out paraphrase = the R38 gate
     del M; torch.cuda.empty_cache()
-    return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3), per_stream=per_stream)
+    return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
+                final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3), per_stream=per_stream)
 
 def dump(results, nseeds):
     summ = {}
@@ -322,13 +373,15 @@ def dump(results, nseeds):
         rs = results[arm]
         if not rs:
             continue
-        summ[arm] = dict(final_em=round(sum(r["final_em"] for r in rs) / len(rs), 3),
-                         final_f1=round(sum(r["final_f1"] for r in rs) / len(rs), 3),
+        def av(k):
+            return round(sum(r.get(k, 0) for r in rs) / len(rs), 3)
+        summ[arm] = dict(final_em=av("final_em"), final_f1=av("final_f1"),
+                         final_para_em=av("final_para_em"), final_para_f1=av("final_para_f1"),
                          per_stream=rs[-1].get("per_stream"))
     json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS),
                "summary": summ}, open(OUT, "w"), indent=1)
-    print("RESULT_JSON " + json.dumps({a: {"final_em": summ[a]["final_em"], "final_f1": summ[a]["final_f1"]}
-                                       for a in summ}), flush=True)
+    print("RESULT_JSON " + json.dumps({a: {"final_em": summ[a]["final_em"],
+                                           "final_para_em": summ[a]["final_para_em"]} for a in summ}), flush=True)
 
 if __name__ == "__main__":
     main()
