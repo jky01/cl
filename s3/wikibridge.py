@@ -68,7 +68,8 @@ QT2 = "Q: {q}\nA:"                                                              
 RT = "Context: {c}\nQuestion: {q}\nAnswer:"                                      # RAG (gold passage)
 
 def load_model():
-    m = AutoModelForCausalLM.from_pretrained(NAME, dtype=torch.float16).to(device).eval()
+    # bfloat16, NOT float16: direct fp16 AdamW training NaNs out (verified); bf16 trains stably.
+    m = AutoModelForCausalLM.from_pretrained(NAME, dtype=torch.bfloat16).to(device).eval()
     return m
 
 @torch.no_grad()
@@ -205,7 +206,7 @@ def qa_ce(model, qas):
     for i in range(0, len(qas), 16):
         chunk = qas[i:i + 16]
         prompts = [QT.format(q=q["question"]) for q in chunk]
-        answers = [" " + q["answers"][0] for q in chunk]
+        answers = [" " + q["answers"][0] + "\n" for q in chunk]   # train a "\n" STOP after the answer
         full = [p + a for p, a in zip(prompts, answers)]
         e = tok(full, return_tensors="pt", padding=True, truncation=True, max_length=128).to(device)
         plen = [len(tok(p).input_ids) for p in prompts]
