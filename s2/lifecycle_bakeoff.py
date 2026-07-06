@@ -709,8 +709,13 @@ def main():
     def run_ogd(seed, streams, scaffolds):
         kper = int(os.environ.get("BK_OGD_KPER", 24))     # new basis dirs kept per stream
         rankcap = int(os.environ.get("BK_OGD_RANK", 64))  # total Q rank cap (memory: 119MB/rank fp32)
-        ncollect = int(os.environ.get("BK_OGD_NCOL", 48)) # committed-correct margin samples per stream
+        ncollect = int(os.environ.get("BK_OGD_NCOL", 80)) # committed-correct margin samples per stream
         ogd_lr = float(os.environ.get("BK_OGD_LR", LR))
+        ogd_sgd = int(os.environ.get("BK_OGD_SGD", 0))    # cross-check: SGD-mom keeps update ~⊥Q natively
+        ogd_wd = float(os.environ.get("BK_OGD_WD", 0.0))  # wd=0: decoupled decay is an unprojected update
+        # exact-OGD: reproject the REALIZED ΔΘ ⊥ Q each step (AdamW precond/decay do NOT commute with the
+        # gradient projection, so Qᵀg=0 does NOT imply Qᵀ ΔΘ=0 — same realized-leak issue as nswrite).
+        reproject = int(os.environ.get("BK_OGD_REPROJECT", 1))
         dense = load_frozen()
         base_hop = hop_acc(dense)
         set_trainable_top(dense, GROW)                    # FIXED top-GROW base layers (all params protected)
@@ -731,6 +736,13 @@ def main():
         def write_grad(g):
             for p, a, b in zip(trainable, offs[:-1], offs[1:]):
                 p.grad = g[a:b].view_as(p).clone()
+
+        def flat_params():
+            return torch.cat([p.data.reshape(-1) for p in trainable]).float()
+
+        def add_flat(delta):                              # theta += delta (flattened)
+            for p, a, b in zip(trainable, offs[:-1], offs[1:]):
+                p.data.add_(delta[a:b].view_as(p))
 
         def margin_grad(prompt, gold):
             # d(gold_margin)/d(theta_trainable) for ONE committed-correct old fact -> flattened [P] fp16
@@ -753,21 +765,22 @@ def main():
                 gt = one_tok(f[2])
                 items += [(p_seen(*f), gt), (p_para(*f), gt)]
             rng.shuffle(items)
-            cols = []
+            A = torch.empty(P, ncollect, dtype=torch.float16, device=device)  # write columns in-place (no 2x peak)
+            n = 0
             for pr, gt in items:
-                if len(cols) >= ncollect:
+                if n >= ncollect:
                     break
                 v = margin_grad(pr, gt)
                 if v is not None:
-                    cols.append(v)
-            if not cols:
-                return None
-            A = torch.stack(cols, 1)                       # [P, n] fp16
+                    A[:, n] = v; n += 1
+            if n == 0:
+                return None, 0
+            A = A[:, :n]
             G = (A.transpose(0, 1) @ A).float()            # [n, n] (fp32-accumulated)
             evals, evecs = torch.linalg.eigh(G)
-            k = min(kper, A.shape[1])
+            k = min(kper, n)
             E = evecs[:, -k:]; s = evals[-k:].clamp_min(1e-8).sqrt()
-            return ((A @ E.half()) / s.half()).contiguous()  # [P, k] fp16, ~orthonormal
+            return ((A @ E.half()) / s.half()).contiguous(), n  # [P, k] fp16, ~orthonormal
 
         def merge_Q(Qold, Qnew):
             if Qnew is None:
@@ -779,11 +792,13 @@ def main():
             E = evecs[:, -k:]; s = evals[-k:].clamp_min(1e-8).sqrt()
             return ((C @ E.half()) / s.half()).contiguous()
 
+        leak_hist = []; ncol_hist = []
         for r in range(ROUNDS):
             S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
-            opt = torch.optim.AdamW(trainable, lr=ogd_lr, weight_decay=0.01)
+            opt = (torch.optim.SGD(trainable, lr=ogd_lr, momentum=0.9) if ogd_sgd
+                   else torch.optim.AdamW(trainable, lr=ogd_lr, weight_decay=ogd_wd))
             dense.train()
-            occ_acc = 0.0; occ_n = 0
+            occ_acc = 0.0; occ_n = 0; uleak_acc = 0.0; uleak_n = 0
             for _ in range(STEPS):
                 sub = [rng.choice(S) for _ in range(Bf)]
                 phrase = p_seen if rng.random() < 0.5 else p_para
@@ -807,26 +822,36 @@ def main():
                     gn = g.pow(2).sum().item()
                     coef = Q.transpose(0, 1) @ g.half()    # [R]
                     proj = (Q @ coef).float()
-                    g = g - proj
-                    write_grad(g)
+                    write_grad(g - proj)
                     if gn > 0:
                         occ_acc += proj.pow(2).sum().item() / gn; occ_n += 1
+                th0 = flat_params() if (Q is not None and reproject) else None
                 torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+                if th0 is not None:                        # exact-OGD: force realized ΔΘ ⊥ Q (kills Adam leak)
+                    dth = flat_params() - th0
+                    dn = dth.pow(2).sum().item()
+                    lk = (Q @ (Q.transpose(0, 1) @ dth.half())).float()
+                    add_flat(-lk)                          # theta <- theta - Q Qᵀ ΔΘ
+                    if dn > 0:
+                        uleak_acc += lk.pow(2).sum().item() / dn; uleak_n += 1
             dense.eval()
-            Q = merge_Q(Q, collect_Q(S))                   # commit: fold this stream's answer dirs into Q
+            Qnew, ncol = collect_Q(S)                       # commit: fold this stream's answer dirs into Q
+            Q = merge_Q(Q, Qnew); ncol_hist.append(ncol)
             energy = occ_acc / max(occ_n, 1)
             occ_hist.append(round(energy, 3))
             eff_hist.append(round((max(0.0, 1.0 - energy)) ** 0.5, 3))
+            leak_hist.append(round(uleak_acc / uleak_n, 4) if uleak_n else 0.0)  # realized ΔΘ leak (~0 = clean)
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [ogd       seed {seed} r{r}] rank={0 if Q is None else Q.shape[1]} "
-                  f"energy-occ={occ_hist[-1]} eff-grad={eff_hist[-1]} fresh={round(seen[r],2)} "
-                  f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+            print(f"    [ogd       seed {seed} r{r}] rank={0 if Q is None else Q.shape[1]} ncol={ncol} "
+                  f"energy-occ={occ_hist[-1]} eff-grad={eff_hist[-1]} upd-leak={leak_hist[-1]} "
+                  f"fresh={round(seen[r],2)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         del dense, Q; torch.cuda.empty_cache()
         tp = n_trainable_count(trainable)
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
-                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist)
+                    occupancy_curve=occ_hist, effective_grad_curve=eff_hist,
+                    realized_leak_curve=leak_hist, ncollect_curve=ncol_hist)
 
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
