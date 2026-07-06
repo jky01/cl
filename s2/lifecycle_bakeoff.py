@@ -291,12 +291,21 @@ def main():
     # stable per-kind RNG offset (script-local determinism; not dependent on PYTHONHASHSEED / string hash)
     KIND_OFFSET = {"ours": 11, "naive": 17, "continued": 19, "loramerge": 23, "oracle": 29}
 
-    def run_consolidate(seed, streams, kind, scaffolds, replay_k=None):
+    def run_consolidate(seed, streams, kind, scaffolds, replay_k=None, replay_tgt=None):
         dense = load_frozen()
         base_hop = hop_acc(dense)
         rng = random.Random(seed * 13 + KIND_OFFSET.get(kind, 41))
         hist = []; opt_steps = 0; tparams = []
         replay = kind in ("ours", "oracle")            # ours=self-distill(no gold); oracle=gold-old CE
+        # R36-A2 compact per-fact replay TARGET (compute/bytes axis, still covers ALL facts):
+        # "snapshot"(default)=live pre-round snapshot KL (needs a resident teacher fwd every step);
+        # "answerid"=precomputed committed argmax token, CE (no snapshot, no replay teacher fwd);
+        # "topk8"/"topk16"=precomputed committed top-k logit sketch, top-k KL; "current"=live current-model
+        # argmax (CIRCULAR negative control). committed targets are captured once at each stream's commit.
+        REPLAY_TGT = replay_tgt if replay_tgt is not None else os.environ.get("BK_REPLAY_TGT", "snapshot")
+        committed = {}                                 # (fact, view_idx) -> token id | (ids, logits)
+        topk_k = 8 if REPLAY_TGT == "topk8" else (16 if REPLAY_TGT == "topk16" else 0)
+        replay_fwd = 0                                 # count of teacher forward passes on replayed prompts
         # R36-A minimal-footprint rehearsal: replay only a FIXED committed K-subset per prior stream
         # (BK_REPLAY_K). K=-1 (default) = full replay (unchanged ours/oracle). K=0 => empty pool => naive
         # within the consolidate loop. Fixed subset (stable per-stream RNG, NOT hash-based) so the stored
@@ -321,7 +330,7 @@ def main():
             grow_qwen(dense, GROW); set_trainable_top(dense, GROW)
             tparams.append(n_trainable(dense))
             snap = None
-            if kind == "ours" and prior:               # self-distill needs a pre-round snapshot
+            if kind == "ours" and prior and REPLAY_TGT == "snapshot":   # only snapshot mode needs a teacher copy
                 snap = copy.deepcopy(dense).eval()
                 for p in snap.parameters():
                     p.requires_grad_(False)
@@ -344,16 +353,29 @@ def main():
                         F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
                 if replay and prior:                                 # REPLAY prior streams
                     sub2 = [rng.choice(prior) for _ in range(Bf)]
-                    ph2 = p_seen if rng.random() < 0.5 else p_para
+                    use_seen = rng.random() < 0.5
+                    ph2 = p_seen if use_seen else p_para; vi = 0 if use_seen else 1
                     e2 = tok([ph2(*f) for f in sub2], return_tensors="pt", padding=True).to(device)
                     s2 = dense.lm_head(dense.model(**e2, use_cache=False).last_hidden_state[:, -1]).float()
                     if kind == "oracle":                             # ORACLE: old-stream GOLD CE
                         gold2 = torch.tensor([one_tok(f[2]) for f in sub2], device=device)
                         loss = loss + F.cross_entropy(s2, gold2)
-                    else:                                            # ours: self-distill to snapshot (NO gold)
+                    elif REPLAY_TGT == "snapshot":                   # ours: self-distill to live snapshot (NO gold)
                         with torch.no_grad():
                             snap_lg = snap.lm_head(snap.model(**e2, use_cache=False).last_hidden_state[:, -1]).float()
+                        replay_fwd += 1
                         loss = loss + F.kl_div(F.log_softmax(s2, -1), F.softmax(snap_lg, -1), reduction="batchmean")
+                    elif REPLAY_TGT == "answerid":                   # precomputed committed argmax token, CE
+                        tgt = torch.tensor([committed[(f, vi)] for f in sub2], device=device)
+                        loss = loss + F.cross_entropy(s2, tgt)
+                    elif REPLAY_TGT in ("topk8", "topk16"):          # precomputed committed top-k logit sketch, top-k KL
+                        ids = torch.tensor([committed[(f, vi)][0] for f in sub2], device=device)      # [Bf,k]
+                        tvl = torch.tensor([committed[(f, vi)][1] for f in sub2], device=device)      # [Bf,k]
+                        tgt = F.softmax(tvl, dim=1)
+                        stud = torch.gather(F.log_softmax(s2, -1), 1, ids)                            # [Bf,k]
+                        loss = loss + (tgt * (tgt.clamp_min(1e-9).log() - stud)).sum(1).mean()
+                    else:                                            # "current": circular control (reuse student argmax)
+                        loss = loss + F.cross_entropy(s2, s2.argmax(-1).detach())
                 ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
                 ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
                 ea = tok(ap, return_tensors="pt", padding=True).to(device)
@@ -365,10 +387,26 @@ def main():
                 torch.nn.utils.clip_grad_norm_([p for p in dense.parameters() if p.requires_grad], 1.0)
                 opt.step(); opt_steps += 1
             dense.eval(); del snap; torch.cuda.empty_cache()
+            # R36-A2: capture THIS stream's committed target signal once (cheap: 2*|S| fwds, not per-step)
+            if replay and REPLAY_TGT in ("answerid", "topk8", "topk16"):
+                with torch.no_grad():
+                    for vi2, phrase in enumerate((p_seen, p_para)):
+                        prompts = [phrase(*f) for f in S]
+                        for i in range(0, len(prompts), 128):
+                            cf = S[i:i + 128]
+                            e = tok(prompts[i:i + 128], return_tensors="pt", padding=True).to(device)
+                            lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                            if REPLAY_TGT == "answerid":
+                                for f, a in zip(cf, lg.argmax(1).tolist()):
+                                    committed[(f, vi2)] = a
+                            else:
+                                tv, ti = lg.topk(topk_k, dim=1)
+                                for f, tvv, tii in zip(cf, tv.tolist(), ti.tolist()):
+                                    committed[(f, vi2)] = (tii, tvv)
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
-            print(f"    [{kind:9s}{('K'+str(REPLAY_K)) if REPLAY_K>=0 else '':4s} seed {seed} r{r}] "
-                  f"L={len(dense.model.layers)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+            print(f"    [{kind:9s}{('K'+str(REPLAY_K)) if REPLAY_K>=0 else '':4s}{('/'+REPLAY_TGT) if REPLAY_TGT!='snapshot' else '':10s} "
+                  f"seed {seed} r{r}] L={len(dense.model.layers)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
         # R36-A: replayed vs NON-replayed old-fact recall (the decisive test — do K probes protect the
         # WHOLE stream, or only the rehearsed items?). Over streams that were actually rehearsed (j<ROUNDS-1).
         rep_metrics = {}
@@ -385,8 +423,15 @@ def main():
                   f"para={rep_metrics['replayed_para']} | NON-REPLAYED seen={rep_metrics['nonreplayed_seen']} "
                   f"para={rep_metrics['nonreplayed_para']} (n_rep={len(rep)} n_non={len(nonrep)})", flush=True)
         del dense; torch.cuda.empty_cache()
+        # R36-A2 footprint accounting: extra stored bytes/fact (beyond the (key,relation) tuple all modes
+        # need) and replay-time teacher forward passes (0 for precomputed modes = the compute win).
+        bpf = {"snapshot": 0, "answerid": 2 * 4, "topk8": 2 * 8 * 6,
+               "topk16": 2 * 16 * 6, "current": 0}.get(REPLAY_TGT, 0)
+        tgt_metrics = dict(replay_tgt=REPLAY_TGT, replay_teacher_forwards=replay_fwd,
+                           extra_bytes_per_fact=bpf, uses_snapshot_teacher=(REPLAY_TGT == "snapshot"))
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
-                    tparams_per_round=tparams, updated_params_total=sum(tparams), **rep_metrics)
+                    tparams_per_round=tparams, updated_params_total=sum(tparams),
+                    **rep_metrics, **tgt_metrics)
 
     # ---------------- LoRA-merge arm (fixed size, per-stream adapter merged in) -----------------
     def run_loramerge(seed, streams, scaffolds):
@@ -914,7 +959,7 @@ def main():
     results = {a: [] for a in ARMS}
     _scaf_arms = ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand",
                   "naive_fixed", "margin", "marginrandv", "ogd")
-    need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") for a in ARMS)
+    need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") or a.startswith("ours_tgt_") for a in ARMS)
 
     def agg(arm):
         runs = results[arm]
@@ -964,7 +1009,7 @@ def main():
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
             peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep,
-            **(flags["ours"] if arm.startswith("ours_k") else flags[arm]))
+            **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_")) else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
 
@@ -1034,7 +1079,9 @@ def main():
                 out_a = run_ogd(seed, streams, scaffolds)
             elif arm.startswith("ours_k"):               # R36-A: ours_k<K> = ours with fixed-K replay,
                 out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_k=int(arm[6:]))
-            else:                                          # sweep all K in ONE process (scaffolds shared)
+            elif arm.startswith("ours_tgt_"):             # R36-A2: ours_tgt_<mode> = ours with compact target
+                out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_tgt=arm[len("ours_tgt_"):])
+            else:                                          # sweep all K/targets in ONE process (shared scaffolds)
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
             out_a["peak_vram_mb"] = (torch.cuda.max_memory_allocated() / 1e6) if device == "cuda" else 0
