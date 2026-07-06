@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WIKIBRIDGE (Qwen/Qwen2.5-0.5B, cuda) source=squad streams=4x5art x5qa cpt=200 cons=300 seeds=1 arms=['base_no_ingest', 'rag_gold_passage', 'naive_cpt', 'compact_cpt_only', 'compact_cpt_qa']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3159.35it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  60%|██████    | 262/434 [00:00<00:00, 2617.72it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 2400.14it/s]
+  WARN: 15 articles survived para-screen -> 3 streams (< 4)
+  seed 0: streams=[5, 5, 5] total_qa=75
+    base closed-book O/P EM=0.000/0.000 | RAG-gold O/P EM=0.973/0.973
+    [base_no_ingest] {"final_em": 0.0, "final_f1": 0.061644059644059654, "final_para_em": 0.0, "final_para_f1": 0.0, "wall": 0.0}
+    [rag_gold_passage] {"final_em": 0.9733333333333334, "final_f1": 0.99, "final_para_em": 0.9733333333333334, "final_para_f1": 0.0, "wall": 0.0}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  79%|███████▉  | 229/290 [00:00<00:00, 2220.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2301.23it/s]
+      [naive_cpt s0 t0] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/25 old O/P=None/None
+      [naive_cpt s0 t1] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/25 old O/P=0.0/0.0
+      [naive_cpt s0 t2] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/25 old O/P=0.0/0.0
+    [naive_cpt] {"final_em": 0.0, "final_f1": 0.102, "final_para_em": 0.0, "final_para_f1": 0.103, "wall": 146.9}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2969.88it/s]
+      [compact_cpt_only s0 t0] scaffold O/P=0.04/0.00 M_new O/P=0.00/0.00 committed=0/25 old O/P=None/None
+      [compact_cpt_only s0 t1] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/25 old O/P=0.0/0.0
+      [compact_cpt_only s0 t2] scaffold O/P=0.00/0.00 M_new O/P=0.04/0.00 committed=1/25 old O/P=0.0/0.0
+    [compact_cpt_only] {"final_em": 0.013, "final_f1": 0.083, "final_para_em": 0.0, "final_para_f1": 0.063, "wall": 615.6}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3089.98it/s]
+      [compact_cpt_qa s0 t0] scaffold O/P=1.00/0.96 M_new O/P=1.00/0.92 committed=25/25 old O/P=None/None
+      [compact_cpt_qa s0 t1] scaffold O/P=1.00/0.88 M_new O/P=1.00/0.88 committed=25/25 old O/P=1.0/0.88
+      [compact_cpt_qa s0 t2] scaffold O/P=1.00/0.92 M_new O/P=1.00/0.88 committed=25/25 old O/P=1.0/0.9
+    [compact_cpt_qa] {"final_em": 1.0, "final_f1": 1.0, "final_para_em": 0.893, "final_para_f1": 0.898, "wall": 931.9}
+RESULT_JSON {"base_no_ingest": {"final_em": 0.0, "final_para_em": 0.0}, "rag_gold_passage": {"final_em": 0.973, "final_para_em": 0.973}, "naive_cpt": {"final_em": 0.0, "final_para_em": 0.0}, "compact_cpt_only": {"final_em": 0.013, "final_para_em": 0.0}, "compact_cpt_qa": {"final_em": 1.0, "final_para_em": 0.893}}
+[done]
+== R38P DONE rc=0 ==

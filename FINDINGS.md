@@ -1,5 +1,39 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R38-WikiBridge-A (REAL-TEXT bridge — read Wikipedia passages → durable closed-book QA in weights) —
+> POSITIVE** `s3/wikibridge.py`, logs `docs/cloud_results/r38_squad_para.{log,json,manifest}`, Qwen2.5-0.5B,
+> 3 streams × 5 SQuAD articles × 5 QA (75 QA, base-hard + RAG-answerable screened, **held-out paraphrase
+> eval**). First step from synthetic tuples to real passage text. Per stream: transient continued-PT
+> scaffold on new passages (+QA span-CE for the qa arm) → consolidate into one dense checkpoint by replaying
+> OLD **committed answer-sequence CE** targets + neutral base anchors (base-KL never on old QA — R37 lesson);
+> discard scaffold; **closed-book** eval, no passage/retrieval/task-id. The decisive metric is EM on
+> **held-out reworded questions** (paraphrase = internalization, not prompt memorization).
+>
+> | arm | orig-EM | **para-EM (internalization)** |
+> |---|---|---|
+> | base_no_ingest | 0.000 | 0.000 |
+> | rag_gold_passage (upper bound, uses inference memory) | 0.973 | 0.973 |
+> | naive_cpt (sequential continued-PT, no replay) | 0.000 | 0.000 |
+> | compact_cpt_only (LM-only scaffold + compact replay) | 0.013 | 0.000 |
+> | **compact_cpt_qa (QA-target scaffold + compact replay)** | **1.000** | **0.893** |
+>
+> **compact_cpt_qa recovers 92% of RAG's answer quality (0.893/0.973) FROM WEIGHTS ALONE on held-out
+> paraphrased questions** — genuine internalization (memorization gap orig 1.0 → para 0.893 is only ~0.11),
+> retained across streams (old-para 0.88–0.90), single dense checkpoint, no inference memory, no joint
+> retrain. **Two decisive findings:** (1) **reading is NOT enough** — raw next-token continued-PT
+> (`naive_cpt`, `compact_cpt_only`) yields ~0 closed-book QA; the load-bearing step is **S1 teacher
+> construction**: converting passage text into *source-grounded QA/answer-function targets* (self-quiz).
+> (2) **compact committed answer-sequence targets (R36-A2 generalized to multi-token) retain old QA** while
+> new streams are written. Bugs found + fixed en route (both would silently sink it): **fp16 AdamW training
+> NaNs → use bfloat16**; answer needs a `\n` stop token for clean greedy decode. **Honest caveats:** 0.5B,
+> 15 articles / 3 streams / 1 seed (para-screen is strict); extractive short answers only; not
+> cross-document reasoning; RAG (0.973) still exceeds weights-only (0.893). But the **real-text bridge
+> works**: source text becomes internalized, retained, memory-free in-weight knowledge — the first credible
+> step toward "read and internalize," with the honest requirement that ingestion must build answer-function
+> targets, not just read. Next: scale articles/streams/seeds; footprint sweep (R36-A-style) on old replay;
+> counterfactual audit (`WB_SOURCE=cf`); multi-view teacher if paraphrase transfer needs strengthening.
+>
+
 > **PIVOT (2026-07-03/04, rounds R19-R25) — Grow-and-Consolidate (`s2/`).** Per the
 > strategy doc `reference/2026.07.03.20.md`, the direction shifted from *scaling an
 > external memory* to *consolidating a transient memory scaffold into a single dense

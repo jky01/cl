@@ -1,0 +1,687 @@
+{
+ "source": "squad",
+ "seed": 0,
+ "streams": [
+  [
+   {
+    "title": "Northwestern_University",
+    "qas": [
+     {
+      "question": "Who founded Northwestern University?",
+      "answers": [
+       "John Evans"
+      ],
+      "context": "Northwestern was founded in 1851 by John Evans, for whom the City of Evanston is named, and eight other lawyers, businessmen and Methodist leaders. Its founding purpose was to serve the Northwest Territory, an area that today includes the states of Ohio, Indiana, Illinois, Michigan, Wisconsin and parts of Minnesota. Instruction began in 1855; women were admitted in 1869. Today, the main campus is a 240-acre (97 ha) parcel in Evanston, along the shores of Lake Michigan just 12 miles north of downtown Chicago. The university's law, medical, and professional schools are located on a 25-acre (10 ha) campus in Chicago's Streeterville neighborhood. In 2008, the university opened a campus in Education City, Doha, Qatar with programs in journalism and communication.",
+      "eval_question": "Which individual established Northwestern University?"
+     },
+     {
+      "question": "What year was Northwestern founded?",
+      "answers": [
+       "1851"
+      ],
+      "context": "Northwestern was founded in 1851 by John Evans, for whom the City of Evanston is named, and eight other lawyers, businessmen and Methodist leaders. Its founding purpose was to serve the Northwest Territory, an area that today includes the states of Ohio, Indiana, Illinois, Michigan, Wisconsin and parts of Minnesota. Instruction began in 1855; women were admitted in 1869. Today, the main campus is a 240-acre (97 ha) parcel in Evanston, along the shores of Lake Michigan just 12 miles north of downtown Chicago. The university's law, medical, and professional schools are located on a 25-acre (10 ha) campus in Chicago's Streeterville neighborhood. In 2008, the university opened a campus in Education City, Doha, Qatar with programs in journalism and communication.",
+      "eval_question": "In which decade did Northwestern University get established?"
+     },
+     {
+      "question": "What year were women allowed to attend Northwestern University?",
+      "answers": [
+       "1869"
+      ],
+      "context": "Northwestern was founded in 1851 by John Evans, for whom the City of Evanston is named, and eight other lawyers, businessmen and Methodist leaders. Its founding purpose was to serve the Northwest Territory, an area that today includes the states of Ohio, Indiana, Illinois, Michigan, Wisconsin and parts of Minnesota. Instruction began in 1855; women were admitted in 1869. Today, the main campus is a 240-acre (97 ha) parcel in Evanston, along the shores of Lake Michigan just 12 miles north of downtown Chicago. The university's law, medical, and professional schools are located on a 25-acre (10 ha) campus in Chicago's Streeterville neighborhood. In 2008, the university opened a campus in Education City, Doha, Qatar with programs in journalism and communication.",
+      "eval_question": "Since which year could women enroll at Northwestern University?"
+     },
+     {
+      "question": "Where did Northwestern University opened an additional campus at in 2008?",
+      "answers": [
+       "Education City, Doha, Qatar"
+      ],
+      "context": "Northwestern was founded in 1851 by John Evans, for whom the City of Evanston is named, and eight other lawyers, businessmen and Methodist leaders. Its founding purpose was to serve the Northwest Territory, an area that today includes the states of Ohio, Indiana, Illinois, Michigan, Wisconsin and parts of Minnesota. Instruction began in 1855; women were admitted in 1869. Today, the main campus is a 240-acre (97 ha) parcel in Evanston, along the shores of Lake Michigan just 12 miles north of downtown Chicago. The university's law, medical, and professional schools are located on a 25-acre (10 ha) campus in Chicago's Streeterville neighborhood. In 2008, the university opened a campus in Education City, Doha, Qatar with programs in journalism and communication.",
+      "eval_question": "In which location did Northwestern University establish a new campus in 2008?"
+     },
+     {
+      "question": "When were women first admitted to Northwestern?",
+      "answers": [
+       "1869"
+      ],
+      "context": "Northwestern was founded in 1851 by John Evans, for whom the City of Evanston is named, and eight other lawyers, businessmen and Methodist leaders. Its founding purpose was to serve the Northwest Territory, an area that today includes the states of Ohio, Indiana, Illinois, Michigan, Wisconsin and parts of Minnesota. Instruction began in 1855; women were admitted in 1869. Today, the main campus is a 240-acre (97 ha) parcel in Evanston, along the shores of Lake Michigan just 12 miles north of downtown Chicago. The university's law, medical, and professional schools are located on a 25-acre (10 ha) campus in Chicago's Streeterville neighborhood. In 2008, the university opened a campus in Education City, Doha, Qatar with programs in journalism and communication.",
+      "eval_question": "In which year did Northwestern begin admitting women?"
+     }
+    ]
+   },
+   {
+    "title": "Beyonc\u00e9",
+    "qas": [
+     {
+      "question": "When did Beyonce leave Destiny's Child and become a solo singer?",
+      "answers": [
+       "2003"
+      ],
+      "context": "Beyonc\u00e9 Giselle Knowles-Carter (/bi\u02d0\u02c8j\u0252nse\u026a/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyonc\u00e9's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five Grammy Awards and featured the Billboard Hot 100 number-one singles \"Crazy in Love\" and \"Baby Boy\".",
+      "eval_question": "How many years after leaving Destiny's Child did Beyonc\u00e9 launch her solo career?"
+     },
+     {
+      "question": "In what city and state did Beyonce  grow up? ",
+      "answers": [
+       "Houston, Texas"
+      ],
+      "context": "Beyonc\u00e9 Giselle Knowles-Carter (/bi\u02d0\u02c8j\u0252nse\u026a/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyonc\u00e9's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five Grammy Awards and featured the Billboard Hot 100 number-one singles \"Crazy in Love\" and \"Baby Boy\".",
+      "eval_question": "Where was Beyonc\u00e9 born and raised?"
+     },
+     {
+      "question": "In what R&B group was she the lead singer?",
+      "answers": [
+       "Destiny's Child"
+      ],
+      "context": "Beyonc\u00e9 Giselle Knowles-Carter (/bi\u02d0\u02c8j\u0252nse\u026a/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyonc\u00e9's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five Grammy Awards and featured the Billboard Hot 100 number-one singles \"Crazy in Love\" and \"Baby Boy\".",
+      "eval_question": "Which R&B group did she lead as the vocalist?"
+     },
+     {
+      "question": "Who managed the Destiny's Child group?",
+      "answers": [
+       "Mathew Knowles"
+      ],
+      "context": "Beyonc\u00e9 Giselle Knowles-Carter (/bi\u02d0\u02c8j\u0252nse\u026a/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyonc\u00e9's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five Grammy Awards and featured the Billboard Hot 100 number-one singles \"Crazy in Love\" and \"Baby Boy\".",
+      "eval_question": "Which individual led the group Destiny's Child?"
+     },
+     {
+      "question": "What was the name of Beyonce's first solo album?",
+      "answers": [
+       "Dangerously in Love"
+      ],
+      "context": "Beyonc\u00e9 Giselle Knowles-Carter (/bi\u02d0\u02c8j\u0252nse\u026a/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyonc\u00e9's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five Grammy Awards and featured the Billboard Hot 100 number-one singles \"Crazy in Love\" and \"Baby Boy\".",
+      "eval_question": "What was Beyonc\u00e9's debut solo album called?"
+     }
+    ]
+   },
+   {
+    "title": "Muammar_Gaddafi",
+    "qas": [
+     {
+      "question": "What political philosophy did  Gaddafi adhere to when he was the Chairperson of the African Union?",
+      "answers": [
+       "Pan-Africanism"
+      ],
+      "context": "Muammar Muhammad Abu Minyar al-Gaddafi (Arabic: \u0645\u0639\u0645\u0631 \u0645\u062d\u0645\u062f \u0623\u0628\u0648 \u0645\u0646\u064a\u0627\u0631 \u0627\u0644\u0642\u0630\u0627\u0641\u064a\u200e Arabic pronunciation: [mu\u0295amar al.qa\u00f0a\u02d0fi\u02d0]; /\u02c8mo\u028a.\u0259m\u0251\u02d0r \u0261\u0259\u02c8d\u0251\u02d0fi/;  audio (help\u00b7info); c.\u20091942 \u2013 20 October 2011), commonly known as Colonel Gaddafi,[b] was a Libyan revolutionary, politician, and political theorist. He governed Libya as Revolutionary Chairman of the Libyan Arab Republic from 1969 to 1977 and then as the \"Brotherly Leader\" of the Great Socialist People's Libyan Arab Jamahiriya from 1977 to 2011. Initially ideologically committed to Arab nationalism and Arab socialism, he came to rule according to his own Third International Theory before embracing Pan-Africanism and serving as Chairperson of the African Union from 2009 to 2010.",
+      "eval_question": "To which political ideology did Gaddafi subscribe while serving as the Chairperson of the African Union?"
+     },
+     {
+      "question": "What ideology did Gaddafi adopt when he was the Chairperson of the African Union?",
+      "answers": [
+       "Pan-Africanism"
+      ],
+      "context": "Muammar Muhammad Abu Minyar al-Gaddafi (Arabic: \u0645\u0639\u0645\u0631 \u0645\u062d\u0645\u062f \u0623\u0628\u0648 \u0645\u0646\u064a\u0627\u0631 \u0627\u0644\u0642\u0630\u0627\u0641\u064a\u200e Arabic pronunciation: [mu\u0295amar al.qa\u00f0a\u02d0fi\u02d0]; /\u02c8mo\u028a.\u0259m\u0251\u02d0r \u0261\u0259\u02c8d\u0251\u02d0fi/;  audio (help\u00b7info); c.\u20091942 \u2013 20 October 2011), commonly known as Colonel Gaddafi,[b] was a Libyan revolutionary, politician, and political theorist. He governed Libya as Revolutionary Chairman of the Libyan Arab Republic from 1969 to 1977 and then as the \"Brotherly Leader\" of the Great Socialist People's Libyan Arab Jamahiriya from 1977 to 2011. Initially ideologically committed to Arab nationalism and Arab socialism, he came to rule according to his own Third International Theory before embracing Pan-Africanism and serving as Chairperson of the African Union from 2009 to 2010.",
+      "eval_question": "Which political philosophy did Gaddafi champion while serving as the Chairperson of the African Union?"
+     },
+     {
+      "question": "When did he first gain power in Libya?",
+      "answers": [
+       "1969"
+      ],
+      "context": "Muammar Muhammad Abu Minyar al-Gaddafi (Arabic: \u0645\u0639\u0645\u0631 \u0645\u062d\u0645\u062f \u0623\u0628\u0648 \u0645\u0646\u064a\u0627\u0631 \u0627\u0644\u0642\u0630\u0627\u0641\u064a\u200e Arabic pronunciation: [mu\u0295amar al.qa\u00f0a\u02d0fi\u02d0]; /\u02c8mo\u028a.\u0259m\u0251\u02d0r \u0261\u0259\u02c8d\u0251\u02d0fi/;  audio (help\u00b7info); c.\u20091942 \u2013 20 October 2011), commonly known as Colonel Gaddafi,[b] was a Libyan revolutionary, politician, and political theorist. He governed Libya as Revolutionary Chairman of the Libyan Arab Republic from 1969 to 1977 and then as the \"Brotherly Leader\" of the Great Socialist People's Libyan Arab Jamahiriya from 1977 to 2011. Initially ideologically committed to Arab nationalism and Arab socialism, he came to rule according to his own Third International Theory before embracing Pan-Africanism and serving as Chairperson of the African Union from 2009 to 2010.",
+      "eval_question": "In which year did he assume control in Libya?"
+     },
+     {
+      "question": "By what name was Muammar Muhammad Abu Minyar al-Gaddafi typically known?",
+      "answers": [
+       "Colonel Gaddafi"
+      ],
+      "context": "Muammar Muhammad Abu Minyar al-Gaddafi (Arabic: \u0645\u0639\u0645\u0631 \u0645\u062d\u0645\u062f \u0623\u0628\u0648 \u0645\u0646\u064a\u0627\u0631 \u0627\u0644\u0642\u0630\u0627\u0641\u064a\u200e Arabic pronunciation: [mu\u0295amar al.qa\u00f0a\u02d0fi\u02d0]; /\u02c8mo\u028a.\u0259m\u0251\u02d0r \u0261\u0259\u02c8d\u0251\u02d0fi/;  audio (help\u00b7info); c.\u20091942 \u2013 20 October 2011), commonly known as Colonel Gaddafi,[b] was a Libyan revolutionary, politician, and political theorist. He governed Libya as Revolutionary Chairman of the Libyan Arab Republic from 1969 to 1977 and then as the \"Brotherly Leader\" of the Great Socialist People's Libyan Arab Jamahiriya from 1977 to 2011. Initially ideologically committed to Arab nationalism and Arab socialism, he came to rule according to his own Third International Theory before embracing Pan-Africanism and serving as Chairperson of the African Union from 2009 to 2010.",
+      "eval_question": "What was the common title used for Muammar Muhammad Abu Minyar al-Gaddafi?"
+     },
+     {
+      "question": "What was the official name of Libya between 1969 and 1977?",
+      "answers": [
+       "Libyan Arab Republic"
+      ],
+      "context": "Muammar Muhammad Abu Minyar al-Gaddafi (Arabic: \u0645\u0639\u0645\u0631 \u0645\u062d\u0645\u062f \u0623\u0628\u0648 \u0645\u0646\u064a\u0627\u0631 \u0627\u0644\u0642\u0630\u0627\u0641\u064a\u200e Arabic pronunciation: [mu\u0295amar al.qa\u00f0a\u02d0fi\u02d0]; /\u02c8mo\u028a.\u0259m\u0251\u02d0r \u0261\u0259\u02c8d\u0251\u02d0fi/;  audio (help\u00b7info); c.\u20091942 \u2013 20 October 2011), commonly known as Colonel Gaddafi,[b] was a Libyan revolutionary, politician, and political theorist. He governed Libya as Revolutionary Chairman of the Libyan Arab Republic from 1969 to 1977 and then as the \"Brotherly Leader\" of the Great Socialist People's Libyan Arab Jamahiriya from 1977 to 2011. Initially ideologically committed to Arab nationalism and Arab socialism, he came to rule according to his own Third International Theory before embracing Pan-Africanism and serving as Chairperson of the African Union from 2009 to 2010.",
+      "eval_question": "What did Libya call itself from 1969 to 1977?"
+     }
+    ]
+   },
+   {
+    "title": "States_of_Germany",
+    "qas": [
+     {
+      "question": "How many federal states does Germany have?",
+      "answers": [
+       "sixteen"
+      ],
+      "context": "Germany is a federal republic consisting of sixteen federal states (German: Bundesland, or Land).[a] Since today's Germany was formed from an earlier collection of several states, it has a federal constitution, and the constituent states retain a measure of sovereignty. With an emphasis on geographical conditions, Berlin and Hamburg are frequently called Stadtstaaten (city-states), as is the Free Hanseatic City of Bremen, which in fact includes the cities of Bremen and Bremerhaven. The remaining 13 states are called Fl\u00e4chenl\u00e4nder (literally: area states).",
+      "eval_question": "What is the number of federal states in Germany?"
+     },
+     {
+      "question": "The Free Hanseatic City of Bremen includes which two cities?",
+      "answers": [
+       "Bremen and Bremerhaven"
+      ],
+      "context": "Germany is a federal republic consisting of sixteen federal states (German: Bundesland, or Land).[a] Since today's Germany was formed from an earlier collection of several states, it has a federal constitution, and the constituent states retain a measure of sovereignty. With an emphasis on geographical conditions, Berlin and Hamburg are frequently called Stadtstaaten (city-states), as is the Free Hanseatic City of Bremen, which in fact includes the cities of Bremen and Bremerhaven. The remaining 13 states are called Fl\u00e4chenl\u00e4nder (literally: area states).",
+      "eval_question": "Which two cities are part of the Free Hanseatic City of Bremen?"
+     },
+     {
+      "question": "What do Germans call the other 13 states?",
+      "answers": [
+       "Fl\u00e4chenl\u00e4nder"
+      ],
+      "context": "Germany is a federal republic consisting of sixteen federal states (German: Bundesland, or Land).[a] Since today's Germany was formed from an earlier collection of several states, it has a federal constitution, and the constituent states retain a measure of sovereignty. With an emphasis on geographical conditions, Berlin and Hamburg are frequently called Stadtstaaten (city-states), as is the Free Hanseatic City of Bremen, which in fact includes the cities of Bremen and Bremerhaven. The remaining 13 states are called Fl\u00e4chenl\u00e4nder (literally: area states).",
+      "eval_question": "How are the other 13 states referred to by Germans?"
+     },
+     {
+      "question": "How many states are in Germany?",
+      "answers": [
+       "sixteen"
+      ],
+      "context": "Germany is a federal republic consisting of sixteen federal states (German: Bundesland, or Land).[a] Since today's Germany was formed from an earlier collection of several states, it has a federal constitution, and the constituent states retain a measure of sovereignty. With an emphasis on geographical conditions, Berlin and Hamburg are frequently called Stadtstaaten (city-states), as is the Free Hanseatic City of Bremen, which in fact includes the cities of Bremen and Bremerhaven. The remaining 13 states are called Fl\u00e4chenl\u00e4nder (literally: area states).",
+      "eval_question": "What is the number of states within Germany?"
+     },
+     {
+      "question": "How many states are called \"Fl\u00e4chenl\u00e4nder\"?",
+      "answers": [
+       "13"
+      ],
+      "context": "Germany is a federal republic consisting of sixteen federal states (German: Bundesland, or Land).[a] Since today's Germany was formed from an earlier collection of several states, it has a federal constitution, and the constituent states retain a measure of sovereignty. With an emphasis on geographical conditions, Berlin and Hamburg are frequently called Stadtstaaten (city-states), as is the Free Hanseatic City of Bremen, which in fact includes the cities of Bremen and Bremerhaven. The remaining 13 states are called Fl\u00e4chenl\u00e4nder (literally: area states).",
+      "eval_question": "How many states are referred to as \"Fl\u00e4chenl\u00e4nder\"?"
+     }
+    ]
+   },
+   {
+    "title": "Carnival",
+    "qas": [
+     {
+      "question": "The Philippines stopped celebrating Carnival after what year? ",
+      "answers": [
+       "1939"
+      ],
+      "context": "The term Carnival is traditionally used in areas with a large Catholic presence. However, the Philippines, a predominantly Roman Catholic country, does not celebrate Carnival anymore since the dissolution of the Manila Carnival after 1939, the last carnival in the country. In historically Lutheran countries, the celebration is known as Fastelavn, and in areas with a high concentration of Anglicans and Methodists, pre-Lenten celebrations, along with penitential observances, occur on Shrove Tuesday. In Eastern Orthodox nations, Maslenitsa is celebrated during the last week before Great Lent. In German-speaking Europe and the Netherlands, the Carnival season traditionally opens on 11/11 (often at 11:11 a.m.). This dates back to celebrations before the Advent season or with harvest celebrations of St. Martin's Day.",
+      "eval_question": "When did the Philippines cease to observe Carnival?"
+     },
+     {
+      "question": "What is the Carnival celebration known as in Lutheran countries?",
+      "answers": [
+       "Fastelavn"
+      ],
+      "context": "The term Carnival is traditionally used in areas with a large Catholic presence. However, the Philippines, a predominantly Roman Catholic country, does not celebrate Carnival anymore since the dissolution of the Manila Carnival after 1939, the last carnival in the country. In historically Lutheran countries, the celebration is known as Fastelavn, and in areas with a high concentration of Anglicans and Methodists, pre-Lenten celebrations, along with penitential observances, occur on Shrove Tuesday. In Eastern Orthodox nations, Maslenitsa is celebrated during the last week before Great Lent. In German-speaking Europe and the Netherlands, the Carnival season traditionally opens on 11/11 (often at 11:11 a.m.). This dates back to celebrations before the Advent season or with harvest celebrations of St. Martin's Day.",
+      "eval_question": "In which Lutheran countries is the Carnival celebration referred to as?"
+     },
+     {
+      "question": "What country no longer celebrates Carnival?",
+      "answers": [
+       "the Philippines"
+      ],
+      "context": "The term Carnival is traditionally used in areas with a large Catholic presence. However, the Philippines, a predominantly Roman Catholic country, does not celebrate Carnival anymore since the dissolution of the Manila Carnival after 1939, the last carnival in the country. In historically Lutheran countries, the celebration is known as Fastelavn, and in areas with a high concentration of Anglicans and Methodists, pre-Lenten celebrations, along with penitential observances, occur on Shrove Tuesday. In Eastern Orthodox nations, Maslenitsa is celebrated during the last week before Great Lent. In German-speaking Europe and the Netherlands, the Carnival season traditionally opens on 11/11 (often at 11:11 a.m.). This dates back to celebrations before the Advent season or with harvest celebrations of St. Martin's Day.",
+      "eval_question": "Which country no longer observes Carnival?"
+     },
+     {
+      "question": "The Manila Carnival was dissolved after what year?",
+      "answers": [
+       "1939"
+      ],
+      "context": "The term Carnival is traditionally used in areas with a large Catholic presence. However, the Philippines, a predominantly Roman Catholic country, does not celebrate Carnival anymore since the dissolution of the Manila Carnival after 1939, the last carnival in the country. In historically Lutheran countries, the celebration is known as Fastelavn, and in areas with a high concentration of Anglicans and Methodists, pre-Lenten celebrations, along with penitential observances, occur on Shrove Tuesday. In Eastern Orthodox nations, Maslenitsa is celebrated during the last week before Great Lent. In German-speaking Europe and the Netherlands, the Carnival season traditionally opens on 11/11 (often at 11:11 a.m.). This dates back to celebrations before the Advent season or with harvest celebrations of St. Martin's Day.",
+      "eval_question": "When did the Manila Carnival cease to exist?"
+     },
+     {
+      "question": "What is the Carnival known as in countries which are mostly Lutheran?",
+      "answers": [
+       "Fastelavn"
+      ],
+      "context": "The term Carnival is traditionally used in areas with a large Catholic presence. However, the Philippines, a predominantly Roman Catholic country, does not celebrate Carnival anymore since the dissolution of the Manila Carnival after 1939, the last carnival in the country. In historically Lutheran countries, the celebration is known as Fastelavn, and in areas with a high concentration of Anglicans and Methodists, pre-Lenten celebrations, along with penitential observances, occur on Shrove Tuesday. In Eastern Orthodox nations, Maslenitsa is celebrated during the last week before Great Lent. In German-speaking Europe and the Netherlands, the Carnival season traditionally opens on 11/11 (often at 11:11 a.m.). This dates back to celebrations before the Advent season or with harvest celebrations of St. Martin's Day.",
+      "eval_question": "In which predominantly Lutheran countries is the Carnival referred to as?"
+     }
+    ]
+   }
+  ],
+  [
+   {
+    "title": "Melbourne",
+    "qas": [
+     {
+      "question": "What is Melbourne's main metropolitan train terminus called?",
+      "answers": [
+       "Flinders Street Station"
+      ],
+      "context": "The main passenger airport serving the metropolis and the state is Melbourne Airport (also called Tullamarine Airport), which is the second busiest in Australia, and the Port of Melbourne is Australia's busiest seaport for containerised and general cargo. Melbourne has an extensive transport network. The main metropolitan train terminus is Flinders Street Station, and the main regional train and coach terminus is Southern Cross Station. Melbourne is also home to Australia's most extensive freeway network and has the world's largest urban tram network.",
+      "eval_question": "What is the primary terminus for Melbourne's major railway system known as?"
+     },
+     {
+      "question": "What is Melbourne's main regional train and coach terminus called?",
+      "answers": [
+       "Southern Cross Station"
+      ],
+      "context": "The main passenger airport serving the metropolis and the state is Melbourne Airport (also called Tullamarine Airport), which is the second busiest in Australia, and the Port of Melbourne is Australia's busiest seaport for containerised and general cargo. Melbourne has an extensive transport network. The main metropolitan train terminus is Flinders Street Station, and the main regional train and coach terminus is Southern Cross Station. Melbourne is also home to Australia's most extensive freeway network and has the world's largest urban tram network.",
+      "eval_question": "What is the primary station for regional trains and coaches in Melbourne known as?"
+     },
+     {
+      "question": "What is the main metropolitan train terminus called in Melbourne?",
+      "answers": [
+       "Flinders Street Station"
+      ],
+      "context": "The main passenger airport serving the metropolis and the state is Melbourne Airport (also called Tullamarine Airport), which is the second busiest in Australia, and the Port of Melbourne is Australia's busiest seaport for containerised and general cargo. Melbourne has an extensive transport network. The main metropolitan train terminus is Flinders Street Station, and the main regional train and coach terminus is Southern Cross Station. Melbourne is also home to Australia's most extensive freeway network and has the world's largest urban tram network.",
+      "eval_question": "What is the primary railway station that serves as an endpoint for trains in Melbourne?"
+     },
+     {
+      "question": "What is the main regional train and coach terminus in Melbourne?",
+      "answers": [
+       "Southern Cross Station"
+      ],
+      "context": "The main passenger airport serving the metropolis and the state is Melbourne Airport (also called Tullamarine Airport), which is the second busiest in Australia, and the Port of Melbourne is Australia's busiest seaport for containerised and general cargo. Melbourne has an extensive transport network. The main metropolitan train terminus is Flinders Street Station, and the main regional train and coach terminus is Southern Cross Station. Melbourne is also home to Australia's most extensive freeway network and has the world's largest urban tram network.",
+      "eval_question": "Which major railway station and bus terminal serves Melbourne's primary connections?"
+     },
+     {
+      "question": "What city is known to be home to Australia's most extensive freeway network?",
+      "answers": [
+       "Melbourne"
+      ],
+      "context": "The main passenger airport serving the metropolis and the state is Melbourne Airport (also called Tullamarine Airport), which is the second busiest in Australia, and the Port of Melbourne is Australia's busiest seaport for containerised and general cargo. Melbourne has an extensive transport network. The main metropolitan train terminus is Flinders Street Station, and the main regional train and coach terminus is Southern Cross Station. Melbourne is also home to Australia's most extensive freeway network and has the world's largest urban tram network.",
+      "eval_question": "Which urban area is recognized for having the country's largest system of freeways?"
+     }
+    ]
+   },
+   {
+    "title": "Queen_Victoria",
+    "qas": [
+     {
+      "question": "What is her nickname that she was given because her children married into royal families across the continent?",
+      "answers": [
+       "the grandmother of Europe"
+      ],
+      "context": "Victoria married her first cousin, Prince Albert of Saxe-Coburg and Gotha, in 1840. Their nine children married into royal and noble families across the continent, tying them together and earning her the sobriquet \"the grandmother of Europe\". After Albert's death in 1861, Victoria plunged into deep mourning and avoided public appearances. As a result of her seclusion, republicanism temporarily gained strength, but in the latter half of her reign her popularity recovered. Her Golden and Diamond Jubilees were times of public celebration.",
+      "eval_question": "What name did they call her due to her offspring marrying into royal houses throughout the continent?"
+     },
+     {
+      "question": "In the later half of her reign, what happened to her popularity?",
+      "answers": [
+       "her popularity recovered"
+      ],
+      "context": "Victoria married her first cousin, Prince Albert of Saxe-Coburg and Gotha, in 1840. Their nine children married into royal and noble families across the continent, tying them together and earning her the sobriquet \"the grandmother of Europe\". After Albert's death in 1861, Victoria plunged into deep mourning and avoided public appearances. As a result of her seclusion, republicanism temporarily gained strength, but in the latter half of her reign her popularity recovered. Her Golden and Diamond Jubilees were times of public celebration.",
+      "eval_question": "What change occurred in her public approval rating towards the end of her reign?"
+     },
+     {
+      "question": "What year did Prince Albert die?",
+      "answers": [
+       "1861"
+      ],
+      "context": "Victoria married her first cousin, Prince Albert of Saxe-Coburg and Gotha, in 1840. Their nine children married into royal and noble families across the continent, tying them together and earning her the sobriquet \"the grandmother of Europe\". After Albert's death in 1861, Victoria plunged into deep mourning and avoided public appearances. As a result of her seclusion, republicanism temporarily gained strength, but in the latter half of her reign her popularity recovered. Her Golden and Diamond Jubilees were times of public celebration.",
+      "eval_question": "In which year did Prince Albert pass away?"
+     },
+     {
+      "question": "How many children did Queen Victoria and Prince Albert have?",
+      "answers": [
+       "nine"
+      ],
+      "context": "Victoria married her first cousin, Prince Albert of Saxe-Coburg and Gotha, in 1840. Their nine children married into royal and noble families across the continent, tying them together and earning her the sobriquet \"the grandmother of Europe\". After Albert's death in 1861, Victoria plunged into deep mourning and avoided public appearances. As a result of her seclusion, republicanism temporarily gained strength, but in the latter half of her reign her popularity recovered. Her Golden and Diamond Jubilees were times of public celebration.",
+      "eval_question": "What is the number of children born to Queen Victoria and Prince Albert?"
+     },
+     {
+      "question": "What was the year of Alberts death?",
+      "answers": [
+       "1861"
+      ],
+      "context": "Victoria married her first cousin, Prince Albert of Saxe-Coburg and Gotha, in 1840. Their nine children married into royal and noble families across the continent, tying them together and earning her the sobriquet \"the grandmother of Europe\". After Albert's death in 1861, Victoria plunged into deep mourning and avoided public appearances. As a result of her seclusion, republicanism temporarily gained strength, but in the latter half of her reign her popularity recovered. Her Golden and Diamond Jubilees were times of public celebration.",
+      "eval_question": "In which year did Albert pass away?"
+     }
+    ]
+   },
+   {
+    "title": "Athanasius_of_Alexandria",
+    "qas": [
+     {
+      "question": "What was one nickname for Saint Athanasius of Alexandria?",
+      "answers": [
+       "Athanasius the Great"
+      ],
+      "context": "Saint Athanasius of Alexandria (/\u02cc\u00e6\u03b8\u0259\u02c8ne\u026a\u0283\u0259s/; Greek: \u1f08\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2 \u1f08\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03b5\u03af\u03b1\u03c2, Athan\u00e1sios Alexandr\u00edas; c. 296\u2013298 \u2013 2 May 373), also called Athanasius the Great, Athanasius the Confessor or, primarily in the Coptic Orthodox Church, Athanasius the Apostolic, was the twentieth bishop of Alexandria (as Athanasius I). His episcopate lasted 45 years (c. 8 June 328 \u2013 2 May 373), of which over 17 were spent in five exiles ordered by four different Roman emperors. Athanasius is a renowned Christian theologian, a Church Father, the chief defender of Trinitarianism against Arianism, and a noted Egyptian leader of the fourth century.",
+      "eval_question": "What title did Saint Athanasius of Alexandria go by?"
+     },
+     {
+      "question": "For how many years was Saint Athanasius of Alexandria a bishop?",
+      "answers": [
+       "45 years"
+      ],
+      "context": "Saint Athanasius of Alexandria (/\u02cc\u00e6\u03b8\u0259\u02c8ne\u026a\u0283\u0259s/; Greek: \u1f08\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2 \u1f08\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03b5\u03af\u03b1\u03c2, Athan\u00e1sios Alexandr\u00edas; c. 296\u2013298 \u2013 2 May 373), also called Athanasius the Great, Athanasius the Confessor or, primarily in the Coptic Orthodox Church, Athanasius the Apostolic, was the twentieth bishop of Alexandria (as Athanasius I). His episcopate lasted 45 years (c. 8 June 328 \u2013 2 May 373), of which over 17 were spent in five exiles ordered by four different Roman emperors. Athanasius is a renowned Christian theologian, a Church Father, the chief defender of Trinitarianism against Arianism, and a noted Egyptian leader of the fourth century.",
+      "eval_question": "How many years did Saint Athanasius of Alexandria serve as a bishop?"
+     },
+     {
+      "question": "When did Saint Athanasius die?",
+      "answers": [
+       "2 May 373"
+      ],
+      "context": "Saint Athanasius of Alexandria (/\u02cc\u00e6\u03b8\u0259\u02c8ne\u026a\u0283\u0259s/; Greek: \u1f08\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2 \u1f08\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03b5\u03af\u03b1\u03c2, Athan\u00e1sios Alexandr\u00edas; c. 296\u2013298 \u2013 2 May 373), also called Athanasius the Great, Athanasius the Confessor or, primarily in the Coptic Orthodox Church, Athanasius the Apostolic, was the twentieth bishop of Alexandria (as Athanasius I). His episcopate lasted 45 years (c. 8 June 328 \u2013 2 May 373), of which over 17 were spent in five exiles ordered by four different Roman emperors. Athanasius is a renowned Christian theologian, a Church Father, the chief defender of Trinitarianism against Arianism, and a noted Egyptian leader of the fourth century.",
+      "eval_question": "In what year did Saint Athanasius pass away?"
+     },
+     {
+      "question": "Of what city was he bishop?",
+      "answers": [
+       "Alexandria"
+      ],
+      "context": "Saint Athanasius of Alexandria (/\u02cc\u00e6\u03b8\u0259\u02c8ne\u026a\u0283\u0259s/; Greek: \u1f08\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2 \u1f08\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03b5\u03af\u03b1\u03c2, Athan\u00e1sios Alexandr\u00edas; c. 296\u2013298 \u2013 2 May 373), also called Athanasius the Great, Athanasius the Confessor or, primarily in the Coptic Orthodox Church, Athanasius the Apostolic, was the twentieth bishop of Alexandria (as Athanasius I). His episcopate lasted 45 years (c. 8 June 328 \u2013 2 May 373), of which over 17 were spent in five exiles ordered by four different Roman emperors. Athanasius is a renowned Christian theologian, a Church Father, the chief defender of Trinitarianism against Arianism, and a noted Egyptian leader of the fourth century.",
+      "eval_question": "Which city did he serve as bishop for?"
+     },
+     {
+      "question": "How long did his episcopate last?",
+      "answers": [
+       "45 years"
+      ],
+      "context": "Saint Athanasius of Alexandria (/\u02cc\u00e6\u03b8\u0259\u02c8ne\u026a\u0283\u0259s/; Greek: \u1f08\u03b8\u03b1\u03bd\u03ac\u03c3\u03b9\u03bf\u03c2 \u1f08\u03bb\u03b5\u03be\u03b1\u03bd\u03b4\u03c1\u03b5\u03af\u03b1\u03c2, Athan\u00e1sios Alexandr\u00edas; c. 296\u2013298 \u2013 2 May 373), also called Athanasius the Great, Athanasius the Confessor or, primarily in the Coptic Orthodox Church, Athanasius the Apostolic, was the twentieth bishop of Alexandria (as Athanasius I). His episcopate lasted 45 years (c. 8 June 328 \u2013 2 May 373), of which over 17 were spent in five exiles ordered by four different Roman emperors. Athanasius is a renowned Christian theologian, a Church Father, the chief defender of Trinitarianism against Arianism, and a noted Egyptian leader of the fourth century.",
+      "eval_question": "For how many years was his episcopacy in office?"
+     }
+    ]
+   },
+   {
+    "title": "Imperial_College_London",
+    "qas": [
+     {
+      "question": "When was the Royal College of Chemistry established?",
+      "answers": [
+       "1845"
+      ],
+      "context": "The Royal College of Chemistry was established by private subscription in 1845 as there was a growing awareness that practical aspects of the experimental sciences were not well taught and that in the United Kingdom the teaching of chemistry in particular had fallen behind that in Germany. As a result of a movement earlier in the decade, many politicians donated funds to establish the college, including Benjamin Disraeli, William Gladstone and Robert Peel. It was also supported by Prince Albert, who persuaded August Wilhelm von Hofmann to be the first professor.",
+      "eval_question": "In which year did the Royal College of Chemistry come into existence?"
+     },
+     {
+      "question": "Who was the first professor of the Royal College of Chemistry?",
+      "answers": [
+       "August Wilhelm von Hofmann"
+      ],
+      "context": "The Royal College of Chemistry was established by private subscription in 1845 as there was a growing awareness that practical aspects of the experimental sciences were not well taught and that in the United Kingdom the teaching of chemistry in particular had fallen behind that in Germany. As a result of a movement earlier in the decade, many politicians donated funds to establish the college, including Benjamin Disraeli, William Gladstone and Robert Peel. It was also supported by Prince Albert, who persuaded August Wilhelm von Hofmann to be the first professor.",
+      "eval_question": "What was the name of the college's inaugural chemistry instructor?"
+     },
+     {
+      "question": "Who supported the Royal College of Chemistry?",
+      "answers": [
+       "Prince Albert"
+      ],
+      "context": "The Royal College of Chemistry was established by private subscription in 1845 as there was a growing awareness that practical aspects of the experimental sciences were not well taught and that in the United Kingdom the teaching of chemistry in particular had fallen behind that in Germany. As a result of a movement earlier in the decade, many politicians donated funds to establish the college, including Benjamin Disraeli, William Gladstone and Robert Peel. It was also supported by Prince Albert, who persuaded August Wilhelm von Hofmann to be the first professor.",
+      "eval_question": "Which organizations backed the establishment of the Royal College of Chemistry?"
+     },
+     {
+      "question": "Which country was ahead of the United Kingdom in the teaching of chemistry?",
+      "answers": [
+       "Germany"
+      ],
+      "context": "The Royal College of Chemistry was established by private subscription in 1845 as there was a growing awareness that practical aspects of the experimental sciences were not well taught and that in the United Kingdom the teaching of chemistry in particular had fallen behind that in Germany. As a result of a movement earlier in the decade, many politicians donated funds to establish the college, including Benjamin Disraeli, William Gladstone and Robert Peel. It was also supported by Prince Albert, who persuaded August Wilhelm von Hofmann to be the first professor.",
+      "eval_question": "In which country did the teaching of chemistry precede that in the United Kingdom?"
+     },
+     {
+      "question": "Who was the first professor of the college?",
+      "answers": [
+       "August Wilhelm von Hofmann"
+      ],
+      "context": "The Royal College of Chemistry was established by private subscription in 1845 as there was a growing awareness that practical aspects of the experimental sciences were not well taught and that in the United Kingdom the teaching of chemistry in particular had fallen behind that in Germany. As a result of a movement earlier in the decade, many politicians donated funds to establish the college, including Benjamin Disraeli, William Gladstone and Robert Peel. It was also supported by Prince Albert, who persuaded August Wilhelm von Hofmann to be the first professor.",
+      "eval_question": "Which individual held the position of the college's inaugural professor?"
+     }
+    ]
+   },
+   {
+    "title": "Marshall_Islands",
+    "qas": [
+     {
+      "question": "As of 2011, how many people live in the Marshall Islands?",
+      "answers": [
+       "53,158"
+      ],
+      "context": "The Marshall Islands, officially the Republic of the Marshall Islands (Marshallese: Aolep\u0101n Aor\u014dkin M\u0327aje\u013c),[note 1] is an island country located near the equator in the Pacific Ocean, slightly west of the International Date Line. Geographically, the country is part of the larger island group of Micronesia. The country's population of 53,158 people (at the 2011 Census) is spread out over 29 coral atolls, comprising 1,156 individual islands and islets. The islands share maritime boundaries with the Federated States of Micronesia to the west, Wake Island to the north,[note 2] Kiribati to the south-east, and Nauru to the south. About 27,797 of the islanders (at the 2011 Census) live on Majuro, which contains the capital.",
+      "eval_question": "What was the population of the Marshall Islands as of 2011?"
+     },
+     {
+      "question": "Which island is home to the capital of the Marshall Islands?",
+      "answers": [
+       "Majuro"
+      ],
+      "context": "The Marshall Islands, officially the Republic of the Marshall Islands (Marshallese: Aolep\u0101n Aor\u014dkin M\u0327aje\u013c),[note 1] is an island country located near the equator in the Pacific Ocean, slightly west of the International Date Line. Geographically, the country is part of the larger island group of Micronesia. The country's population of 53,158 people (at the 2011 Census) is spread out over 29 coral atolls, comprising 1,156 individual islands and islets. The islands share maritime boundaries with the Federated States of Micronesia to the west, Wake Island to the north,[note 2] Kiribati to the south-east, and Nauru to the south. About 27,797 of the islanders (at the 2011 Census) live on Majuro, which contains the capital.",
+      "eval_question": "What island hosts the capital city of the Marshall Islands?"
+     },
+     {
+      "question": "In what ocean are the Marshall Islands located?",
+      "answers": [
+       "Pacific Ocean"
+      ],
+      "context": "The Marshall Islands, officially the Republic of the Marshall Islands (Marshallese: Aolep\u0101n Aor\u014dkin M\u0327aje\u013c),[note 1] is an island country located near the equator in the Pacific Ocean, slightly west of the International Date Line. Geographically, the country is part of the larger island group of Micronesia. The country's population of 53,158 people (at the 2011 Census) is spread out over 29 coral atolls, comprising 1,156 individual islands and islets. The islands share maritime boundaries with the Federated States of Micronesia to the west, Wake Island to the north,[note 2] Kiribati to the south-east, and Nauru to the south. About 27,797 of the islanders (at the 2011 Census) live on Majuro, which contains the capital.",
+      "eval_question": "Which ocean does the location of the Marshall Islands include?"
+     },
+     {
+      "question": "How many people lived in the Marshall Islands in 2011?",
+      "answers": [
+       "53,158"
+      ],
+      "context": "The Marshall Islands, officially the Republic of the Marshall Islands (Marshallese: Aolep\u0101n Aor\u014dkin M\u0327aje\u013c),[note 1] is an island country located near the equator in the Pacific Ocean, slightly west of the International Date Line. Geographically, the country is part of the larger island group of Micronesia. The country's population of 53,158 people (at the 2011 Census) is spread out over 29 coral atolls, comprising 1,156 individual islands and islets. The islands share maritime boundaries with the Federated States of Micronesia to the west, Wake Island to the north,[note 2] Kiribati to the south-east, and Nauru to the south. About 27,797 of the islanders (at the 2011 Census) live on Majuro, which contains the capital.",
+      "eval_question": "What was the population of the Marshall Islands in the year 2011?"
+     },
+     {
+      "question": "How many coral atolls comprise the Marshall Islands?",
+      "answers": [
+       "29"
+      ],
+      "context": "The Marshall Islands, officially the Republic of the Marshall Islands (Marshallese: Aolep\u0101n Aor\u014dkin M\u0327aje\u013c),[note 1] is an island country located near the equator in the Pacific Ocean, slightly west of the International Date Line. Geographically, the country is part of the larger island group of Micronesia. The country's population of 53,158 people (at the 2011 Census) is spread out over 29 coral atolls, comprising 1,156 individual islands and islets. The islands share maritime boundaries with the Federated States of Micronesia to the west, Wake Island to the north,[note 2] Kiribati to the south-east, and Nauru to the south. About 27,797 of the islanders (at the 2011 Census) live on Majuro, which contains the capital.",
+      "eval_question": "What is the total number of coral atolls in the Marshall Islands?"
+     }
+    ]
+   }
+  ],
+  [
+   {
+    "title": "Boston",
+    "qas": [
+     {
+      "question": "What is the approximate population for 2014?",
+      "answers": [
+       "655,884"
+      ],
+      "context": "Boston (pronounced i/\u02c8b\u0252st\u0259n/) is the capital and largest city of the Commonwealth of Massachusetts in the United States. Boston also served as the historic county seat of Suffolk County until Massachusetts disbanded county government in 1999. The city proper covers 48 square miles (124 km2) with an estimated population of 655,884 in 2014, making it the largest city in New England and the 24th largest city in the United States. The city is the economic and cultural anchor of a substantially larger metropolitan area called Greater Boston, home to 4.7 million people and the tenth-largest metropolitan statistical area in the country. Greater Boston as a commuting region is home to 8.1 million people, making it the sixth-largest combined statistical area in the United States.",
+      "eval_question": "How many people were estimated to live in [location] in 2014?"
+     },
+     {
+      "question": "How many square miles does Boston cover?",
+      "answers": [
+       "48 square miles"
+      ],
+      "context": "Boston (pronounced i/\u02c8b\u0252st\u0259n/) is the capital and largest city of the Commonwealth of Massachusetts in the United States. Boston also served as the historic county seat of Suffolk County until Massachusetts disbanded county government in 1999. The city proper covers 48 square miles (124 km2) with an estimated population of 655,884 in 2014, making it the largest city in New England and the 24th largest city in the United States. The city is the economic and cultural anchor of a substantially larger metropolitan area called Greater Boston, home to 4.7 million people and the tenth-largest metropolitan statistical area in the country. Greater Boston as a commuting region is home to 8.1 million people, making it the sixth-largest combined statistical area in the United States.",
+      "eval_question": "What is the total area of Boston in square miles?"
+     },
+     {
+      "question": "What was the population of Boston in 2014",
+      "answers": [
+       "655,884"
+      ],
+      "context": "Boston (pronounced i/\u02c8b\u0252st\u0259n/) is the capital and largest city of the Commonwealth of Massachusetts in the United States. Boston also served as the historic county seat of Suffolk County until Massachusetts disbanded county government in 1999. The city proper covers 48 square miles (124 km2) with an estimated population of 655,884 in 2014, making it the largest city in New England and the 24th largest city in the United States. The city is the economic and cultural anchor of a substantially larger metropolitan area called Greater Boston, home to 4.7 million people and the tenth-largest metropolitan statistical area in the country. Greater Boston as a commuting region is home to 8.1 million people, making it the sixth-largest combined statistical area in the United States.",
+      "eval_question": "How many people lived in Boston in the year 2014?"
+     },
+     {
+      "question": "How many square miles is the city proper of Boston?",
+      "answers": [
+       "48"
+      ],
+      "context": "Boston (pronounced i/\u02c8b\u0252st\u0259n/) is the capital and largest city of the Commonwealth of Massachusetts in the United States. Boston also served as the historic county seat of Suffolk County until Massachusetts disbanded county government in 1999. The city proper covers 48 square miles (124 km2) with an estimated population of 655,884 in 2014, making it the largest city in New England and the 24th largest city in the United States. The city is the economic and cultural anchor of a substantially larger metropolitan area called Greater Boston, home to 4.7 million people and the tenth-largest metropolitan statistical area in the country. Greater Boston as a commuting region is home to 8.1 million people, making it the sixth-largest combined statistical area in the United States.",
+      "eval_question": "What is the area in square miles of the city limits of Boston?"
+     },
+     {
+      "question": "The large metropolitan area of Boston is also called what?",
+      "answers": [
+       "Greater Boston"
+      ],
+      "context": "Boston (pronounced i/\u02c8b\u0252st\u0259n/) is the capital and largest city of the Commonwealth of Massachusetts in the United States. Boston also served as the historic county seat of Suffolk County until Massachusetts disbanded county government in 1999. The city proper covers 48 square miles (124 km2) with an estimated population of 655,884 in 2014, making it the largest city in New England and the 24th largest city in the United States. The city is the economic and cultural anchor of a substantially larger metropolitan area called Greater Boston, home to 4.7 million people and the tenth-largest metropolitan statistical area in the country. Greater Boston as a commuting region is home to 8.1 million people, making it the sixth-largest combined statistical area in the United States.",
+      "eval_question": "What is another name for the large metropolitan area including Boston?"
+     }
+    ]
+   },
+   {
+    "title": "Arena_Football_League",
+    "qas": [
+     {
+      "question": "When was the football league established?",
+      "answers": [
+       "1987"
+      ],
+      "context": "The Arena Football League (AFL) is the highest level of professional indoor American football in the United States. It was founded in 1987 by Jim Foster, making it the third longest-running professional football league in North America, after the Canadian Football League and the National Football League. It is played indoors on a 68-yard field (about half the distance of an NFL field), resulting in a faster-paced and higher-scoring game. The sport was invented in the early 1980s and patented by Foster, a former executive of the United States Football League and the National Football League.",
+      "eval_question": "In which year was the Football League founded?"
+     },
+     {
+      "question": "In what year was the AFL founded?",
+      "answers": [
+       "1987"
+      ],
+      "context": "The Arena Football League (AFL) is the highest level of professional indoor American football in the United States. It was founded in 1987 by Jim Foster, making it the third longest-running professional football league in North America, after the Canadian Football League and the National Football League. It is played indoors on a 68-yard field (about half the distance of an NFL field), resulting in a faster-paced and higher-scoring game. The sport was invented in the early 1980s and patented by Foster, a former executive of the United States Football League and the National Football League.",
+      "eval_question": "When did the AFL get established?"
+     },
+     {
+      "question": "Who was the founder of the Arena Football League?",
+      "answers": [
+       "Jim Foster"
+      ],
+      "context": "The Arena Football League (AFL) is the highest level of professional indoor American football in the United States. It was founded in 1987 by Jim Foster, making it the third longest-running professional football league in North America, after the Canadian Football League and the National Football League. It is played indoors on a 68-yard field (about half the distance of an NFL field), resulting in a faster-paced and higher-scoring game. The sport was invented in the early 1980s and patented by Foster, a former executive of the United States Football League and the National Football League.",
+      "eval_question": "What person established the Arena Football League?"
+     },
+     {
+      "question": "What was the inaugural year of the AFL?",
+      "answers": [
+       "1987"
+      ],
+      "context": "The Arena Football League (AFL) is the highest level of professional indoor American football in the United States. It was founded in 1987 by Jim Foster, making it the third longest-running professional football league in North America, after the Canadian Football League and the National Football League. It is played indoors on a 68-yard field (about half the distance of an NFL field), resulting in a faster-paced and higher-scoring game. The sport was invented in the early 1980s and patented by Foster, a former executive of the United States Football League and the National Football League.",
+      "eval_question": "In which year did the AFL start?"
+     },
+     {
+      "question": "In yards, how large is an arena football field?",
+      "answers": [
+       "68"
+      ],
+      "context": "The Arena Football League (AFL) is the highest level of professional indoor American football in the United States. It was founded in 1987 by Jim Foster, making it the third longest-running professional football league in North America, after the Canadian Football League and the National Football League. It is played indoors on a 68-yard field (about half the distance of an NFL field), resulting in a faster-paced and higher-scoring game. The sport was invented in the early 1980s and patented by Foster, a former executive of the United States Football League and the National Football League.",
+      "eval_question": "What is the size of an arena football field in yards?"
+     }
+    ]
+   },
+   {
+    "title": "Pharmaceutical_industry",
+    "qas": [
+     {
+      "question": "Who identified the active substance?",
+      "answers": [
+       "John Abel"
+      ],
+      "context": "By the 1890s the profound effect of adrenal extracts on many different tissue types had been discovered, setting off a search both for the mechanism of chemical signalling and efforts to exploit these observations for the development of new drugs. The blood pressure raising and vasoconstrictive effects of adrenal extracts were of particular interest to surgeons as hemostatic agents and as treatment for shock, and a number of companies developed products based on adrenal extracts containing varying purities of the active substance. In 1897 John Abel of Johns Hopkins University identified the active principle as epinephrine, which he isolated in an impure state as the sulfate salt. Industrial chemist Jokichi Takamine later developed a method for obtaining epinephrine in a pure state, and licensed the technology to Parke Davis. Parke Davis marketed epinephrine under the trade name Adrenalin. Injected epinephrine proved to be especially efficacious for the acute treatment of asthma attacks, and an inhaled version was sold in the United States until 2011 (Primatene Mist). By 1929 epinephrine had been formulated into an inhaler for use in the treatment of nasal congestion.",
+      "eval_question": "Which person discovered the active ingredient?"
+     },
+     {
+      "question": "Who developed the method to obtain epinephrine in a pure state?",
+      "answers": [
+       "Jokichi Takamine"
+      ],
+      "context": "By the 1890s the profound effect of adrenal extracts on many different tissue types had been discovered, setting off a search both for the mechanism of chemical signalling and efforts to exploit these observations for the development of new drugs. The blood pressure raising and vasoconstrictive effects of adrenal extracts were of particular interest to surgeons as hemostatic agents and as treatment for shock, and a number of companies developed products based on adrenal extracts containing varying purities of the active substance. In 1897 John Abel of Johns Hopkins University identified the active principle as epinephrine, which he isolated in an impure state as the sulfate salt. Industrial chemist Jokichi Takamine later developed a method for obtaining epinephrine in a pure state, and licensed the technology to Parke Davis. Parke Davis marketed epinephrine under the trade name Adrenalin. Injected epinephrine proved to be especially efficacious for the acute treatment of asthma attacks, and an inhaled version was sold in the United States until 2011 (Primatene Mist). By 1929 epinephrine had been formulated into an inhaler for use in the treatment of nasal congestion.",
+      "eval_question": "Which scientist created a technique for producing epinephrine in its pure form?"
+     },
+     {
+      "question": "Who marketed epinephrine?",
+      "answers": [
+       "Parke Davis"
+      ],
+      "context": "By the 1890s the profound effect of adrenal extracts on many different tissue types had been discovered, setting off a search both for the mechanism of chemical signalling and efforts to exploit these observations for the development of new drugs. The blood pressure raising and vasoconstrictive effects of adrenal extracts were of particular interest to surgeons as hemostatic agents and as treatment for shock, and a number of companies developed products based on adrenal extracts containing varying purities of the active substance. In 1897 John Abel of Johns Hopkins University identified the active principle as epinephrine, which he isolated in an impure state as the sulfate salt. Industrial chemist Jokichi Takamine later developed a method for obtaining epinephrine in a pure state, and licensed the technology to Parke Davis. Parke Davis marketed epinephrine under the trade name Adrenalin. Injected epinephrine proved to be especially efficacious for the acute treatment of asthma attacks, and an inhaled version was sold in the United States until 2011 (Primatene Mist). By 1929 epinephrine had been formulated into an inhaler for use in the treatment of nasal congestion.",
+      "eval_question": "Which company or entity was responsible for marketing epinephrine?"
+     },
+     {
+      "question": "As an inhaler, what was epinephrine used to treat?",
+      "answers": [
+       "nasal congestion"
+      ],
+      "context": "By the 1890s the profound effect of adrenal extracts on many different tissue types had been discovered, setting off a search both for the mechanism of chemical signalling and efforts to exploit these observations for the development of new drugs. The blood pressure raising and vasoconstrictive effects of adrenal extracts were of particular interest to surgeons as hemostatic agents and as treatment for shock, and a number of companies developed products based on adrenal extracts containing varying purities of the active substance. In 1897 John Abel of Johns Hopkins University identified the active principle as epinephrine, which he isolated in an impure state as the sulfate salt. Industrial chemist Jokichi Takamine later developed a method for obtaining epinephrine in a pure state, and licensed the technology to Parke Davis. Parke Davis marketed epinephrine under the trade name Adrenalin. Injected epinephrine proved to be especially efficacious for the acute treatment of asthma attacks, and an inhaled version was sold in the United States until 2011 (Primatene Mist). By 1929 epinephrine had been formulated into an inhaler for use in the treatment of nasal congestion.",
+      "eval_question": "What condition did epinephrine treat when administered through an inhaler?"
+     },
+     {
+      "question": "Who developed the method to get epinephrine in it's pure form?",
+      "answers": [
+       "Jokichi Takamine"
+      ],
+      "context": "By the 1890s the profound effect of adrenal extracts on many different tissue types had been discovered, setting off a search both for the mechanism of chemical signalling and efforts to exploit these observations for the development of new drugs. The blood pressure raising and vasoconstrictive effects of adrenal extracts were of particular interest to surgeons as hemostatic agents and as treatment for shock, and a number of companies developed products based on adrenal extracts containing varying purities of the active substance. In 1897 John Abel of Johns Hopkins University identified the active principle as epinephrine, which he isolated in an impure state as the sulfate salt. Industrial chemist Jokichi Takamine later developed a method for obtaining epinephrine in a pure state, and licensed the technology to Parke Davis. Parke Davis marketed epinephrine under the trade name Adrenalin. Injected epinephrine proved to be especially efficacious for the acute treatment of asthma attacks, and an inhaled version was sold in the United States until 2011 (Primatene Mist). By 1929 epinephrine had been formulated into an inhaler for use in the treatment of nasal congestion.",
+      "eval_question": "Which scientist created the technique for isolating epinephrine into a pure substance?"
+     }
+    ]
+   },
+   {
+    "title": "American_Idol",
+    "qas": [
+     {
+      "question": "Who is the creator of American Idol?",
+      "answers": [
+       "Simon Fuller"
+      ],
+      "context": "American Idol is an American singing competition series created by Simon Fuller and produced by 19 Entertainment, and is distributed by FremantleMedia North America. It began airing on Fox on June 11, 2002, as an addition to the Idols format based on the British series Pop Idol and has since become one of the most successful shows in the history of American television. The concept of the series is to find new solo recording artists, with the winner being determined by the viewers in America. Winners chosen by viewers through telephone, Internet, and SMS text voting were Kelly Clarkson, Ruben Studdard, Fantasia Barrino, Carrie Underwood, Taylor Hicks, Jordin Sparks, David Cook, Kris Allen, Lee DeWyze, Scotty McCreery, Phillip Phillips, Candice Glover, Caleb Johnson, and Nick Fradiani.",
+      "eval_question": "What person founded American Idol?"
+     },
+     {
+      "question": "What year did American Idol begin airing?",
+      "answers": [
+       "2002"
+      ],
+      "context": "American Idol is an American singing competition series created by Simon Fuller and produced by 19 Entertainment, and is distributed by FremantleMedia North America. It began airing on Fox on June 11, 2002, as an addition to the Idols format based on the British series Pop Idol and has since become one of the most successful shows in the history of American television. The concept of the series is to find new solo recording artists, with the winner being determined by the viewers in America. Winners chosen by viewers through telephone, Internet, and SMS text voting were Kelly Clarkson, Ruben Studdard, Fantasia Barrino, Carrie Underwood, Taylor Hicks, Jordin Sparks, David Cook, Kris Allen, Lee DeWyze, Scotty McCreery, Phillip Phillips, Candice Glover, Caleb Johnson, and Nick Fradiani.",
+      "eval_question": "In which calendar year did American Idol premiere?"
+     },
+     {
+      "question": "What British show is American Idols format based on?",
+      "answers": [
+       "Pop Idol"
+      ],
+      "context": "American Idol is an American singing competition series created by Simon Fuller and produced by 19 Entertainment, and is distributed by FremantleMedia North America. It began airing on Fox on June 11, 2002, as an addition to the Idols format based on the British series Pop Idol and has since become one of the most successful shows in the history of American television. The concept of the series is to find new solo recording artists, with the winner being determined by the viewers in America. Winners chosen by viewers through telephone, Internet, and SMS text voting were Kelly Clarkson, Ruben Studdard, Fantasia Barrino, Carrie Underwood, Taylor Hicks, Jordin Sparks, David Cook, Kris Allen, Lee DeWyze, Scotty McCreery, Phillip Phillips, Candice Glover, Caleb Johnson, and Nick Fradiani.",
+      "eval_question": "Which British television show inspired the format of American Idol?"
+     },
+     {
+      "question": "What television network does American Idol air on?",
+      "answers": [
+       "Fox"
+      ],
+      "context": "American Idol is an American singing competition series created by Simon Fuller and produced by 19 Entertainment, and is distributed by FremantleMedia North America. It began airing on Fox on June 11, 2002, as an addition to the Idols format based on the British series Pop Idol and has since become one of the most successful shows in the history of American television. The concept of the series is to find new solo recording artists, with the winner being determined by the viewers in America. Winners chosen by viewers through telephone, Internet, and SMS text voting were Kelly Clarkson, Ruben Studdard, Fantasia Barrino, Carrie Underwood, Taylor Hicks, Jordin Sparks, David Cook, Kris Allen, Lee DeWyze, Scotty McCreery, Phillip Phillips, Candice Glover, Caleb Johnson, and Nick Fradiani.",
+      "eval_question": "On which TV channel is American Idol broadcast?"
+     },
+     {
+      "question": "What British series is American Idols format based on?",
+      "answers": [
+       "Pop Idol"
+      ],
+      "context": "American Idol is an American singing competition series created by Simon Fuller and produced by 19 Entertainment, and is distributed by FremantleMedia North America. It began airing on Fox on June 11, 2002, as an addition to the Idols format based on the British series Pop Idol and has since become one of the most successful shows in the history of American television. The concept of the series is to find new solo recording artists, with the winner being determined by the viewers in America. Winners chosen by viewers through telephone, Internet, and SMS text voting were Kelly Clarkson, Ruben Studdard, Fantasia Barrino, Carrie Underwood, Taylor Hicks, Jordin Sparks, David Cook, Kris Allen, Lee DeWyze, Scotty McCreery, Phillip Phillips, Candice Glover, Caleb Johnson, and Nick Fradiani.",
+      "eval_question": "Which British show inspired the format of American Idol?"
+     }
+    ]
+   },
+   {
+    "title": "Fr\u00e9d\u00e9ric_Chopin",
+    "qas": [
+     {
+      "question": "For what instrument did Fr\u00e9d\u00e9ric write primarily for?",
+      "answers": [
+       "solo piano"
+      ],
+      "context": "Fr\u00e9d\u00e9ric Fran\u00e7ois Chopin (/\u02c8\u0283o\u028ap\u00e6n/; French pronunciation: \u200b[f\u0281e.de.\u0281ik f\u0281\u0251\u0303.swa \u0283\u0254.p\u025b\u0303]; 22 February or 1 March 1810 \u2013 17 October 1849), born Fryderyk Franciszek Chopin,[n 1] was a Polish and French (by citizenship and birth of father) composer and a virtuoso pianist of the Romantic era, who wrote primarily for the solo piano. He gained and has maintained renown worldwide as one of the leading musicians of his era, whose \"poetic genius was based on a professional technique that was without equal in his generation.\" Chopin was born in what was then the Duchy of Warsaw, and grew up in Warsaw, which after 1815 became part of Congress Poland. A child prodigy, he completed his musical education and composed his earlier works in Warsaw before leaving Poland at the age of 20, less than a month before the outbreak of the November 1830 Uprising.",
+      "eval_question": "Which instrument was Fr\u00e9d\u00e9ric's primary focus when composing?"
+     },
+     {
+      "question": "Where did Chopin grow up?",
+      "answers": [
+       "Warsaw"
+      ],
+      "context": "Fr\u00e9d\u00e9ric Fran\u00e7ois Chopin (/\u02c8\u0283o\u028ap\u00e6n/; French pronunciation: \u200b[f\u0281e.de.\u0281ik f\u0281\u0251\u0303.swa \u0283\u0254.p\u025b\u0303]; 22 February or 1 March 1810 \u2013 17 October 1849), born Fryderyk Franciszek Chopin,[n 1] was a Polish and French (by citizenship and birth of father) composer and a virtuoso pianist of the Romantic era, who wrote primarily for the solo piano. He gained and has maintained renown worldwide as one of the leading musicians of his era, whose \"poetic genius was based on a professional technique that was without equal in his generation.\" Chopin was born in what was then the Duchy of Warsaw, and grew up in Warsaw, which after 1815 became part of Congress Poland. A child prodigy, he completed his musical education and composed his earlier works in Warsaw before leaving Poland at the age of 20, less than a month before the outbreak of the November 1830 Uprising.",
+      "eval_question": "In which place did Chopin spend his childhood?"
+     },
+     {
+      "question": "What instrument did he mostly compose for?",
+      "answers": [
+       "solo piano"
+      ],
+      "context": "Fr\u00e9d\u00e9ric Fran\u00e7ois Chopin (/\u02c8\u0283o\u028ap\u00e6n/; French pronunciation: \u200b[f\u0281e.de.\u0281ik f\u0281\u0251\u0303.swa \u0283\u0254.p\u025b\u0303]; 22 February or 1 March 1810 \u2013 17 October 1849), born Fryderyk Franciszek Chopin,[n 1] was a Polish and French (by citizenship and birth of father) composer and a virtuoso pianist of the Romantic era, who wrote primarily for the solo piano. He gained and has maintained renown worldwide as one of the leading musicians of his era, whose \"poetic genius was based on a professional technique that was without equal in his generation.\" Chopin was born in what was then the Duchy of Warsaw, and grew up in Warsaw, which after 1815 became part of Congress Poland. A child prodigy, he completed his musical education and composed his earlier works in Warsaw before leaving Poland at the age of 20, less than a month before the outbreak of the November 1830 Uprising.",
+      "eval_question": "For which instrument did he primarily write?"
+     },
+     {
+      "question": "When did Chopin die?",
+      "answers": [
+       "17 October 1849"
+      ],
+      "context": "Fr\u00e9d\u00e9ric Fran\u00e7ois Chopin (/\u02c8\u0283o\u028ap\u00e6n/; French pronunciation: \u200b[f\u0281e.de.\u0281ik f\u0281\u0251\u0303.swa \u0283\u0254.p\u025b\u0303]; 22 February or 1 March 1810 \u2013 17 October 1849), born Fryderyk Franciszek Chopin,[n 1] was a Polish and French (by citizenship and birth of father) composer and a virtuoso pianist of the Romantic era, who wrote primarily for the solo piano. He gained and has maintained renown worldwide as one of the leading musicians of his era, whose \"poetic genius was based on a professional technique that was without equal in his generation.\" Chopin was born in what was then the Duchy of Warsaw, and grew up in Warsaw, which after 1815 became part of Congress Poland. A child prodigy, he completed his musical education and composed his earlier works in Warsaw before leaving Poland at the age of 20, less than a month before the outbreak of the November 1830 Uprising.",
+      "eval_question": "In what year did Chopin pass away?"
+     },
+     {
+      "question": "The majority of Chopin's compositions were for what instrument?",
+      "answers": [
+       "solo piano"
+      ],
+      "context": "Fr\u00e9d\u00e9ric Fran\u00e7ois Chopin (/\u02c8\u0283o\u028ap\u00e6n/; French pronunciation: \u200b[f\u0281e.de.\u0281ik f\u0281\u0251\u0303.swa \u0283\u0254.p\u025b\u0303]; 22 February or 1 March 1810 \u2013 17 October 1849), born Fryderyk Franciszek Chopin,[n 1] was a Polish and French (by citizenship and birth of father) composer and a virtuoso pianist of the Romantic era, who wrote primarily for the solo piano. He gained and has maintained renown worldwide as one of the leading musicians of his era, whose \"poetic genius was based on a professional technique that was without equal in his generation.\" Chopin was born in what was then the Duchy of Warsaw, and grew up in Warsaw, which after 1815 became part of Congress Poland. A child prodigy, he completed his musical education and composed his earlier works in Warsaw before leaving Poland at the age of 20, less than a month before the outbreak of the November 1830 Uprising.",
+      "eval_question": "For which instrument did the majority of Chopin's works belong?"
+     }
+    ]
+   }
+  ]
+ ]
+}
