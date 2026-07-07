@@ -1,5 +1,44 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R39-A (key-tied schema anchoring — first rehearsal-free "manufacture prior-anchoring for NEW facts"
+> probe) — CLEAN NEGATIVE for the anchoring mechanism; RE-CONFIRMS `nswrite` as the strong rehearsal-free
+> writer.** `s2/lifecycle_bakeoff.py` `run_keytie`, logs `docs/cloud_results/r39a_keytie.{json,log}`,
+> Qwen2.5-0.5B KG, 6 streams × 40 facts, 2 seeds, fixed-size (no growth). Hypothesis (from R38B-A): pin each
+> NEW fact's retrieval key-stem pooled rep to its **frozen-base** rep (cosine, λ=1), so the model writes only
+> minimal association bits on a stable pretrained key → inherit the real-text zero-replay retention floor.
+> Rehearsal-free by the strict line (anchor = the fact's OWN kstem + frozen base; no old prompts/answers/
+> logits/targets in later writes; single dense checkpoint; no inference key bank). Headline = **old-only
+> non-replayed paraphrase EM** (streams 0..R-2). 2-seed:
+>
+> | arm | old_para | old_seen | newest | base-hop after | rehearsal-free? |
+> |---|---|---|---|---|---|
+> | naive_fixed (no protection) | 0.302 | 0.332 | 0.95 | 0.210 | yes |
+> | **keytie_base** (tie key → frozen base) | **0.360** | 0.365 | 0.95 | 0.198 | yes |
+> | keytie_random (shuffled anchor, matched compute) | 0.297 | 0.320 | 0.95 | 0.201 | yes |
+> | **nswrite** (interference-aware null-space write) | **0.742** | 0.843 | 0.95 | 0.214 | yes (training-state, no old-item info) |
+> | ours_tgt_answerid (compact committed replay) | 0.838 | 0.925 | 0.95 | 0.200 | no (O(#facts) ledger) |
+>
+> **Verdict against codex's pre-registered gates: FAIL.** (1) `keytie_base − keytie_random = +0.062`,
+> `keytie_base − naive = +0.057`: there IS a **real, sign-consistent target-specific anchoring signal**
+> (both seeds: seed0 +0.095, seed1 +0.03) — tying a fact to its OWN frozen-base key beats tying to a random
+> key — but it is **trivially small**. (2) **PRIMARY gate `keytie_base > nswrite`: −0.382. Massive fail.**
+> Anchoring the retrieval KEY barely moves retention; it does not approach the best rehearsal-free baseline.
+> keytie does NOT sacrifice fresh learning (newest 0.95 = naive) and does not drift base (hop 0.198), so the
+> failure is "no benefit," not "benefit bought by damage." **Interpretation (compression frame):
+> interference is codebook-*contention* — which write DIRECTIONS/subspace you overwrite — not where the
+> retrieval key points. keytie stabilized the key's direction; `nswrite` protects the whole write from
+> colliding with occupied subspace. Only the latter matters.** **The louder positive: `nswrite` (0.742 old-
+> para, 0.843 old-seen) recovers ~89% of committed-replay's old-para (0.742/0.838) with ZERO replay and zero
+> committed targets** — the standing-best rehearsal-free result (R36-I), here directly bracketed against
+> replay in one run. Its write-subspace occupancy saturates 0.74→0.91 over 6 rounds — the R36-I saturation
+> that is the one principled regime where function-preserving *growth* may finally be necessary (phase-2:
+> depth vs width on saturation). **R39-A conclusion:** manufacturing prior-anchoring by KEY-representation
+> tying is not the lever; the rehearsal-free frontier stays with subspace-protected writing + its saturation.
+> Next (codex phase-2 brainstorm, `qa/`): schema-extraction consolidation (`BK_DATA=schema_comp`, reuse R34
+> bridge surface where held-out 2-hop groks to 0.98) testing whether O(#facts)→O(#patterns) — replay K
+> support instances per pattern ONCE, compile the rule, stop paying per instance (footprint SLOPE dtargets/dA
+> as the headline, not a point estimate).
+
 > **R38-WikiBridge-A (REAL-TEXT bridge — read Wikipedia passages → durable closed-book QA in weights) —
 > POSITIVE** `s3/wikibridge.py`, logs `docs/cloud_results/r38_squad_para.{log,json,manifest}`, Qwen2.5-0.5B,
 > 3 streams × 5 SQuAD articles × 5 QA (75 QA, base-hard + RAG-answerable screened, **held-out paraphrase
