@@ -547,7 +547,8 @@ def surprise_summary(results):
     # WITHIN-source: for each arm, pool OLD-only NON-replayed committed items (ct < final stream), join base
     # para-surprise bits with final eval retention; report tercile(lo/mid/hi bits), retention, point-biserial
     # corr, retained/bit — plus a variant excluding base-already-correct items (write-difficulty, not prior).
-    final_t = ACTUAL_STREAMS - 1
+    # codex: compute final_t PER SEED from that seed's committed items (not a global ACTUAL_STREAMS, which
+    # only reflects the last processed seed and breaks under variable survived-stream counts).
 
     def stats(pairs):                                   # pairs: list of (bits, retained_0_1)
         n = len(pairs)
@@ -571,8 +572,11 @@ def surprise_summary(results):
             if seed >= len(results.get(arm, [])):
                 continue
             pq = results[arm][seed].get("perqa") or {}
+            if not pq:
+                continue
+            seed_final_t = max(r["commit_t"] for r in pq.values())   # per-seed final stream
             for qid, rec in pq.items():
-                if qid in base and rec["commit_t"] < final_t and not rec["replayed"]:
+                if qid in base and rec["commit_t"] < seed_final_t and not rec["replayed"]:
                     pair = (base[qid]["base_bits_para"], rec["final_eval_em"])
                     allp.append(pair)
                     if not base[qid]["base_em_para"]:
