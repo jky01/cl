@@ -1,7 +1,8 @@
 # Capstone — Replay-Consolidation: Continual Knowledge-into-Weights without Inference Memory
 
-*Synthesis of the Grow-and-Consolidate research arc (R19–R36, 2026-07). Model: Qwen2.5-0.5B, all
-results ≥2 seeds unless noted. Harness: `s2/lifecycle_bakeoff.py`. Logs: `docs/cloud_results/`.*
+*Synthesis of the Grow-and-Consolidate research arc (R19–R38B-A, 2026-07). Model: Qwen2.5-0.5B, all
+results ≥2 seeds unless noted. Harnesses: `s2/lifecycle_bakeoff.py` (synthetic/KG), `s3/wikibridge.py`
+(real passage text). Logs: `docs/cloud_results/`.*
 
 ## Headline
 
@@ -15,6 +16,18 @@ results ≥2 seeds unless noted. Harness: `s2/lifecycle_bakeoff.py`. Logs: `docs
 
 This is a *cheap, memory-free, in-weights* continual-learning result. It is **not** a claim that continual
 learning is solved, that rehearsal is unnecessary, or that model growth is required.
+
+> **Real-text extension (R38-A → R38B-A).** The same lifecycle transfers from synthetic/KG tuples to **real
+> Wikipedia passage text**: `s3/wikibridge.py` reads SQuAD passages into a **closed-book** dense checkpoint
+> that answers **held-out paraphrased** questions at **0.893** para-EM (92% of gold-passage RAG) with no
+> inference memory — provided ingestion builds **QA/answer-function targets**, not raw reading (raw
+> continued-PT → ~0). Two hardened results bound the "read many books cheaply" hope: the strong **"small
+> random replay buys non-replayed neighbor coverage" claim is RETRACTED** (R38B — the pilot signal was a
+> fresh-stream accounting artifact; replay protects the replayed item, not its neighbors), while a **narrow
+> positive survives** — **real/prior-anchored knowledge has a no-replay retention floor that independent
+> invented facts lack** (R38B-A same-objective control: real-text zero-replay old-para 0.63–0.74 vs
+> independent-synthetic 0.16–0.18, a decisive collapse). Reading real knowledge that overlaps the pretrained
+> manifold is genuinely cheaper to *retain* than memorizing independent tuples — but not via replay coverage.
 
 ## The contract (invariant held throughout)
 
@@ -39,6 +52,15 @@ scaffold is **discarded** — inference is the dense checkpoint alone.
 | **R36-EV** external validity | holds on **KG-shaped real-entity counterfactuals** (~80 real subjects, 5 relations, 2 surface forms, frozen-base screen): all-seen **0.919**, oldest forget **+0.000**, oracle-gap seen +0.035 — **not a template artifact** |
 | **R36-A2** cheaper | a **1 committed answer token / (fact,view)**, stored once at commit, replayed via CE, **== full snapshot self-distill** (0.875/0.765/+0.000) while removing the resident snapshot and **5000→0** replay teacher forwards (**peak VRAM 9407→6711 MB, −29%**) |
 
+## 1b. Real-text arc (R37-A, R38) — from tuples to passages, and the footprint reckoning
+
+| milestone | result |
+|---|---|
+| **R38-A** real-text bridge | `s3/wikibridge.py`: transient continued-PT scaffold **+ QA span-CE targets** on SQuAD passages → consolidate into one dense checkpoint with compact committed replay → **closed-book** held-out-**paraphrase** EM **0.893** (RAG upper bound 0.973), base/naive/read-only **0.000**. Reading is not enough; the load-bearing step is **building answer-function targets** from source text. |
+| **R38B** footprint retraction | The "small random replay K buys **non-replayed** neighbor retention via real-text redundancy" pilot (0.733@K3) was a **fresh-stream accounting artifact**. Old-only + 2-seed hardening: K3−K0 = **+0.062** (≪ +0.15 bar), seed-sign unstable, **zero-replay no-anchor arm (0.738) beats every replay arm**. Replay protects the *replayed* item (k1 replayed 0.875 vs non 0.641) — R36-A item-rehearsal, **no neighbor spillover**. Strong sublinear-coverage claim **dead**. |
+| **R38B-A** same-objective control | Swap ONLY the corpus (`WB_SOURCE=synth`, identical `run_ingest`) to **independent invented facts**: zero-replay old-para **collapses to 0.16–0.18** (all 3 seeds ≤0.27) vs real text 0.63–0.74. `shared_templates` (max format sharing) already collapsed ⇒ not format-sharing. **The real-text no-replay floor is genuine prior-anchoring / redundancy, not a gentle objective.** Narrow POSITIVE preserved. |
+| **R37-A** localized-write growth | Penalize new grown-block forward footprint `‖Δh‖²/‖h‖²` on a non-new reference → block ≈ identity on old prompts. Clean 2-seed: decoy 0.608 (≈ nswrite), nogrow-decoy 0.325 (< naive 0.387) ⇒ **growth is load-bearing under isolation** — the first growth-necessary signal — but only in the strict no-router regime and still ≪ replay. Not a solved growth story. |
+
 ## 2. Bounded negatives — why the *cheaper* alternatives don't suffice
 
 Each was a genuine attempt at the frontier, closed with the *right* experiment (not a strawman):
@@ -60,7 +82,10 @@ Each was a genuine attempt at the frontier, closed with the *right* experiment (
   fact A carries zero information about unrelated fact B, so the retained information must scale with the
   number of independent facts preserved — an **O(#facts) information-footprint** result for arbitrary
   independent facts. (This is not a universal lower bound on all structured-data coresets or
-  self-generated coverage schemes, nor an exact per-round replay-frequency bound.)
+  self-generated coverage schemes, nor an exact per-round replay-frequency bound.) **On real text this was
+  re-tested and holds (R38B):** the apparent redundancy-spillover was a fresh-stream artifact; random
+  sublinear replay still protects only replayed items. What real text *does* add (R38B-A) is a
+  **prior-anchoring no-replay floor** — orthogonal to replay coverage, not a softening of it.
 
 ## 3. Honest limits (what we did NOT prove)
 
@@ -94,11 +119,22 @@ stronger surrogate than the failed diagonal EWC but still a local approximation,
 optimization); structured/redundant-data regimes where coreset replay *can* generalize (a different
 theorem boundary, not arbitrary-fact lifelong retention).
 
-**Next frontier (R37 roadmap):** **R37-A** strict no-router growth isolation (only if the harness can
-enforce the no-task-ID / no-key-bank / un-routed-inference contract cleanly); **R37-B** structured/
-generative replay coverage (reduce O(#facts) prompt storage without losing independent-fact retention);
-**R37-C** better committed-target / scaffold quality to close the para-dominated oracle gap (+0.131 para
-at R36-EV). These are named as the open program, not run before closing R19–R36.
+**Next frontier (R39 — rehearsal-free answer-function protection).** R37-A (growth isolation, done above)
+and R38B-A (real-text prior-anchoring floor) reframe the open problem: replay is still load-bearing for
+*independent* new knowledge, and the only thing that retains without replay is knowledge already anchored in
+the prior. The genuinely-unsolved target is therefore **writing NEW independent knowledge in an
+interference-resistant way with no per-item rehearsal**. R38B-A shows the hardest honest regime to test it
+in is **independent synthetic / KG-shaped facts** (real-text prior anchoring would mask failure). The design
+must hold a strict line codex drew: *protecting old realized update directions ≠ protecting the old answer
+function* (R36-C already failed that way), and a method that stores per-fact prompts/logits/activations/
+Jacobians is **compressed rehearsal, not rehearsal-free** — the label requires that **no old item-specific
+information is used during later writes**. Candidate mechanisms to pit against best `nswrite` + compact-replay
+oracle: (i) generic-probe **functional anchoring** (KL to M_{t-1} on a fixed broad non-old probe set —
+pure training-state constraint); (ii) **generative self-replay** (M_{t-1} reconstructs its own QA to
+rehearse — no stored old data); (iii) realized-ΔΘ null-space writing (training-state constraint, but
+direction≠function caveat applies). Strict gates: beat best `nswrite` by a material margin (not just naive),
+newest within a small tolerance of the no-protection writer, base/neutral preserved, and honest train-time
+storage/compute accounting with an explicit rehearsal-free-vs-compressed-rehearsal line.
 
 ## 5. Reproducibility
 
@@ -114,9 +150,14 @@ at R36-EV). These are named as the open program, not run before closing R19–R3
 
 Replay-consolidation is a robust, externally-valid, now-cheap method for writing independent factual
 knowledge into a single dense model with no inference memory and no joint retraining, and it beats standard
-in-weights no-replay CL baselines. The cheaper dreams around it — rehearsal-free protection and
-sublinear-fact rehearsal — are mapped and bounded. Continual learning is **not solved**; this is an honest,
-reproducible advance on the *in-weights, memory-free* corner of it. **Replay-consolidation is the closed
-positive; first-order rehearsal-free protection and random sublinear replay are bounded negatives; growth
-remains an explicitly unproven future frontier that must win under a strict no-router, matched-compute
-isolation test before it can be claimed as part of the solution.**
+in-weights no-replay CL baselines — now demonstrated from synthetic tuples through KG counterfactuals to
+**real Wikipedia passages → closed-book paraphrase QA** (R38-A). The cheaper dreams around it — rehearsal-free
+protection and sublinear-fact rehearsal — are mapped and bounded, and the real-text "read many books cheaply"
+hope is split honestly: **no free redundancy-spillover from random replay (R38B), but a genuine no-replay
+retention floor for prior-anchored knowledge that independent facts lack (R38B-A).** Continual learning is
+**not solved**; this is an honest, reproducible advance on the *in-weights, memory-free* corner of it.
+**Replay-consolidation is the closed positive; first-order rehearsal-free protection and random sublinear
+replay are bounded negatives; localized-write growth is load-bearing only under strict no-router isolation
+(R37-A) and is not yet a solved growth story; and the live open frontier is rehearsal-FREE answer-function
+protection for genuinely new independent knowledge (R39) — where no old item-specific information may touch
+later writes.**
