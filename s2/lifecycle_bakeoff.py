@@ -1058,6 +1058,90 @@ def main():
                     occupancy_curve=occ_hist, effective_grad_curve=eff_hist,
                     realized_leak_curve=leak_hist, ncollect_curve=ncol_hist)
 
+    # ---------------- keytie arm (R39-A: ENGINEER prior-anchoring for NEW facts, rehearsal-free) --------
+    # R38B-A showed real facts retain without replay because they sit on the pretrained manifold; independent
+    # invented facts collapse. R39-A tries to MANUFACTURE that anchoring: when writing each new fact, pin its
+    # retrieval KEY-STEM representation (kstem, the subject/relation encoding BEFORE the answer position) to
+    # that stem's FROZEN-BASE representation, so the model writes only the minimal association bits on top of
+    # a stable pretrained key. Fixed-size top-GROW (no growth). Rehearsal-free by codex's strict line: the
+    # anchor for a fact is computed from that fact's OWN kstem + the frozen base — NO old prompts/answers/
+    # logits/activations/targets touch later writes; inference is the single dense checkpoint, no key bank.
+    # anchor_mode: base = tie to frozen-base kstem rep; random = tie to a SHUFFLED base rep (matched-compute
+    # mismatched-target control — must NOT help if the gain is real anchoring); none = no tie (== naive_fixed).
+    def run_keytie(seed, streams, scaffolds, anchor_mode):
+        lam = float(os.environ.get("BK_KT_LAMBDA", 1.0))
+        metric = os.environ.get("BK_KT_METRIC", "cos")     # cos (scale-free direction) | mse
+        kt_lr = float(os.environ.get("BK_KT_LR", LR))
+        dense = load_frozen()
+        base_hop = hop_acc(dense)
+        set_trainable_top(dense, GROW)
+        for lyr in dense.model.layers[-GROW:]:
+            for mod in lyr.modules():
+                if isinstance(mod, nn.Linear) and mod.bias is not None:
+                    mod.bias.requires_grad_(False)
+        trainable = [p for p in dense.parameters() if p.requires_grad]
+        # frozen-base key anchors (each fact's OWN base key rep — rehearsal-free)
+        base_ref = load_frozen()
+        allf = [f for S in streams for f in S]
+        kk = [kstem(f) for f in allf]
+        reps = pooled(base_ref, kk)                        # [Nf, d] frozen, no_grad
+        del base_ref; torch.cuda.empty_cache()
+        idxmap = {k: i for i, k in enumerate(kk)}
+        if anchor_mode == "random":                        # mismatched-anchor control (same compute)
+            perm = list(range(len(kk))); random.Random(seed * 7 + 1).shuffle(perm)
+            reps = reps[perm].contiguous()
+        rng = random.Random(seed * 13 + 71)
+        hist = []; opt_steps = 0; tie_hist = []
+
+        def pooled_grad(texts):                            # grad-enabled mean-pool of the current model
+            e = tok(texts, return_tensors="pt", padding=True).to(device)
+            h = dense.model(**e, use_cache=False).last_hidden_state
+            msk = e.attention_mask[..., None].to(h.dtype)
+            return (h * msk).sum(1) / msk.sum(1)
+
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            opt = torch.optim.AdamW(trainable, lr=kt_lr, weight_decay=0.01)
+            dense.train(); tie_acc = 0.0; tie_n = 0
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = dense.lm_head(dense.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():                      # answer learning: scaffold teacher (matched to nswrite)
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                ap = [ANCHOR_TEXT[rng.randrange(len(ANCHOR_TEXT))] for _ in range(Ba)]
+                ap += [make(rng, names, rng.choice(HOPS))[0] for _ in range(Ba)]
+                ea = tok(ap, return_tensors="pt", padding=True).to(device)
+                sa = dense.lm_head(dense.model(**ea, use_cache=False).last_hidden_state[:, -1]).float()
+                with torch.no_grad():
+                    ba = base_logits(ea)
+                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(ba, -1), reduction="batchmean")
+                if anchor_mode != "none":                  # KEY-TIE: pin new fact's key stem to frozen base
+                    ks = [kstem(f) for f in sub]
+                    cur = pooled_grad(ks)
+                    tgt = reps[[idxmap[k] for k in ks]].to(cur.dtype)
+                    tie = ((1 - F.cosine_similarity(cur, tgt, -1)).mean() if metric == "cos"
+                           else F.mse_loss(cur, tgt))
+                    loss = loss + lam * tie
+                    tie_acc += tie.item(); tie_n += 1
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_(trainable, 1.0); opt.step(); opt_steps += 1
+            dense.eval()
+            tie_hist.append(round(tie_acc / max(tie_n, 1), 5))
+            seen, para, h = eval_all(dense, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [keytie-{anchor_mode:6s} seed {seed} r{r}] tie={tie_hist[-1]} "
+                  f"fresh={round(seen[r],2)} seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        del dense; torch.cuda.empty_cache()
+        tp = n_trainable_count(trainable)
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
+                    anchor_mode=anchor_mode, kt_lambda=lam, kt_metric=metric, tie_curve=tie_hist)
+
     flags = {
         "ours":      dict(uses_gold_new=False, uses_gold_old=False, uses_replay=True,  uses_inference_memory=False, single_dense=True),
         "naive":     dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
@@ -1072,6 +1156,7 @@ def main():
         "marginrandv": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True, uses_commit_answers=True),
         "grow_local": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
+        "keytie":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=False),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
@@ -1079,7 +1164,7 @@ def main():
     _scaf_arms = ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand",
                   "naive_fixed", "margin", "marginrandv", "ogd")
     need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") or a.startswith("ours_tgt_")
-                        or a.startswith("grow_local_") for a in ARMS)
+                        or a.startswith("grow_local_") or a.startswith("keytie_") for a in ARMS)
 
     def agg(arm):
         runs = results[arm]
@@ -1088,6 +1173,10 @@ def main():
         s0_para = sum(r["hist"][-1][1][0] for r in runs) / len(runs)
         allseen = sum(sum(r["hist"][-1][0]) / len(r["hist"][-1][0]) for r in runs) / len(runs)
         allpara = sum(sum(r["hist"][-1][1]) / len(r["hist"][-1][1]) for r in runs) / len(runs)
+        # R39 headline: OLD-only final retention over streams 0..R-2 (exclude the newest stream); the R38B-A
+        # axis, and guards against all-seen hiding forgetting behind fresh-stream learning.
+        old_seen = sum(sum(r["hist"][-1][0][:-1]) / max(len(r["hist"][-1][0]) - 1, 1) for r in runs) / len(runs)
+        old_para = sum(sum(r["hist"][-1][1][:-1]) / max(len(r["hist"][-1][1]) - 1, 1) for r in runs) / len(runs)
         newest = sum(r["hist"][-1][0][-1] for r in runs) / len(runs)
         bhop = sum(r["base_hop"] for r in runs) / len(runs)
         hop_f = sum(r["hist"][-1][2] for r in runs) / len(runs)
@@ -1141,6 +1230,7 @@ def main():
             occupancy_curve=occ_curve, effective_grad_curve=eff_curve, fresh_diagonal=fresh_diag,
             oldest_S0_fresh=s0_fresh, oldest_S0_final=s0_fin, oldest_S0_forgetting=s0_fresh - s0_fin,
             oldest_S0_para_final=s0_para, all_seen_final=allseen, all_para_final=allpara,
+            old_seen_final=old_seen, old_para_final=old_para,
             mean_forgetting_all_streams=mean_forget, age_curve_final_seen=age,
             newest_stream_final=newest, base_hop_before=bhop, base_hop_after=hop_f,
             trainable_params_per_round=runs[0]["tparams_per_round"],
@@ -1149,7 +1239,8 @@ def main():
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
             peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt, **gl,
             **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_"))
-               else flags["grow_local"] if arm.startswith("grow_local_") else flags[arm]))
+               else flags["grow_local"] if arm.startswith("grow_local_")
+               else flags["keytie"] if arm.startswith("keytie_") else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
 
@@ -1168,6 +1259,7 @@ def main():
                   f"{a['base_hop_before']:.3f}->{a['base_hop_after']:.3f}  "
                   f"{str(a['uses_gold_new']):5s} {str(a['uses_replay']):7s} {str(a['uses_inference_memory'])}")
             print(f"             mean-forget(all-streams)={a['mean_forgetting_all_streams']:+.3f} "
+                  f"OLD-only(0..R-2) seen={a['old_seen_final']:.3f} para={a['old_para_final']:.3f} "
                   f"age-curve(final seen S0..Sn)={a['age_curve_final_seen']}")
             if a.get("gradient_occupancy_final") is not None:
                 print(f"             energy-occ={a['occupancy_curve']} eff-grad={a['effective_grad_curve']} "
@@ -1223,6 +1315,8 @@ def main():
                 out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_tgt=arm[len("ours_tgt_"):])
             elif arm.startswith("grow_local_"):           # R37-A: localized-write growth isolation
                 out_a = run_grow_local(seed, streams, scaffolds, arm[len("grow_local_"):])
+            elif arm.startswith("keytie_"):                # R39-A: engineer prior-anchoring (base|random|none)
+                out_a = run_keytie(seed, streams, scaffolds, arm[len("keytie_"):])
             else:                                          # sweep all K/targets in ONE process (shared scaffolds)
                 out_a = run_consolidate(seed, streams, arm, scaffolds)
             out_a["wall"] = time.time() - t0
