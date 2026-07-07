@@ -132,7 +132,7 @@ def build_squad(seed, base):
     rng = random.Random(3000 + seed); rng.shuffle(titles)
     kept_articles = []
     for title in titles:
-        if len(kept_articles) >= STREAMS * ARTS * 5:      # over-select; para-screen prunes hard
+        if len(kept_articles) >= STREAMS * ARTS * 8:      # over-select; para-screen prunes hard
             break
         rows = by_title[title]
         # one long context = first paragraph(s); collect candidate QAs with short answers
@@ -402,12 +402,13 @@ def run_ingest(base, streams, arm, seed):
         if ct < final_t:
             ages[final_t - ct].append(q)
     age_para = {a: sc(qs) for a, qs in sorted(ages.items())}
+    old_rep_pa, old_non_pa = sc(old_rep), sc(old_non)   # score BEFORE del M (closure captures M)
     del M; torch.cuda.empty_cache()
     return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
                 final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3),
                 replay_k=REPLAY_K, no_anchor=no_anchor,
                 n_old_replayed=len(old_rep), n_old_nonreplayed=len(old_non),
-                old_replayed_para_em=sc(old_rep), old_nonreplayed_para_em=sc(old_non),
+                old_replayed_para_em=old_rep_pa, old_nonreplayed_para_em=old_non_pa,
                 age_para=age_para, per_stream=per_stream)
 
 def dump(results, nseeds):
