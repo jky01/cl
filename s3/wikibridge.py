@@ -263,7 +263,7 @@ def build_synth(seed, base):
             if len(tok(w, add_special_tokens=False).input_ids) <= 4:
                 used.add(w); return w
         raise RuntimeError("name pool exhausted")
-    n_art = STREAMS * ARTS * 4                      # over-select; RAG-screen on lookalike names is lossy
+    n_art = STREAMS * ARTS * int(os.environ.get("WB_SYNTH_OVERSEL", 4))   # over-select; RAG-screen lossy
     arts = []
     for _ in range(n_art):
         facts = []

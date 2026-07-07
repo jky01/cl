@@ -1,0 +1,294 @@
+{
+ "config": {
+  "source": "synth",
+  "synth_variant": "shared_templates",
+  "streams": 2,
+  "arts": 5,
+  "qa": 5,
+  "seeds": 2,
+  "arms": [
+   "naive_cpt",
+   "compact_cpt_qa",
+   "compact_cpt_qa_k1",
+   "compact_cpt_qa_k0",
+   "compact_cpt_qa_k0_noanchor"
+  ],
+  "actual_streams": 1,
+  "survived_articles": 5
+ },
+ "summary": {
+  "naive_cpt": {
+   "final_em": 0.0,
+   "final_f1": 0.0,
+   "final_para_em": 0.0,
+   "final_para_f1": 0.0,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 0.0,
+     "scaffold_new_para": 0.0,
+     "M_new_orig": 0.0,
+     "M_new_para": 0.0,
+     "n_committed": 0,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  },
+  "compact_cpt_qa": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.82,
+   "final_para_f1": 0.82,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.8,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.84,
+     "n_committed": 25,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  },
+  "compact_cpt_qa_k1": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.88,
+   "final_para_f1": 0.88,
+   "replay_k": 1,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.92,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.88,
+     "n_committed": 25,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  },
+  "compact_cpt_qa_k0": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.72,
+   "final_para_f1": 0.734,
+   "replay_k": 0,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.72,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.76,
+     "n_committed": 25,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  },
+  "compact_cpt_qa_k0_noanchor": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.86,
+   "final_para_f1": 0.86,
+   "replay_k": 0,
+   "no_anchor": true,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.8,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.88,
+     "n_committed": 25,
+     "old_orig": null,
+     "old_para": null
+    }
+   ]
+  }
+ },
+ "per_seed": {
+  "naive_cpt": [
+   {
+    "final_em": 0.0,
+    "final_f1": 0.0,
+    "final_para_em": 0.0,
+    "final_para_f1": 0.0,
+    "replay_k": -1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 57.9
+   },
+   {
+    "final_em": 0.0,
+    "final_f1": 0.0,
+    "final_para_em": 0.0,
+    "final_para_f1": 0.0,
+    "replay_k": -1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 63.6
+   }
+  ],
+  "compact_cpt_qa": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.8,
+    "final_para_f1": 0.8,
+    "replay_k": -1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 248.2
+   },
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.84,
+    "final_para_f1": 0.84,
+    "replay_k": -1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 262.0
+   }
+  ],
+  "compact_cpt_qa_k1": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.88,
+    "final_para_f1": 0.88,
+    "replay_k": 1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 247.4
+   },
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.88,
+    "final_para_f1": 0.88,
+    "replay_k": 1,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 250.1
+   }
+  ],
+  "compact_cpt_qa_k0": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.68,
+    "final_para_f1": 0.707,
+    "replay_k": 0,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 247.2
+   },
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.76,
+    "final_para_f1": 0.76,
+    "replay_k": 0,
+    "no_anchor": false,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 249.5
+   }
+  ],
+  "compact_cpt_qa_k0_noanchor": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.84,
+    "final_para_f1": 0.84,
+    "replay_k": 0,
+    "no_anchor": true,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 204.5
+   },
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.88,
+    "final_para_f1": 0.88,
+    "replay_k": 0,
+    "no_anchor": true,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": null,
+    "age_para": {},
+    "wall": 196.6
+   }
+  ]
+ },
+ "surprise": {}
+}
