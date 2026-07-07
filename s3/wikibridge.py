@@ -684,6 +684,7 @@ def dump(results, nseeds):
                 if qid in pq:
                     row[f"{arm}__eval_em"] = pq[qid]["final_eval_em"]
                     row[f"{arm}__replayed"] = pq[qid]["replayed"]
+                    row[f"{arm}__ever_replayed"] = pq[qid].get("ever_replayed", pq[qid]["replayed"])
                     row[f"{arm}__commit_t"] = pq[qid]["commit_t"]
             side.append(row)
     json.dump(dict(source=SOURCE, synth_variant=SYNTH_VARIANT, rows=side), open(OUT.replace(".json", ".perqa.json"), "w"))
