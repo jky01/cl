@@ -4,7 +4,7 @@
 > pass/null gates. Update the STATUS column and the "last updated" line every time an experiment returns.
 > This is the plan-of-record; `FINDINGS.md` is the evidence log, `docs/CAPSTONE.md` is the narrative.
 >
-> **Last updated:** 2026-07-07 (after R40 Phase-0 smoke: merge RETIRED, surprise re-venued to s3; next = surprise on s3 real-vs-synth).
+> **Last updated:** 2026-07-07 (after R40-s3: surprise PASSES categorically (on/off-manifold), NULL as continuous bits law → cost = O(#off-manifold exceptions); next = Phase-1 surprise-gated residual write).
 > **Governing constraints (never relax):** knowledge must end in ONE dense checkpoint; no inference-time
 > memory / router / task-id / retrieval; no joint full retraining; catastrophic forgetting measured
 > explicitly (old-only, non-replayed, paraphrase EM over streams 0..R-2 is the headline).
@@ -70,7 +70,7 @@ STATUS legend: ✅ positive · ❌ tested-negative · 🔬 queued (gated) · �
 | — | answer-level OGD (`run_ogd`, R36-C) | write-path (direction) | ❌ | near naive. Direction protection ≠ function protection. |
 | — | generic growth (width/depth/capacity) R23/R31/R32/R34 | — | ❌ | 4 independent negatives; growth not justified by generic capacity/composition. |
 | — | sequential `loramerge` (fold into evolving dense) R33/R35 | write-path | ❌ | 0.367 all-seen, base-hop collapse 0.06. Sequential drift. (≠ parallel-merge below.) |
-| 1 | **surprise-cost reframe / surprise-gated residual write** | changes x-axis of ALL terms | 🔬 re-venue to s3 | R40: NULL on KG (all counterfactuals = uniformly high-surprise, no low-surprise pop). Must test on `s3/wikibridge` real-vs-synth (the on/off-manifold contrast). Instrumentation ready. |
+| 1 | **surprise-cost reframe / surprise-gated residual write** | changes x-axis of ALL terms | ✅(categorical) R40-s3 | PASS as CATEGORICAL on/off-manifold: squad k0 old-nonrep para 0.76 vs synth 0.08 (+0.68); bits/token 4.45 vs 11.37 (survives answer-length control). NULL as within-source continuous bits law (corr −0.05..−0.26, noise). → cost = **O(#off-manifold exceptions)**, not a smooth bits law. Founds Phase-1. |
 | 2 | **interference-as-signal** → collision-discovered schema (unsupervised) | patterns (discovery) | 🔬 Phase-2 | current-current collision clusters recover R34 bridge structure above derange. Legal (no old items). |
 | A | parallel-train-from-frozen-base + merge (`merge_ties`/`merge_sum`) | write-path (resolve at merge) | ❌ R40 | **RETIRED.** merge 0.22–0.25 < loramerge 0.50 << nswrite 0.975; collapses newest+base-hop; conflict 0.244. Independent-fact task vectors collide destructively at merge — worse than sequential. (Task arithmetic needs *related* tasks.) |
 | B | schema-extraction consolidation (`schema_comp`) | patterns | 🔬 Phase-2 | O(#facts)→O(#patterns). Headline = footprint SLOPE dtargets/dA, not point. `schema_commit` vs equal-budget `item_k_matched` is the load-bearing control. |
@@ -131,8 +131,9 @@ store the residual without old drift AND grown arm beats nswrite/locality at mat
 
 ## 4. Known unknowns (open questions — update as answered)
 
-1. **Does surprise predict retention?** (R40 KG = NULL, but wrong venue — all counterfactuals high-surprise.
-   OPEN, must re-test on s3 real-vs-synth where a low-surprise/on-manifold population exists.)
+1. **Does surprise predict retention?** ANSWERED (R40-s3): YES categorically (on/off-manifold: squad 0.76 vs
+   synth 0.08 zero-replay, bits/token 4.45 vs 11.37), NO as a within-source continuous bits law (weak/noise).
+   Cost = O(#off-manifold exceptions). Open refinement: SEEDS=2 + matched stream counts to firm the floor gap.
 2. **Is parallel-merge a better route or just a missing baseline?** (R40 = ANSWERED NO: merge collapses
    below sequential loramerge for independent facts; task vectors collide. Retired.)
 3. **What is the LEGAL growth trigger?** occupancy alone is a false alarm (R36-I). Candidate: persistent

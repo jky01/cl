@@ -1,5 +1,45 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R40-s3 (surprise gate on the RIGHT venue — real `squad` vs independent `synth` through one ingest path)
+> — the surprise/manifold cost model PASSES at the CATEGORICAL level, is NULL as a within-source continuous
+> bits law.** `s3/wikibridge.py` surprise instrumentation (per-QA frozen-base answer-seq bits + per-arm final
+> retention keyed by qid), logs `docs/cloud_results/r40s3_{squad,synth}.{json,perqa.json,log}`, Qwen2.5-0.5B,
+> 1 seed (squad 2 streams / synth 4 streams — smoke). **Old-only NON-replayed paraphrase EM (the zero-replay
+> floor), matched arms:**
+>
+> | arm | squad (real, on-manifold) | synth (invented, off-manifold) | gap |
+> |---|---|---|---|
+> | compact_cpt_qa_k0 (no replay, +anchor) | **0.76** | **0.08** | **+0.68** |
+> | compact_cpt_qa_k0_noanchor (no replay, no anchor) | **0.60** | **0.187** | **+0.41** |
+> | compact_cpt_qa_k1 (1 residual/article) | 0.65 | 0.10 | +0.55 |
+> | compact_cpt_qa (full replay, ceiling) | 0.88 (rep) | 0.52 (rep) | +0.36 |
+>
+> **(1) Categorical source = on/off-manifold DECISIVELY predicts zero-replay retention** (+0.68 at k0, far
+> above codex's +0.25 scale bar) — R40's KG null was a **venue artifact** (KG counterfactuals were uniformly
+> high-surprise; no low-surprise population). On the correct real-vs-synth venue the R38B-A gap reproduces
+> cleanly with the surprise instrumentation. **And the surprise contrast is real and survives answer-length
+> control:** mean **bits/token = 4.45 (squad) vs 11.37 (synth)** — the off-manifold source is ~2.5× higher
+> per-token surprise AND the one that collapses. Total bits are answer-length-confounded (squad 4.9 tok /
+> 19.3 bits vs synth 3.9 tok / 44.5 bits); bits/token is the clean measure and cleanly separates the sources.
+>
+> **(2) Continuous bits are NOT a within-source retention law (NULL/weak).** Within squad k0, base-para
+> surprise vs retention corr = −0.05 (total) / −0.26 (bits/token); within synth k0 −0.10 / −0.13; k0_noanchor
+> near zero. Weakly in the expected direction (higher surprise → lower retention) but within noise at n=25–75.
+> **So the effect is CATEGORICAL (manifold membership), not a smooth per-item bits gradient** — codex's
+> pre-registered "partial pass": the usable planning variable is an **on/off-manifold residual BUCKET**, not
+> "cost = k × bits".
+>
+> **Net (surprise reframe, verdict):** the surprise-cost model is REAL and measurable, but it reclassifies
+> the cost as **O(#off-manifold exceptions)**, NOT a continuous surprise law and NOT a dissolution of the
+> exception wall. On-manifold (low bits/token) knowledge is retained ~0.6–0.76 with ZERO replay; genuinely
+> novel off-manifold knowledge still collapses to ~0.08–0.19 unreplayed. **Consequence for "read hundreds of
+> books": cheap/no-replay for content that builds on existing knowledge; the irreducible cost is exactly the
+> off-manifold novelty**, which still needs residual/replay budget. This directly founds Phase-1 (surprise-
+> gated residual write: spend replay/residual budget only on high-bits/token off-manifold items). **Caveats:**
+> 1 seed; squad 2 streams (old=stream 0 only) vs synth 4 streams (different counts — codex guardrail); within-
+> source underpowered. Worth scaling to SEEDS=2, but the categorical floor gap is large and robust to the
+> anchor/no-anchor split. Instrumentation (`qa_answer_bits`, `.perqa.json`) reusable.
+
 > **R40 (Phase-0 smoke — surprise instrumentation + parallel-train-from-frozen-base MERGE arms) —
 > MERGE is a CLEAN NEGATIVE; surprise-as-continuous-predictor is NULL in this venue (wrong venue).**
 > `s2/lifecycle_bakeoff.py` `run_mergeparallel` + `surprise_probe`/`surprise_summary`, logs
