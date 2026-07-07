@@ -396,7 +396,8 @@ def dump(results, nseeds):
         if not rs:
             continue
         def av(k):
-            return round(sum(r.get(k, 0) for r in rs) / len(rs), 3)
+            vals = [r.get(k) for r in rs if r.get(k) is not None]
+            return round(sum(vals) / len(vals), 3) if vals else None
         summ[arm] = dict(final_em=av("final_em"), final_f1=av("final_f1"),
                          final_para_em=av("final_para_em"), final_para_f1=av("final_para_f1"),
                          replay_k=rs[-1].get("replay_k"), n_replayed=rs[-1].get("n_replayed"),

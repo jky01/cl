@@ -1,0 +1,13 @@
+{
+ "note": "reconstructed from run stdout (pod reclaimed before scp); config 4x5x5 -> actual 3 streams / 15 articles / 75 QA survived para-screen; Qwen2.5-0.5B, 1 seed, SQuAD hard-tail + held-out paraphrase; WB_REPLAY_K = committed QA/article replayed",
+ "base_no_ingest": {"final_para_em": 0.000},
+ "rag_gold_passage": {"final_para_em": 0.973},
+ "summary": {
+  "naive_cpt":         {"replay_k": null, "final_para_em": 0.000, "replayed_para_em": null,  "nonreplayed_para_em": null,  "n_replayed": 0,  "n_nonreplayed": 0},
+  "compact_cpt_qa":    {"replay_k": -1,   "final_para_em": 0.893, "replayed_para_em": null,  "nonreplayed_para_em": null,  "n_replayed": 0,  "n_nonreplayed": 0, "comment": "replay ALL committed"},
+  "compact_cpt_qa_k3": {"replay_k": 3,    "final_para_em": 0.853, "replayed_para_em": 0.933, "nonreplayed_para_em": 0.733, "n_replayed": 45, "n_nonreplayed": 30},
+  "compact_cpt_qa_k2": {"replay_k": 2,    "final_para_em": 0.627, "replayed_para_em": 0.800, "nonreplayed_para_em": 0.511, "n_replayed": 30, "n_nonreplayed": 45},
+  "compact_cpt_qa_k1": {"replay_k": 1,    "final_para_em": 0.573, "replayed_para_em": 0.933, "nonreplayed_para_em": 0.483, "n_replayed": 15, "n_nonreplayed": 60},
+  "compact_cpt_qa_k0": {"replay_k": 0,    "final_para_em": 0.507, "replayed_para_em": null,  "nonreplayed_para_em": 0.507, "n_replayed": 0,  "n_nonreplayed": 75, "comment": "no old replay"}
+ }
+}

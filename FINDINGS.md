@@ -33,6 +33,35 @@
 > targets, not just read. Next: scale articles/streams/seeds; footprint sweep (R36-A-style) on old replay;
 > counterfactual audit (`WB_SOURCE=cf`); multi-view teacher if paraphrase transfer needs strengthening.
 >
+> **R38 FOOTPRINT SWEEP (does real-text redundancy soften the R36-A O(#facts) bound?) — PARTIAL YES**
+> `s3/wikibridge.py` `WB_REPLAY_K` / `compact_cpt_qa_k<K>`, `docs/cloud_results/r38_footprint.json`, SQuAD
+> 15 art / 3 streams, 1 seed. Cap old committed-QA replay to **K per article**, report replayed vs
+> **NON-replayed** old-paraphrase EM (the R36-A decisive split, now on real text):
+>
+> | K/article | final para-EM | replayed para | **NON-replayed para** |
+> |---|---|---|---|
+> | naive (no replay, full CPT) | 0.000 | — | — |
+> | 0 (compact, no old replay) | 0.507 | — | **0.507** |
+> | 1 | 0.573 | 0.933 | **0.483** |
+> | 2 | 0.627 | 0.800 | **0.511** |
+> | 3 | 0.853 | 0.933 | **0.733** |
+> | all committed | 0.893 | — | — |
+>
+> **Real text behaves differently from synthetic independent facts.** In R36-A (synthetic), non-replayed
+> old items collapsed to ~naive (≈0) — pure item rehearsal. Here, **non-replayed old QA retain at ~0.50
+> even at K=0–2** (vs synthetic ~0) and **rise to 0.733 at K=3/article** (vs full-replay 0.893). Two effects
+> soften the O(#facts) bound: (1) the gentle compact-consolidation itself (new-QA CE + neutral anchor,
+> starting from M_{t-1}) preserves ~0.5 of old paraphrase behavior with **zero** old replay — far above
+> synthetic naive; (2) **real-passage redundancy gives genuine spillover** — replaying 3 committed QA/article
+> lifts *non-replayed* stream-mates to 0.733, unlike independent counterfactuals where A carries no
+> information about B. So on real text, **sub-linear replay coverage partially generalizes** — the footprint
+> is softer than the synthetic O(#facts) lower bound, though not eliminated (full replay 0.893 > K=3 0.853 >
+> low-K). This is the first evidence that "read hundreds of books" may be **cheaper than O(#facts)** because
+> real knowledge shares structure. **Honest caveats:** 1 seed, 15 articles, 0.5B, paraphrase eval; the K=0
+> baseline (0.507) means part of "retention" is the consolidation's gentleness, not replay coverage — a
+> cleaner attribution needs the naive-consolidate floor and >1 seed. Next: multi-seed + larger corpus to
+> confirm the redundancy-spillover trend, and answer-type-diverse coreset selection vs random K.
+>
 
 > **PIVOT (2026-07-03/04, rounds R19-R25) — Grow-and-Consolidate (`s2/`).** Per the
 > strategy doc `reference/2026.07.03.20.md`, the direction shifted from *scaling an
