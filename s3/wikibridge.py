@@ -262,11 +262,11 @@ def build_synth(seed, base):
             if len(tok(w, add_special_tokens=False).input_ids) <= 4:
                 used.add(w); return w
         raise RuntimeError("name pool exhausted")
-    n_art = STREAMS * ARTS * 2                      # modest over-select; base is ignorant by construction
+    n_art = STREAMS * ARTS * 4                      # over-select; RAG-screen on lookalike names is lossy
     arts = []
     for _ in range(n_art):
         facts = []
-        for j in range(QA_PER + 2):
+        for j in range(QA_PER + 4):
             s, a = fresh(), fresh()
             st, q, p = (tmpls[(len(facts)) % len(tmpls)] if SYNTH_VARIANT == "shared_templates"
                         else rng.choice(tmpls))
