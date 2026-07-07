@@ -64,6 +64,7 @@ Task:
 4. The Markdown must record the source file name: qa/claude/$latest_claude.
 5. Do not overwrite existing files.
 6. After writing, ensure the latest qa/codex filename is later than $latest_claude.
+7. At the end of the Markdown response, provide an additional section with open-ended brainstorming suggestions that push the boundaries of the current discussion, potentially offering high-risk/high-reward angles aligned with the project objective.
 
 Do not perform unrelated code changes."
 
