@@ -25,6 +25,7 @@ from __future__ import annotations
 import os
 import copy
 import json
+import math
 import time
 import random
 import torch
@@ -283,6 +284,43 @@ def main():
         para = [recall(m, streams[j], p_para) for j in range(r + 1)]
         return seen, para, hop_acc(m)
 
+    @torch.no_grad()
+    def perfact(m, streams, phrase):
+        # flat 0/1 (argmax==gold) over ALL facts in stream order; per-fact retention on a final model
+        facts = [f for s in streams for f in s]
+        prompts = [phrase(*f) for f in facts]
+        gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
+        res = []
+        for i in range(0, len(prompts), 128):
+            e = tok(prompts[i:i + 128], return_tensors="pt", padding=True).to(device)
+            pred = m.lm_head(m.model(**e).last_hidden_state[:, -1]).float().argmax(-1)
+            res += (pred == gold[i:i + 128]).int().tolist()
+        return res
+
+    @torch.no_grad()
+    def surprise_probe(streams):
+        # per-fact FROZEN-BASE surprise (R40 Phase-0): bits=-log2 P_base(gold), margin(gold-top1<=0),
+        # entropy(bits), already_correct. Computed for p_seen and p_para. This is the reproducible
+        # cost-unit: does base surprise predict later retention better than raw fact-count/age?
+        facts = [f for s in streams for f in s]
+        gold = torch.tensor([one_tok(v) for (_, _, v) in facts], device=device)
+        cols = {}
+        for phrase, key in ((p_seen, "seen"), (p_para, "para")):
+            prompts = [phrase(*f) for f in facts]
+            bits, marg, ent, corr = [], [], [], []
+            for i in range(0, len(prompts), 128):
+                e = tok(prompts[i:i + 128], return_tensors="pt", padding=True).to(device)
+                lg = feat.lm_head(feat.model(**e).last_hidden_state[:, -1]).float()
+                logp = F.log_softmax(lg, -1)
+                g = gold[i:i + 128]
+                gi = torch.arange(len(g), device=device)
+                bits += (-logp[gi, g] / math.log(2)).tolist()
+                marg += (lg[gi, g] - lg.max(-1).values).tolist()
+                ent += (-(logp.exp() * logp).sum(-1) / math.log(2)).tolist()
+                corr += lg.argmax(-1).eq(g).int().tolist()
+            cols[key] = dict(bits=bits, margin=marg, entropy=ent, correct=corr)
+        return facts, cols
+
     def n_trainable(m):
         return sum(p.numel() for p in m.parameters() if p.requires_grad)
 
@@ -422,6 +460,7 @@ def main():
             print(f"    [{kind} K{REPLAY_K} seed {seed}] REPLAYED seen={rep_metrics['replayed_seen']} "
                   f"para={rep_metrics['replayed_para']} | NON-REPLAYED seen={rep_metrics['nonreplayed_seen']} "
                   f"para={rep_metrics['nonreplayed_para']} (n_rep={len(rep)} n_non={len(nonrep)})", flush=True)
+        pf_seen, pf_para = perfact(dense, streams, p_seen), perfact(dense, streams, p_para)
         del dense; torch.cuda.empty_cache()
         # R36-A2 footprint accounting: extra stored bytes/fact (beyond the (key,relation) tuple all modes
         # need) and replay-time teacher forward passes (0 for precomputed modes = the compute win).
@@ -435,6 +474,7 @@ def main():
                            extra_bytes_per_fact=bpf, uses_snapshot_teacher=(REPLAY_TGT == "snapshot"))
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=tparams, updated_params_total=sum(tparams),
+                    perfact_seen=pf_seen, perfact_para=pf_para,
                     **rep_metrics, **tgt_metrics)
 
     # ---------------- R37-A grow-local: LOCALIZED-WRITE growth isolation (no router, no replay) ----
@@ -587,9 +627,101 @@ def main():
             seen, para, h = eval_all(dense, streams, r)
             hist.append((seen, para, h))
             print(f"    [loramerge seed {seed} r{r}] seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        pf_seen, pf_para = perfact(dense, streams, p_seen), perfact(dense, streams, p_para)
         del dense; torch.cuda.empty_cache()
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
-                    tparams_per_round=tparams, updated_params_total=sum(tparams))
+                    tparams_per_round=tparams, updated_params_total=sum(tparams),
+                    perfact_seen=pf_seen, perfact_para=pf_para)
+
+    # ---------------- parallel-train-from-frozen-base + MERGE arms (R40) --------------------------
+    # DIFFERENT from loramerge (which folds each LoRA into the EVOLVING dense -> sequential drift, R33/R35
+    # failure). Here each stream trains a LoRA on a FRESH FROZEN base; interference is resolved at MERGE
+    # time, not avoided at write time. mode="sum": task-vector arithmetic sum. mode="ties": trim-elect-mean
+    # (TIES). Final artifact is ONE dense checkpoint; no inference memory. Per-stream deltas are current-
+    # stream training products (NOT old-item data); storage O(#streams x q/v-weights) is reported, not hidden.
+    def run_mergeparallel(seed, streams, scaffolds, mode):
+        from peft import LoraConfig, get_peft_model
+        density = float(os.environ.get("BK_TIES_DENSITY", 0.2))
+        lam = float(os.environ.get(f"BK_MERGE_{mode.upper()}_LAMBDA",       # per-mode: sum wants <1, ties ~1
+                    os.environ.get("BK_MERGE_LAMBDA", "0.5" if mode == "sum" else "1.0")))
+        base = load_frozen()
+        base_hop = hop_acc(base)
+        bp = {n: p for n, p in base.named_parameters()}
+        tnames = [n for n in bp if n.endswith("q_proj.weight") or n.endswith("v_proj.weight")]
+        rng = random.Random(seed * 13 + 47)
+        hist = []; opt_steps = 0; tparams = []; deltas = []; conflict_curve = []
+        scratch = load_frozen()                                   # reused eval buffer (reset+apply each round)
+
+        def combine(ds):                                          # ds: list of CPU delta tensors (same shape)
+            if mode == "sum":
+                return torch.stack(ds, 0).sum(0)
+            stk = torch.stack(ds, 0); R = stk.shape[0]
+            flat = stk.reshape(R, -1); k = max(1, int(density * flat.shape[1]))
+            trimmed = torch.zeros_like(flat)
+            for j in range(R):
+                idx = flat[j].abs().topk(k).indices
+                trimmed[j, idx] = flat[j, idx]
+            sign = torch.sign(trimmed.sum(0))
+            agree = (torch.sign(trimmed) == sign) & (trimmed != 0)
+            num = (trimmed * agree.float()).sum(0)
+            cnt = agree.float().sum(0).clamp(min=1.0)
+            return (num / cnt).reshape(stk.shape[1:])
+
+        for r in range(ROUNDS):
+            S = streams[r]; mods, Kf, Sf = scaffolds[r][0], scaffolds[r][1], scaffolds[r][2]
+            fresh = load_frozen()
+            cfg = LoraConfig(r=LORA_R, lora_alpha=2 * LORA_R, lora_dropout=0.0,
+                             target_modules=["q_proj", "v_proj"], task_type="CAUSAL_LM")
+            peft_m = get_peft_model(fresh, cfg)
+            tparams.append(sum(p.numel() for p in peft_m.parameters() if p.requires_grad))
+            opt = torch.optim.AdamW([p for p in peft_m.parameters() if p.requires_grad], lr=2e-4)
+            peft_m.train()
+            for _ in range(STEPS):
+                sub = [rng.choice(S) for _ in range(Bf)]
+                phrase = p_seen if rng.random() < 0.5 else p_para
+                pr = [phrase(*f) for f in sub]
+                e = tok(pr, return_tensors="pt", padding=True).to(device)
+                s_lg = peft_m(**e, use_cache=False).logits[:, -1].float()
+                with torch.no_grad():
+                    t_lg = teacher_logits(feat, mods, Kf, Sf, pr)
+                loss = F.cross_entropy(s_lg, t_lg.argmax(-1)) + F.kl_div(
+                    F.log_softmax(s_lg, -1), F.softmax(t_lg, -1), reduction="batchmean")
+                opt.zero_grad(); loss.backward()
+                torch.nn.utils.clip_grad_norm_([p for p in peft_m.parameters() if p.requires_grad], 1.0)
+                opt.step(); opt_steps += 1
+            merged = peft_m.merge_and_unload()                    # fresh := base + ΔW_r
+            mp = {n: p for n, p in merged.named_parameters()}
+            deltas.append({n: (mp[n].detach() - bp[n].detach()).cpu() for n in tnames})
+            del fresh, peft_m, merged; torch.cuda.empty_cache()
+            # eval round r: reset scratch to base, apply merged deltas 0..r
+            with torch.no_grad():
+                sp = {n: p for n, p in scratch.named_parameters()}
+                for n in sp:
+                    sp[n].copy_(bp[n])
+                confs = []
+                for n in tnames:
+                    ds = [deltas[j][n] for j in range(r + 1)]
+                    if len(ds) > 1:                                # sign-conflict rate among nonzero coords
+                        stk = torch.stack(ds, 0); nz = (stk != 0)
+                        pos = ((stk > 0) & nz).sum(0).float(); neg = ((stk < 0) & nz).sum(0).float()
+                        tot = (pos + neg).clamp(min=1.0)
+                        confs.append((torch.minimum(pos, neg) / tot).mean().item())
+                    comb = combine(ds).to(device, sp[n].dtype)
+                    sp[n].add_(lam * comb)
+            conflict_curve.append(round(sum(confs) / len(confs), 4) if confs else 0.0)
+            scratch.eval()
+            seen, para, h = eval_all(scratch, streams, r)
+            hist.append((seen, para, h))
+            print(f"    [merge_{mode:4s} seed {seed} r{r}] seen={[round(x,2) for x in seen]} "
+                  f"hop={h:.3f} conflict={conflict_curve[-1]}", flush=True)
+        pf_seen, pf_para = perfact(scratch, streams, p_seen), perfact(scratch, streams, p_para)
+        delta_bytes = sum(sum(d[n].numel() * 4 for n in d) for d in deltas)
+        del base, scratch; torch.cuda.empty_cache()
+        return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
+                    tparams_per_round=tparams, updated_params_total=sum(tparams),
+                    perfact_seen=pf_seen, perfact_para=pf_para,
+                    merge_mode=mode, merge_lambda=lam, ties_density=density,
+                    conflict_curve=conflict_curve, delta_store_bytes=delta_bytes)
 
     # ---------------- external-memory arm (persistent bank; inference USES memory) --------------
     def run_extmem(seed, streams):
@@ -883,12 +1015,14 @@ def main():
             print(f"    [nswrite-{mode:4s} seed {seed} r{r}] energy-occ={occ_hist[-1]} "
                   f"eff-grad={eff_hist[-1]} dW-leak={leak_hist[-1]} fresh={round(seen[r],2)} "
                   f"seen={[round(x,2) for x in seen]} hop={h:.3f}", flush=True)
+        pf_seen, pf_para = perfact(dense, streams, p_seen), perfact(dense, streams, p_para)
         del dense; torch.cuda.empty_cache()
         tp = n_trainable_count(trainable)
         return dict(base_hop=base_hop, hist=hist, opt_steps=opt_steps,
                     tparams_per_round=[tp] * ROUNDS, updated_params_total=tp * ROUNDS,
                     occupancy_curve=occ_hist, effective_grad_curve=eff_hist,
-                    realized_leak_curve=leak_hist)
+                    realized_leak_curve=leak_hist,
+                    perfact_seen=pf_seen, perfact_para=pf_para)
 
     # ---------------- ogd arm (answer-level Orthogonal Gradient Descent, rehearsal-free) ----------
     # R36-C: the STRONGEST rehearsal-free primitive, distinct from nswrite. Instead of protecting each
@@ -1157,12 +1291,14 @@ def main():
         "ogd":       dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True, uses_commit_answers=True),
         "grow_local": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True),
         "keytie":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=False),
+        "merge_sum": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
+        "merge_ties": dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=False, single_dense=True, uses_training_state=True),
         "extmem":    dict(uses_gold_new=False, uses_gold_old=False, uses_replay=False, uses_inference_memory=True,  single_dense=False),
     }
 
     results = {a: [] for a in ARMS}
     _scaf_arms = ("ours", "naive", "loramerge", "oracle", "ewc", "nswrite", "nswrite_rand",
-                  "naive_fixed", "margin", "marginrandv", "ogd")
+                  "naive_fixed", "margin", "marginrandv", "ogd", "merge_sum", "merge_ties")
     need_scaffold = any(a in _scaf_arms or a.startswith("ours_k") or a.startswith("ours_tgt_")
                         or a.startswith("grow_local_") or a.startswith("keytie_") for a in ARMS)
 
@@ -1225,6 +1361,13 @@ def main():
                        replay_teacher_forwards=sum(r["replay_teacher_forwards"] for r in runs) / len(runs),
                        extra_bytes_per_fact=runs[0]["extra_bytes_per_fact"],
                        uses_snapshot_teacher=runs[0]["uses_snapshot_teacher"])
+        mg = {}
+        if all("conflict_curve" in r for r in runs):       # R40 parallel-merge diagnostics
+            nc = len(runs[0]["conflict_curve"])
+            mg = dict(merge_mode=runs[0]["merge_mode"], merge_lambda=runs[0]["merge_lambda"],
+                      ties_density=runs[0]["ties_density"], delta_store_bytes=runs[0]["delta_store_bytes"],
+                      conflict_curve=[round(sum(r["conflict_curve"][j] for r in runs) / len(runs), 4)
+                                      for j in range(nc)])
         return dict(
             gradient_occupancy_final=occ, effective_grad_final=eff,
             occupancy_curve=occ_curve, effective_grad_curve=eff_curve, fresh_diagonal=fresh_diag,
@@ -1237,12 +1380,50 @@ def main():
             updated_params_total=sum(r["updated_params_total"] for r in runs) / len(runs),
             optimizer_steps=sum(r["opt_steps"] for r in runs) / len(runs),
             wall_clock_seconds=sum(r["wall"] for r in runs) / len(runs),
-            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt, **gl,
+            peak_vram_mb=max(r["peak_vram_mb"] for r in runs), **rep, **tgt, **gl, **mg,
             **(flags["ours"] if (arm.startswith("ours_k") or arm.startswith("ours_tgt_"))
                else flags["grow_local"] if arm.startswith("grow_local_")
                else flags["keytie"] if arm.startswith("keytie_") else flags[arm]))
 
     out = os.environ.get("BK_OUT", "lifecycle_bakeoff_result.json")
+    surprise_by_seed = []                                  # R40: per-seed (facts, frozen-base surprise cols)
+
+    def surprise_summary():
+        # pool per-fact base-para surprise with each arm's final per-fact para retention; test whether
+        # surprise predicts retention (terciles + point-biserial + retained/surprise-bit).
+        pooled_bits, pooled_ret, pooled_corr = {}, {}, {}
+        for s, (facts, cols) in enumerate(surprise_by_seed):
+            bits = cols["para"]["bits"]; alc = cols["para"]["correct"]
+            for arm in ARMS:
+                if s < len(results[arm]) and results[arm][s].get("perfact_para") is not None:
+                    pooled_bits.setdefault(arm, []).extend(bits)
+                    pooled_ret.setdefault(arm, []).extend(results[arm][s]["perfact_para"])
+                    pooled_corr.setdefault(arm, []).extend(alc)
+
+        def _stats(b, ret):                               # tercile / per-bit / point-biserial on a fact subset
+            n = len(b)
+            if n < 3:
+                return None
+            order = sorted(range(n), key=lambda i: b[i]); t = max(1, n // 3)
+            terc = [round(sum(ret[i] for i in order[a:a + t]) / max(len(order[a:a + t]), 1), 3)
+                    for a in (0, t, 2 * t)]
+            mb = sum(b) / n; mr = sum(ret) / n
+            sd_b = (sum((x - mb) ** 2 for x in b) / n) ** 0.5 or 1.0
+            sd_r = (sum((x - mr) ** 2 for x in ret) / n) ** 0.5 or 1.0
+            corr = round(sum((b[i] - mb) * (ret[i] - mr) for i in range(n)) / (n * sd_b * sd_r), 4)
+            return dict(retained_para_overall=round(mr, 3), by_surprise_tercile_lo_mid_hi=terc,
+                        retained_per_surprise_bit=round(sum(ret) / (sum(b) or 1.0), 5),
+                        corr_surprise_vs_retained=corr, mean_surprise_bits=round(mb, 3), n_facts=n)
+        summ = {}
+        for arm in pooled_bits:
+            b, ret, alc = pooled_bits[arm], pooled_ret[arm], pooled_corr[arm]
+            full = _stats(b, ret)
+            if full is None:
+                continue
+            # codex: also exclude base-already-correct facts, else the signal is "base knew it", not "write difficulty"
+            nb = [b[i] for i in range(len(b)) if not alc[i]]; nr = [ret[i] for i in range(len(b)) if not alc[i]]
+            summ[arm] = dict(**full, excl_already_correct=_stats(nb, nr))
+        return summ
 
     def dump(nseeds):
         print(f"\n== BAKEOFF (mean/{nseeds} seeds done, {ROUNDS} rounds x {PER} facts) ==")
@@ -1269,9 +1450,27 @@ def main():
             og_p = summary["oracle"]["all_para_final"] - summary["ours"]["all_para_final"]
             print(f"  ORACLE_GAP (oracle-ours): seen {og_s:+.3f}  para {og_p:+.3f}  "
                   f"(small gap => no-gold self-distill ~ gold-old upper bound)")
+        ssum = surprise_summary()
+        if ssum:
+            print("  -- R40 surprise gate (base-para surprise vs final para retention) --")
+            for arm, sv in ssum.items():
+                ex = sv.get("excl_already_correct") or {}
+                print(f"     {arm:16s} ret={sv['retained_para_overall']:.3f} "
+                      f"tercile(lo/mid/hi surprise)={sv['by_surprise_tercile_lo_mid_hi']} "
+                      f"corr={sv['corr_surprise_vs_retained']:+.3f} ret/bit={sv['retained_per_surprise_bit']} "
+                      f"| excl-already-correct: corr={ex.get('corr_surprise_vs_retained')} "
+                      f"tercile={ex.get('by_surprise_tercile_lo_mid_hi')} n={ex.get('n_facts')}", flush=True)
         with open(out, "w") as f:
             json.dump(dict(config=dict(model=NAME, rounds=ROUNDS, per=PER, grow=GROW, steps=STEPS,
-                                       seeds_done=nseeds, arms=ARMS, lora_r=LORA_R), summary=summary), f, indent=2)
+                                       seeds_done=nseeds, arms=ARMS, lora_r=LORA_R),
+                           summary=summary, surprise=ssum), f, indent=2)
+        pf_out = out.replace(".json", ".perfact.json")
+        with open(pf_out, "w") as f:
+            json.dump(dict(seeds=[dict(seed=s, facts=[list(f) for f in facts], surprise=cols,
+                                       arms={arm: results[arm][s].get("perfact_para")
+                                             for arm in ARMS if s < len(results[arm])
+                                             and results[arm][s].get("perfact_para") is not None})
+                                  for s, (facts, cols) in enumerate(surprise_by_seed)]), f)
         print(f"RESULT_JSON_{nseeds}SEED " + json.dumps(summary), flush=True)
 
     for seed in range(SEEDS):
@@ -1282,6 +1481,10 @@ def main():
             bseen = recall(feat, allf, p_seen); bpar = recall(feat, allf, p_para)
             print(f"    [KG base-recall screen] frozen-base seen={bseen:.3f} para={bpar:.3f} "
                   f"({'OK <=0.15' if bseen <= 0.15 else 'WARNING: base already knows facts'})", flush=True)
+        sp_facts, sp_cols = surprise_probe(streams)       # R40: per-fact frozen-base surprise (once/seed)
+        surprise_by_seed.append((sp_facts, sp_cols))
+        print(f"    [R40 surprise] mean base-para bits={sum(sp_cols['para']['bits'])/len(sp_facts):.2f} "
+              f"already-correct para={sum(sp_cols['para']['correct'])}/{len(sp_facts)}", flush=True)
         # train each stream's scaffold ONCE (deterministic in seed*100+r); share across arms
         scaffolds = None
         if need_scaffold:
@@ -1309,6 +1512,10 @@ def main():
                 out_a = run_nswrite(seed, streams, scaffolds, "marginrandv")
             elif arm == "ogd":
                 out_a = run_ogd(seed, streams, scaffolds)
+            elif arm == "merge_sum":                     # R40: parallel-from-base + task-vector sum
+                out_a = run_mergeparallel(seed, streams, scaffolds, "sum")
+            elif arm == "merge_ties":                    # R40: parallel-from-base + TIES merge
+                out_a = run_mergeparallel(seed, streams, scaffolds, "ties")
             elif arm.startswith("ours_k"):               # R36-A: ours_k<K> = ours with fixed-K replay,
                 out_a = run_consolidate(seed, streams, "ours", scaffolds, replay_k=int(arm[6:]))
             elif arm.startswith("ours_tgt_"):             # R36-A2: ours_tgt_<mode> = ours with compact target
