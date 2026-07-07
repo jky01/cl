@@ -1,5 +1,40 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R41 (Rung 1 — surprise-gated replay BUDGET on a mixed squad+synth stream) — STRONG PASS: the model's own
+> frozen-base bits/token is an ACTIONABLE routing signal, not just a category marker.** `s3/wikibridge.py`
+> `build_mixed` + `select_budget`, logs `docs/cloud_results/r41_rung1.{json,perqa.json,log}`, Qwen2.5-0.5B,
+> mixed stream (3 streams × [3 squad + 3 synth] articles), 1 seed, budget = 50% of old committed items replayed,
+> selected by rule. Old-only (60 items) final paraphrase EM, split by frozen-base bits/token (median 9.12;
+> high = off-manifold exceptions, low = on-manifold):
+>
+> | arm (replays 50% of old) | all-old | **HIGH-bits old (exceptions)** | low-bits old (on-manifold) |
+> |---|---|---|---|
+> | **bgt_surprise** (replay top-50% by bits/token) | **0.617** | **0.533** | 0.700 |
+> | bgt_random (replay random 50%) | 0.500 | 0.267 | 0.733 |
+> | bgt_lowbits (replay bottom-50%) | 0.517 | 0.267 | 0.767 |
+> | bgt_sourceoracle (replay synth-first) | 0.583 | 0.500 | 0.667 |
+> | compact_cpt_qa (full replay, ceiling) | 0.617 | 0.500 | 0.733 |
+> | compact_cpt_qa_k0 (zero replay, floor) | 0.417 | 0.233 | 0.600 |
+>
+> **Clears every one of codex's pre-registered gates:** (1) **surprise − random = +0.117 all-old AND +0.266
+> HIGH-bits** (bars were +0.10 / +0.15). (2) **lowbits (0.267 high-bits) ≪ surprise** — allocation DIRECTION
+> matters; lowbits ties random by abandoning the exceptions. (3) **sourceoracle competitive (0.500 vs 0.533
+> high-bits) — surprise even beats the source oracle**, proving frozen-base bits/token is a SUFFICIENT routing
+> signal (no squad/synth label needed; the model's own surprise finds the exceptions). (4) low-bits skipped
+> items stay safe (surprise 0.700, above k0 0.600). (5) newest not underlearned (surprise final-para 0.589 ≥
+> full 0.578). **Headline: surprise-gated replay of the top-50%-by-bits/token MATCHES full replay on all-old
+> (0.617 = 0.617) and EXCEEDS it on the exceptions (0.533 > 0.500) at HALF the budget** — it concentrates the
+> scarce budget on off-manifold exceptions and correctly skips on-manifold items that survive unreplayed
+> (R40-s3 mechanism, now a control knob). **This turns the surprise result from a category marker into a
+> deployable allocation policy: spend O(#exceptions) committed-target budget, routed by the model's own
+> bits/token, instead of O(#facts).** Exception-tail density signal: at B=0.5 surprise already ties full → the
+> tail here is ≤50% (corpus is 50% synth by construction). **Caveats:** 1 seed; exact density needs a budget
+> ladder (0.25/0.5/0.75, codex's next step); "replayed" = final-consolidation pool (ever_replayed audit field
+> logged). **Ladder: Rung 1 mechanism VALIDATED.** Whether Rung 2 (fixed-capacity memory layer) is needed now
+> depends only on the measured exception-tail density for real corpora: sparse tail → surprise-gated compact
+> replay suffices with NO new architecture; dense tail → Rung 2 justified. Next: SEEDS=2 sign-stability, then
+> budget ladder → the density number.
+
 > **R40-s3 (surprise gate on the RIGHT venue — real `squad` vs independent `synth` through one ingest path)
 > — the surprise/manifold cost model PASSES at the CATEGORICAL level, is NULL as a within-source continuous
 > bits law.** `s3/wikibridge.py` surprise instrumentation (per-QA frozen-base answer-seq bits + per-arm final

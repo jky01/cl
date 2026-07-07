@@ -82,11 +82,12 @@ it relocates the exception ledger into the model without solving the deep proble
 - **Rung 0:** ✅ DONE — matched-stream guardrail PASSES: k0 squad 0.68 vs synth 0.24 (+0.44), k0_noanchor
   0.68 vs 0.22 (+0.46), no seed inversion (clears codex bars). Age confound was ~0.2 of the unmatched +0.68;
   categorical on/off-manifold effect survives clean. R40-s3 is now a clean matched Phase-0 pass.
-- **Rung 1 (NEXT, zero new arch):** surprise-gated compact-replay budget in s3, MIXED squad+synth stream —
-  framed as **exception-tail DENSITY measurement** (min replay fraction to reach within 0.05 of full replay).
-  Arms: surprise_gate_B / random_budget_B / lowbits_budget_B / k0 floor / full-replay ceiling / source_oracle_B
-  (diag). Deliverable = the density number that decides whether Rung 2/3 is needed. (Density is corpus-specific;
-  the MECHANISM result — does surprise-gating beat random allocation — is what generalizes.)
+- **Rung 1 (R41): MECHANISM VALIDATED — STRONG PASS.** surprise-gated replay (top-50% by frozen-base
+  bits/token) beats random by +0.117 all-old / **+0.266 high-bits (exceptions)**, ties FULL replay on all-old
+  (0.617) and beats it on exceptions (0.533>0.500) at HALF budget; beats even the source-oracle (bits/token is
+  a sufficient router, no label needed); lowbits ties random (direction matters); on-manifold skipped stays
+  safe (0.700). → deployable **O(#exceptions)** allocation policy, routed by the model's own surprise, no new
+  arch. TODO: SEEDS=2 + budget ladder (0.25/0.5/0.75) for the exact exception-tail density number.
 - **Rung 2 (gated by density): fixed-capacity content-addressed associative memory layer for exceptions.**
 - **Rung 3 (gated by Rung 2 wall): TTT/Titans (surprise-gated state=weights), local/predictive-coding update
   rules, VSA superposition (graceful √ interference vs hard null-space saturation).** Titans independently uses

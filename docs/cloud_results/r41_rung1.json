@@ -1,0 +1,511 @@
+{
+ "config": {
+  "source": "mixed",
+  "synth_variant": "shared_templates",
+  "streams": 3,
+  "arts": 3,
+  "qa": 5,
+  "seeds": 1,
+  "arms": [
+   "compact_cpt_qa",
+   "compact_cpt_qa_k0",
+   "compact_cpt_qa_bgt_surprise",
+   "compact_cpt_qa_bgt_random",
+   "compact_cpt_qa_bgt_lowbits",
+   "compact_cpt_qa_bgt_sourceoracle"
+  ],
+  "actual_streams": 3,
+  "survived_articles": 18
+ },
+ "summary": {
+  "compact_cpt_qa": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.578,
+   "final_para_f1": 0.601,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 60,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": 0.617,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.7,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.733,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.633,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.667,
+     "n_committed": 30,
+     "old_orig": 1.0,
+     "old_para": 0.833
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.433,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.5,
+     "n_committed": 30,
+     "old_orig": 1.0,
+     "old_para": 0.617
+    }
+   ]
+  },
+  "compact_cpt_qa_k0": {
+   "final_em": 0.678,
+   "final_f1": 0.678,
+   "final_para_em": 0.433,
+   "final_para_f1": 0.453,
+   "replay_k": 0,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 60,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": 0.433,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.7,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.767,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.667,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.7,
+     "n_committed": 30,
+     "old_orig": 0.6,
+     "old_para": 0.433
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.5,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.5,
+     "n_committed": 30,
+     "old_orig": 0.517,
+     "old_para": 0.433
+    }
+   ]
+  },
+  "compact_cpt_qa_bgt_surprise": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.589,
+   "final_para_f1": 0.611,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 30,
+   "n_old_nonreplayed": 30,
+   "old_replayed_para_em": 0.533,
+   "old_nonreplayed_para_em": 0.7,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.767,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.733,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.667,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.6,
+     "n_committed": 30,
+     "old_orig": 1.0,
+     "old_para": 0.767
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.433,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.533,
+     "n_committed": 30,
+     "old_orig": 1.0,
+     "old_para": 0.633
+    }
+   ]
+  },
+  "compact_cpt_qa_bgt_random": {
+   "final_em": 0.944,
+   "final_f1": 0.944,
+   "final_para_em": 0.489,
+   "final_para_f1": 0.496,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 30,
+   "n_old_nonreplayed": 30,
+   "old_replayed_para_em": 0.533,
+   "old_nonreplayed_para_em": 0.467,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.667,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.8,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.7,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.667,
+     "n_committed": 30,
+     "old_orig": 0.967,
+     "old_para": 0.7
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.4,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.467,
+     "n_committed": 30,
+     "old_orig": 0.9,
+     "old_para": 0.5
+    }
+   ]
+  },
+  "compact_cpt_qa_bgt_lowbits": {
+   "final_em": 0.789,
+   "final_f1": 0.789,
+   "final_para_em": 0.478,
+   "final_para_f1": 0.497,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 30,
+   "n_old_nonreplayed": 30,
+   "old_replayed_para_em": 0.767,
+   "old_nonreplayed_para_em": 0.267,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.667,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.8,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.767,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.7,
+     "n_committed": 30,
+     "old_orig": 0.733,
+     "old_para": 0.6
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.5,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.4,
+     "n_committed": 30,
+     "old_orig": 0.683,
+     "old_para": 0.517
+    }
+   ]
+  },
+  "compact_cpt_qa_bgt_sourceoracle": {
+   "final_em": 0.967,
+   "final_f1": 0.967,
+   "final_para_em": 0.522,
+   "final_para_f1": 0.558,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 30,
+   "n_old_nonreplayed": 30,
+   "old_replayed_para_em": 0.533,
+   "old_nonreplayed_para_em": 0.633,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.867,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.7,
+     "n_committed": 30,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.7,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.633,
+     "n_committed": 30,
+     "old_orig": 1.0,
+     "old_para": 0.633
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.5,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.4,
+     "n_committed": 30,
+     "old_orig": 0.95,
+     "old_para": 0.583
+    }
+   ]
+  }
+ },
+ "per_seed": {
+  "compact_cpt_qa": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.578,
+    "final_para_f1": 0.601,
+    "replay_k": -1,
+    "no_anchor": false,
+    "budget_mode": null,
+    "budget_frac": null,
+    "n_old_replayed": 60,
+    "n_old_nonreplayed": 0,
+    "old_replayed_para_em": 0.617,
+    "old_nonreplayed_para_em": null,
+    "age_para": {
+     "1": 0.6,
+     "2": 0.633
+    },
+    "wall": 490.5
+   }
+  ],
+  "compact_cpt_qa_k0": [
+   {
+    "final_em": 0.678,
+    "final_f1": 0.678,
+    "final_para_em": 0.433,
+    "final_para_f1": 0.453,
+    "replay_k": 0,
+    "no_anchor": false,
+    "budget_mode": null,
+    "budget_frac": null,
+    "n_old_replayed": 0,
+    "n_old_nonreplayed": 60,
+    "old_replayed_para_em": null,
+    "old_nonreplayed_para_em": 0.433,
+    "age_para": {
+     "1": 0.5,
+     "2": 0.367
+    },
+    "wall": 440.3
+   }
+  ],
+  "compact_cpt_qa_bgt_surprise": [
+   {
+    "final_em": 1.0,
+    "final_f1": 1.0,
+    "final_para_em": 0.589,
+    "final_para_f1": 0.611,
+    "replay_k": -1,
+    "no_anchor": false,
+    "budget_mode": "surprise",
+    "budget_frac": 0.5,
+    "n_old_replayed": 30,
+    "n_old_nonreplayed": 30,
+    "old_replayed_para_em": 0.533,
+    "old_nonreplayed_para_em": 0.7,
+    "age_para": {
+     "1": 0.633,
+     "2": 0.633
+    },
+    "wall": 496.7
+   }
+  ],
+  "compact_cpt_qa_bgt_random": [
+   {
+    "final_em": 0.944,
+    "final_f1": 0.944,
+    "final_para_em": 0.489,
+    "final_para_f1": 0.496,
+    "replay_k": -1,
+    "no_anchor": false,
+    "budget_mode": "random",
+    "budget_frac": 0.5,
+    "n_old_replayed": 30,
+    "n_old_nonreplayed": 30,
+    "old_replayed_para_em": 0.533,
+    "old_nonreplayed_para_em": 0.467,
+    "age_para": {
+     "1": 0.433,
+     "2": 0.567
+    },
+    "wall": 492.6
+   }
+  ],
+  "compact_cpt_qa_bgt_lowbits": [
+   {
+    "final_em": 0.789,
+    "final_f1": 0.789,
+    "final_para_em": 0.478,
+    "final_para_f1": 0.497,
+    "replay_k": -1,
+    "no_anchor": false,
+    "budget_mode": "lowbits",
+    "budget_frac": 0.5,
+    "n_old_replayed": 30,
+    "n_old_nonreplayed": 30,
+    "old_replayed_para_em": 0.767,
+    "old_nonreplayed_para_em": 0.267,
+    "age_para": {
+     "1": 0.5,
+     "2": 0.533
+    },
+    "wall": 484.2
+   }
+  ],
+  "compact_cpt_qa_bgt_sourceoracle": [
+   {
+    "final_em": 0.967,
+    "final_f1": 0.967,
+    "final_para_em": 0.522,
+    "final_para_f1": 0.558,
+    "replay_k": -1,
+    "no_anchor": false,
+    "budget_mode": "sourceoracle",
+    "budget_frac": 0.5,
+    "n_old_replayed": 30,
+    "n_old_nonreplayed": 30,
+    "old_replayed_para_em": 0.533,
+    "old_nonreplayed_para_em": 0.633,
+    "age_para": {
+     "1": 0.567,
+     "2": 0.6
+    },
+    "wall": 488.6
+   }
+  ]
+ },
+ "surprise": {
+  "compact_cpt_qa_k0": {
+   "n": 60,
+   "retained_overall": 0.417,
+   "by_bits_tercile": [
+    0.75,
+    0.25,
+    0.25
+   ],
+   "corr_bits_vs_retained": -0.4554,
+   "retained_per_bit": 0.01405,
+   "mean_bits": 29.659,
+   "excl_corr": -0.4554,
+   "excl_tercile": [
+    0.75,
+    0.25,
+    0.25
+   ],
+   "excl_n": 60
+  },
+  "compact_cpt_qa_bgt_surprise": {
+   "n": 30,
+   "retained_overall": 0.7,
+   "by_bits_tercile": [
+    0.9,
+    0.6,
+    0.6
+   ],
+   "corr_bits_vs_retained": -0.2682,
+   "retained_per_bit": 0.03751,
+   "mean_bits": 18.66,
+   "excl_corr": -0.2682,
+   "excl_tercile": [
+    0.9,
+    0.6,
+    0.6
+   ],
+   "excl_n": 30
+  },
+  "compact_cpt_qa_bgt_random": {
+   "n": 30,
+   "retained_overall": 0.467,
+   "by_bits_tercile": [
+    0.7,
+    0.4,
+    0.3
+   ],
+   "corr_bits_vs_retained": -0.3297,
+   "retained_per_bit": 0.01438,
+   "mean_bits": 32.459,
+   "excl_corr": -0.3297,
+   "excl_tercile": [
+    0.7,
+    0.4,
+    0.3
+   ],
+   "excl_n": 30
+  },
+  "compact_cpt_qa_bgt_lowbits": {
+   "n": 30,
+   "retained_overall": 0.267,
+   "by_bits_tercile": [
+    0.4,
+    0.3,
+    0.1
+   ],
+   "corr_bits_vs_retained": -0.3176,
+   "retained_per_bit": 0.00656,
+   "mean_bits": 40.658,
+   "excl_corr": -0.3176,
+   "excl_tercile": [
+    0.4,
+    0.3,
+    0.1
+   ],
+   "excl_n": 30
+  },
+  "compact_cpt_qa_bgt_sourceoracle": {
+   "n": 30,
+   "retained_overall": 0.633,
+   "by_bits_tercile": [
+    0.8,
+    0.5,
+    0.6
+   ],
+   "corr_bits_vs_retained": 0.0479,
+   "retained_per_bit": 0.0324,
+   "mean_bits": 19.55,
+   "excl_corr": 0.0479,
+   "excl_tercile": [
+    0.8,
+    0.5,
+    0.6
+   ],
+   "excl_n": 30
+  }
+ }
+}
