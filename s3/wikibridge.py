@@ -299,6 +299,46 @@ def build_synth(seed, base):
           f"ans_tok_len min/mean/max={ln}", flush=True)
     return [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
 
+# ------------------------- MIXED source: squad (on-manifold) + synth (off-manifold) interleaved -------------
+# Rung 1 needs BOTH regimes in ONE continual stream at matched age + shared replay-budget pressure, so a
+# surprise gate can be tested on whether it allocates scarce budget AWAY from easy on-manifold items TOWARD
+# hard off-manifold exceptions. Each mixed stream = that index's squad articles + synth articles.
+def build_mixed(seed, base):
+    sq = build_squad(seed, base)
+    sy = build_synth(seed, base)
+    for s in sq:
+        for a in s:
+            for q in a["qas"]:
+                q["src"] = "squad"
+    for s in sy:
+        for a in s:
+            for q in a["qas"]:
+                q["src"] = "synth"
+    n = min(len(sq), len(sy))
+    print(f"  MIXED: squad_streams={len(sq)} synth_streams={len(sy)} -> {n} mixed streams", flush=True)
+    return [sq[t] + sy[t] for t in range(n)]
+
+# ------------------------- Rung 1: surprise-gated replay-budget selection -------------------------
+def _bpt(seed, q):                                    # frozen-base bits/token for a committed QA (surprise)
+    rec = SURPRISE_BASE.get(seed, {}).get(q.get("qid"))
+    return (rec["base_bits_para"] / rec["ans_ntok"]) if (rec and rec.get("ans_ntok")) else 0.0
+
+def select_budget(items, mode, B, seed):
+    """pick B of the committed OLD items to replay, by the arm's rule. matched budget across modes."""
+    if B <= 0 or not items:
+        return []
+    if B >= len(items):
+        return list(items)
+    if mode == "random":
+        idx = random.Random(f"{seed}:budget").sample(range(len(items)), B)
+        return [items[i] for i in idx]
+    if mode == "sourceoracle":                        # diagnostic upper bound: off-manifold (synth) first
+        order = sorted(range(len(items)), key=lambda i: (items[i].get("src") != "synth", -_bpt(seed, items[i])))
+        return [items[i] for i in order[:B]]
+    key = (lambda i: -_bpt(seed, items[i])) if mode == "surprise" else (lambda i: _bpt(seed, items[i]))  # lowbits
+    order = sorted(range(len(items)), key=key)
+    return [items[i] for i in order[:B]]
+
 # ------------------------- training helpers -------------------------
 NEUTRAL = [
     "The sky is", "Water is made of", "Paris is the capital of", "Two plus two equals",
@@ -377,9 +417,10 @@ def main():
     base = load_model()
     results = {a: [] for a in ARMS}
     for seed in range(SEEDS):
-        builder = {"squad": build_squad, "cf": build_cf, "synth": build_synth}.get(SOURCE)
+        builder = {"squad": build_squad, "cf": build_cf, "synth": build_synth,
+                   "mixed": build_mixed}.get(SOURCE)
         if builder is None:
-            raise ValueError(f"unknown WB_SOURCE={SOURCE!r} (expected squad|cf|synth)")
+            raise ValueError(f"unknown WB_SOURCE={SOURCE!r} (expected squad|cf|synth|mixed)")
         streams = builder(seed, base)
         allqa = [q for s in streams for a in s for q in a["qas"]]
         json.dump({"source": SOURCE, "seed": seed,
@@ -407,7 +448,7 @@ def main():
         bits_p = qa_answer_bits(base, allqa, "eval_question")
         gen_o = gen(base, [QT.format(q=q["question"]) for q in allqa])
         gen_p = gen(base, [QT.format(q=q["eval_question"]) for q in allqa])
-        SURPRISE_BASE[seed] = {q["qid"]: dict(source=SOURCE, t=q["stream_t"], title=q["art_title"],
+        SURPRISE_BASE[seed] = {q["qid"]: dict(source=q.get("src", SOURCE), t=q["stream_t"], title=q["art_title"],
                                               base_em_orig=em(gen_o[k], q["answers"]),
                                               base_em_para=em(gen_p[k], q["answers"]),
                                               base_bits_orig=bits_o[k][0], base_bits_para=bits_p[k][0],
@@ -440,8 +481,14 @@ def run_ingest(base, streams, arm, seed):
     a2 = arm[:-len("_noanchor")] if no_anchor else arm
     # -1=replay ALL committed; K>=0 = K committed QA/article (footprint). arm suffix _k<K> overrides env.
     REPLAY_K = int(a2.split("_k")[-1]) if "_k" in a2 else int(os.environ.get("WB_REPLAY_K", -1))
+    # Rung 1: budget-gated replay. arm `..._bgt_<mode>` (surprise|random|lowbits|sourceoracle) replays a
+    # BUDGET_FRAC subset of OLD committed items, selected by mode. Matched budget across modes -> tests whether
+    # a surprise gate allocates scarce replay budget toward off-manifold exceptions better than random/lowbits.
+    BUDGET_MODE = a2.split("_bgt_")[-1] if "_bgt_" in a2 else None
+    BUDGET_FRAC = float(os.environ.get("WB_BUDGET_FRAC", 0.5))
     committed = []; replay_pool = []                   # replay_pool = items actually replayed
     committed_log = []                                 # (qa, commit_t, is_replayed) — for OLD-ONLY final split
+    last_pool = []                                     # budget arms: pool at the final consolidation (rep flag)
     per_stream = []
     for t in range(len(streams)):
         arts = streams[t]
@@ -471,7 +518,11 @@ def run_ingest(base, streams, arm, seed):
                     loss = loss + qa_ce(M, [rng.choice(new_qa) for _ in range(8)])
                 # old retention: committed answer-sequence CE (compact target, no snapshot teacher).
                 # footprint: replay only the K-per-article subset (replay_pool) when WB_REPLAY_K>=0.
-                pool = committed if REPLAY_K < 0 else replay_pool
+                if BUDGET_MODE:                        # Rung 1: budget subset of OLD committed, by mode
+                    nb = round(BUDGET_FRAC * len(committed))
+                    pool = select_budget(committed, BUDGET_MODE, nb, seed); last_pool = pool
+                else:
+                    pool = committed if REPLAY_K < 0 else replay_pool
                 if replay and pool:
                     loss = loss + qa_ce(M, [rng.choice(pool) for _ in range(8)])
                 # base-capability anchor on NEUTRAL prompts ONLY (never on old QA — R37-A lesson).
@@ -516,6 +567,10 @@ def run_ingest(base, streams, arm, seed):
     # footprint split — OLD-ONLY (codex): only items committed BEFORE the final stream (exposed to later
     # forgetting). Exclude final-stream fresh items. Report replayed vs non-replayed OLD paraphrase.
     final_t = len(streams) - 1
+    if BUDGET_MODE:                                    # rep flag = membership in the FINAL consolidation pool
+        sel = {id(q) for q in last_pool}
+        committed_log = [(q, ct, (id(q) in sel)) for (q, ct, rep) in committed_log]
+        replay_pool = [q for (q, ct, rep) in committed_log if rep]
     old_rep = [q for (q, ct, rep) in committed_log if ct < final_t and rep]
     old_non = [q for (q, ct, rep) in committed_log if ct < final_t and not rep]
     def sc(qs):
@@ -539,6 +594,7 @@ def run_ingest(base, streams, arm, seed):
     return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
                 final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3),
                 replay_k=REPLAY_K, no_anchor=no_anchor,
+                budget_mode=BUDGET_MODE, budget_frac=(BUDGET_FRAC if BUDGET_MODE else None),
                 n_old_replayed=len(old_rep), n_old_nonreplayed=len(old_non),
                 old_replayed_para_em=old_rep_pa, old_nonreplayed_para_em=old_non_pa,
                 age_para=age_para, per_stream=per_stream, perqa=perqa)
