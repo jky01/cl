@@ -489,6 +489,7 @@ def run_ingest(base, streams, arm, seed):
     committed = []; replay_pool = []                   # replay_pool = items actually replayed
     committed_log = []                                 # (qa, commit_t, is_replayed) — for OLD-ONLY final split
     last_pool = []                                     # budget arms: pool at the final consolidation (rep flag)
+    ever_ids = set()                                   # budget arms: items replayed in ANY consolidation (audit)
     per_stream = []
     for t in range(len(streams)):
         arts = streams[t]
@@ -521,6 +522,7 @@ def run_ingest(base, streams, arm, seed):
                 if BUDGET_MODE:                        # Rung 1: budget subset of OLD committed, by mode
                     nb = round(BUDGET_FRAC * len(committed))
                     pool = select_budget(committed, BUDGET_MODE, nb, seed); last_pool = pool
+                    ever_ids.update(id(q) for q in pool)
                 else:
                     pool = committed if REPLAY_K < 0 else replay_pool
                 if replay and pool:
@@ -589,7 +591,8 @@ def run_ingest(base, streams, arm, seed):
         ge = gen(M, [QT.format(q=q["eval_question"]) for (q, ct, rep) in cl])
         go = gen(M, [QT.format(q=q["question"]) for (q, ct, rep) in cl])
         perqa = {q["qid"]: dict(final_eval_em=em(ge[i], q["answers"]), final_orig_em=em(go[i], q["answers"]),
-                                replayed=bool(rep), commit_t=ct) for i, (q, ct, rep) in enumerate(cl)}
+                                replayed=bool(rep), ever_replayed=(id(q) in ever_ids) if BUDGET_MODE else bool(rep),
+                                commit_t=ct) for i, (q, ct, rep) in enumerate(cl)}
     del M; torch.cuda.empty_cache()
     return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
                 final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3),
