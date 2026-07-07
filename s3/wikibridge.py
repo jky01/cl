@@ -14,7 +14,7 @@ Arms (env WB_ARMS): base_no_ingest | rag_gold_passage | naive_cpt | compact_cpt_
 Data (env WB_SOURCE): squad (hard-tail, base-screened) | cf (counterfactual-edited, base-ignorance
 guaranteed). Answers: SQuAD-style normalized EM / token-F1. Model: Qwen2.5-0.5B.
 """
-import os, sys, json, re, string, random, time, copy, collections
+import os, sys, json, re, string, random, time, copy, collections, math
 import torch, torch.nn as nn, torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -34,6 +34,7 @@ MANIFEST = os.environ.get("WB_MANIFEST", "wikibridge_manifest.json")
 MAXNEW = int(os.environ.get("WB_MAXNEW", 12))
 device = "cuda" if torch.cuda.is_available() else "cpu"
 ACTUAL_STREAMS = SURVIVED_ARTS = 0
+SURPRISE_BASE = {}                                  # R40->s3: seed -> {qid: base surprise/EM record}
 
 tok = AutoTokenizer.from_pretrained(NAME)
 if tok.pad_token is None:
@@ -342,6 +343,34 @@ def qa_ce(model, qas):
     tok.padding_side = "left"
     return loss / max(n, 1)
 
+@torch.no_grad()
+def qa_answer_bits(model, qas, key="question"):
+    """per-QA gold answer-sequence surprise in bits (total, #answer-tokens) under the closed-book template.
+    Mirrors qa_ce's answer-token masking. On the frozen base this is R40's per-fact 'surprise' cost unit."""
+    tok.padding_side = "right"
+    res = []
+    for i in range(0, len(qas), 16):
+        chunk = qas[i:i + 16]
+        prompts = [QT.format(q=q[key]) for q in chunk]
+        answers = [" " + q["answers"][0] + "\n" for q in chunk]
+        full = [p + a for p, a in zip(prompts, answers)]
+        e = tok(full, return_tensors="pt", padding=True, truncation=True, max_length=128).to(device)
+        plen = [len(tok(p).input_ids) for p in prompts]
+        logp = F.log_softmax(model(**e, use_cache=False).logits[:, :-1].float(), -1)
+        labels = e["input_ids"][:, 1:].clone()
+        labels[e["attention_mask"][:, 1:] == 0] = -100
+        for r, pl in enumerate(plen):
+            labels[r, :max(0, pl - 1)] = -100
+        for r in range(len(chunk)):
+            m = labels[r] != -100
+            if bool(m.any()):
+                nll = -logp[r][m].gather(1, labels[r][m][:, None]).squeeze(1)   # nats/token
+                res.append((round((nll.sum() / math.log(2)).item(), 3), int(m.sum().item())))
+            else:
+                res.append((0.0, 0))
+    tok.padding_side = "left"
+    return res
+
 def main():
     print(f"WIKIBRIDGE ({NAME}, {device}) source={SOURCE} streams={STREAMS}x{ARTS}art x{QA_PER}qa "
           f"cpt={CPT_STEPS} cons={CONS_STEPS} seeds={SEEDS} arms={ARMS}", flush=True)
@@ -368,6 +397,25 @@ def main():
         n_art = sum(len(s) for s in streams)
         print(f"    actual_streams={len(streams)} survived_articles={n_art} | "
               f"base closed-book O/P EM={b_em:.3f}/{bp_em:.3f} | RAG-gold O/P EM={r_em:.3f}/{rp_em:.3f}", flush=True)
+
+        # R40->s3 surprise instrumentation: stable qid per QA + FROZEN-BASE per-QA surprise/EM/answer-length.
+        for t, s in enumerate(streams):
+            for ai, a in enumerate(s):
+                for j, q in enumerate(a["qas"]):
+                    q["qid"] = f"{seed}:{t}:{ai}:{j}"; q["stream_t"] = t; q["art_title"] = a["title"]
+        bits_o = qa_answer_bits(base, allqa, "question")
+        bits_p = qa_answer_bits(base, allqa, "eval_question")
+        gen_o = gen(base, [QT.format(q=q["question"]) for q in allqa])
+        gen_p = gen(base, [QT.format(q=q["eval_question"]) for q in allqa])
+        SURPRISE_BASE[seed] = {q["qid"]: dict(source=SOURCE, t=q["stream_t"], title=q["art_title"],
+                                              base_em_orig=em(gen_o[k], q["answers"]),
+                                              base_em_para=em(gen_p[k], q["answers"]),
+                                              base_bits_orig=bits_o[k][0], base_bits_para=bits_p[k][0],
+                                              ans_ntok=bits_p[k][1]) for k, q in enumerate(allqa)}
+        _sb = [v["base_bits_para"] for v in SURPRISE_BASE[seed].values()]
+        _al = sum(v["base_em_para"] for v in SURPRISE_BASE[seed].values())
+        print(f"    [R40 surprise] mean base-para bits={sum(_sb)/max(len(_sb),1):.2f} "
+              f"already-correct para={_al}/{len(_sb)}", flush=True)
 
         for arm in ARMS:
             t0 = time.time()
@@ -479,13 +527,63 @@ def run_ingest(base, streams, arm, seed):
             ages[final_t - ct].append(q)
     age_para = {a: sc(qs) for a, qs in sorted(ages.items())}
     old_rep_pa, old_non_pa = sc(old_rep), sc(old_non)   # score BEFORE del M (closure captures M)
+    # R40->s3: per-QA FINAL retention (all committed items) keyed by qid, for surprise-vs-retention join
+    cl = committed_log
+    perqa = {}
+    if cl:
+        ge = gen(M, [QT.format(q=q["eval_question"]) for (q, ct, rep) in cl])
+        go = gen(M, [QT.format(q=q["question"]) for (q, ct, rep) in cl])
+        perqa = {q["qid"]: dict(final_eval_em=em(ge[i], q["answers"]), final_orig_em=em(go[i], q["answers"]),
+                                replayed=bool(rep), commit_t=ct) for i, (q, ct, rep) in enumerate(cl)}
     del M; torch.cuda.empty_cache()
     return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
                 final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3),
                 replay_k=REPLAY_K, no_anchor=no_anchor,
                 n_old_replayed=len(old_rep), n_old_nonreplayed=len(old_non),
                 old_replayed_para_em=old_rep_pa, old_nonreplayed_para_em=old_non_pa,
-                age_para=age_para, per_stream=per_stream)
+                age_para=age_para, per_stream=per_stream, perqa=perqa)
+
+def surprise_summary(results):
+    # WITHIN-source: for each arm, pool OLD-only NON-replayed committed items (ct < final stream), join base
+    # para-surprise bits with final eval retention; report tercile(lo/mid/hi bits), retention, point-biserial
+    # corr, retained/bit — plus a variant excluding base-already-correct items (write-difficulty, not prior).
+    final_t = ACTUAL_STREAMS - 1
+
+    def stats(pairs):                                   # pairs: list of (bits, retained_0_1)
+        n = len(pairs)
+        if n < 3:
+            return None
+        b = [p[0] for p in pairs]; ret = [p[1] for p in pairs]
+        order = sorted(range(n), key=lambda i: b[i]); t = max(1, n // 3)
+        terc = [round(sum(ret[i] for i in order[a:a + t]) / max(len(order[a:a + t]), 1), 3)
+                for a in (0, t, 2 * t)]
+        mb = sum(b) / n; mr = sum(ret) / n
+        sb = (sum((x - mb) ** 2 for x in b) / n) ** 0.5 or 1.0
+        sr = (sum((x - mr) ** 2 for x in ret) / n) ** 0.5 or 1.0
+        corr = round(sum((b[i] - mb) * (ret[i] - mr) for i in range(n)) / (n * sb * sr), 4)
+        return dict(n=n, retained_overall=round(mr, 3), by_bits_tercile=terc,
+                    corr_bits_vs_retained=corr, retained_per_bit=round(sum(ret) / (sum(b) or 1.0), 5),
+                    mean_bits=round(mb, 3))
+    summ = {}
+    for arm in ARMS:
+        allp, exclp = [], []
+        for seed, base in SURPRISE_BASE.items():
+            if seed >= len(results.get(arm, [])):
+                continue
+            pq = results[arm][seed].get("perqa") or {}
+            for qid, rec in pq.items():
+                if qid in base and rec["commit_t"] < final_t and not rec["replayed"]:
+                    pair = (base[qid]["base_bits_para"], rec["final_eval_em"])
+                    allp.append(pair)
+                    if not base[qid]["base_em_para"]:
+                        exclp.append(pair)
+        s = stats(allp)
+        if s is None:
+            continue
+        ex = stats(exclp) or {}
+        summ[arm] = dict(**s, excl_corr=ex.get("corr_bits_vs_retained"),
+                         excl_tercile=ex.get("by_bits_tercile"), excl_n=ex.get("n"))
+    return summ
 
 def dump(results, nseeds):
     summ = {}
@@ -504,12 +602,34 @@ def dump(results, nseeds):
                          old_nonreplayed_para_em=av("old_nonreplayed_para_em"),
                          per_stream=rs[-1].get("per_stream"))
     # per-seed rows (codex R38B gate 3): the whole claim turns on seed-level sign agreement — persist them all
-    per_seed = {arm: [{k: v for k, v in r.items() if k != "per_stream"} for r in results[arm]]
+    per_seed = {arm: [{k: v for k, v in r.items() if k not in ("per_stream", "perqa")} for r in results[arm]]
                 for arm in ARMS if results.get(arm)}
+    ssum = surprise_summary(results)
     json.dump({"config": dict(source=SOURCE, synth_variant=SYNTH_VARIANT, streams=STREAMS, arts=ARTS,
                               qa=QA_PER, seeds=nseeds, arms=ARMS,
                               actual_streams=ACTUAL_STREAMS, survived_articles=SURVIVED_ARTS),
-               "summary": summ, "per_seed": per_seed}, open(OUT, "w"), indent=1)
+               "summary": summ, "per_seed": per_seed, "surprise": ssum}, open(OUT, "w"), indent=1)
+    # per-QA sidecar: join FROZEN-BASE surprise/EM with each arm's per-QA final retention (source contrast
+    # analysis is done OFFLINE across the squad and synth runs).
+    side = []
+    for seed, base in SURPRISE_BASE.items():
+        arms_ret = {arm: (results[arm][seed].get("perqa") or {})
+                    for arm in ARMS if seed < len(results[arm]) and results[arm][seed].get("perqa")}
+        for qid, rec in base.items():
+            row = dict(qid=qid, **rec)
+            for arm, pq in arms_ret.items():
+                if qid in pq:
+                    row[f"{arm}__eval_em"] = pq[qid]["final_eval_em"]
+                    row[f"{arm}__replayed"] = pq[qid]["replayed"]
+                    row[f"{arm}__commit_t"] = pq[qid]["commit_t"]
+            side.append(row)
+    json.dump(dict(source=SOURCE, synth_variant=SYNTH_VARIANT, rows=side), open(OUT.replace(".json", ".perqa.json"), "w"))
+    if ssum:
+        print("  -- R40 surprise gate (WITHIN-source: base-para surprise vs OLD-only NONreplayed eval retention) --")
+        for arm, sv in ssum.items():
+            print(f"     {arm:26s} ret={sv['retained_overall']} tercile(lo/mid/hi bits)={sv['by_bits_tercile']} "
+                  f"corr={sv['corr_bits_vs_retained']} n={sv['n']} | excl-base-correct: "
+                  f"corr={sv.get('excl_corr')} tercile={sv.get('excl_tercile')} n={sv.get('excl_n')}", flush=True)
     print("RESULT_JSON " + json.dumps({a: {"final_em": summ[a]["final_em"],
                                            "final_para_em": summ[a]["final_para_em"]} for a in summ}), flush=True)
 
