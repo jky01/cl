@@ -72,6 +72,43 @@
 > recipe. **Caveats:** 0.5B, 12 articles / 3 streams (para-screen caps survivors), 2 seeds. The retraction is
 > the science: the hardened accounting overturned a single-seed positive.
 >
+> **R38B-A SAME-OBJECTIVE SYNTHETIC CONTROL — the zero-replay retention floor is a REAL-TEXT effect, NOT
+> objective gentleness (narrow POSITIVE).** `s3/wikibridge.py` `WB_SOURCE=synth` (`build_synth`),
+> `docs/cloud_results/r38ba_synth.{json,log}`, **3 seeds**. Resolves the one open question R38B left: is the
+> ~0.65 non-replayed floor from *real-text redundancy/pretrained-prior overlap*, or just a *gentler
+> objective*? Method (codex-designed): run the **identical `run_ingest` path** — same scaffold+QA-CE,
+> consolidate-from-M_{t-1}, compact old replay, anchor/noanchor, old-only split, closed-book paraphrase eval
+> — swapping ONLY the corpus to **independent invented facts** (unique proper-noun subject AND answer per
+> fact, no reuse anywhere → zero real-world redundancy/prior). Matched 3 streams / 12 articles; base
+> closed-book 0.000, RAG-gold 1.000. Old-only non-replayed old-paraphrase EM:
+>
+> | arm | **synth (3-seed avg)** | synth per-seed | **R38B real text** |
+> |---|---|---|---|
+> | naive_cpt | 0.000 | — | 0.000 |
+> | **k0** (zero old replay, +anchor) | **0.181** | 0.175/0.267/0.100 | **0.625** |
+> | **k0_noanchor** (zero old replay) | **0.164** | 0.100/0.217/0.175 | **0.738** |
+> | k1 | 0.243 | — | 0.641 |
+> | k3 | 0.312 | — | 0.687 |
+> | compact_cpt_qa (full replay) | final-para 0.614, replayed 0.664 | — | 0.80 / 0.787 |
+>
+> **Decisive against codex's pre-registered threshold (synth k0/k0_noanchor ≤ 0.25 → real-text effect; ≥ 0.55
+> → objective gentleness):** synth k0/k0_noanchor = **0.181/0.164, all three seeds ≤ 0.27**, vs real text
+> 0.625/0.738. On independent facts the zero-replay floor **collapses toward naive** — gentle consolidation
+> does NOT preserve unreplayed old facts once real-world structure is removed. Sanity controls all hold:
+> naive 0.0; full replay retains (replayed 0.664 » non-replayed); replay protects *replayed* items (k1
+> replayed 0.764 vs non-replayed 0.243) = R36-A item-rehearsal, no neighbor spillover. Because
+> `shared_templates` (max question-format sharing) ALREADY collapsed, the floor is **not** format/template
+> sharing either — so the `unique_templates` follow-up is unnecessary. **Conclusion:** the R38B real-text
+> ~0.65 no-replay floor is a genuine property of **prior-anchored / redundant real knowledge** — real facts
+> overlap the pretrained manifold and resist interference even without rehearsal; independent invented facts
+> have no such anchor and are overwritten by any later update unless explicitly replayed. **This closes the
+> footprint thread with an honest split:** the strong "K-replay gives sub-O(#facts) coverage via redundancy
+> spillover" claim is dead (R38B); the narrow claim **"real/prior-anchored corpora leave a no-replay
+> retention floor that independent facts lack" is SUPPORTED** (R38B-A) — "reading" real knowledge that
+> overlaps the prior is genuinely cheaper to retain than memorizing independent tuples, but not via replay
+> coverage. **Caveats:** 0.5B, 3 streams / 12 articles, 3 seeds; synth is globally harder (full-replay 0.61 <
+> real 0.80), which is itself consistent with weaker prior anchoring for invented facts.
+>
 
 > **PIVOT (2026-07-03/04, rounds R19-R25) — Grow-and-Consolidate (`s2/`).** Per the
 > strategy doc `reference/2026.07.03.20.md`, the direction shifted from *scaling an
