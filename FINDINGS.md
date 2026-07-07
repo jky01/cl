@@ -39,6 +39,17 @@
 > 1 seed; squad 2 streams (old=stream 0 only) vs synth 4 streams (different counts — codex guardrail); within-
 > source underpowered. Worth scaling to SEEDS=2, but the categorical floor gap is large and robust to the
 > anchor/no-anchor split. Instrumentation (`qa_answer_bits`, `.perqa.json`) reusable.
+>
+> **MATCHED-STREAM CONFIRM (R40-s3m, both sources STREAMS=2, 2 seeds — removes the age confound): PASSES.**
+> `docs/cloud_results/r40s3m_squad.*` + `r40s3m2_synth.*` (synth re-run with `WB_SYNTH_OVERSEL=12` after the
+> first synth under-yielded 1 stream). Matched old-only non-replayed para EM: **k0 squad 0.68 vs synth 0.24 =
+> +0.44**; **k0_noanchor squad 0.68 vs synth 0.22 = +0.46**; no seed inversion (squad 0.64/0.72 both > synth
+> 0.20/0.28). Clears codex's pre-registered bars (k0 ≥+0.30, k0_noanchor ≥+0.20). **The age confound was real
+> but partial:** matched synth k0 rose 0.08→0.24 (the original 4-stream synth aged more), so ~0.2 of the
+> unmatched +0.68 was age; the categorical on/off-manifold effect survives cleanly at +0.44/+0.46. Full replay
+> narrows but does not close (synth old-replayed 0.70 vs squad 0.82), confirming the deficit is
+> retention/write budget for off-manifold exceptions, not total unlearnability. **The surprise/manifold
+> categorical result is now a clean matched Phase-0 pass.**
 
 > **R40 (Phase-0 smoke — surprise instrumentation + parallel-train-from-frozen-base MERGE arms) —
 > MERGE is a CLEAN NEGATIVE; surprise-as-continuous-predictor is NULL in this venue (wrong venue).**

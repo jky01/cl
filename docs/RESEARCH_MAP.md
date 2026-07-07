@@ -79,7 +79,9 @@ it relocates the exception ledger into the model without solving the deep proble
 + consolidation freeing/reusing slots.
 
 **Feasibility ladder (climb, don't leap):**
-- **Rung 0:** fix the matched synth guardrail (r40s3m synth got actual_streams=1; re-running with WB_SYNTH_OVERSEL).
+- **Rung 0:** ✅ DONE — matched-stream guardrail PASSES: k0 squad 0.68 vs synth 0.24 (+0.44), k0_noanchor
+  0.68 vs 0.22 (+0.46), no seed inversion (clears codex bars). Age confound was ~0.2 of the unmatched +0.68;
+  categorical on/off-manifold effect survives clean. R40-s3 is now a clean matched Phase-0 pass.
 - **Rung 1 (NEXT, zero new arch):** surprise-gated compact-replay budget in s3, MIXED squad+synth stream —
   framed as **exception-tail DENSITY measurement** (min replay fraction to reach within 0.05 of full replay).
   Arms: surprise_gate_B / random_budget_B / lowbits_budget_B / k0 floor / full-replay ceiling / source_oracle_B
