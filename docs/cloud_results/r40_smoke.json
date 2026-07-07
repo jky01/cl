@@ -1,0 +1,462 @@
+{
+  "config": {
+    "model": "Qwen/Qwen2.5-0.5B",
+    "rounds": 3,
+    "per": 20,
+    "grow": 2,
+    "steps": 600,
+    "seeds_done": 1,
+    "arms": [
+      "naive_fixed",
+      "nswrite",
+      "ours_tgt_answerid",
+      "loramerge",
+      "merge_sum",
+      "merge_ties"
+    ],
+    "lora_r": 8
+  },
+  "summary": {
+    "naive_fixed": {
+      "gradient_occupancy_final": 0.0,
+      "effective_grad_final": 1.0,
+      "occupancy_curve": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "effective_grad_curve": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "fresh_diagonal": [
+        1.0,
+        1.0,
+        0.85
+      ],
+      "oldest_S0_fresh": 1.0,
+      "oldest_S0_final": 0.4,
+      "oldest_S0_forgetting": 0.6,
+      "oldest_S0_para_final": 0.4,
+      "all_seen_final": 0.6666666666666666,
+      "all_para_final": 0.7000000000000001,
+      "old_seen_final": 0.575,
+      "old_para_final": 0.625,
+      "mean_forgetting_all_streams": 0.2833333333333333,
+      "age_curve_final_seen": [
+        0.4,
+        0.75,
+        0.85
+      ],
+      "newest_stream_final": 0.85,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.1909722222222222,
+      "trainable_params_per_round": [
+        29822464,
+        29822464,
+        29822464
+      ],
+      "updated_params_total": 89467392.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 265.6951837539673,
+      "peak_vram_mb": 5302.12096,
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true,
+      "uses_training_state": false
+    },
+    "nswrite": {
+      "gradient_occupancy_final": 0.802,
+      "effective_grad_final": 0.444,
+      "occupancy_curve": [
+        0.0,
+        0.716,
+        0.802
+      ],
+      "effective_grad_curve": [
+        1.0,
+        0.533,
+        0.444
+      ],
+      "fresh_diagonal": [
+        1.0,
+        1.0,
+        0.85
+      ],
+      "oldest_S0_fresh": 1.0,
+      "oldest_S0_final": 0.95,
+      "oldest_S0_forgetting": 0.050000000000000044,
+      "oldest_S0_para_final": 0.95,
+      "all_seen_final": 0.9333333333333332,
+      "all_para_final": 0.9333333333333332,
+      "old_seen_final": 0.975,
+      "old_para_final": 0.975,
+      "mean_forgetting_all_streams": 0.01666666666666668,
+      "age_curve_final_seen": [
+        0.95,
+        1.0,
+        0.85
+      ],
+      "newest_stream_final": 0.85,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.2152777777777778,
+      "trainable_params_per_round": [
+        29822464,
+        29822464,
+        29822464
+      ],
+      "updated_params_total": 89467392.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 267.14977979660034,
+      "peak_vram_mb": 5364.486656,
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true,
+      "uses_training_state": true
+    },
+    "ours_tgt_answerid": {
+      "gradient_occupancy_final": null,
+      "effective_grad_final": null,
+      "occupancy_curve": null,
+      "effective_grad_curve": null,
+      "fresh_diagonal": [
+        1.0,
+        1.0,
+        0.85
+      ],
+      "oldest_S0_fresh": 1.0,
+      "oldest_S0_final": 1.0,
+      "oldest_S0_forgetting": 0.0,
+      "oldest_S0_para_final": 1.0,
+      "all_seen_final": 0.9500000000000001,
+      "all_para_final": 0.9500000000000001,
+      "old_seen_final": 1.0,
+      "old_para_final": 1.0,
+      "mean_forgetting_all_streams": 0.0,
+      "age_curve_final_seen": [
+        1.0,
+        1.0,
+        0.85
+      ],
+      "newest_stream_final": 0.85,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.2048611111111111,
+      "trainable_params_per_round": [
+        29824768,
+        29824768,
+        29824768
+      ],
+      "updated_params_total": 89474304.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 311.45616269111633,
+      "peak_vram_mb": 5877.934592,
+      "replay_tgt": "answerid",
+      "target_source": "committed_dense_argmax",
+      "replay_teacher_forwards": 0.0,
+      "extra_bytes_per_fact": 8,
+      "uses_snapshot_teacher": false,
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": true,
+      "uses_inference_memory": false,
+      "single_dense": true
+    },
+    "loramerge": {
+      "gradient_occupancy_final": null,
+      "effective_grad_final": null,
+      "occupancy_curve": null,
+      "effective_grad_curve": null,
+      "fresh_diagonal": [
+        1.0,
+        1.0,
+        0.85
+      ],
+      "oldest_S0_fresh": 1.0,
+      "oldest_S0_final": 0.55,
+      "oldest_S0_forgetting": 0.44999999999999996,
+      "oldest_S0_para_final": 0.35,
+      "all_seen_final": 0.65,
+      "all_para_final": 0.6166666666666667,
+      "old_seen_final": 0.55,
+      "old_para_final": 0.5,
+      "mean_forgetting_all_streams": 0.3,
+      "age_curve_final_seen": [
+        0.55,
+        0.55,
+        0.85
+      ],
+      "newest_stream_final": 0.85,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.13541666666666666,
+      "trainable_params_per_round": [
+        540672,
+        540672,
+        540672
+      ],
+      "updated_params_total": 1622016.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 199.19286179542542,
+      "peak_vram_mb": 5055.699968,
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true
+    },
+    "merge_sum": {
+      "gradient_occupancy_final": null,
+      "effective_grad_final": null,
+      "occupancy_curve": null,
+      "effective_grad_curve": null,
+      "fresh_diagonal": [
+        0.85,
+        0.55,
+        0.25
+      ],
+      "oldest_S0_fresh": 0.85,
+      "oldest_S0_final": 0.4,
+      "oldest_S0_forgetting": 0.44999999999999996,
+      "oldest_S0_para_final": 0.35,
+      "all_seen_final": 0.26666666666666666,
+      "all_para_final": 0.21666666666666667,
+      "old_seen_final": 0.275,
+      "old_para_final": 0.25,
+      "mean_forgetting_all_streams": 0.2833333333333333,
+      "age_curve_final_seen": [
+        0.4,
+        0.15,
+        0.25
+      ],
+      "newest_stream_final": 0.25,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.10069444444444445,
+      "trainable_params_per_round": [
+        540672,
+        540672,
+        540672
+      ],
+      "updated_params_total": 1622016.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 233.59897708892822,
+      "peak_vram_mb": 10998.636032,
+      "merge_mode": "sum",
+      "merge_lambda": 0.5,
+      "ties_density": 0.2,
+      "delta_store_bytes": 264241152,
+      "conflict_curve": [
+        0.0,
+        0.2437,
+        0.2448
+      ],
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true,
+      "uses_training_state": true
+    },
+    "merge_ties": {
+      "gradient_occupancy_final": null,
+      "effective_grad_final": null,
+      "occupancy_curve": null,
+      "effective_grad_curve": null,
+      "fresh_diagonal": [
+        1.0,
+        0.4,
+        0.2
+      ],
+      "oldest_S0_fresh": 1.0,
+      "oldest_S0_final": 0.45,
+      "oldest_S0_forgetting": 0.55,
+      "oldest_S0_para_final": 0.25,
+      "all_seen_final": 0.26666666666666666,
+      "all_para_final": 0.19999999999999998,
+      "old_seen_final": 0.3,
+      "old_para_final": 0.225,
+      "mean_forgetting_all_streams": 0.26666666666666666,
+      "age_curve_final_seen": [
+        0.45,
+        0.15,
+        0.2
+      ],
+      "newest_stream_final": 0.2,
+      "base_hop_before": 0.2048611111111111,
+      "base_hop_after": 0.14583333333333334,
+      "trainable_params_per_round": [
+        540672,
+        540672,
+        540672
+      ],
+      "updated_params_total": 1622016.0,
+      "optimizer_steps": 1800.0,
+      "wall_clock_seconds": 241.01697611808777,
+      "peak_vram_mb": 10994.343424,
+      "merge_mode": "ties",
+      "merge_lambda": 1.0,
+      "ties_density": 0.2,
+      "delta_store_bytes": 264241152,
+      "conflict_curve": [
+        0.0,
+        0.2438,
+        0.2442
+      ],
+      "uses_gold_new": false,
+      "uses_gold_old": false,
+      "uses_replay": false,
+      "uses_inference_memory": false,
+      "single_dense": true,
+      "uses_training_state": true
+    }
+  },
+  "surprise": {
+    "naive_fixed": {
+      "retained_para_overall": 0.7,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.65,
+        0.6,
+        0.85
+      ],
+      "retained_per_surprise_bit": 0.07205,
+      "corr_surprise_vs_retained": 0.1516,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.69,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.632,
+          0.579,
+          0.842
+        ],
+        "retained_per_surprise_bit": 0.06938,
+        "corr_surprise_vs_retained": 0.2073,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    },
+    "nswrite": {
+      "retained_para_overall": 0.933,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.9,
+        0.95,
+        0.95
+      ],
+      "retained_per_surprise_bit": 0.09607,
+      "corr_surprise_vs_retained": 0.0418,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.931,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.895,
+          0.947,
+          0.947
+        ],
+        "retained_per_surprise_bit": 0.09367,
+        "corr_surprise_vs_retained": 0.0626,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    },
+    "ours_tgt_answerid": {
+      "retained_para_overall": 0.95,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.95,
+        0.95,
+        0.95
+      ],
+      "retained_per_surprise_bit": 0.09778,
+      "corr_surprise_vs_retained": -0.0529,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.948,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.947,
+          0.947,
+          0.947
+        ],
+        "retained_per_surprise_bit": 0.0954,
+        "corr_surprise_vs_retained": -0.0408,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    },
+    "loramerge": {
+      "retained_para_overall": 0.617,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.6,
+        0.55,
+        0.7
+      ],
+      "retained_per_surprise_bit": 0.06347,
+      "corr_surprise_vs_retained": 0.0308,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.603,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.579,
+          0.526,
+          0.684
+        ],
+        "retained_per_surprise_bit": 0.06071,
+        "corr_surprise_vs_retained": 0.0871,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    },
+    "merge_sum": {
+      "retained_para_overall": 0.217,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.2,
+        0.25,
+        0.2
+      ],
+      "retained_per_surprise_bit": 0.0223,
+      "corr_surprise_vs_retained": 0.1234,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.207,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.158,
+          0.263,
+          0.158
+        ],
+        "retained_per_surprise_bit": 0.02081,
+        "corr_surprise_vs_retained": 0.1818,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    },
+    "merge_ties": {
+      "retained_para_overall": 0.2,
+      "by_surprise_tercile_lo_mid_hi": [
+        0.15,
+        0.2,
+        0.25
+      ],
+      "retained_per_surprise_bit": 0.02059,
+      "corr_surprise_vs_retained": 0.0723,
+      "mean_surprise_bits": 9.715,
+      "n_facts": 60,
+      "excl_already_correct": {
+        "retained_para_overall": 0.207,
+        "by_surprise_tercile_lo_mid_hi": [
+          0.158,
+          0.211,
+          0.263
+        ],
+        "retained_per_surprise_bit": 0.02081,
+        "corr_surprise_vs_retained": 0.0433,
+        "mean_surprise_bits": 9.94,
+        "n_facts": 58
+      }
+    }
+  }
+}

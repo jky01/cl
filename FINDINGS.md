@@ -1,5 +1,47 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R40 (Phase-0 smoke — surprise instrumentation + parallel-train-from-frozen-base MERGE arms) —
+> MERGE is a CLEAN NEGATIVE; surprise-as-continuous-predictor is NULL in this venue (wrong venue).**
+> `s2/lifecycle_bakeoff.py` `run_mergeparallel` + `surprise_probe`/`surprise_summary`, logs
+> `docs/cloud_results/r40_smoke.{json,perfact.json,log}`, Qwen2.5-0.5B KG counterfactuals, 3 streams × 20,
+> 1 seed, LD_STEPS=600 (cheap decision smoke). old_para_final (streams 0..R-2):
+>
+> | arm | old_para | newest | base-hop after | retained/surprise-bit | merge-conflict |
+> |---|---|---|---|---|---|
+> | naive_fixed | 0.625 | 0.85 | 0.191 | 0.072 | — |
+> | **nswrite** | **0.975** | 0.85 | 0.215 | 0.096 | — |
+> | ours_tgt_answerid | 1.000 | 0.85 | 0.205 | 0.098 | — |
+> | loramerge (sequential fold) | 0.500 | 0.85 | 0.135 | 0.063 | — |
+> | **merge_sum** (parallel + task-vector sum) | **0.250** | 0.25 | 0.101 | 0.022 | 0.245 |
+> | **merge_ties** (parallel + TIES) | **0.225** | 0.20 | 0.146 | 0.021 | 0.244 |
+>
+> **(1) Parallel-train-from-frozen-base + MERGE — DECISIVE NEGATIVE, retired.** Both merge arms land
+> **below even the sequential `loramerge` baseline** (0.225/0.25 < 0.50), far below `nswrite` (0.975); they
+> **collapse newest-stream learning** (0.2–0.25 vs 0.85 everywhere else) and base-hop (0.10–0.15). The
+> hypothesis that parallel training "removes sequential drift" is FALSE for independent facts: merging
+> independent per-stream LoRA task vectors on the shared q/v subspace **interferes destructively** (sign-
+> conflict 0.244 by round 3) — worse than sequential fold. This is the R38B-A / O(#facts) wall in weight-
+> space: independent facts occupy *conflicting* write directions, so their task vectors collide at merge.
+> (Task arithmetic works for *related/structured* tasks whose vectors align; not for independent tuples.)
+> codex predicted exactly this. Merge fails both its baseline gate (> loramerge) and frontier gate
+> (≥ nswrite+0.05). **Retire the merge paradigm for independent-fact CL.**
+>
+> **(2) Surprise gate — NULL here, but this is the WRONG venue.** Base-para surprise does NOT predict
+> retention in the expected direction: for the most-informative arm (naive_fixed, the one with forgetting
+> variance) the correlation is weakly POSITIVE (+0.15, excl-already-correct +0.21; tercile lo/mid/hi
+> retention 0.65/0.60/0.85) — within noise at n=58. **Reason: KG counterfactuals are uniformly high-
+> surprise** (mean 9.72 bits, only 2/60 already-base-correct), so there is NO low-surprise (prior-anchored)
+> population to expose the R38B-A floor. The surprise hypothesis is inherently a *real-text-vs-synthetic*
+> (on-manifold vs off-manifold) contrast, which this venue cannot create. **Conclusion: the surprise gate
+> must be re-run on `s3/wikibridge.py` real-vs-synth, not KG counterfactuals.** The R38B-A phenomenon
+> (real 0.63–0.74 vs synth 0.16–0.18) stands; R40 only shows base-surprise is not a smooth *within-
+> counterfactual* retention predictor.
+>
+> **(3) nswrite re-confirmed** as the best rehearsal-free writer (0.975 ≈ replay 1.0 at this small scale),
+> and most surprise-bit-efficient (0.096). Consistent with R39-A. **Net R40:** cheaply killed the merge
+> paradigm for independent facts; relocated the surprise test to s3; nswrite remains the frontier writer.
+> Instrumentation (`surprise_probe`, `perfact` sidecar, merge-conflict diag) now reusable for the s3 surprise run.
+
 > **R39-A (key-tied schema anchoring — first rehearsal-free "manufacture prior-anchoring for NEW facts"
 > probe) — CLEAN NEGATIVE for the anchoring mechanism; RE-CONFIRMS `nswrite` as the strong rehearsal-free
 > writer.** `s2/lifecycle_bakeoff.py` `run_keytie`, logs `docs/cloud_results/r39a_keytie.{json,log}`,

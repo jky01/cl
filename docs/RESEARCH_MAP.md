@@ -4,7 +4,7 @@
 > pass/null gates. Update the STATUS column and the "last updated" line every time an experiment returns.
 > This is the plan-of-record; `FINDINGS.md` is the evidence log, `docs/CAPSTONE.md` is the narrative.
 >
-> **Last updated:** 2026-07-07 (after R39-A + four qa/ brainstorm rounds; next = R40 Phase-0).
+> **Last updated:** 2026-07-07 (after R40 Phase-0 smoke: merge RETIRED, surprise re-venued to s3; next = surprise on s3 real-vs-synth).
 > **Governing constraints (never relax):** knowledge must end in ONE dense checkpoint; no inference-time
 > memory / router / task-id / retrieval; no joint full retraining; catastrophic forgetting measured
 > explicitly (old-only, non-replayed, paraphrase EM over streams 0..R-2 is the headline).
@@ -70,9 +70,9 @@ STATUS legend: ✅ positive · ❌ tested-negative · 🔬 queued (gated) · �
 | — | answer-level OGD (`run_ogd`, R36-C) | write-path (direction) | ❌ | near naive. Direction protection ≠ function protection. |
 | — | generic growth (width/depth/capacity) R23/R31/R32/R34 | — | ❌ | 4 independent negatives; growth not justified by generic capacity/composition. |
 | — | sequential `loramerge` (fold into evolving dense) R33/R35 | write-path | ❌ | 0.367 all-seen, base-hop collapse 0.06. Sequential drift. (≠ parallel-merge below.) |
-| 1 | **surprise-cost reframe / surprise-gated residual write** | changes x-axis of ALL terms | 🔬 R40 Phase-0 | gate: surprise buckets predict retention better than fact-count/age. **Build FIRST.** |
+| 1 | **surprise-cost reframe / surprise-gated residual write** | changes x-axis of ALL terms | 🔬 re-venue to s3 | R40: NULL on KG (all counterfactuals = uniformly high-surprise, no low-surprise pop). Must test on `s3/wikibridge` real-vs-synth (the on/off-manifold contrast). Instrumentation ready. |
 | 2 | **interference-as-signal** → collision-discovered schema (unsupervised) | patterns (discovery) | 🔬 Phase-2 | current-current collision clusters recover R34 bridge structure above derange. Legal (no old items). |
-| A | **parallel-train-from-frozen-base + merge** (`merge_ties`/`merge_sum`/DARE) | write-path (resolve at merge) | 🔬 R40 smoke | removes sequential drift; interference → merge-conflict. Gate: > loramerge; frontier if ≥ nswrite+0.05. |
+| A | parallel-train-from-frozen-base + merge (`merge_ties`/`merge_sum`) | write-path (resolve at merge) | ❌ R40 | **RETIRED.** merge 0.22–0.25 < loramerge 0.50 << nswrite 0.975; collapses newest+base-hop; conflict 0.244. Independent-fact task vectors collide destructively at merge — worse than sequential. (Task arithmetic needs *related* tasks.) |
 | B | schema-extraction consolidation (`schema_comp`) | patterns | 🔬 Phase-2 | O(#facts)→O(#patterns). Headline = footprint SLOPE dtargets/dA, not point. `schema_commit` vs equal-budget `item_k_matched` is the load-bearing control. |
 | C | targeted pattern-separation growth (`grow_sep_decoy`) | write-path @ collision | 🔬 later | separate against collision-MODES (training-state), NOT nearest old fact (=rehearsal). Extends R37-A. Trigger ≠ occupancy alone. |
 | D | LSM-tree multi-timescale weight tiers | recompression amortization | 💡 | make replay-touches/fact O(log N) not O(N). Not rehearsal-free; a compute win. Compare vs `ours_tgt`. |
@@ -91,7 +91,8 @@ STATUS legend: ✅ positive · ❌ tested-negative · 🔬 queued (gated) · �
 
 ## 3. Build order (phased, each with a decision gate)
 
-**R40 — Phase 0 + merge-smoke + capacity accounting (NEXT, cheap).** One tiny KG bakeoff:
+**R40 — Phase 0 + merge-smoke + capacity accounting (DONE 2026-07-07: merge RETIRED; surprise NULL on KG →
+must re-run on s3 real-vs-synth; nswrite re-confirmed. See FINDINGS R40).** Original design was one tiny KG bakeoff:
 `naive_fixed, nswrite, ours_tgt_answerid, loramerge, merge_sum, merge_ties`; instrument per-fact surprise
 (base/current CE bits, gold margin, entropy, already-correct, delta norm) + merge-conflict (sign-conflict,
 drop fraction, base-hop). Tiny config (`LD_ROUNDS=3 LD_PER=20 LD_SEEDS=1`, reduced steps) as smoke.
@@ -130,8 +131,10 @@ store the residual without old drift AND grown arm beats nswrite/locality at mat
 
 ## 4. Known unknowns (open questions — update as answered)
 
-1. **Does surprise predict retention?** (R40 decides.) If yes, the whole accounting unit changes.
-2. **Is parallel-merge a better route or just a missing baseline?** (R40 smoke → full R-run if it clears nswrite.)
+1. **Does surprise predict retention?** (R40 KG = NULL, but wrong venue — all counterfactuals high-surprise.
+   OPEN, must re-test on s3 real-vs-synth where a low-surprise/on-manifold population exists.)
+2. **Is parallel-merge a better route or just a missing baseline?** (R40 = ANSWERED NO: merge collapses
+   below sequential loramerge for independent facts; task vectors collide. Retired.)
 3. **What is the LEGAL growth trigger?** occupancy alone is a false alarm (R36-I). Candidate: persistent
    mutual collision among current-stream writes + surviving high-surprise residual. Unproven.
 4. **Surprise circularity:** measured under base (clean, underestimates) or current (true cost, path-dependent)
