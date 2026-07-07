@@ -64,7 +64,7 @@ Task:
 4. The Markdown must record the source file name: qa/claude/$latest_claude.
 5. Do not overwrite existing files.
 6. After writing, ensure the latest qa/codex filename is later than $latest_claude.
-7. At the end of the Markdown response, provide an additional section with open-ended brainstorming suggestions that push the boundaries of the current discussion, potentially offering high-risk/high-reward angles aligned with the project objective.
+7. When the exchange is a design/strategy discussion (not a narrow code review, launch confirmation, or yes/no ruling), append a section with open-ended, boundary-pushing, high-risk/high-reward brainstorming aligned with the project objective. If the message is a focused review/confirmation/ruling, stay concise and skip that section unless a genuinely promising angle exists.
 
 Do not perform unrelated code changes."
 
