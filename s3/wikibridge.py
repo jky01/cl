@@ -312,9 +312,12 @@ def run_ingest(base, streams, arm, seed):
     replay = arm.startswith("compact")
     M = load_model()                                  # M_0 = base copy (trainable)
     rng = random.Random(seed * 100003 + sum(bytes(arm, "utf8")))   # stable seed (no PYTHONHASHSEED dep)
+    no_anchor = arm.endswith("_noanchor")              # attribution floor: gentle consolidate w/o neutral anchor
+    a2 = arm[:-len("_noanchor")] if no_anchor else arm
     # -1=replay ALL committed; K>=0 = K committed QA/article (footprint). arm suffix _k<K> overrides env.
-    REPLAY_K = int(arm.split("_k")[-1]) if "_k" in arm else int(os.environ.get("WB_REPLAY_K", -1))
-    committed = []; replay_pool = []; nonreplay_pool = []   # committed old QA; footprint split
+    REPLAY_K = int(a2.split("_k")[-1]) if "_k" in a2 else int(os.environ.get("WB_REPLAY_K", -1))
+    committed = []; replay_pool = []                   # replay_pool = items actually replayed
+    committed_log = []                                 # (qa, commit_t, is_replayed) — for OLD-ONLY final split
     per_stream = []
     for t in range(len(streams)):
         arts = streams[t]
@@ -347,10 +350,12 @@ def run_ingest(base, streams, arm, seed):
                 pool = committed if REPLAY_K < 0 else replay_pool
                 if replay and pool:
                     loss = loss + qa_ce(M, [rng.choice(pool) for _ in range(8)])
-                # base-capability anchor on NEUTRAL prompts ONLY (never on old QA — R37-A lesson)
-                ne, nb = base_anchor_logits(base, [rng.choice(NEUTRAL) for _ in range(8)])
-                sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
-                loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")
+                # base-capability anchor on NEUTRAL prompts ONLY (never on old QA — R37-A lesson).
+                # _noanchor floor arm drops this to separate "gentle updates" from "redundancy spillover".
+                if not no_anchor:
+                    ne, nb = base_anchor_logits(base, [rng.choice(NEUTRAL) for _ in range(8)])
+                    sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
+                    loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")
                 opt.zero_grad(); loss.backward()
                 torch.nn.utils.clip_grad_norm_(M.parameters(), 1.0); opt.step()
             M.eval()
@@ -362,12 +367,16 @@ def run_ingest(base, streams, arm, seed):
         correct = [q for q, p in zip(new_qa, gen(M, [QT.format(q=q["question"]) for q in new_qa]))
                    if em(p, q["answers"]) == 1]
         committed += correct
-        if REPLAY_K >= 0:                              # footprint: fixed K committed QA/article replayed
-            by_art = collections.defaultdict(list)
-            for q in correct:
-                by_art[q["context"]].append(q)
-            for qs in by_art.values():
-                replay_pool += qs[:REPLAY_K]; nonreplay_pool += qs[REPLAY_K:]
+        by_art = collections.defaultdict(list)         # nested random K-per-article (stable per article)
+        for q in correct:
+            by_art[q["context"]].append(q)
+        for qs in by_art.values():
+            random.Random(hash(qs[0]["question"]) & 0xffffffff).shuffle(qs)   # stable per-article order
+            for i, q in enumerate(qs):
+                rep = (REPLAY_K < 0) or (i < REPLAY_K)
+                committed_log.append((q, t, rep))
+                if rep:
+                    replay_pool.append(q)
         # retention: OLD streams' QA (0..t-1) on M — both ORIG and PARAPHRASE surfaces
         old_qa = [q for tt in range(t) for a in streams[tt] for q in a["qas"]]
         o_em = round(score(M, old_qa, key="question")[0], 3) if old_qa else None
@@ -380,14 +389,26 @@ def run_ingest(base, streams, arm, seed):
     allqa = [q for s in streams for a in s for q in a["qas"]]
     f_em, f_f1 = score(M, allqa, key="question")
     fp_em, fp_f1 = score(M, allqa, key="eval_question")     # FINAL held-out paraphrase = the R38 gate
-    # footprint split: replayed vs NON-replayed committed-old paraphrase EM (R36-A lesson on real text)
-    rep_pa = round(score(M, replay_pool, key="eval_question")[0], 3) if replay_pool else None
-    non_pa = round(score(M, nonreplay_pool, key="eval_question")[0], 3) if nonreplay_pool else None
+    # footprint split — OLD-ONLY (codex): only items committed BEFORE the final stream (exposed to later
+    # forgetting). Exclude final-stream fresh items. Report replayed vs non-replayed OLD paraphrase.
+    final_t = len(streams) - 1
+    old_rep = [q for (q, ct, rep) in committed_log if ct < final_t and rep]
+    old_non = [q for (q, ct, rep) in committed_log if ct < final_t and not rep]
+    def sc(qs):
+        return round(score(M, qs, key="eval_question")[0], 3) if qs else None
+    # age buckets: how far back the committed item is from the final checkpoint
+    ages = collections.defaultdict(list)
+    for (q, ct, rep) in committed_log:
+        if ct < final_t:
+            ages[final_t - ct].append(q)
+    age_para = {a: sc(qs) for a, qs in sorted(ages.items())}
     del M; torch.cuda.empty_cache()
     return dict(final_em=round(f_em, 3), final_f1=round(f_f1, 3),
                 final_para_em=round(fp_em, 3), final_para_f1=round(fp_f1, 3),
-                replay_k=REPLAY_K, n_replayed=len(replay_pool), n_nonreplayed=len(nonreplay_pool),
-                replayed_para_em=rep_pa, nonreplayed_para_em=non_pa, per_stream=per_stream)
+                replay_k=REPLAY_K, no_anchor=no_anchor,
+                n_old_replayed=len(old_rep), n_old_nonreplayed=len(old_non),
+                old_replayed_para_em=sc(old_rep), old_nonreplayed_para_em=sc(old_non),
+                age_para=age_para, per_stream=per_stream)
 
 def dump(results, nseeds):
     summ = {}
@@ -400,9 +421,10 @@ def dump(results, nseeds):
             return round(sum(vals) / len(vals), 3) if vals else None
         summ[arm] = dict(final_em=av("final_em"), final_f1=av("final_f1"),
                          final_para_em=av("final_para_em"), final_para_f1=av("final_para_f1"),
-                         replay_k=rs[-1].get("replay_k"), n_replayed=rs[-1].get("n_replayed"),
-                         n_nonreplayed=rs[-1].get("n_nonreplayed"),
-                         replayed_para_em=av("replayed_para_em"), nonreplayed_para_em=av("nonreplayed_para_em"),
+                         replay_k=rs[-1].get("replay_k"), no_anchor=rs[-1].get("no_anchor"),
+                         n_old_replayed=rs[-1].get("n_old_replayed"), n_old_nonreplayed=rs[-1].get("n_old_nonreplayed"),
+                         old_replayed_para_em=av("old_replayed_para_em"),
+                         old_nonreplayed_para_em=av("old_nonreplayed_para_em"),
                          per_stream=rs[-1].get("per_stream"))
     json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS,
                               actual_streams=ACTUAL_STREAMS, survived_articles=SURVIVED_ARTS),
