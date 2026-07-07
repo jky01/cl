@@ -33,34 +33,44 @@
 > targets, not just read. Next: scale articles/streams/seeds; footprint sweep (R36-A-style) on old replay;
 > counterfactual audit (`WB_SOURCE=cf`); multi-view teacher if paraphrase transfer needs strengthening.
 >
-> **R38 FOOTPRINT SWEEP (does real-text redundancy soften the R36-A O(#facts) bound?) — PARTIAL YES**
-> `s3/wikibridge.py` `WB_REPLAY_K` / `compact_cpt_qa_k<K>`, `docs/cloud_results/r38_footprint.json`, SQuAD
-> 15 art / 3 streams, 1 seed. Cap old committed-QA replay to **K per article**, report replayed vs
-> **NON-replayed** old-paraphrase EM (the R36-A decisive split, now on real text):
+> **R38 FOOTPRINT SWEEP — the "real-text redundancy softens O(#facts)" claim is RETRACTED after
+> attribution hardening (R38B).** The original 1-seed pilot (`r38_footprint.json`) reported non-replayed
+> old-paraphrase rising to 0.733 at K=3 (vs 0.507 at K=0) and read this as replay-coverage spillover. That
+> signal was a **fresh-stream accounting artifact**: the replayed/non-replayed split scored *all* committed
+> items, including the final stream's items that had never been exposed to a later forgetting event. R38B
+> (`docs/cloud_results/r38b.{json,log}`, `WB_..._k<K>` + `_noanchor`, 2 seeds, **old-only split** = items
+> committed strictly before the final stream) corrects this. Old-only non-replayed old-paraphrase EM:
 >
-> | K/article | final para-EM | replayed para | **NON-replayed para** |
-> |---|---|---|---|
-> | naive (no replay, full CPT) | 0.000 | — | — |
-> | 0 (compact, no old replay) | 0.507 | — | **0.507** |
-> | 1 | 0.573 | 0.933 | **0.483** |
-> | 2 | 0.627 | 0.800 | **0.511** |
-> | 3 | 0.853 | 0.933 | **0.733** |
-> | all committed | 0.893 | — | — |
+> | arm (K committed-QA/article replayed) | seed0 | seed1 | **2-seed avg** | replayed-item para |
+> |---|---|---|---|---|
+> | naive_cpt (full CPT, no replay) | 0.000 | 0.000 | **0.000** | — |
+> | k0 (compact, zero old replay, +anchor) | 0.575 | 0.675 | **0.625** | — |
+> | k1 | 0.500 | 0.781 | **0.641** | 0.875 |
+> | k3 | 0.562 | 0.812 | **0.687** | 0.729 |
+> | **k0_noanchor** (zero old replay, no anchor) | 0.675 | 0.800 | **0.738** | — |
+> | compact_cpt_qa (replay ALL committed) | — | — | final-para 0.80 | 0.787 |
 >
-> **Real text behaves differently from synthetic independent facts.** In R36-A (synthetic), non-replayed
-> old items collapsed to ~naive (≈0) — pure item rehearsal. Here, **non-replayed old QA retain at ~0.50
-> even at K=0–2** (vs synthetic ~0) and **rise to 0.733 at K=3/article** (vs full-replay 0.893). Two effects
-> soften the O(#facts) bound: (1) the gentle compact-consolidation itself (new-QA CE + neutral anchor,
-> starting from M_{t-1}) preserves ~0.5 of old paraphrase behavior with **zero** old replay — far above
-> synthetic naive; (2) **real-passage redundancy gives genuine spillover** — replaying 3 committed QA/article
-> lifts *non-replayed* stream-mates to 0.733, unlike independent counterfactuals where A carries no
-> information about B. So on real text, **sub-linear replay coverage partially generalizes** — the footprint
-> is softer than the synthetic O(#facts) lower bound, though not eliminated (full replay 0.893 > K=3 0.853 >
-> low-K). This is the first evidence that "read hundreds of books" may be **cheaper than O(#facts)** because
-> real knowledge shares structure. **Honest caveats:** 1 seed, 15 articles, 0.5B, paraphrase eval; the K=0
-> baseline (0.507) means part of "retention" is the consolidation's gentleness, not replay coverage — a
-> cleaner attribution needs the naive-consolidate floor and >1 seed. Next: multi-seed + larger corpus to
-> confirm the redundancy-spillover trend, and answer-type-diverse coreset selection vs random K.
+> **Verdict against codex's pre-registered pass bar (K3 non-replayed ≥ K0 + 0.15; holds ≥2 seeds; not
+> order-dependent): FAIL.** (1) 2-seed avg K3−K0 = +0.062, far under the +0.15 threshold. (2) The two seeds
+> **disagree on sign**: seed0 replay is flat/slightly harmful (k1 0.500 < k0 0.575), seed1 mildly helpful
+> (k3 0.812 > k0 0.675) — so any K-benefit is inside seed/ordering noise. (3) The **zero-replay, no-anchor
+> arm (0.738) beats every replay arm in both seeds** — the best non-replayed retention comes from *not*
+> replaying old items at all. **So replay does NOT buy non-replayed neighbor retention; it protects the
+> replayed items themselves** (k1 replayed 0.875 vs non-replayed 0.641) — exactly the item-rehearsal picture
+> of synthetic R36-A. The independent-fact O(#facts) coverage bound **stands** on real text: to reliably
+> retain a specific fact you must replay it. "Read hundreds of books cheaply via redundancy" is **not**
+> supported at this scale.
+>
+> **Two honest positives survive the hardening:** (a) **the compact-QA consolidation is genuinely gentle** —
+> with *zero* old replay it still holds ~0.63–0.74 non-replayed old paraphrase (vs naive_cpt 0.0), i.e.
+> sequential QA-target consolidation from M_{t-1} is far less destructive than raw continued-PT (this is a
+> consolidation-objective effect, **not** a replay-coverage effect, and its origin — real-text shared
+> structure vs objective gentleness — is *not* resolved here). (b) **the neutral base-capability KL anchor
+> mildly HURTS old-fact retention** — k0_noanchor > k0 on non-replayed old para in both seeds (+0.10, +0.125)
+> and on final para (0.717/0.767 vs 0.617/0.617); the anchor pulls M back toward the base prior and erodes
+> learned facts. A cleaner anchor (on truly neutral tokens only, or dropped) is the better consolidation
+> recipe. **Caveats:** 0.5B, 12 articles / 3 streams (para-screen caps survivors), 2 seeds. The retraction is
+> the science: the hardened accounting overturned a single-seed positive.
 >
 
 > **PIVOT (2026-07-03/04, rounds R19-R25) — Grow-and-Consolidate (`s2/`).** Per the

@@ -1,0 +1,285 @@
+{
+ "config": {
+  "source": "squad",
+  "streams": 4,
+  "arts": 4,
+  "qa": 5,
+  "seeds": 2,
+  "arms": [
+   "naive_cpt",
+   "compact_cpt_qa",
+   "compact_cpt_qa_k3",
+   "compact_cpt_qa_k1",
+   "compact_cpt_qa_k0",
+   "compact_cpt_qa_k0_noanchor"
+  ],
+  "actual_streams": 3,
+  "survived_articles": 12
+ },
+ "summary": {
+  "naive_cpt": {
+   "final_em": 0.009,
+   "final_f1": 0.076,
+   "final_para_em": 0.0,
+   "final_para_f1": 0.052,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": 0.0,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 0.0,
+     "scaffold_new_para": 0.0,
+     "M_new_orig": 0.0,
+     "M_new_para": 0.0,
+     "n_committed": 0,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 0.0,
+     "scaffold_new_para": 0.0,
+     "M_new_orig": 0.0,
+     "M_new_para": 0.0,
+     "n_committed": 0,
+     "old_orig": 0.0,
+     "old_para": 0.0
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 0.0,
+     "scaffold_new_para": 0.0,
+     "M_new_orig": 0.0,
+     "M_new_para": 0.0,
+     "n_committed": 0,
+     "old_orig": 0.0,
+     "old_para": 0.0
+    }
+   ]
+  },
+  "compact_cpt_qa": {
+   "final_em": 1.0,
+   "final_f1": 1.0,
+   "final_para_em": 0.8,
+   "final_para_f1": 0.836,
+   "replay_k": -1,
+   "no_anchor": false,
+   "n_old_replayed": 40,
+   "n_old_nonreplayed": 0,
+   "old_replayed_para_em": 0.787,
+   "old_nonreplayed_para_em": null,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 0.95
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.85,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 0.875
+    }
+   ]
+  },
+  "compact_cpt_qa_k3": {
+   "final_em": 0.983,
+   "final_f1": 0.988,
+   "final_para_em": 0.709,
+   "final_para_f1": 0.764,
+   "replay_k": 3,
+   "no_anchor": false,
+   "n_old_replayed": 24,
+   "n_old_nonreplayed": 16,
+   "old_replayed_para_em": 0.729,
+   "old_nonreplayed_para_em": 0.687,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.85,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.8,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 0.95
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.85,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.7,
+     "n_committed": 20,
+     "old_orig": 0.975,
+     "old_para": 0.8
+    }
+   ]
+  },
+  "compact_cpt_qa_k1": {
+   "final_em": 0.983,
+   "final_f1": 0.988,
+   "final_para_em": 0.717,
+   "final_para_f1": 0.79,
+   "replay_k": 1,
+   "no_anchor": false,
+   "n_old_replayed": 8,
+   "n_old_nonreplayed": 32,
+   "old_replayed_para_em": 0.875,
+   "old_nonreplayed_para_em": 0.641,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.8,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 1.0
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.8,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.85,
+     "n_committed": 20,
+     "old_orig": 0.975,
+     "old_para": 0.8
+    }
+   ]
+  },
+  "compact_cpt_qa_k0": {
+   "final_em": 0.933,
+   "final_f1": 0.933,
+   "final_para_em": 0.667,
+   "final_para_f1": 0.723,
+   "replay_k": 0,
+   "no_anchor": false,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 40,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": 0.625,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.85,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.85,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 0.9
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.85,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.8,
+     "n_committed": 20,
+     "old_orig": 0.875,
+     "old_para": 0.675
+    }
+   ]
+  },
+  "compact_cpt_qa_k0_noanchor": {
+   "final_em": 0.983,
+   "final_f1": 0.988,
+   "final_para_em": 0.742,
+   "final_para_f1": 0.816,
+   "replay_k": 0,
+   "no_anchor": true,
+   "n_old_replayed": 0,
+   "n_old_nonreplayed": 40,
+   "old_replayed_para_em": null,
+   "old_nonreplayed_para_em": 0.738,
+   "per_stream": [
+    {
+     "t": 0,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.9,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.9,
+     "n_committed": 20,
+     "old_orig": null,
+     "old_para": null
+    },
+    {
+     "t": 1,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.75,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.75,
+     "n_committed": 20,
+     "old_orig": 1.0,
+     "old_para": 0.85
+    },
+    {
+     "t": 2,
+     "scaffold_new_orig": 1.0,
+     "scaffold_new_para": 0.8,
+     "M_new_orig": 1.0,
+     "M_new_para": 0.65,
+     "n_committed": 20,
+     "old_orig": 0.975,
+     "old_para": 0.8
+    }
+   ]
+  }
+ }
+}

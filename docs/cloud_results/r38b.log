@@ -1,0 +1,74 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WIKIBRIDGE (Qwen/Qwen2.5-0.5B, cuda) source=squad streams=4x4art x5qa cpt=200 cons=300 seeds=2 arms=['naive_cpt', 'compact_cpt_qa', 'compact_cpt_qa_k3', 'compact_cpt_qa_k1', 'compact_cpt_qa_k0', 'compact_cpt_qa_k0_noanchor']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9408.49it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8195.32it/s]
+  WARN: 14 articles survived para-screen -> 3 streams (< 4)
+  seed 0: streams=[4, 4, 4] total_qa=60
+    actual_streams=3 survived_articles=12 | base closed-book O/P EM=0.017/0.000 | RAG-gold O/P EM=1.000/0.983
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9156.97it/s]
+      [naive_cpt s0 t0] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/20 old O/P=None/None
+      [naive_cpt s0 t1] scaffold O/P=0.05/0.00 M_new O/P=0.05/0.00 committed=1/20 old O/P=0.0/0.0
+      [naive_cpt s0 t2] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/20 old O/P=0.025/0.0
+    [naive_cpt] {"final_em": 0.017, "final_f1": 0.064, "final_para_em": 0.0, "final_para_f1": 0.04, "replay_k": -1, "no_anchor": false, "n_old_replayed": 1, "n_old_nonreplayed": 0, "old_replayed_para_em": 0.0, "old_nonreplayed_para_em": null, "age_para": {"1": 0.0}, "wall": 53.7}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8755.49it/s]
+      [compact_cpt_qa s0 t0] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.85 committed=20/20 old O/P=None/None
+      [compact_cpt_qa s0 t1] scaffold O/P=1.00/0.70 M_new O/P=1.00/0.65 committed=20/20 old O/P=1.0/0.8
+      [compact_cpt_qa s0 t2] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.75 committed=20/20 old O/P=1.0/0.7
+    [compact_cpt_qa] {"final_em": 1.0, "final_f1": 1.0, "final_para_em": 0.7, "final_para_f1": 0.74, "replay_k": -1, "no_anchor": false, "n_old_replayed": 40, "n_old_nonreplayed": 0, "old_replayed_para_em": 0.7, "old_nonreplayed_para_em": null, "age_para": {"1": 0.55, "2": 0.85}, "wall": 360.5}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8821.28it/s]
+      [compact_cpt_qa_k3 s0 t0] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.85 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k3 s0 t1] scaffold O/P=1.00/0.75 M_new O/P=1.00/0.60 committed=20/20 old O/P=0.95/0.65
+      [compact_cpt_qa_k3 s0 t2] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.80 committed=20/20 old O/P=0.975/0.6
+    [compact_cpt_qa_k3] {"final_em": 0.983, "final_f1": 0.983, "final_para_em": 0.667, "final_para_f1": 0.743, "replay_k": 3, "no_anchor": false, "n_old_replayed": 24, "n_old_nonreplayed": 16, "old_replayed_para_em": 0.625, "old_nonreplayed_para_em": 0.562, "age_para": {"1": 0.55, "2": 0.65}, "wall": 355.5}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8542.43it/s]
+      [compact_cpt_qa_k1 s0 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.85 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k1 s0 t1] scaffold O/P=1.00/0.60 M_new O/P=1.00/0.70 committed=20/20 old O/P=0.75/0.6
+      [compact_cpt_qa_k1 s0 t2] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.70 committed=20/20 old O/P=0.975/0.55
+    [compact_cpt_qa_k1] {"final_em": 0.983, "final_f1": 0.994, "final_para_em": 0.617, "final_para_f1": 0.715, "replay_k": 1, "no_anchor": false, "n_old_replayed": 8, "n_old_nonreplayed": 32, "old_replayed_para_em": 0.875, "old_nonreplayed_para_em": 0.5, "age_para": {"1": 0.55, "2": 0.55}, "wall": 357.2}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9123.52it/s]
+      [compact_cpt_qa_k0 s0 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.85 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k0 s0 t1] scaffold O/P=1.00/0.75 M_new O/P=1.00/0.70 committed=20/20 old O/P=0.9/0.8
+      [compact_cpt_qa_k0 s0 t2] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.65 committed=20/20 old O/P=0.925/0.575
+    [compact_cpt_qa_k0] {"final_em": 0.95, "final_f1": 0.95, "final_para_em": 0.617, "final_para_f1": 0.69, "replay_k": 0, "no_anchor": false, "n_old_replayed": 0, "n_old_nonreplayed": 40, "old_replayed_para_em": null, "old_nonreplayed_para_em": 0.575, "age_para": {"1": 0.55, "2": 0.6}, "wall": 322.2}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8636.75it/s]
+      [compact_cpt_qa_k0_noanchor s0 t0] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k0_noanchor s0 t1] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.75 committed=20/20 old O/P=0.95/0.9
+      [compact_cpt_qa_k0_noanchor s0 t2] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.85 committed=20/20 old O/P=0.975/0.65
+    [compact_cpt_qa_k0_noanchor] {"final_em": 0.983, "final_f1": 0.983, "final_para_em": 0.717, "final_para_f1": 0.823, "replay_k": 0, "no_anchor": true, "n_old_replayed": 0, "n_old_nonreplayed": 40, "old_replayed_para_em": null, "old_nonreplayed_para_em": 0.675, "age_para": {"1": 0.55, "2": 0.75}, "wall": 212.7}
+RESULT_JSON {"naive_cpt": {"final_em": 0.017, "final_para_em": 0.0}, "compact_cpt_qa": {"final_em": 1.0, "final_para_em": 0.7}, "compact_cpt_qa_k3": {"final_em": 0.983, "final_para_em": 0.667}, "compact_cpt_qa_k1": {"final_em": 0.983, "final_para_em": 0.617}, "compact_cpt_qa_k0": {"final_em": 0.95, "final_para_em": 0.617}, "compact_cpt_qa_k0_noanchor": {"final_em": 0.983, "final_para_em": 0.717}}
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8067.54it/s]
+  WARN: 14 articles survived para-screen -> 3 streams (< 4)
+  seed 1: streams=[4, 4, 4] total_qa=60
+    actual_streams=3 survived_articles=12 | base closed-book O/P EM=0.000/0.000 | RAG-gold O/P EM=1.000/0.983
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9020.41it/s]
+      [naive_cpt s1 t0] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/20 old O/P=None/None
+      [naive_cpt s1 t1] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/20 old O/P=0.0/0.0
+      [naive_cpt s1 t2] scaffold O/P=0.00/0.00 M_new O/P=0.00/0.00 committed=0/20 old O/P=0.0/0.0
+    [naive_cpt] {"final_em": 0.0, "final_f1": 0.088, "final_para_em": 0.0, "final_para_f1": 0.064, "replay_k": -1, "no_anchor": false, "n_old_replayed": 0, "n_old_nonreplayed": 0, "old_replayed_para_em": null, "old_nonreplayed_para_em": null, "age_para": {}, "wall": 53.1}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8802.32it/s]
+      [compact_cpt_qa s1 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa s1 t1] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=1.0/0.95
+      [compact_cpt_qa s1 t2] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.90 committed=20/20 old O/P=1.0/0.875
+    [compact_cpt_qa] {"final_em": 1.0, "final_f1": 1.0, "final_para_em": 0.9, "final_para_f1": 0.931, "replay_k": -1, "no_anchor": false, "n_old_replayed": 40, "n_old_nonreplayed": 0, "old_replayed_para_em": 0.875, "old_nonreplayed_para_em": null, "age_para": {"1": 0.85, "2": 0.95}, "wall": 361.5}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8578.34it/s]
+      [compact_cpt_qa_k3 s1 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k3 s1 t1] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.80 committed=20/20 old O/P=1.0/0.95
+      [compact_cpt_qa_k3 s1 t2] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.70 committed=20/20 old O/P=0.975/0.8
+    [compact_cpt_qa_k3] {"final_em": 0.983, "final_f1": 0.994, "final_para_em": 0.75, "final_para_f1": 0.786, "replay_k": 3, "no_anchor": false, "n_old_replayed": 24, "n_old_nonreplayed": 16, "old_replayed_para_em": 0.833, "old_nonreplayed_para_em": 0.812, "age_para": {"1": 0.6, "2": 0.95}, "wall": 356.8}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8779.82it/s]
+      [compact_cpt_qa_k1 s1 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k1 s1 t1] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.80 committed=20/20 old O/P=1.0/1.0
+      [compact_cpt_qa_k1 s1 t2] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.85 committed=20/20 old O/P=0.975/0.8
+    [compact_cpt_qa_k1] {"final_em": 0.983, "final_f1": 0.983, "final_para_em": 0.817, "final_para_f1": 0.866, "replay_k": 1, "no_anchor": false, "n_old_replayed": 8, "n_old_nonreplayed": 32, "old_replayed_para_em": 0.875, "old_nonreplayed_para_em": 0.781, "age_para": {"1": 0.75, "2": 0.85}, "wall": 361.4}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9365.17it/s]
+      [compact_cpt_qa_k0 s1 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k0 s1 t1] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.85 committed=20/20 old O/P=1.0/0.9
+      [compact_cpt_qa_k0 s1 t2] scaffold O/P=1.00/0.85 M_new O/P=1.00/0.80 committed=20/20 old O/P=0.875/0.675
+    [compact_cpt_qa_k0] {"final_em": 0.917, "final_f1": 0.917, "final_para_em": 0.717, "final_para_f1": 0.756, "replay_k": 0, "no_anchor": false, "n_old_replayed": 0, "n_old_nonreplayed": 40, "old_replayed_para_em": null, "old_nonreplayed_para_em": 0.675, "age_para": {"1": 0.65, "2": 0.6}, "wall": 317.0}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9380.12it/s]
+      [compact_cpt_qa_k0_noanchor s1 t0] scaffold O/P=1.00/0.90 M_new O/P=1.00/0.90 committed=20/20 old O/P=None/None
+      [compact_cpt_qa_k0_noanchor s1 t1] scaffold O/P=1.00/0.75 M_new O/P=1.00/0.75 committed=20/20 old O/P=1.0/0.85
+      [compact_cpt_qa_k0_noanchor s1 t2] scaffold O/P=1.00/0.80 M_new O/P=1.00/0.65 committed=20/20 old O/P=0.975/0.8
+    [compact_cpt_qa_k0_noanchor] {"final_em": 0.983, "final_f1": 0.994, "final_para_em": 0.767, "final_para_f1": 0.809, "replay_k": 0, "no_anchor": true, "n_old_replayed": 0, "n_old_nonreplayed": 40, "old_replayed_para_em": null, "old_nonreplayed_para_em": 0.8, "age_para": {"1": 0.65, "2": 0.85}, "wall": 213.5}
+RESULT_JSON {"naive_cpt": {"final_em": 0.009, "final_para_em": 0.0}, "compact_cpt_qa": {"final_em": 1.0, "final_para_em": 0.8}, "compact_cpt_qa_k3": {"final_em": 0.983, "final_para_em": 0.709}, "compact_cpt_qa_k1": {"final_em": 0.983, "final_para_em": 0.717}, "compact_cpt_qa_k0": {"final_em": 0.933, "final_para_em": 0.667}, "compact_cpt_qa_k0_noanchor": {"final_em": 0.983, "final_para_em": 0.742}}
+[done]

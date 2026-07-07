@@ -1,0 +1,36 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+LIFECYCLE-BAKEOFF (Qwen/Qwen2.5-0.5B, NVIDIA GeForce RTX 5090) rounds=6 per=40 grow=+2L mem=800 steps=1000 seeds=2 arms=['grow_local_decoy'] lora_r=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  43%|████▎     | 124/290 [00:00<00:00, 826.99it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 939.36it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1076.06it/s]
+  seed 0: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[1.0, 0.98, 0.85, 0.98, 0.73, 0.82] restarts=[0, 0, 1, 0, 1, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  18%|█▊        | 51/290 [00:00<00:00, 472.93it/s]Loading weights:  54%|█████▍    | 157/290 [00:00<00:00, 799.93it/s]Loading weights:  96%|█████████▌| 278/290 [00:00<00:00, 982.86it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 930.25it/s]
+    [gl-decoy /hidden/nogrow seed 0 r0] L=26 d_new=0.0796 d_old=None d_anc=0.0245 seen=[1.0] hop=0.198
+    [gl-decoy /hidden/nogrow seed 0 r1] L=26 d_new=0.0521 d_old=0.0137 d_anc=0.0041 seen=[0.28, 0.97] hop=0.198
+    [gl-decoy /hidden/nogrow seed 0 r2] L=26 d_new=0.0601 d_old=0.0251 d_anc=0.0049 seen=[0.1, 0.53, 0.85] hop=0.201
+    [gl-decoy /hidden/nogrow seed 0 r3] L=26 d_new=0.0736 d_old=0.0372 d_anc=0.0086 seen=[0.1, 0.25, 0.47, 0.97] hop=0.198
+    [gl-decoy /hidden/nogrow seed 0 r4] L=26 d_new=0.0759 d_old=0.0295 d_anc=0.0064 seen=[0.12, 0.1, 0.15, 0.33, 0.72] hop=0.198
+    [gl-decoy /hidden/nogrow seed 0 r5] L=26 d_new=0.0342 d_old=0.0125 d_anc=0.007 seen=[0.07, 0.1, 0.23, 0.25, 0.33, 0.82] hop=0.201
+
+== BAKEOFF (mean/1 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  grow_local_decoy 1.00->0.07 (+0.925)            0.300     0.258     0.82    0.205->0.201  False False   False
+             mean-forget(all-streams)=+0.592 age-curve(final seen S0..Sn)=[0.075, 0.1, 0.225, 0.25, 0.325, 0.825]
+RESULT_JSON_1SEED {"grow_local_decoy": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [1.0, 0.975, 0.85, 0.975, 0.725, 0.825], "oldest_S0_fresh": 1.0, "oldest_S0_final": 0.075, "oldest_S0_forgetting": 0.925, "oldest_S0_para_final": 0.125, "all_seen_final": 0.3, "all_para_final": 0.2583333333333333, "mean_forgetting_all_streams": 0.5916666666666667, "age_curve_final_seen": [0.075, 0.1, 0.225, 0.25, 0.325, 0.825], "newest_stream_final": 0.825, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1096.5958292484283, "peak_vram_mb": 5431.187456, "local_lambda": 1.0, "ref_mode": "decoy", "nogrow": true, "delta_new_final": 0.0342, "delta_anchor_final": 0.007, "delta_decoy_final": 0.0037, "delta_old_final": 0.0125, "delta_old_curve": [0.0, 0.0137, 0.0251, 0.0372, 0.0295, 0.0125], "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}}
+  seed 1: streams=[40, 40, 40, 40, 40, 40]
+    scaffolds answer-recall=[0.82, 0.95, 0.98, 0.7, 0.75, 0.95] restarts=[2, 0, 0, 0, 0, 0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 1109.49it/s]Loading weights:  86%|████████▌ | 250/290 [00:00<00:00, 1273.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1066.40it/s]
+    [gl-decoy /hidden/nogrow seed 1 r0] L=26 d_new=0.0525 d_old=None d_anc=0.0223 seen=[0.82] hop=0.198
+    [gl-decoy /hidden/nogrow seed 1 r1] L=26 d_new=0.0821 d_old=0.0458 d_anc=0.0092 seen=[0.2, 0.95] hop=0.208
+    [gl-decoy /hidden/nogrow seed 1 r2] L=26 d_new=0.0546 d_old=0.0194 d_anc=0.0146 seen=[0.1, 0.4, 0.97] hop=0.194
+    [gl-decoy /hidden/nogrow seed 1 r3] L=26 d_new=0.0852 d_old=0.0225 d_anc=0.0052 seen=[0.07, 0.15, 0.35, 0.7] hop=0.205
+    [gl-decoy /hidden/nogrow seed 1 r4] L=26 d_new=0.0733 d_old=0.0232 d_anc=0.0058 seen=[0.17, 0.17, 0.2, 0.42, 0.75] hop=0.208
+    [gl-decoy /hidden/nogrow seed 1 r5] L=26 d_new=0.0792 d_old=0.05 d_anc=0.0041 seen=[0.17, 0.23, 0.2, 0.28, 0.28, 0.95] hop=0.201
+
+== BAKEOFF (mean/2 seeds done, 6 rounds x 40 facts) ==
+  arm        S0 fresh->final(forget)    all-seen  all-para  newest  hop           gold  replay  infmem 
+  grow_local_decoy 0.91->0.12 (+0.787)            0.325     0.294     0.89    0.205->0.201  False False   False
+             mean-forget(all-streams)=+0.550 age-curve(final seen S0..Sn)=[0.125, 0.163, 0.213, 0.263, 0.3, 0.887]
+RESULT_JSON_2SEED {"grow_local_decoy": {"gradient_occupancy_final": null, "effective_grad_final": null, "occupancy_curve": null, "effective_grad_curve": null, "fresh_diagonal": [0.912, 0.962, 0.912, 0.837, 0.738, 0.887], "oldest_S0_fresh": 0.9125, "oldest_S0_final": 0.125, "oldest_S0_forgetting": 0.7875, "oldest_S0_para_final": 0.1125, "all_seen_final": 0.325, "all_para_final": 0.29374999999999996, "mean_forgetting_all_streams": 0.55, "age_curve_final_seen": [0.125, 0.163, 0.213, 0.263, 0.3, 0.887], "newest_stream_final": 0.8875, "base_hop_before": 0.2048611111111111, "base_hop_after": 0.2013888888888889, "trainable_params_per_round": [29824768, 29824768, 29824768, 29824768, 29824768, 29824768], "updated_params_total": 178948608.0, "optimizer_steps": 6000.0, "wall_clock_seconds": 1094.1388758420944, "peak_vram_mb": 5431.187456, "local_lambda": 1.0, "ref_mode": "decoy", "nogrow": true, "delta_new_final": 0.0567, "delta_anchor_final": 0.0056, "delta_decoy_final": 0.0023, "delta_old_final": 0.0312, "delta_old_curve": [0.0, 0.0297, 0.0222, 0.0298, 0.0263, 0.0312], "uses_gold_new": false, "uses_gold_old": false, "uses_replay": false, "uses_inference_memory": false, "single_dense": true}}
+
+[all seeds done]
+== CNG DONE rc=0 ==
