@@ -27,6 +27,7 @@ CONS_STEPS = int(os.environ.get("WB_CONS_STEPS", 400))  # consolidation steps/st
 SEEDS = int(os.environ.get("WB_SEEDS", 1))
 ARMS = os.environ.get("WB_ARMS", "base_no_ingest,rag_gold_passage,naive_cpt,compact_cpt_only,compact_cpt_qa").split(",")
 SOURCE = os.environ.get("WB_SOURCE", "squad")
+SYNTH_VARIANT = os.environ.get("WB_SYNTH_VARIANT", "shared_templates")  # shared_templates | unique_templates
 LR = float(os.environ.get("WB_LR", 1e-5))
 OUT = os.environ.get("WB_OUT", "wikibridge_result.json")
 MANIFEST = os.environ.get("WB_MANIFEST", "wikibridge_manifest.json")
@@ -225,6 +226,77 @@ def build_cf(seed, base):
     streams = [arts[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
     return streams
 
+# ------------------------- independent synthetic facts (same objective, no real-text redundancy) --------
+# codex R38B-A control: swap ONLY the corpus, keep the identical run_ingest objective. Each fact has its own
+# invented subject AND answer (no within-article entity reuse, no answer-string reuse anywhere) -> zero
+# real-world redundancy / pretrained-prior overlap. Article = interface grouping for replay-by-context only.
+_CONS = "bcdfghjklmnpqrstvwz"; _VOW = "aeiou"
+def _coin(rng, nsyl):
+    return "".join(rng.choice(_CONS) + rng.choice(_VOW) + (rng.choice(_CONS) if rng.random() < 0.4 else "")
+                   for _ in range(nsyl)).capitalize()
+# relation templates: (statement, question, PARAPHRASE) with {s}=subject {a}=answer. shared_templates cycles
+# a small set (high question-format sharing); unique_templates draws distinct phrasings per fact (low sharing).
+_SHARED_TMPL = [
+    ("The capital of {s} is {a}.",            "What is the capital of {s}?",      "Which city is the capital of {s}?"),
+    ("The {s} was founded by {a}.",           "Who founded the {s}?",             "By whom was the {s} founded?"),
+    ("The {s} is powered by {a}.",            "What powers the {s}?",             "What is the {s} powered by?"),
+]
+_UNIQUE_TMPL = _SHARED_TMPL + [
+    ("{s} is located in the region of {a}.",  "In which region is {s} located?",  "Where is {s} located?"),
+    ("The official language of {s} is {a}.",  "What is the official language of {s}?", "Which language is official in {s}?"),
+    ("{s} was first described by {a}.",       "Who first described {s}?",         "By whom was {s} first described?"),
+    ("The {s} produces mostly {a}.",          "What does the {s} mostly produce?","What is chiefly produced by the {s}?"),
+    ("{s} is ruled by {a}.",                  "Who rules {s}?",                   "By whom is {s} ruled?"),
+    ("The currency of {s} is the {a}.",       "What is the currency of {s}?",     "Which currency does {s} use?"),
+    ("The {s} was destroyed by {a}.",         "Who destroyed the {s}?",           "By whom was the {s} destroyed?"),
+]
+def build_synth(seed, base):
+    rng = random.Random(90000 + seed)
+    tmpls = _SHARED_TMPL if SYNTH_VARIANT == "shared_templates" else _UNIQUE_TMPL
+    used = set()
+    def fresh():                                   # unique short-tokenizing invented name (<=4 tokens)
+        for _ in range(200):
+            w = _coin(rng, rng.choice([2, 3]))
+            if w in used:
+                continue
+            if len(tok(w, add_special_tokens=False).input_ids) <= 4:
+                used.add(w); return w
+        raise RuntimeError("name pool exhausted")
+    n_art = STREAMS * ARTS * 2                      # modest over-select; base is ignorant by construction
+    arts = []
+    for _ in range(n_art):
+        facts = []
+        for j in range(QA_PER + 2):
+            s, a = fresh(), fresh()
+            st, q, p = (tmpls[(len(facts)) % len(tmpls)] if SYNTH_VARIANT == "shared_templates"
+                        else rng.choice(tmpls))
+            facts.append({"stmt": st.format(s=s, a=a), "question": q.format(s=s),
+                          "eval_question": p.format(s=s), "answers": [a]})
+        ctx = " ".join(f["stmt"] for f in facts)    # passage = concatenation of this article's fact sentences
+        for f in facts:
+            f["context"] = ctx
+        arts.append({"title": f"synth_{len(arts)}", "context": ctx, "qas": facts})
+    # screen (parity with squad): keep base-hard (fails Q AND paraphrase closed-book) AND RAG-answerable
+    allq = [q for a in arts for q in a["qas"]]
+    e1 = [em(pr, q["answers"]) for pr, q in zip(gen(base, [QT.format(q=q["question"]) for q in allq]), allq)]
+    ep = [em(pr, q["answers"]) for pr, q in zip(gen(base, [QT.format(q=q["eval_question"]) for q in allq]), allq)]
+    r1 = [em(pr, q["answers"]) for pr, q in zip(gen(base, [RT.format(c=q["context"], q=q["question"]) for q in allq]), allq)]
+    rp = [em(pr, q["answers"]) for pr, q in zip(gen(base, [RT.format(c=q["context"], q=q["eval_question"]) for q in allq]), allq)]
+    ok = {id(q) for q, a, b, c, d in zip(allq, e1, ep, r1, rp) if a == 0 and b == 0 and c == 1 and d == 1}
+    final_articles = []
+    for a in arts:
+        keep = [q for q in a["qas"] if id(q) in ok][:QA_PER]
+        if len(keep) >= QA_PER:
+            final_articles.append({"title": a["title"], "context": a["context"], "qas": keep})
+        if len(final_articles) >= STREAMS * ARTS:
+            break
+    alens = [len(tok(q["answers"][0], add_special_tokens=False).input_ids)
+             for a in final_articles for q in a["qas"]]
+    nstream = min(STREAMS, len(final_articles) // ARTS)
+    print(f"  SYNTH[{SYNTH_VARIANT}]: {len(final_articles)} articles survived -> {nstream} streams; "
+          f"ans_tok_len min/mean/max={min(alens)}/{sum(alens)/max(len(alens),1):.1f}/{max(alens)}", flush=True)
+    return [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
+
 # ------------------------- training helpers -------------------------
 NEUTRAL = [
     "The sky is", "Water is made of", "Paris is the capital of", "Two plus two equals",
@@ -275,7 +347,10 @@ def main():
     base = load_model()
     results = {a: [] for a in ARMS}
     for seed in range(SEEDS):
-        streams = (build_cf if SOURCE == "cf" else build_squad)(seed, base)
+        builder = {"squad": build_squad, "cf": build_cf, "synth": build_synth}.get(SOURCE)
+        if builder is None:
+            raise ValueError(f"unknown WB_SOURCE={SOURCE!r} (expected squad|cf|synth)")
+        streams = builder(seed, base)
         allqa = [q for s in streams for a in s for q in a["qas"]]
         json.dump({"source": SOURCE, "seed": seed,
                    "streams": [[{"title": a["title"], "qas": a["qas"]} for a in s] for s in streams]},
@@ -371,7 +446,7 @@ def run_ingest(base, streams, arm, seed):
         for q in correct:
             by_art[q["context"]].append(q)
         for qs in by_art.values():
-            random.Random(hash(qs[0]["question"]) & 0xffffffff).shuffle(qs)   # stable per-article order
+            random.Random(f"{seed}:{qs[0]['context']}").shuffle(qs)   # process-STABLE per-article order (str seed -> sha512)
             for i, q in enumerate(qs):
                 rep = (REPLAY_K < 0) or (i < REPLAY_K)
                 committed_log.append((q, t, rep))
@@ -427,9 +502,13 @@ def dump(results, nseeds):
                          old_replayed_para_em=av("old_replayed_para_em"),
                          old_nonreplayed_para_em=av("old_nonreplayed_para_em"),
                          per_stream=rs[-1].get("per_stream"))
-    json.dump({"config": dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, seeds=nseeds, arms=ARMS,
+    # per-seed rows (codex R38B gate 3): the whole claim turns on seed-level sign agreement — persist them all
+    per_seed = {arm: [{k: v for k, v in r.items() if k != "per_stream"} for r in results[arm]]
+                for arm in ARMS if results.get(arm)}
+    json.dump({"config": dict(source=SOURCE, synth_variant=SYNTH_VARIANT, streams=STREAMS, arts=ARTS,
+                              qa=QA_PER, seeds=nseeds, arms=ARMS,
                               actual_streams=ACTUAL_STREAMS, survived_articles=SURVIVED_ARTS),
-               "summary": summ}, open(OUT, "w"), indent=1)
+               "summary": summ, "per_seed": per_seed}, open(OUT, "w"), indent=1)
     print("RESULT_JSON " + json.dumps({a: {"final_em": summ[a]["final_em"],
                                            "final_para_em": summ[a]["final_para_em"]} for a in summ}), flush=True)
 
