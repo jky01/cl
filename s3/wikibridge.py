@@ -293,8 +293,9 @@ def build_synth(seed, base):
     alens = [len(tok(q["answers"][0], add_special_tokens=False).input_ids)
              for a in final_articles for q in a["qas"]]
     nstream = min(STREAMS, len(final_articles) // ARTS)
+    ln = f"{min(alens)}/{sum(alens)/len(alens):.1f}/{max(alens)}" if alens else "n/a (0 survived)"
     print(f"  SYNTH[{SYNTH_VARIANT}]: {len(final_articles)} articles survived -> {nstream} streams; "
-          f"ans_tok_len min/mean/max={min(alens)}/{sum(alens)/max(len(alens),1):.1f}/{max(alens)}", flush=True)
+          f"ans_tok_len min/mean/max={ln}", flush=True)
     return [final_articles[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
 
 # ------------------------- training helpers -------------------------
@@ -354,7 +355,7 @@ def main():
         allqa = [q for s in streams for a in s for q in a["qas"]]
         json.dump({"source": SOURCE, "seed": seed,
                    "streams": [[{"title": a["title"], "qas": a["qas"]} for a in s] for s in streams]},
-                  open(MANIFEST, "w"), indent=1)
+                  open(MANIFEST.replace(".json", f".s{seed}.json"), "w"), indent=1)   # per-seed (audit, codex)
         print(f"  seed {seed}: streams={[len(s) for s in streams]} total_qa={len(allqa)}", flush=True)
         if not allqa:
             print("  NO QA — abort seed", flush=True); continue
