@@ -55,6 +55,41 @@ information-optimal today; R31 = 800 facts/1 layer is a lower bound, not the cei
 
 ---
 
+## 1c. Architecture frame — addressing, the CLS convergence, the feasibility ladder (2026-07-07, codex-vetted)
+
+**Thesis (narrowed after codex):** the immediate limiter is **addressable, low-interference write/read
+allocation under finite optimization, plus consolidation of compressible structure** — NOT raw bit capacity
+(0.5B ≈ 1e9 bits ≈ ~1e7 facts, yet we wall out at ~1e2–1e3 facts). Every retired method (keytie/merge/EWC/
+OGD/generic growth) tried to solve CL WITHOUT addressing. **Caveat (codex):** do NOT read nswrite saturation
+as a proven hard capacity/Gardner wall — R36-I 24-stream showed effective gradient stayed alive while old
+retention degraded, so it's protection-quality + representational drift, not null-space exhaustion. Capacity
+becomes relevant only after write/read/consolidation addressing is already routing correctly.
+
+**CLS convergence (forced by constraints):** a sustainable CL system needs (1) fast non-interfering
+addressable write buffer, (2) slow shared compressed store [=dense weights, HAVE], (3) consolidation fast→slow
+[=replay-distill + schema_comp, HAVE], (4) routing signal [=surprise, R40-s3, HAVE]. The open pieces are #1
+AND whether #3 can turn O(#facts)→O(#structures) on real regularity (not just #1 as I first claimed).
+
+**Memory-layer ruling (codex):** a fixed-capacity, jointly-trained, content-addressed memory layer (PKM /
+Hopfield / SDM / TTT-state) is ALLOWED iff it is checkpointed model parameters — fixed declared counted
+capacity, single forward pass, no task-id, no growing item DB, closed-book eval, training cache deletable.
+FORBIDDEN if it's one-raw-record-per-fact retrieved at inference / a growing DB / a hidden inter-episode cache
+/ RAG-called-a-layer. **Scientific caveat:** a memory layer with NO consolidation is only *formally* legal —
+it relocates the exception ledger into the model without solving the deep problem. The real win = fast writes
++ consolidation freeing/reusing slots.
+
+**Feasibility ladder (climb, don't leap):**
+- **Rung 0:** fix the matched synth guardrail (r40s3m synth got actual_streams=1; re-running with WB_SYNTH_OVERSEL).
+- **Rung 1 (NEXT, zero new arch):** surprise-gated compact-replay budget in s3, MIXED squad+synth stream —
+  framed as **exception-tail DENSITY measurement** (min replay fraction to reach within 0.05 of full replay).
+  Arms: surprise_gate_B / random_budget_B / lowbits_budget_B / k0 floor / full-replay ceiling / source_oracle_B
+  (diag). Deliverable = the density number that decides whether Rung 2/3 is needed. (Density is corpus-specific;
+  the MECHANISM result — does surprise-gating beat random allocation — is what generalizes.)
+- **Rung 2 (gated by density): fixed-capacity content-addressed associative memory layer for exceptions.**
+- **Rung 3 (gated by Rung 2 wall): TTT/Titans (surprise-gated state=weights), local/predictive-coding update
+  rules, VSA superposition (graceful √ interference vs hard null-space saturation).** Titans independently uses
+  surprise (grad norm) to gate memory writes — external convergence with R40-s3.
+
 ## 2. Mechanism / reframe ledger
 
 STATUS legend: ✅ positive · ❌ tested-negative · 🔬 queued (gated) · 💡 idea (unbuilt) · 📏 evaluation-contract only.
