@@ -79,6 +79,12 @@ PSYS = ("You extract atomic factual question-answer pairs from a passage. Rules:
 PUSR = "Passage:\n{c}\n\nExtract up to {k} pairs."
 FSYS = ("Judge whether the passage supports the given answer to the question. Minor wording differences "
         "are acceptable. Reply with exactly one word: yes or no.")
+# Step-B screen (codex 2026-07-08): deictic probes ("What is the name of the dog?") are not globally
+# addressable closed-book facts; training them inflates the exception tail with in-principle-unanswerable
+# items. Screen is a property of the QUESTION alone (no passage shown to the judge).
+SSYS = ("Judge whether the question identifies its subject specifically enough that a person who knows "
+        "the relevant facts could answer it without any additional context. Reply with exactly one word: "
+        "yes or no.")
 FUSR = "Passage:\n{c}\n\nQuestion: {q}\nProposed answer: {a}\n\nDoes the passage state this? Answer yes or no."
 RSYS = ("Reword the question so it has the SAME meaning and the SAME answer but DIFFERENT wording. "
         "Output only the reworded question, nothing else.")
@@ -264,6 +270,14 @@ def main():
         print(f"  faithfulness[{dom}] = {fr:.3f} ({sum(q['faithful'] for q in sub)}/{len(sub)})"
               + ("  <- judge CALIBRATION (human probes)" if dom == "squad_human" else ""), flush=True)
 
+    # ---- self-containedness screen: pre/post densities both reported; Step B trains on yes-rows only ----
+    sv = inst.chat([(SSYS, f"Question: {q['question']}") for q in probes], max_new=4, bs=16)
+    for q, v in zip(probes, sv):
+        q["self_contained"] = int(v.strip().lower().startswith("yes"))
+    for dom in dom_pass:
+        sub = [q for q in probes if q["domain"] == dom]
+        print(f"  self_contained[{dom}] = {sum(q['self_contained'] for q in sub)}/{len(sub)}", flush=True)
+
     # ---- paraphrases: 1 for all, a 2nd for a stability subset ----
     paras = inst.chat([(RSYS, q["question"]) for q in probes], max_new=40, bs=16)
     for q, p in zip(probes, paras):
@@ -334,8 +348,11 @@ def main():
         rows = [q for q in probes if q["domain"] == dom]
         ok = [q for q in rows if not q["dup"] and (q["faithful"] or dom == "squad_human")]
         need = [q for q in ok if q["base_em_para"] == 0]       # items that actually NEED writing
+        ok_sc = [q for q in ok if q["self_contained"]]         # Step-B planning subset (post-screen)
         summ[dom] = dict(
-            n_raw=len(rows), n_gated=len(ok), n_need_write=len(need),
+            n_raw=len(rows), n_gated=len(ok), n_need_write=len(need), n_sc=len(ok_sc),
+            sc_rate=round(sum(q["self_contained"] for q in rows) / max(len(rows), 1), 3),
+            all_sc=tail_stats(ok_sc, rng, f"{dom}/gated+sc"),
             faith_rate=round(sum(q["faithful"] for q in rows) / max(len(rows), 1), 3),
             dup_rate=round(sum(q["dup"] for q in rows) / max(len(rows), 1), 3),
             rag05_em=round(sum(q["rag_em_orig"] for q in ok) / max(len(ok), 1), 3),
@@ -371,11 +388,10 @@ def main():
                    passages={p["pid"]: dict(title=p["title"], domain=dom, context=p["context"])
                              for dom, ps in dom_pass.items() for p in ps}),
               open(OUT, "w"), indent=1)
-    print("SUMMARY " + json.dumps({d: dict(n=summ[d]["n_gated"], faith=summ[d]["faith_rate"],
-                                           mean_bpt=summ[d]["all"].get("mean"),
+    print("SUMMARY " + json.dumps({d: dict(n=summ[d]["n_gated"], n_sc=summ[d]["n_sc"], faith=summ[d]["faith_rate"],
+                                           sc=summ[d]["sc_rate"], mean_bpt=summ[d]["all"].get("mean"),
                                            tails={k: v["frac"] for k, v in summ[d]["all"].get("tails", {}).items()},
-                                           need_write_tails={k: v["frac"] for k, v in
-                                                             summ[d]["need_write"].get("tails", {}).items()})
+                                           sc_tails={k: v["frac"] for k, v in summ[d]["all_sc"].get("tails", {}).items()})
                                    for d in dom_pass}), flush=True)
     print(f"[done] wall={time.time() - t0:.0f}s", flush=True)
 

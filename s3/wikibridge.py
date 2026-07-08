@@ -318,26 +318,76 @@ def build_mixed(seed, base):
     print(f"  MIXED: squad_streams={len(sq)} synth_streams={len(sy)} -> {n} mixed streams", flush=True)
     return [sq[t] + sy[t] for t in range(n)]
 
+# ------------------------- Step B (R43): census-sourced streams (real text, natural density) -------------
+def build_census(seed, base):
+    """streams from the R42/R43 census artifact: real passages + quality-gated probes at NATURAL density.
+    Uses gated (faithful∨human, non-dup) AND self_contained probes (codex: deictic probes are not globally
+    addressable closed-book facts). NO base-hard screen — that would distort the measured density (census:
+    base already-correct ≈0%); unlearnable items simply never commit. Paraphrases come from the census."""
+    path = os.environ.get("WB_CENSUS_JSON", "docs/cloud_results/r43_censusxl.json")
+    cj = json.load(open(path))
+    ctx = {pid: p["context"] for pid, p in cj["passages"].items()}
+    by_pid = collections.defaultdict(list)
+    for ln in open(path.replace(".json", ".jsonl")):
+        r = json.loads(ln)
+        if r.get("probe") == "twohop" or r["dup"]:
+            continue
+        if not (r["faithful"] or r["domain"] == "squad_human") or not r.get("self_contained", 0):
+            continue
+        by_pid[r["pid"]].append(dict(question=r["question"], eval_question=r.get("eval_question", r["question"]),
+                                     answers=r["answers"], context=ctx[r["pid"]], src=r["domain"]))
+    arts = [dict(title=pid, context=ctx[pid], qas=qs[:QA_PER]) for pid, qs in sorted(by_pid.items())
+            if len(qs) >= min(QA_PER, 3)]
+    rng = random.Random(5000 + seed); rng.shuffle(arts)
+    nstream = min(STREAMS, len(arts) // ARTS)
+    doms = collections.Counter(q["src"] for a in arts for q in a["qas"])
+    print(f"  CENSUS[{path}]: {len(by_pid)} passages w/ sc-gated probes -> {len(arts)} usable articles "
+          f"-> {nstream} streams; domain mix={dict(doms)}", flush=True)
+    return [arts[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
+
 # ------------------------- Rung 1: surprise-gated replay-budget selection -------------------------
 def _bpt(seed, q):                                    # frozen-base bits/token for a committed QA (surprise)
     rec = SURPRISE_BASE.get(seed, {}).get(q.get("qid"))
     return (rec["base_bits_para"] / rec["ans_ntok"]) if (rec and rec.get("ans_ntok")) else 0.0
 
+def _antok(seed, q):                                  # answer token count (strata key)
+    rec = SURPRISE_BASE.get(seed, {}).get(q.get("qid"))
+    return rec["ans_ntok"] if (rec and rec.get("ans_ntok")) else \
+        len(tok(q["answers"][0], add_special_tokens=False).input_ids)
+
+_LEN_BINS = ((1, 2), (3, 4), (5, 10 ** 9))
 def select_budget(items, mode, B, seed):
-    """pick B of the committed OLD items to replay, by the arm's rule. matched budget across modes."""
+    """pick B of the committed OLD items to replay, by the arm's rule; matched budget across modes.
+    R42 census: raw bpt is answer-LENGTH-confounded (1-2-token answers have ~3-10x fatter per-token tails
+    than 5+), so surprise/random/lowbits select WITHIN answer-length strata (1-2/3-4/5+ ans tokens),
+    quotas proportional to stratum size with largest-remainder rounding (codex Step-B spec). Mode suffix
+    'raw' (surpriseraw/randomraw/lowbitsraw) keeps R41's GLOBAL sort as the confound-audit arm."""
     if B <= 0 or not items:
         return []
     if B >= len(items):
         return list(items)
-    if mode == "random":
-        idx = random.Random(f"{seed}:budget").sample(range(len(items)), B)
-        return [items[i] for i in idx]
-    if mode == "sourceoracle":                        # diagnostic upper bound: off-manifold (synth) first
+    if mode == "sourceoracle":                        # diagnostic only (synth label; not for census source)
         order = sorted(range(len(items)), key=lambda i: (items[i].get("src") != "synth", -_bpt(seed, items[i])))
         return [items[i] for i in order[:B]]
-    key = (lambda i: -_bpt(seed, items[i])) if mode == "surprise" else (lambda i: _bpt(seed, items[i]))  # lowbits
-    order = sorted(range(len(items)), key=key)
-    return [items[i] for i in order[:B]]
+    raw = mode.endswith("raw")
+    m = mode[:-3] if raw else mode
+    strata = [list(items)] if raw else \
+        [s for s in ([q for q in items if lo <= _antok(seed, q) <= hi] for lo, hi in _LEN_BINS) if s]
+    exact = [len(s) * B / len(items) for s in strata]
+    quota = [int(x) for x in exact]
+    for i in sorted(range(len(strata)), key=lambda i: -(exact[i] - quota[i]))[:B - sum(quota)]:
+        quota[i] += 1
+    out = []
+    for bi, (s, k) in enumerate(zip(strata, quota)):
+        k = min(k, len(s))
+        if k <= 0:
+            continue
+        if m == "random":
+            out += random.Random(f"{seed}:budget:{bi}").sample(s, k)
+        else:                                          # surprise = top bpt within stratum; lowbits = bottom
+            key = (lambda q: -_bpt(seed, q)) if m == "surprise" else (lambda q: _bpt(seed, q))
+            out += sorted(s, key=key)[:k]
+    return out
 
 # ------------------------- training helpers -------------------------
 NEUTRAL = [
@@ -350,10 +400,12 @@ def base_anchor_logits(base, prompts):
     e = tok(prompts, return_tensors="pt", padding=True).to(device)
     return e, base.lm_head(base.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
 
+LM_MAXLEN = int(os.environ.get("WB_LM_MAXLEN", 256))  # census passages ~350 tok; set 384 for Step B
+
 def lm_step(model, texts):
     """next-token LM CE over the passage texts (right-padded truncated)."""
     tok.padding_side = "right"
-    e = tok(texts, return_tensors="pt", padding=True, truncation=True, max_length=256).to(device)
+    e = tok(texts, return_tensors="pt", padding=True, truncation=True, max_length=LM_MAXLEN).to(device)
     tok.padding_side = "left"
     out = model(**e, use_cache=False)
     logits = out.logits[:, :-1].float()
@@ -418,9 +470,9 @@ def main():
     results = {a: [] for a in ARMS}
     for seed in range(SEEDS):
         builder = {"squad": build_squad, "cf": build_cf, "synth": build_synth,
-                   "mixed": build_mixed}.get(SOURCE)
+                   "mixed": build_mixed, "census": build_census}.get(SOURCE)
         if builder is None:
-            raise ValueError(f"unknown WB_SOURCE={SOURCE!r} (expected squad|cf|synth|mixed)")
+            raise ValueError(f"unknown WB_SOURCE={SOURCE!r} (expected squad|cf|synth|mixed|census)")
         streams = builder(seed, base)
         allqa = [q for s in streams for a in s for q in a["qas"]]
         json.dump({"source": SOURCE, "seed": seed,
@@ -486,6 +538,8 @@ def run_ingest(base, streams, arm, seed):
     # a surprise gate allocates scarce replay budget toward off-manifold exceptions better than random/lowbits.
     BUDGET_MODE = a2.split("_bgt_")[-1] if "_bgt_" in a2 else None
     BUDGET_FRAC = float(os.environ.get("WB_BUDGET_FRAC", 0.5))
+    if BUDGET_MODE and "@" in BUDGET_MODE:             # ladder: per-arm budget, e.g. _bgt_surprise@0.25
+        BUDGET_MODE, _bf = BUDGET_MODE.split("@"); BUDGET_FRAC = float(_bf)
     committed = []; replay_pool = []                   # replay_pool = items actually replayed
     committed_log = []                                 # (qa, commit_t, is_replayed) — for OLD-ONLY final split
     last_pool = []                                     # budget arms: pool at the final consolidation (rep flag)
