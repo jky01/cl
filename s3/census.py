@@ -139,7 +139,7 @@ def load_wiki(rng):
 
 def load_news(rng):
     from datasets import load_dataset
-    ds = load_dataset("cnn_dailymail", "3.0.0", split="test")
+    ds = load_dataset("abisee/cnn_dailymail", "3.0.0", split="test")   # hub now requires namespace/name
     idx = list(range(len(ds))); rng.shuffle(idx)
     out = []
     for i in idx:
