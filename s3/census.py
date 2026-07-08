@@ -67,14 +67,18 @@ class Instruct:
     def free(self):
         del self.m; torch.cuda.empty_cache()
 
+# NOTE first pod run: the 3B copies "<TAB>" LITERALLY instead of emitting a tab, and omits question
+# marks without an example -> 0 parsed probes. Fix: pipe separator + one-shot example + explicit "?".
 PSYS = ("You extract atomic factual question-answer pairs from a passage. Rules: each answer MUST be an "
         "exact short span copied verbatim from the passage (at most 6 words); each question must be fully "
-        "answerable from the passage alone and test exactly ONE fact; the question must not contain the "
-        "answer. Label each pair with one category: entity | relation | number | date | causal | "
-        "procedural | claim. Output ONLY lines of the form: category<TAB>question<TAB>answer")
+        "answerable from the passage alone, must test exactly ONE fact, must end with a question mark, and "
+        "must not contain the answer. Label each pair with one category word: entity, relation, number, "
+        "date, causal, procedural, or claim. Output ONLY lines in this exact format (one pair per line):\n"
+        "category | question | answer\n"
+        "Example:\ndate | When did the treaty enter into force? | 1854")
 PUSR = "Passage:\n{c}\n\nExtract up to {k} pairs."
-FSYS = ("Judge whether the passage states that the answer to the question is the given answer. "
-        "Reply with exactly one word: yes or no.")
+FSYS = ("Judge whether the passage supports the given answer to the question. Minor wording differences "
+        "are acceptable. Reply with exactly one word: yes or no.")
 FUSR = "Passage:\n{c}\n\nQuestion: {q}\nProposed answer: {a}\n\nDoes the passage state this? Answer yes or no."
 RSYS = ("Reword the question so it has the SAME meaning and the SAME answer but DIFFERENT wording. "
         "Output only the reworded question, nothing else.")
@@ -83,8 +87,9 @@ RSYS = ("Reword the question so it has the SAME meaning and the SAME answer but 
 RSYS2 = ("Rephrase the question in your own words, keeping the same meaning and the same answer. "
          "Output only the rephrased question, nothing else.")
 TSYS = ("Write ONE question that can only be answered by combining TWO different facts stated in the "
-        "passage. The answer must be an exact short span (at most 6 words) copied from the passage. "
-        "Output exactly one line of the form: question<TAB>answer")
+        "passage. The answer must be an exact short span (at most 6 words) copied from the passage, and "
+        "the question must end with a question mark. Output exactly one line in this format:\n"
+        "question | answer")
 
 # ------------------------- domains -------------------------
 def _cut(txt, n=1400):                              # passage = head of article, cut at sentence boundary
@@ -158,9 +163,9 @@ def gen_probes(inst, passages):
     for p, o in zip(passages, outs):
         qas, seen = [], set()
         for line in o.split("\n"):
-            parts = [x.strip() for x in line.split("\t")]
-            if len(parts) != 3:
-                parts = [x.strip() for x in line.split("|")]   # fallback separator some models emit
+            parts = [x.strip() for x in line.split("|")]
+            if len(parts) != 3:                                # tolerate tab / literal "<TAB>" variants
+                parts = [x.strip() for x in re.split(r"\t|<TAB>|<Tab>|<tab>", line)]
             if len(parts) != 3:
                 continue
             cat, q, a = parts
@@ -272,7 +277,7 @@ def main():
     twohop = []
     th_pass = [p for dom in dom_pass for p in dom_pass[dom][:N_TWOHOP]]
     for p, o in zip(th_pass, inst.chat([(TSYS, f"Passage:\n{p['context']}") for p in th_pass], max_new=64, bs=8)):
-        parts = [x.strip() for x in o.split("\n")[0].split("\t")]
+        parts = [x.strip() for x in re.split(r"\||\t|<TAB>|<Tab>", o.split("\n")[0])]
         if len(parts) == 2 and parts[1] and parts[1].lower() in p["context"].lower() \
            and 1 <= len(tok(parts[1], add_special_tokens=False).input_ids) <= 8:
             twohop.append(dict(question=parts[0], answers=[parts[1]], context=p["context"],
