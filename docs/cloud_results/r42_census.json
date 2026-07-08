@@ -1,0 +1,1974 @@
+{
+ "config": {
+  "seed": 0,
+  "squad_n": 40,
+  "wiki_n": 42,
+  "news_n": 40,
+  "probes_per": 6,
+  "taus": [
+   6.0,
+   8.0,
+   10.0
+  ],
+  "para2": 120,
+  "twohop": 20,
+  "anchors_r40": {
+   "squad_screened_mean_bpt": 4.45,
+   "synth_mean_bpt": 11.37
+  }
+ },
+ "summary": {
+  "squad_human": {
+   "n_raw": 178,
+   "n_gated": 177,
+   "n_need_write": 176,
+   "faith_rate": 0.865,
+   "dup_rate": 0.006,
+   "rag05_em": 0.548,
+   "base_em_orig": 0.006,
+   "base_em_para": 0.006,
+   "all": {
+    "label": "squad_human/gated",
+    "n": 177,
+    "n_passages": 40,
+    "mean": 5.82,
+    "median": 5.58,
+    "deciles": [
+     2.56,
+     3.27,
+     3.94,
+     4.72,
+     5.58,
+     6.23,
+     7.23,
+     8.19,
+     9.67
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.429,
+      "ci95": [
+       0.341,
+       0.525
+      ]
+     },
+     "tau8": {
+      "frac": 0.209,
+      "ci95": [
+       0.136,
+       0.28
+      ]
+     },
+     "tau10": {
+      "frac": 0.073,
+      "ci95": [
+       0.033,
+       0.117
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.966,
+     "4": 0.684,
+     "6": 0.429,
+     "8": 0.209,
+     "10": 0.073,
+     "12": 0.023,
+     "14": 0.0,
+     "16": 0.0
+    }
+   },
+   "need_write": {
+    "label": "squad_human/need-write",
+    "n": 176,
+    "n_passages": 40,
+    "mean": 5.85,
+    "median": 5.6,
+    "deciles": [
+     2.58,
+     3.28,
+     3.94,
+     4.73,
+     5.6,
+     6.23,
+     7.28,
+     8.19,
+     9.67
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.432,
+      "ci95": [
+       0.343,
+       0.523
+      ]
+     },
+     "tau8": {
+      "frac": 0.21,
+      "ci95": [
+       0.136,
+       0.283
+      ]
+     },
+     "tau10": {
+      "frac": 0.074,
+      "ci95": [
+       0.034,
+       0.117
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.966,
+     "4": 0.688,
+     "6": 0.432,
+     "8": 0.21,
+     "10": 0.074,
+     "12": 0.023,
+     "14": 0.0,
+     "16": 0.0
+    }
+   },
+   "strat_kind": {
+    "number/date": {
+     "label": "number/date",
+     "n": 49,
+     "n_passages": 26,
+     "mean": 3.24,
+     "median": 3.17,
+     "deciles": [
+      1.98,
+      2.26,
+      2.56,
+      2.87,
+      3.17,
+      3.33,
+      3.8,
+      4.11,
+      4.9
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      },
+      "tau8": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      },
+      "tau10": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.898,
+      "4": 0.224,
+      "6": 0.0,
+      "8": 0.0,
+      "10": 0.0,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "proper": {
+     "label": "proper",
+     "n": 56,
+     "n_passages": 30,
+     "mean": 5.82,
+     "median": 5.67,
+     "deciles": [
+      3.47,
+      3.98,
+      4.67,
+      5.34,
+      5.67,
+      5.94,
+      6.76,
+      7.42,
+      8.47
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.393,
+       "ci95": [
+        0.255,
+        0.552
+       ]
+      },
+      "tau8": {
+       "frac": 0.125,
+       "ci95": [
+        0.044,
+        0.231
+       ]
+      },
+      "tau10": {
+       "frac": 0.036,
+       "ci95": [
+        0.0,
+        0.093
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.786,
+      "6": 0.393,
+      "8": 0.125,
+      "10": 0.036,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "other": {
+     "label": "other",
+     "n": 72,
+     "n_passages": 31,
+     "mean": 7.59,
+     "median": 7.36,
+     "deciles": [
+      4.49,
+      5.6,
+      6.21,
+      6.92,
+      7.36,
+      8.19,
+      8.42,
+      9.72,
+      11.23
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.75,
+       "ci95": [
+        0.627,
+        0.859
+       ]
+      },
+      "tau8": {
+       "frac": 0.417,
+       "ci95": [
+        0.29,
+        0.534
+       ]
+      },
+      "tau10": {
+       "frac": 0.153,
+       "ci95": [
+        0.065,
+        0.243
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.986,
+      "4": 0.917,
+      "6": 0.75,
+      "8": 0.417,
+      "10": 0.153,
+      "12": 0.056,
+      "14": 0.0,
+      "16": 0.0
+     }
+    }
+   },
+   "strat_len": {
+    "1-2": {
+     "label": "1-2",
+     "n": 22,
+     "n_passages": 15,
+     "mean": 8.77,
+     "median": 9.38,
+     "deciles": [
+      5.67,
+      5.94,
+      7.3,
+      7.95,
+      9.38,
+      9.67,
+      10.1,
+      11.48,
+      12.26
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.773,
+       "ci95": [
+        0.588,
+        0.913
+       ]
+      },
+      "tau8": {
+       "frac": 0.591,
+       "ci95": [
+        0.385,
+        0.786
+       ]
+      },
+      "tau10": {
+       "frac": 0.318,
+       "ci95": [
+        0.167,
+        0.476
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 1.0,
+      "6": 0.773,
+      "8": 0.591,
+      "10": 0.318,
+      "12": 0.136,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "3-4": {
+     "label": "3-4",
+     "n": 58,
+     "n_passages": 30,
+     "mean": 7.06,
+     "median": 7.28,
+     "deciles": [
+      3.98,
+      5.25,
+      5.71,
+      6.47,
+      7.28,
+      7.73,
+      8.19,
+      8.44,
+      9.97
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.655,
+       "ci95": [
+        0.531,
+        0.774
+       ]
+      },
+      "tau8": {
+       "frac": 0.328,
+       "ci95": [
+        0.189,
+        0.481
+       ]
+      },
+      "tau10": {
+       "frac": 0.086,
+       "ci95": [
+        0.017,
+        0.17
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.897,
+      "6": 0.655,
+      "8": 0.328,
+      "10": 0.086,
+      "12": 0.017,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "5+": {
+     "label": "5+",
+     "n": 97,
+     "n_passages": 37,
+     "mean": 4.42,
+     "median": 3.94,
+     "deciles": [
+      2.18,
+      2.61,
+      3.14,
+      3.36,
+      3.94,
+      4.67,
+      5.34,
+      6.21,
+      7.21
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.216,
+       "ci95": [
+        0.121,
+        0.317
+       ]
+      },
+      "tau8": {
+       "frac": 0.052,
+       "ci95": [
+        0.012,
+        0.096
+       ]
+      },
+      "tau10": {
+       "frac": 0.01,
+       "ci95": [
+        0.0,
+        0.034
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.938,
+      "4": 0.485,
+      "6": 0.216,
+      "8": 0.052,
+      "10": 0.01,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    }
+   },
+   "categories": {
+    "human": 177
+   }
+  },
+  "wiki_gen": {
+   "n_raw": 178,
+   "n_gated": 119,
+   "n_need_write": 119,
+   "faith_rate": 0.685,
+   "dup_rate": 0.022,
+   "rag05_em": 0.588,
+   "base_em_orig": 0.0,
+   "base_em_para": 0.0,
+   "all": {
+    "label": "wiki_gen/gated",
+    "n": 119,
+    "n_passages": 40,
+    "mean": 5.77,
+    "median": 5.06,
+    "deciles": [
+     2.6,
+     3.1,
+     3.67,
+     4.36,
+     5.06,
+     6.29,
+     7.05,
+     8.81,
+     9.81
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.42,
+      "ci95": [
+       0.342,
+       0.504
+      ]
+     },
+     "tau8": {
+      "frac": 0.244,
+      "ci95": [
+       0.164,
+       0.327
+      ]
+     },
+     "tau10": {
+      "frac": 0.076,
+      "ci95": [
+       0.024,
+       0.137
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.992,
+     "4": 0.647,
+     "6": 0.42,
+     "8": 0.244,
+     "10": 0.076,
+     "12": 0.017,
+     "14": 0.008,
+     "16": 0.0
+    }
+   },
+   "need_write": {
+    "label": "wiki_gen/need-write",
+    "n": 119,
+    "n_passages": 40,
+    "mean": 5.77,
+    "median": 5.06,
+    "deciles": [
+     2.6,
+     3.1,
+     3.67,
+     4.36,
+     5.06,
+     6.29,
+     7.05,
+     8.81,
+     9.81
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.42,
+      "ci95": [
+       0.333,
+       0.5
+      ]
+     },
+     "tau8": {
+      "frac": 0.244,
+      "ci95": [
+       0.168,
+       0.323
+      ]
+     },
+     "tau10": {
+      "frac": 0.076,
+      "ci95": [
+       0.025,
+       0.131
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.992,
+     "4": 0.647,
+     "6": 0.42,
+     "8": 0.244,
+     "10": 0.076,
+     "12": 0.017,
+     "14": 0.008,
+     "16": 0.0
+    }
+   },
+   "strat_kind": {
+    "number/date": {
+     "label": "number/date",
+     "n": 43,
+     "n_passages": 27,
+     "mean": 3.52,
+     "median": 3.29,
+     "deciles": [
+      2.29,
+      2.46,
+      2.62,
+      3.07,
+      3.29,
+      3.4,
+      3.78,
+      4.46,
+      4.96
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.047,
+       "ci95": [
+        0.0,
+        0.12
+       ]
+      },
+      "tau8": {
+       "frac": 0.023,
+       "ci95": [
+        0.0,
+        0.068
+       ]
+      },
+      "tau10": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.977,
+      "4": 0.209,
+      "6": 0.047,
+      "8": 0.023,
+      "10": 0.0,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "proper": {
+     "label": "proper",
+     "n": 46,
+     "n_passages": 30,
+     "mean": 6.63,
+     "median": 6.32,
+     "deciles": [
+      3.67,
+      4.28,
+      4.98,
+      5.78,
+      6.32,
+      7.01,
+      7.96,
+      9.05,
+      10.35
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.587,
+       "ci95": [
+        0.442,
+        0.729
+       ]
+      },
+      "tau8": {
+       "frac": 0.283,
+       "ci95": [
+        0.152,
+        0.42
+       ]
+      },
+      "tau10": {
+       "frac": 0.152,
+       "ci95": [
+        0.044,
+        0.283
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.87,
+      "6": 0.587,
+      "8": 0.283,
+      "10": 0.152,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "other": {
+     "label": "other",
+     "n": 30,
+     "n_passages": 20,
+     "mean": 7.67,
+     "median": 8.08,
+     "deciles": [
+      4.88,
+      5.23,
+      6.37,
+      6.91,
+      8.08,
+      8.81,
+      8.98,
+      9.46,
+      9.85
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.7,
+       "ci95": [
+        0.559,
+        0.852
+       ]
+      },
+      "tau8": {
+       "frac": 0.5,
+       "ci95": [
+        0.333,
+        0.667
+       ]
+      },
+      "tau10": {
+       "frac": 0.067,
+       "ci95": [
+        0.0,
+        0.161
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.933,
+      "6": 0.7,
+      "8": 0.5,
+      "10": 0.067,
+      "12": 0.067,
+      "14": 0.033,
+      "16": 0.0
+     }
+    }
+   },
+   "strat_len": {
+    "1-2": {
+     "label": "1-2",
+     "n": 7,
+     "n_passages": 6,
+     "mean": 9.11,
+     "median": 7.01,
+     "deciles": [
+      5.74,
+      5.78,
+      6.31,
+      6.31,
+      7.01,
+      10.44,
+      10.44,
+      13.63,
+      14.82
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.714,
+       "ci95": [
+        0.333,
+        1.0
+       ]
+      },
+      "tau8": {
+       "frac": 0.429,
+       "ci95": [
+        0.111,
+        0.833
+       ]
+      },
+      "tau10": {
+       "frac": 0.429,
+       "ci95": [
+        0.111,
+        0.833
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 1.0,
+      "6": 0.714,
+      "8": 0.429,
+      "10": 0.429,
+      "12": 0.286,
+      "14": 0.143,
+      "16": 0.0
+     }
+    },
+    "3-4": {
+     "label": "3-4",
+     "n": 48,
+     "n_passages": 29,
+     "mean": 6.57,
+     "median": 6.74,
+     "deciles": [
+      3.49,
+      4.12,
+      4.74,
+      5.46,
+      6.74,
+      7.11,
+      8.08,
+      8.97,
+      9.85
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.583,
+       "ci95": [
+        0.471,
+        0.698
+       ]
+      },
+      "tau8": {
+       "frac": 0.312,
+       "ci95": [
+        0.191,
+        0.452
+       ]
+      },
+      "tau10": {
+       "frac": 0.083,
+       "ci95": [
+        0.02,
+        0.167
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.812,
+      "6": 0.583,
+      "8": 0.312,
+      "10": 0.083,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "5+": {
+     "label": "5+",
+     "n": 64,
+     "n_passages": 32,
+     "mean": 4.8,
+     "median": 3.94,
+     "deciles": [
+      2.31,
+      2.62,
+      3.0,
+      3.32,
+      3.94,
+      4.88,
+      5.23,
+      6.91,
+      9.07
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.266,
+       "ci95": [
+        0.169,
+        0.378
+       ]
+      },
+      "tau8": {
+       "frac": 0.172,
+       "ci95": [
+        0.086,
+        0.277
+       ]
+      },
+      "tau10": {
+       "frac": 0.031,
+       "ci95": [
+        0.0,
+        0.088
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.984,
+      "4": 0.484,
+      "6": 0.266,
+      "8": 0.172,
+      "10": 0.031,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    }
+   },
+   "categories": {
+    "entity": 55,
+    "relation": 27,
+    "causal": 2,
+    "number": 12,
+    "date": 23
+   }
+  },
+  "news_gen": {
+   "n_raw": 179,
+   "n_gated": 150,
+   "n_need_write": 150,
+   "faith_rate": 0.844,
+   "dup_rate": 0.006,
+   "rag05_em": 0.46,
+   "base_em_orig": 0.0,
+   "base_em_para": 0.0,
+   "all": {
+    "label": "news_gen/gated",
+    "n": 150,
+    "n_passages": 39,
+    "mean": 6.61,
+    "median": 6.55,
+    "deciles": [
+     3.25,
+     3.93,
+     4.7,
+     5.64,
+     6.55,
+     7.43,
+     8.0,
+     8.88,
+     10.49
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.547,
+      "ci95": [
+       0.475,
+       0.613
+      ]
+     },
+     "tau8": {
+      "frac": 0.293,
+      "ci95": [
+       0.213,
+       0.374
+      ]
+     },
+     "tau10": {
+      "frac": 0.14,
+      "ci95": [
+       0.082,
+       0.199
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.98,
+     "4": 0.787,
+     "6": 0.547,
+     "8": 0.293,
+     "10": 0.14,
+     "12": 0.04,
+     "14": 0.0,
+     "16": 0.0
+    }
+   },
+   "need_write": {
+    "label": "news_gen/need-write",
+    "n": 150,
+    "n_passages": 39,
+    "mean": 6.61,
+    "median": 6.55,
+    "deciles": [
+     3.25,
+     3.93,
+     4.7,
+     5.64,
+     6.55,
+     7.43,
+     8.0,
+     8.88,
+     10.49
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.547,
+      "ci95": [
+       0.483,
+       0.616
+      ]
+     },
+     "tau8": {
+      "frac": 0.293,
+      "ci95": [
+       0.215,
+       0.368
+      ]
+     },
+     "tau10": {
+      "frac": 0.14,
+      "ci95": [
+       0.083,
+       0.199
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.98,
+     "4": 0.787,
+     "6": 0.547,
+     "8": 0.293,
+     "10": 0.14,
+     "12": 0.04,
+     "14": 0.0,
+     "16": 0.0
+    }
+   },
+   "strat_kind": {
+    "number/date": {
+     "label": "number/date",
+     "n": 41,
+     "n_passages": 27,
+     "mean": 3.61,
+     "median": 3.74,
+     "deciles": [
+      2.08,
+      2.58,
+      2.92,
+      3.32,
+      3.74,
+      3.91,
+      4.27,
+      4.65,
+      4.81
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.024,
+       "ci95": [
+        0.0,
+        0.081
+       ]
+      },
+      "tau8": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      },
+      "tau10": {
+       "frac": 0.0,
+       "ci95": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.927,
+      "4": 0.366,
+      "6": 0.024,
+      "8": 0.0,
+      "10": 0.0,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "proper": {
+     "label": "proper",
+     "n": 56,
+     "n_passages": 34,
+     "mean": 7.66,
+     "median": 7.73,
+     "deciles": [
+      4.37,
+      5.64,
+      5.93,
+      6.99,
+      7.73,
+      8.02,
+      8.74,
+      9.67,
+      10.97
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.696,
+       "ci95": [
+        0.569,
+        0.808
+       ]
+      },
+      "tau8": {
+       "frac": 0.429,
+       "ci95": [
+        0.3,
+        0.542
+       ]
+      },
+      "tau10": {
+       "frac": 0.161,
+       "ci95": [
+        0.078,
+        0.236
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.929,
+      "6": 0.696,
+      "8": 0.429,
+      "10": 0.161,
+      "12": 0.054,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "other": {
+     "label": "other",
+     "n": 53,
+     "n_passages": 30,
+     "mean": 7.83,
+     "median": 7.61,
+     "deciles": [
+      5.04,
+      5.88,
+      6.55,
+      7.11,
+      7.61,
+      7.91,
+      8.61,
+      10.16,
+      10.97
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.792,
+       "ci95": [
+        0.709,
+        0.88
+       ]
+      },
+      "tau8": {
+       "frac": 0.377,
+       "ci95": [
+        0.229,
+        0.533
+       ]
+      },
+      "tau10": {
+       "frac": 0.226,
+       "ci95": [
+        0.094,
+        0.375
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.962,
+      "6": 0.792,
+      "8": 0.377,
+      "10": 0.226,
+      "12": 0.057,
+      "14": 0.0,
+      "16": 0.0
+     }
+    }
+   },
+   "strat_len": {
+    "1-2": {
+     "label": "1-2",
+     "n": 19,
+     "n_passages": 15,
+     "mean": 9.4,
+     "median": 9.68,
+     "deciles": [
+      5.76,
+      5.93,
+      7.51,
+      8.44,
+      9.68,
+      10.19,
+      11.61,
+      12.36,
+      13.14
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.789,
+       "ci95": [
+        0.636,
+        0.941
+       ]
+      },
+      "tau8": {
+       "frac": 0.684,
+       "ci95": [
+        0.5,
+        0.875
+       ]
+      },
+      "tau10": {
+       "frac": 0.474,
+       "ci95": [
+        0.211,
+        0.733
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 1.0,
+      "6": 0.789,
+      "8": 0.684,
+      "10": 0.474,
+      "12": 0.211,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "3-4": {
+     "label": "3-4",
+     "n": 63,
+     "n_passages": 32,
+     "mean": 7.16,
+     "median": 7.11,
+     "deciles": [
+      4.25,
+      4.88,
+      5.64,
+      6.55,
+      7.11,
+      7.61,
+      7.91,
+      8.88,
+      10.79
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.667,
+       "ci95": [
+        0.571,
+        0.767
+       ]
+      },
+      "tau8": {
+       "frac": 0.286,
+       "ci95": [
+        0.181,
+        0.403
+       ]
+      },
+      "tau10": {
+       "frac": 0.159,
+       "ci95": [
+        0.077,
+        0.246
+       ]
+      }
+     },
+     "curve": {
+      "2": 1.0,
+      "4": 0.921,
+      "6": 0.667,
+      "8": 0.286,
+      "10": 0.159,
+      "12": 0.032,
+      "14": 0.0,
+      "16": 0.0
+     }
+    },
+    "5+": {
+     "label": "5+",
+     "n": 68,
+     "n_passages": 30,
+     "mean": 5.32,
+     "median": 4.71,
+     "deciles": [
+      2.33,
+      3.25,
+      3.51,
+      4.07,
+      4.71,
+      5.59,
+      7.01,
+      8.0,
+      8.79
+     ],
+     "tails": {
+      "tau6": {
+       "frac": 0.368,
+       "ci95": [
+        0.262,
+        0.471
+       ]
+      },
+      "tau8": {
+       "frac": 0.191,
+       "ci95": [
+        0.104,
+        0.278
+       ]
+      },
+      "tau10": {
+       "frac": 0.029,
+       "ci95": [
+        0.0,
+        0.077
+       ]
+      }
+     },
+     "curve": {
+      "2": 0.956,
+      "4": 0.603,
+      "6": 0.368,
+      "8": 0.191,
+      "10": 0.029,
+      "12": 0.0,
+      "14": 0.0,
+      "16": 0.0
+     }
+    }
+   },
+   "categories": {
+    "entity": 63,
+    "relation": 26,
+    "date": 25,
+    "number": 24,
+    "causal": 8,
+    "claim": 4
+   }
+  },
+  "paraphrase_stability": {
+   "n": 120,
+   "mean_abs_diff": 0.313,
+   "corr": 0.986
+  },
+  "twohop_canary": {
+   "n": 39,
+   "n_faithful": 33,
+   "stats": {
+    "label": "twohop",
+    "n": 33,
+    "n_passages": 33,
+    "mean": 5.71,
+    "median": 4.39,
+    "deciles": [
+     2.54,
+     2.79,
+     3.52,
+     3.98,
+     4.39,
+     5.81,
+     6.88,
+     9.29,
+     9.9
+    ],
+    "tails": {
+     "tau6": {
+      "frac": 0.364,
+      "ci95": [
+       0.212,
+       0.515
+      ]
+     },
+     "tau8": {
+      "frac": 0.242,
+      "ci95": [
+       0.091,
+       0.394
+      ]
+     },
+     "tau10": {
+      "frac": 0.091,
+      "ci95": [
+       0.0,
+       0.182
+      ]
+     }
+    },
+    "curve": {
+     "2": 0.97,
+     "4": 0.576,
+     "6": 0.364,
+     "8": 0.242,
+     "10": 0.091,
+     "12": 0.061,
+     "14": 0.03,
+     "16": 0.0
+    }
+   },
+   "rag05_em": 0.424
+  }
+ },
+ "passages": {
+  "squad:0": {
+   "title": "Victoria_and_Albert_Museum",
+   "domain": "squad_human",
+   "context": "Not only the work of British artists and craftspeople is on display, but also work produced by European artists that was purchased or commissioned by British patrons, as well as imports from Asia, including porcelain, cloth and wallpaper. Designers and artists whose work is on display in the galleries include Gian Lorenzo Bernini, Grinling Gibbons, Daniel Marot, Louis Laguerre, Antonio Verrio, Sir James Thornhill, William Kent, Robert Adam, Josiah Wedgwood, Matthew Boulton, Canova, Thomas Chippendale, Pugin, William Morris. Patrons who have influenced taste are also represented by works of art from their collections, these include: Horace Walpole (a major influence on the Gothic Revival), William Thomas Beckford and Thomas Hope."
+  },
+  "squad:1": {
+   "title": "Nikola_Tesla",
+   "domain": "squad_human",
+   "context": "In late 1886 Tesla met Alfred S. Brown, a Western Union superintendent, and New York attorney Charles F. Peck. The two men were experienced in setting up companies and promoting inventions and patents for financial gain. Based on Tesla's patents and other ideas they agreed to back him financially and handle his patents. Together in April 1887 they formed the Tesla Electric Company with an agreement that profits from generated patents would go \u2153 to Tesla, \u2153 to Peck and Brown, and \u2153 to fund development. They set up a laboratory for Tesla at 89 Liberty Street in Manhattan where he worked on improving and developing new types of electric motors, generators and other devices."
+  },
+  "squad:2": {
+   "title": "Imperialism",
+   "domain": "squad_human",
+   "context": "A controversial aspect of imperialism is the defense and justification of empire-building based on seemingly rational grounds. J. A. Hobson identifies this justification on general grounds as: \"It is desirable that the earth should be peopled, governed, and developed, as far as possible, by the races which can do this work best, i.e. by the races of highest 'social efficiency'\". Many others argued that imperialism is justified for several different reasons. Friedrich Ratzel believed that in order for a state to survive, imperialism was needed. Halford Mackinder felt that Great Britain needed to be one of the greatest imperialists and therefore justified imperialism. The purportedly scientific nature of \"Social Darwinism\" and a theory of races formed a supposedly rational justification for imperialism. The rhetoric of colonizers being racially superior appears to have achieved its purpose, for example throughout Latin America \"whiteness\" is still prized today and various forms of blanqueamiento (whitening) are common."
+  },
+  "squad:3": {
+   "title": "American_Broadcasting_Company",
+   "domain": "squad_human",
+   "context": "While its radio network was undergoing reconstruction, ABC found it difficult to avoid falling behind on the new medium of television. To ensure a space, in 1947, ABC submitted five applications for television station licenses, one for each market where it owned and operated a radio station (New York City, Los Angeles, Chicago, San Francisco and Detroit). These applications all requested for the stations to broadcast on VHF channel 7, as Frank Marx, then ABC's vice-president of engineering, thought that the low-band VHF frequencies (corresponding to channels 2 through 6) would be requisitioned from broadcasting use and reallocated for the U.S. Army."
+  },
+  "squad:4": {
+   "title": "Warsaw",
+   "domain": "squad_human",
+   "context": "Warsaw remained the capital of the Polish\u2013Lithuanian Commonwealth until 1796, when it was annexed by the Kingdom of Prussia to become the capital of the province of South Prussia. Liberated by Napoleon's army in 1806, Warsaw was made the capital of the newly created Duchy of Warsaw. Following the Congress of Vienna of 1815, Warsaw became the centre of the Congress Poland, a constitutional monarchy under a personal union with Imperial Russia. The Royal University of Warsaw was established in 1816."
+  },
+  "squad:5": {
+   "title": "Intergovernmental_Panel_on_Climate_Change",
+   "domain": "squad_human",
+   "context": "The IPCC Fourth Assessment Report (AR4) published in 2007 featured a graph showing 12 proxy based temperature reconstructions, including the three highlighted in the 2001 Third Assessment Report (TAR); Mann, Bradley & Hughes 1999 as before, Jones et al. 1998 and Briffa 2000 had both been calibrated by newer studies. In addition, analysis of the Medieval Warm Period cited reconstructions by Crowley & Lowery 2000 (as cited in the TAR) and Osborn & Briffa 2006. Ten of these 14 reconstructions covered 1,000 years or longer. Most reconstructions shared some data series, particularly tree ring data, but newer reconstructions used additional data and covered a wider area, using a variety of statistical methods. The section discussed the divergence problem affecting certain tree ring data."
+  },
+  "squad:6": {
+   "title": "Islamism",
+   "domain": "squad_human",
+   "context": "Moderate and reformist Islamists who accept and work within the democratic process include parties like the Tunisian Ennahda Movement. Jamaat-e-Islami of Pakistan is basically a socio-political and democratic Vanguard party but has also gained political influence through military coup d'\u00e9tat in past. The Islamist groups like Hezbollah in Lebanon and Hamas in Palestine participate in democratic and political process as well as armed attacks, seeking to abolish the state of Israel. Radical Islamist organizations like al-Qaeda and the Egyptian Islamic Jihad, and groups such as the Taliban, entirely reject democracy, often declaring as kuffar those Muslims who support it (see takfirism), as well as calling for violent/offensive jihad or urging and conducting attacks on a religious basis."
+  },
+  "squad:7": {
+   "title": "Rhine",
+   "domain": "squad_human",
+   "context": "Near Tamins-Reichenau the Anterior Rhine and the Posterior Rhine join and form the Rhine. The river makes a distinctive turn to the north near Chur. This section is nearly 86 km long, and descends from a height of 599 m to 396 m. It flows through a wide glacial alpine valley known as the Rhine Valley (German: Rheintal). Near Sargans a natural dam, only a few metres high, prevents it from flowing into the open Seeztal valley and then through Lake Walen and Lake Zurich into the river Aare. The Alpine Rhine begins in the most western part of the Swiss canton of Graub\u00fcnden, and later forms the border between Switzerland to the West and Liechtenstein and later Austria to the East."
+  },
+  "squad:8": {
+   "title": "Doctor_Who",
+   "domain": "squad_human",
+   "context": "The Sarah Jane Adventures, starring Elisabeth Sladen who reprised her role as investigative journalist Sarah Jane Smith, was developed by CBBC; a special aired on New Year's Day 2007 and a full series began on 24 September 2007. A second series followed in 2008, notable for (as noted above) featuring the return of Brigadier Lethbridge-Stewart. A third in 2009 featured a crossover appearance from the main show by David Tennant as the Tenth Doctor. In 2010, a further such appearance featured Matt Smith as the Eleventh Doctor alongside former companion actress Katy Manning reprising her role as Jo Grant. A final, three-story fifth series was transmitted in autumn 2011 \u2013 uncompleted due to the death of Elisabeth Sladen in early 2011."
+  },
+  "squad:9": {
+   "title": "Martin_Luther",
+   "domain": "squad_human",
+   "context": "Luther's disappearance during his return trip back to Wittenberg was planned. Frederick III had him intercepted on his way home in the forest near Wittenberg by masked horsemen who were made to appear as armed highwaymen. They escorted Luther to the security of the Wartburg Castle at Eisenach. During his stay at Wartburg, which he referred to as \"my Patmos\", Luther translated the New Testament from Greek into German and poured out doctrinal and polemical writings. These included a renewed attack on Archbishop Albrecht of Mainz, whom he shamed into halting the sale of indulgences in his episcopates, and a \"Refutation of the Argument of Latomus,\" in which he expounded the principle of justification to Jacobus Latomus, an orthodox theologian from Louvain."
+  },
+  "squad:10": {
+   "title": "American_Broadcasting_Company",
+   "domain": "squad_human",
+   "context": "In 1959, Walt Disney Productions, having improved its financial situation, had purchased ABC's shares in the Disneyland theme park for $7.5 million and initiated discussions to renew ABC's television contract for Walt Disney Presents, which was due to expire in 1961. Walt Disney was approached by NBC to produce color broadcasts of his anthology series (which would be renamed Walt Disney's Wonderful World of Color). Goldenson said ABC could not counter the offer, because the network did not have the technical and financial resources to carry the program in the format. As a result, ABC and Disney's first television collaboration ended in 1961 (the network would resume its relationship with Disney in 1985, when the anthology series returned to the network for a three-season run as the Disney Sunday Movie until it lost the rights to NBC again in 1988; the Disney anthology series would return to ABC in 1996, following the company's purchase of the future Capital Cities/ABC, as The Wonderful World of Disney)."
+  },
+  "squad:11": {
+   "title": "Force",
+   "domain": "squad_human",
+   "context": "For certain physical scenarios, it is impossible to model forces as being due to gradient of potentials. This is often due to macrophysical considerations that yield forces as arising from a macroscopic statistical average of microstates. For example, friction is caused by the gradients of numerous electrostatic potentials between the atoms, but manifests as a force model that is independent of any macroscale position vector. Nonconservative forces other than friction include other contact forces, tension, compression, and drag. However, for any sufficiently detailed description, all these forces are the results of conservative ones since each of these macroscopic forces are the net results of the gradients of microscopic potentials."
+  },
+  "squad:12": {
+   "title": "Yuan_dynasty",
+   "domain": "squad_human",
+   "context": "In the China of the Yuan, or Mongol era, various important developments in the arts occurred or continued in their development, including the areas of painting, mathematics, calligraphy, poetry, and theater, with many great artists and writers being famous today. Due to the coming together of painting, poetry, and calligraphy at this time many of the artists practicing these different pursuits were the same individuals, though perhaps more famed for one area of their achievements than others. Often in terms of the further development of landscape painting as well as the classical joining together of the arts of painting, poetry, and calligraphy, the Song dynasty and the Yuan dynasty are linked together. In the area of Chinese painting during the Yuan dynasty there were many famous painters. In the area of calligraphy many of the great calligraphers were from the Yuan dynasty era. In Yuan poetry, the main development was the qu, which was used among other poetic forms by most of the famous Yuan poets. Many of the poets were also involved in the major developments in the theater during this time, and the other way around, with people important in the theater becoming famous through the development of the sanqu type of qu. One of the key factors in the mix of the zaju variety show was the incorporation of poetry both classical and of the newer qu form. One of the important cultural developments during the Yuan era was the consolidation of poetry, painting, and calligraphy into a unified piece of the type that tends to come to mind when people think of classical Chinese art. Another important aspect of Yuan times is the increasing incorporation of the then current, vernacular Chinese into both the qu form of poetry and the zaju variety show. Another important consideration regarding Yuan dynasty arts and culture is that so much of it has survived in China, relatively to works from the Tang dynasty and Song dynasty, which have often been better preserved in places such as the Sh\u014ds\u014din, in Japan."
+  },
+  "squad:13": {
+   "title": "Harvard_University",
+   "domain": "squad_human",
+   "context": "Throughout the 18th century, Enlightenment ideas of the power of reason and free will became widespread among Congregationalist ministers, putting those ministers and their congregations in tension with more traditionalist, Calvinist parties.:1\u20134 When the Hollis Professor of Divinity David Tappan died in 1803 and the president of Harvard Joseph Willard died a year later, in 1804, a struggle broke out over their replacements. Henry Ware was elected to the chair in 1805, and the liberal Samuel Webber was appointed to the presidency of Harvard two years later, which signaled the changing of the tide from the dominance of traditional ideas at Harvard to the dominance of liberal, Arminian ideas (defined by traditionalists as Unitarian ideas).:4\u20135:24"
+  },
+  "squad:14": {
+   "title": "Teacher",
+   "domain": "squad_human",
+   "context": "In Germany, teachers are mainly civil servants recruited in special university classes, called Lehramtstudien (Teaching Education Studies). There are many differences between the teachers for elementary schools (Grundschule), lower secondary schools (Hauptschule), middle level secondary schools (Realschule) and higher level secondary schools (Gymnasium). Salaries for teachers depend on the civil servants' salary index scale (Bundesbesoldungsordnung)."
+  },
+  "squad:15": {
+   "title": "Yuan_dynasty",
+   "domain": "squad_human",
+   "context": "Due to the fact that the bureaucracy was dominated by El Tem\u00fcr, Tugh Tem\u00fcr is known for his cultural contribution instead. He adopted many measures honoring Confucianism and promoting Chinese cultural values. His most concrete effort to patronize Chinese learning was founding the Academy of the Pavilion of the Star of Literature (Chinese: \u594e\u7ae0\u95a3\u5b78\u58eb\u9662), first established in the spring of 1329 and designed to undertake \"a number of tasks relating to the transmission of Confucian high culture to the Mongolian imperial establishment\". The academy was responsible for compiling and publishing a number of books, but its most important achievement was its compilation of a vast institutional compendium named Jingshi Dadian (Chinese: \u7d93\u4e16\u5927\u5178). Tugh Tem\u00fcr supported Zhu Xi's Neo-Confucianism and also devoted himself in Buddhism."
+  },
+  "squad:16": {
+   "title": "Harvard_University",
+   "domain": "squad_human",
+   "context": "Politics: U.N. Secretary General Ban Ki-moon; American political leaders John Hancock, John Adams, John Quincy Adams, Rutherford B. Hayes, Theodore Roosevelt, Franklin D. Roosevelt, John F. Kennedy, Al Gore, George W. Bush and Barack Obama; Chilean President Sebasti\u00e1n Pi\u00f1era; Colombian President Juan Manuel Santos; Costa Rican President Jos\u00e9 Mar\u00eda Figueres; Mexican Presidents Felipe Calder\u00f3n, Carlos Salinas de Gortari and Miguel de la Madrid; Mongolian President Tsakhiagiin Elbegdorj; Peruvian President Alejandro Toledo; Taiwanese President Ma Ying-jeou; Canadian Governor General David Lloyd Johnston; Indian Member of Parliament Jayant Sinha; Albanian Prime Minister Fan S. Noli; Canadian Prime Ministers Mackenzie King and Pierre Trudeau; Greek Prime Minister Antonis Samaras; Israeli Prime Minister Benjamin Netanyahu; former Pakistani Prime Minister Benazir Bhutto; U. S. Secretary of Housing and Urban Development Shaun Donovan; Canadian political leader Michael Ignatieff; Pakistani Members of Provincial Assembly Murtaza Bhutto and Sanam Bhutto; Bangladesh Minister of Finance Abul Maal Abdul Muhith; President of Puntland Abdiweli Mohamed Ali; U.S. Ambassador to the European Union Anthony Luzzatto Gardner."
+  },
+  "squad:17": {
+   "title": "University_of_Chicago",
+   "domain": "squad_human",
+   "context": "Students at the University of Chicago run over 400 clubs and organizations known as Recognized Student Organizations (RSOs). These include cultural and religious groups, academic clubs and teams, and common-interest organizations. Notable extracurricular groups include the University of Chicago College Bowl Team, which has won 118 tournaments and 15 national championships, leading both categories internationally. The university's competitive Model United Nations team was the top ranked team in North America in 2013-14 and 2014-2015. Among notable RSOs are the nation's longest continuously running student film society Doc Films, organizing committee for the University of Chicago Scavenger Hunt, the twice-weekly student newspaper The Chicago Maroon, the alternative weekly student newspaper South Side Weekly, the nation's second oldest continuously running student improvisational theater troupe Off-Off Campus, and the university-owned radio station WHPK."
+  },
+  "squad:18": {
+   "title": "Apollo_program",
+   "domain": "squad_human",
+   "context": " Seamans' establishment of an ad-hoc committee headed by his special technical assistant Nicholas E. Golovin in July 1961, to recommend a launch vehicle to be used in the Apollo program, represented a turning point in NASA's mission mode decision. This committee recognized that the chosen mode was an important part of the launch vehicle choice, and recommended in favor of a hybrid EOR-LOR mode. Its consideration of LOR \u2014as well as Houbolt's ceaseless work\u2014 played an important role in publicizing the workability of the approach. In late 1961 and early 1962, members of the Manned Spacecraft Center began to come around to support LOR, including the newly hired deputy director of the Office of Manned Space Flight, Joseph Shea, who became a champion of LOR. The engineers at Marshall Space Flight Center (MSFC) took longer to become convinced of its merits, but their conversion was announced by Wernher von Braun at a briefing in June 1962."
+  },
+  "squad:19": {
+   "title": "Prime_number",
+   "domain": "squad_human",
+   "context": "A large body of mathematical work would still be valid when calling 1 a prime, but Euclid's fundamental theorem of arithmetic (mentioned above) would not hold as stated. For example, the number 15 can be factored as 3 \u00b7 5 and 1 \u00b7 3 \u00b7 5; if 1 were admitted as a prime, these two presentations would be considered different factorizations of 15 into prime numbers, so the statement of that theorem would have to be modified. Similarly, the sieve of Eratosthenes would not work correctly if 1 were considered a prime: a modified version of the sieve that considers 1 as prime would eliminate all multiples of 1 (that is, all other numbers) and produce as output only the single number 1. Furthermore, the prime numbers have several properties that the number 1 lacks, such as the relationship of the number to its corresponding value of Euler's totient function or the sum of divisors function."
+  },
+  "squad:20": {
+   "title": "Kenya",
+   "domain": "squad_human",
+   "context": "Kenya's services sector, which contributes 61% of GDP, is dominated by tourism. The tourism sector has exhibited steady growth in most years since independence and by the late 1980s had become the country's principal source of foreign exchange. Tourists, the largest number being from Germany and the United Kingdom, are attracted mainly to the coastal beaches and the game reserves, notably, the expansive East and West Tsavo National Park 20,808 square kilometres (8,034 sq mi) in the southeast. Tourism has seen a substantial revival over the past several years and is the major contributor to the pick-up in the country's economic growth. Tourism is now Kenya's largest foreign exchange earning sector, followed by flowers, tea, and coffee. In 2006 tourism generated US$803 million, up from US$699 million the previous year. Presently, there are also numerous Shopping Malls in Kenya. In addition, there are four main hypermarket chains in Kenya."
+  },
+  "squad:21": {
+   "title": "Harvard_University",
+   "domain": "squad_human",
+   "context": "Harvard's 2,400 professors, lecturers, and instructors instruct 7,200 undergraduates and 14,000 graduate students. The school color is crimson, which is also the name of the Harvard sports teams and the daily newspaper, The Harvard Crimson. The color was unofficially adopted (in preference to magenta) by an 1875 vote of the student body, although the association with some form of red can be traced back to 1858, when Charles William Eliot, a young graduate student who would later become Harvard's 21st and longest-serving president (1869\u20131909), bought red bandanas for his crew so they could more easily be distinguished by spectators at a regatta."
+  },
+  "squad:22": {
+   "title": "Warsaw",
+   "domain": "squad_human",
+   "context": "Today, Warsaw has some of the best medical facilities in Poland and East-Central Europe. The city is home to the Children's Memorial Health Institute (CMHI), the highest-reference hospital in all of Poland, as well as an active research and education center. While the Maria Sk\u0142odowska-Curie Institute of Oncology it is one of the largest and most modern oncological institutions in Europe. The clinical section is located in a 10-floor building with 700 beds, 10 operating theatres, an intensive care unit, several diagnostic departments as well as an outpatient clinic. The infrastructure has developed a lot over the past years."
+  },
+  "squad:23": {
+   "title": "Private_school",
+   "domain": "squad_human",
+   "context": "The secondary level includes schools offering years 7 through 12 (year twelve is known as lower sixth) and year 13 (upper sixth). This category includes university-preparatory schools or \"prep schools\", boarding schools and day schools. Tuition at private secondary schools varies from school to school and depends on many factors, including the location of the school, the willingness of parents to pay, peer tuitions and the school's financial endowment. High tuition, schools claim, is used to pay higher salaries for the best teachers and also used to provide enriched learning environments, including a low student to teacher ratio, small class sizes and services, such as libraries, science laboratories and computers. Some private schools are boarding schools and many military academies are privately owned or operated as well."
+  },
+  "squad:24": {
+   "title": "Martin_Luther",
+   "domain": "squad_human",
+   "context": "Since the 1980s, Lutheran Church denominations have repudiated Martin Luther's statements against the Jews and have rejected the use of them to incite hatred against Lutherans. Strommen et al.'s 1970 survey of 4,745 North American Lutherans aged 15\u201365 found that, compared to the other minority groups under consideration, Lutherans were the least prejudiced toward Jews. Nevertheless, Professor Richard (Dick) Geary, former Professor of Modern History at the University of Nottingham, England, and the author of Hitler and Nazism (Routledge 1993), wrote in the journal History Today an article on who voted for the Nazis in elections held from 1928-1933, where he claimed that from his research he found that the Nazis gained disproportionately more votes from Protestant than Catholic areas of Germany."
+  },
+  "squad:25": {
+   "title": "Chloroplast",
+   "domain": "squad_human",
+   "context": "Chloroplasts have their own ribosomes, which they use to synthesize a small fraction of their proteins. Chloroplast ribosomes are about two-thirds the size of cytoplasmic ribosomes (around 17 nm vs 25 nm). They take mRNAs transcribed from the chloroplast DNA and translate them into protein. While similar to bacterial ribosomes, chloroplast translation is more complex than in bacteria, so chloroplast ribosomes include some chloroplast-unique features. Small subunit ribosomal RNAs in several Chlorophyta and euglenid chloroplasts lack motifs for shine-dalgarno sequence recognition, which is considered essential for translation initiation in most chloroplasts and prokaryotes. Such loss is also rarely observed in other plastids and prokaryotes."
+  },
+  "squad:26": {
+   "title": "Nikola_Tesla",
+   "domain": "squad_human",
+   "context": "In the fall of 1937, after midnight one night, Tesla left the Hotel New Yorker to make his regular commute to the cathedral and the library to feed the pigeons. While crossing a street a couple of blocks from the hotel, Tesla was unable to dodge a moving taxicab and was thrown heavily to the ground. Tesla's back was severely wrenched and three of his ribs were broken in the accident (the full extent of his injuries will never be known; Tesla refused to consult a doctor\u2014an almost lifelong custom). Tesla didn't raise any question as to who was at fault and refused medical aid, only asking to be taken to his hotel via cab. Tesla was bedridden for some months and was unable to continue feeding pigeons from his window; soon, they failed to come. In early 1938, Tesla was able to get up. He at once resumed the pigeon-feeding walks on a much more limited scale, but frequently had a messenger act for him."
+  },
+  "squad:27": {
+   "title": "1973_oil_crisis",
+   "domain": "squad_human",
+   "context": "In 1973, Nixon named William E. Simon as the first Administrator of the Federal Energy Office, a short-term organization created to coordinate the response to the embargo. Simon allocated states the same amount of domestic oil for 1974 that each had consumed in 1972, which worked for states whose populations were not increasing. In other states, lines at gasoline stations were common. The American Automobile Association reported that in the last week of February 1974, 20% of American gasoline stations had no fuel."
+  },
+  "squad:28": {
+   "title": "Fresno,_California",
+   "domain": "squad_human",
+   "context": "The neighborhood of Sunnyside is on Fresno's far southeast side, bounded by Chestnut Avenue to the West. Its major thoroughfares are Kings Canyon Avenue and Clovis Avenue. Although parts of Sunnyside are within the City of Fresno, much of the neighborhood is a \"county island\" within Fresno County. Largely developed in the 1950s through the 1970s, it has recently experienced a surge in new home construction. It is also the home of the Sunnyside Country Club, which maintains a golf course designed by William P. Bell."
+  },
+  "squad:29": {
+   "title": "Construction",
+   "domain": "squad_human",
+   "context": "Engineering News-Record (ENR) is a trade magazine for the construction industry. Each year, ENR compiles and reports on data about the size of design and construction companies. They publish a list of the largest companies in the United States (Top-40) and also a list the largest global firms (Top-250, by amount of work they are doing outside their home country). In 2014, ENR compiled the data in nine market segments. It was divided as transportation, petroleum, buildings, power, industrial, water, manufacturing, sewer/waste, telecom, hazardous waste plus a tenth category for other projects. In their reporting on the Top 400, they used data on transportation, sewer, hazardous waste and water to rank firms as heavy contractors."
+  },
+  "squad:30": {
+   "title": "Super_Bowl_50",
+   "domain": "squad_human",
+   "context": "Westwood One will carry the game throughout North America, with Kevin Harlan as play-by-play announcer, Boomer Esiason and Dan Fouts as color analysts, and James Lofton and Mark Malone as sideline reporters. Jim Gray will anchor the pre-game and halftime coverage."
+  },
+  "squad:31": {
+   "title": "Kenya",
+   "domain": "squad_human",
+   "context": "Sizeable minorities of other faiths do exist (Muslim 11.2%, indigenous beliefs 1.7%), and nonreligious 2.4%. Sixty percent of the Muslim population lives in Kenya's Coastal Region, comprising 50% of the total population there. Roughly 4% of Muslims are Ahmadiyya, 8% Shia and another 8% are non-denominational Muslims, while 73% are Sunni. Western areas of the Coast Region are mostly Christian. The upper part of Kenya's Eastern Region is home to 10% of the country's Muslims, where they constitute the majority religious group. In addition, there is a large Hindu population in Kenya (around 300,000), who have played a key role in the local economy; they are mostly of Indian origin."
+  },
+  "squad:32": {
+   "title": "Normans",
+   "domain": "squad_human",
+   "context": "In April 1191 Richard the Lion-hearted left Messina with a large fleet in order to reach Acre. But a storm dispersed the fleet. After some searching, it was discovered that the boat carrying his sister and his fianc\u00e9e Berengaria was anchored on the south coast of Cyprus, together with the wrecks of several other ships, including the treasure ship. Survivors of the wrecks had been taken prisoner by the island's despot Isaac Komnenos. On 1 May 1191, Richard's fleet arrived in the port of Limassol on Cyprus. He ordered Isaac to release the prisoners and the treasure. Isaac refused, so Richard landed his troops and took Limassol."
+  },
+  "squad:33": {
+   "title": "Genghis_Khan",
+   "domain": "squad_human",
+   "context": "The city of Bukhara was not heavily fortified, with a moat and a single wall, and the citadel typical of Khwarezmi cities. The city leaders opened the gates to the Mongols, though a unit of Turkish defenders held the city's citadel for another twelve days. Survivors from the citadel were executed, artisans and craftsmen were sent back to Mongolia, young men who had not fought were drafted into the Mongolian army and the rest of the population was sent into slavery. As the Mongol soldiers looted the city, a fire broke out, razing most of the city to the ground. Genghis Khan had the city's surviving population assemble in the main mosque of the town, where he declared that he was the flail of God, sent to punish them for their sins."
+  },
+  "squad:34": {
+   "title": "Civil_disobedience",
+   "domain": "squad_human",
+   "context": "Some theories of civil disobedience hold that civil disobedience is only justified against governmental entities. Brownlee argues that disobedience in opposition to the decisions of non-governmental agencies such as trade unions, banks, and private universities can be justified if it reflects \"a larger challenge to the legal system that permits those decisions to be taken\". The same principle, she argues, applies to breaches of law in protest against international organizations and foreign governments."
+  },
+  "squad:35": {
+   "title": "Yuan_dynasty",
+   "domain": "squad_human",
+   "context": "The fourth Yuan emperor, Buyantu Khan (Ayurbarwada), was a competent emperor. He was the first Yuan emperor to actively support and adopt mainstream Chinese culture after the reign of Kublai, to the discontent of some Mongol elite. He had been mentored by Li Meng, a Confucian academic. He made many reforms, including the liquidation of the Department of State Affairs (Chinese: \u5c1a\u66f8\u7701), which resulted in the execution of five of the highest-ranking officials. Starting in 1313 the traditional imperial examinations were reintroduced for prospective officials, testing their knowledge on significant historical works. Also, he codified much of the law, as well as publishing or translating a number of Chinese books and works."
+  },
+  "squad:36": {
+   "title": "University_of_Chicago",
+   "domain": "squad_human",
+   "context": "In 1929, the university's fifth president, Robert Maynard Hutchins, took office; the university underwent many changes during his 24-year tenure. Hutchins eliminated varsity football from the university in an attempt to emphasize academics over athletics, instituted the undergraduate college's liberal-arts curriculum known as the Common Core, and organized the university's graduate work into its current[when?] four divisions. In 1933, Hutchins proposed an unsuccessful plan to merge the University of Chicago and Northwestern University into a single university. During his term, the University of Chicago Hospitals (now called the University of Chicago Medical Center) finished construction and enrolled its first medical students. Also, the Committee on Social Thought, an institution distinctive of the university, was created."
+  },
+  "squad:37": {
+   "title": "Warsaw",
+   "domain": "squad_human",
+   "context": "One of the most famous people born in Warsaw was Maria Sk\u0142odowska-Curie, who achieved international recognition for her research on radioactivity and was the first female recipient of the Nobel Prize. Famous musicians include W\u0142adys\u0142aw Szpilman and Fr\u00e9d\u00e9ric Chopin. Though Chopin was born in the village of \u017belazowa Wola, about 60 km (37 mi) from Warsaw, he moved to the city with his family when he was seven months old. Casimir Pulaski, a Polish general and hero of the American Revolutionary War, was born here in 1745."
+  },
+  "squad:38": {
+   "title": "Chloroplast",
+   "domain": "squad_human",
+   "context": "Like mitochondria, chloroplasts use the potential energy stored in an H+, or hydrogen ion gradient to generate ATP energy. The two photosystems capture light energy to energize electrons taken from water, and release them down an electron transport chain. The molecules between the photosystems harness the electrons' energy to pump hydrogen ions into the thylakoid space, creating a concentration gradient, with more hydrogen ions (up to a thousand times as many) inside the thylakoid system than in the stroma. The hydrogen ions in the thylakoid space then diffuse back down their concentration gradient, flowing back out into the stroma through ATP synthase. ATP synthase uses the energy from the flowing hydrogen ions to phosphorylate adenosine diphosphate into adenosine triphosphate, or ATP. Because chloroplast ATP synthase projects out into the stroma, the ATP is synthesized there, in position to be used in the dark reactions."
+  },
+  "squad:39": {
+   "title": "Super_Bowl_50",
+   "domain": "squad_human",
+   "context": "This was the first Super Bowl to feature a quarterback on both teams who was the #1 pick in their draft classes. Manning was the #1 selection of the 1998 NFL draft, while Newton was picked first in 2011. The matchup also pits the top two picks of the 2011 draft against each other: Newton for Carolina and Von Miller for Denver. Manning and Newton also set the record for the largest age difference between opposing Super Bowl quarterbacks at 13 years and 48 days (Manning was 39, Newton was 26)."
+  },
+  "wiki:0": {
+   "title": "Blind Lemon Jefferson",
+   "domain": "wiki_gen",
+   "context": "Lemon Henry \"Blind Lemon\" Jefferson (September 24, 1893 \u2013 December 19, 1929) was an American blues and gospel singer-songwriter and musician. He was one of the most popular blues singers of the 1920s and has been called the \"Father of the Texas Blues\".\n\nDue mainly to his high-pitched voice and the originality of his guitar playing, Jefferson's performances were distinctive. His recordings sold well, but he was not a strong influence on younger blues singers of his generation, who could not imitate him as easily as they could other commercially successful artists. Later blues and rock and roll musicians, however, did attempt to imitate both his songs and his musical style.\n\nBiography\n\nEarly life\nJefferson was born blind, near Coutchman, Texas. He was the youngest of seven (or possibly eight) children born to Alex and Clarissa Jefferson, who were African-American sharecroppers. Disputes regarding the date of his birth derive from contradictory census records and draft registration records. By 1900, the family was farming southeast of Streetman, Texas. Jefferson's birth date was recorded as September 1893 in the 1900 census. The 1910 census, taken in May, before his birthday, confirms his year of birth as 1893 and indicated that the family was farming northwest of Wortham, near his birthplace."
+  },
+  "wiki:1": {
+   "title": "Baku (mythology)",
+   "domain": "wiki_gen",
+   "context": "are Japanese supernatural beings that are said to devour nightmares. According to legend, they were created by the spare pieces that were left over when the gods finished creating all other animals. They have a long history in Japanese folklore and art, and more recently have appeared in manga and anime.\n\nThe Japanese term baku has two current meanings, referring to both the traditional dream-devouring creature and to the Malayan tapir.  In recent years, there have been changes in how the baku is depicted.\n\nHistory and description\nThe traditional Japanese nightmare-devouring baku originates in Chinese folklore about the mo \u8c98 (giant panda) and was familiar in Japan as early as the Muromachi period (14th\u201315th century). Hori Tadao has described the dream-eating abilities attributed to the traditional baku and relates them to other preventatives against nightmare such as amulets. Kaii-Y\u014dkai Densh\u014d Database, citing a 1957 paper, and Mizuki also describe the dream-devouring capacities of the traditional baku.\n\nAn early 17th-century Japanese manuscript, the Sankai Ibutsu (), describes the baku as a shy, Chinese mythical chimera with the trunk and tusks of an elephant, the ears of a rhinoceros, the tail of a cow, the body of a bear and the paws of a tiger, which protected against pestilence and evil, although eating nightmares was not included among its abilities."
+  },
+  "wiki:2": {
+   "title": "Blackbeard",
+   "domain": "wiki_gen",
+   "context": "Edward Teach (alternatively spelled Edward Thatch,  \u2013 22 November 1718), better known as Blackbeard, was an English pirate who operated around the West Indies and the eastern coast of Britain's North American colonies. Little is known about his early life, but he may have been a sailor on privateer ships during Queen Anne's War before he settled on the Bahamian island of New Providence, a base for Captain Benjamin Hornigold, whose crew Teach joined around 1716. Hornigold placed him in command of a sloop that he had captured, and the two engaged in numerous acts of piracy. Their numbers were boosted by the addition to their fleet of two more ships, one of which was commanded by Stede Bonnet, but Hornigold retired from piracy toward the end of 1717, taking two vessels with him.\n\nTeach captured a French slave ship known as , renamed her Queen Anne's Revenge, equipped her with 40 guns, and crewed her with over 300 men. He became a renowned pirate. His nickname derived from his thick black beard and fearsome appearance. He was reported to have tied lit fuses (slow matches) under his hat to frighten his enemies. He formed an alliance of pirates and blockaded the port of Charles Town, South Carolina, ransoming the port's inhabitants. He then ran Queen Anne's Revenge aground on a sandbar near Beaufort, North Carolina."
+  },
+  "wiki:3": {
+   "title": "Bugzilla",
+   "domain": "wiki_gen",
+   "context": "Bugzilla is a web-based general-purpose bug tracking system and testing tool originally developed and used by the Mozilla project, and licensed under the Mozilla Public License.\n\nReleased as open-source software by Netscape Communications in 1998, it has been adopted by a variety of organizations for use as a bug tracking system for both free and open-source software and proprietary projects and products. Bugzilla is used, among others, by the Mozilla Foundation, WebKit, Linux kernel, FreeBSD, KDE, Apache, Eclipse and LibreOffice. Red Hat uses it, but is gradually migrating its product to use Jira. It is also self-hosting.\n\nHistory \n\nBugzilla was originally devised by Terry Weissman in 1998 for the nascent Mozilla.org project, as an open source application to replace the in-house system then in use at Netscape Communications for tracking defects in the Netscape Communicator suite. Bugzilla was originally written in Tcl, but Weissman decided to port it to Perl before its release as part of Netscape's early open-source code drops, in the hope that more people would be able to contribute to it, given that Perl seemed to be a more popular language at the time.\n\nBugzilla 2.0 was the result of that port to Perl, and the first version was released to the public via anonymous CVS. In April 2000, Weissman handed over control of the Bugzilla project to Tara Hernandez."
+  },
+  "wiki:4": {
+   "title": "Bangor",
+   "domain": "wiki_gen",
+   "context": "Bangor or City of Bangor may refer to:\n\nPlaces\n\nAustralia\n Bangor, New South Wales\n Bangor, Tasmania\n\nCanada\n Bangor, Nova Scotia\n Bangor, Saskatchewan\n Bangor, Prince Edward Island\n\nUnited Kingdom\n\nNorthern Ireland\n Bangor, County Down\nBangor railway station (Northern Ireland)\n Bangor (Northern Ireland Parliament constituency), Bangor's former constituency in the Parliament of Northern Ireland\n Bangor (Parliament of Ireland constituency), Bangor's former constituency in the Parliament of Ireland\n Bangor (civil parish)\n\nWales\n Bangor, Gwynedd\n Bangor railway station (Wales)\n Bangor-on-Dee ( or ), Wrexham\n Bangor Teifi, Ceredigion\n Capel Bangor, Ceredigion\n\nUnited States\n Bangor, Alabama\n Bangor, California\n Bangor, Iowa\n Bangor, Maine\n Bangor Air National Guard Base\n Bangor International Airport\n Bangor, Michigan\n Bangor (Amtrak station)\n Bangor Township, Van Buren County, Michigan\n Bangor Township, Bay County, Michigan\n Bangor, New York\n Bangor, Pennsylvania\n Bangor Base, Washington\n Bangor, Wisconsin, a village\n Bangor (town), Wisconsin\n Bangor Township (disambiguation)\n\nElsewhere\n Bangor Erris, County Mayo, Ireland\n Bangor, Morbihan, Britanny, France\n\nArts, entertainment, and media\n Bangor Daily News, Bangor, Maine, US\n Bangor FM, County Down\n\nSports\n Bangor City F.C., a football club in Bangor, Gwynedd\n Bangor 1876 F.C., a football club in Bangor, Gwynedd\n Bangor F.C."
+  },
+  "wiki:5": {
+   "title": "Ballad",
+   "domain": "wiki_gen",
+   "context": "A ballad is a form of verse, often a narrative set to music. Ballads derive from the medieval French chanson ballad\u00e9e or ballade, which were originally \"dance songs\". Ballads were particularly characteristic of the popular poetry and song of Britain and Ireland from the Late Middle  Ages until the 19th century. They were widely used across Europe, and later in Australia, North Africa, North America and South America. \n\nWhile ballads have no prescribed structure and may vary in their number of lines and stanzas, many ballads employ quatrains with ABCB or ABAB rhyme schemes, the key being a rhymed second and fourth line. Contrary to a popular conception, it is rare if not unheard-of for a ballad to contain exactly 13 lines. Additionally, couplets rarely appear in ballads.\n\nMany ballads were written and sold as single-sheet broadsides. The form was often used by poets and composers from the 18th century onwards to produce lyrical ballads. In the later 19th century, the term took on the meaning of a slow form of popular love song and is often used for any love song, particularly the sentimental ballad of pop or rock music, although the term is also associated with the concept of a stylized storytelling song or poem, particularly when used as a title for other media such as a film.\n\nOrigins\nA ballad  is a form of verse, often a narrative set to music."
+  },
+  "wiki:6": {
+   "title": "Blue \u00d6yster Cult",
+   "domain": "wiki_gen",
+   "context": "Blue \u00d6yster Cult ( ; sometimes abbreviated B\u00d6C or BOC) is  an American rock band formed on Long Island in Stony Brook, New York, in 1967. \nThe band has sold 25 million records worldwide, including 7 million in the United States. The band's fusion of hard rock with psychedelia, and penchant for occult, fantastical and tongue-in-cheek lyrics, had a major influence on heavy metal music. They developed a cult following and, while achieving mainstream hits like \"(Don't Fear) The Reaper\" (1976) and \"Burnin' for You\" (1981), rarely experienced commercial success. Both songs, and others such as \"Godzilla\" (1977), remain classic rock radio staples. The band were early adopters of the music video format, and their videos received heavy rotation on MTV in its early period.\n\nBlue \u00d6yster Cult's longest-lasting and the most commercially successful lineup included Donald \"Buck Dharma\" Roeser (lead guitar, vocals), Eric Bloom (lead vocals, \"stun guitar\", keyboards, synthesizer), Allen Lanier (keyboards, rhythm guitar), Joe Bouchard (bass, vocals, keyboards), and Albert Bouchard (drums, percussion, vocals, miscellaneous instruments). The band's current lineup still includes Bloom and Roeser, in addition to Danny Miranda (bass, backing vocals), Richie Castellano (keyboards, rhythm guitar, backing vocals), and Jules Radino (drums, percussion)."
+  },
+  "wiki:7": {
+   "title": "Battery Park City",
+   "domain": "wiki_gen",
+   "context": "Battery Park City is a mainly residential  planned community and neighborhood on the west side of the southern tip of the island of Manhattan in New York City. It is bounded by the Hudson River on the west, the Hudson River shoreline on the north and south, and the West Side Highway on the east. The neighborhood is named for the Battery, formerly known as Battery Park, located directly to the south.\n\nMore than one-third of the development is parkland. The land upon which it is built was created by land reclamation on the Hudson River using over  of soil and rock excavated during the construction of the World Trade Center, the New York City Water Tunnel, and certain other construction projects, as well as from sand dredged from New York Harbor off Staten Island. The neighborhood includes Brookfield Place (formerly the World Financial Center), along with numerous buildings designed for housing, commercial, and retail.\n\nBattery Park City is part of Manhattan Community District 1. It is patrolled by the 1st Precinct of the New York City Police Department.\n\nGeography \n\nBattery Park City is bounded on the east by West Street, which separates the area from the Financial District of Lower Manhattan. To the west, north, and south, the area is surrounded by the Hudson River.\n\nThe development consists of roughly five major sections."
+  },
+  "wiki:8": {
+   "title": "Bacterial vaginosis",
+   "domain": "wiki_gen",
+   "context": "Bacterial vaginosis (BV) is an infection of the vagina caused by excessive growth of bacteria. Common symptoms include increased vaginal discharge that often smells like fish. The discharge is usually white or gray in color. Burning with urination may occur. Itching is uncommon. Occasionally, there may be no symptoms. Having BV approximately doubles the risk of infection by a number of sexually transmitted infections, including HIV/AIDS. It also increases the risk of early delivery among pregnant women.\n\nBV is caused by an imbalance of the naturally occurring bacteria in the vagina. There is a change in the most common type of bacteria and a hundred to thousand fold increase in total numbers of bacteria present. Typically, bacteria other than Lactobacilli become more common. Risk factors include douching, new or multiple sex partners, antibiotics, and using an intrauterine device, among others. However, it is not considered a sexually transmitted infection and, unlike gonorrhoea and chlamydia, sexual partners are not treated. Diagnosis is suspected based on the symptoms, and may be verified by testing the vaginal discharge and finding a higher than normal vaginal pH, and large numbers of bacteria. BV is often confused with a vaginal yeast infection or infection with Trichomonas.\n\nUsually treatment is with an antibiotic, such as clindamycin or metronidazole."
+  },
+  "wiki:9": {
+   "title": "Bud Selig",
+   "domain": "wiki_gen",
+   "context": "Allan Huber \"Bud\" Selig (; born July 30, 1934) is an American baseball executive who currently serves as the Commissioner Emeritus of Baseball. Previously, he served as the ninth Commissioner of Baseball from 1998 to 2015. He initially served as de facto acting commissioner beginning in 1992 in his capacity as chairman of the Major League Baseball Executive Committee before being named the official commissioner in 1998. Selig oversaw baseball through the 1994 strike, the introduction of the wild card, interleague play, and the de facto merging of the National and American Leagues under the Office of the Commissioner. He was instrumental in organizing the World Baseball Classic in 2006. Selig also introduced revenue sharing. He is credited for the financial turnaround of baseball during his tenure with a 400 percent increase in the revenue of MLB and annual record breaking attendance.\n\nDuring Selig's term of service, the use of steroids and other performance-enhancing drugs became a public issue. The Mitchell Report, commissioned by Selig, concluded that the MLB commissioners, club officials, the Players Association, and the players all share \"to some extent in the responsibility for the steroid era."
+  },
+  "wiki:10": {
+   "title": "Bison",
+   "domain": "wiki_gen",
+   "context": "A bison (: bison) is a large bovine in the genus Bison (Greek: \"wild ox\" (bison)) within the tribe Bovini. Two extant and numerous extinct species are recognised.\n\nOf the two surviving species, the American bison, B. bison, found only in North America, is the more numerous. Although colloquially referred to as a buffalo in the United States and Canada, it is only distantly related to the true buffalo. The North American species is composed of two subspecies, the Plains bison, B. b. bison, and the wood bison, B. b. athabascae, which is the namesake of Wood Buffalo National Park in Canada. A third subspecies, the eastern bison (B. b. pennsylvanicus) is no longer considered a valid taxon, being a junior synonym of B. b. bison. References to \"woods bison\" or \"wood bison\" from the eastern United States refer to this subspecies, not B. b. athabascae, which was not found in the region. The European bison, B. bonasus, or wisent, or zubr, or colloquially European buffalo, is found in Europe and the Caucasus, reintroduced after being extinct in the wild.\n\nWhile bison species have been traditionally classified in their own genus, modern genetics indicates that they are nested within the genus Bos, which includes, among others, cattle, yaks and gaur, being most closely related to yaks."
+  },
+  "wiki:11": {
+   "title": "Baryon",
+   "domain": "wiki_gen",
+   "context": "In particle physics, a baryon is a type of composite subatomic particle which contains an odd number of valence quarks (at least 3). Baryons belong to the hadron family of particles; hadrons are composed of quarks. Baryons are also classified as fermions because they have half-integer spin.\n\nThe name \"baryon\", introduced by Abraham Pais, comes from the Greek word for \"heavy\" (\u03b2\u03b1\u03c1\u03cd\u03c2, bar\u00fds), because, at the time of their naming, most known elementary particles had lower masses than the baryons. Each baryon has a corresponding antiparticle (antibaryon) where their corresponding antiquarks replace quarks. For example, a proton is made of two up quarks and one down quark; and its corresponding antiparticle, the antiproton, is made of two up antiquarks and one down antiquark.\n\nBaryons participate in the residual strong force, which is mediated by particles known as mesons. The most familiar baryons are protons and neutrons, both of which contain three quarks, and for this reason they are sometimes called triquarks. These particles make up most of the mass of the visible matter in the universe and compose the nucleus of every atom (electrons, the other major component of the atom, are members of a different family of particles called leptons; leptons do not interact via the strong force)."
+  },
+  "wiki:12": {
+   "title": "Braille embosser",
+   "domain": "wiki_gen",
+   "context": "A braille embosser is an impact printer that renders text as tactile braille cells. Using braille translation software, a document or digital text can be embossed with relative ease. This makes braille production efficient and cost-effective. Braille translation software may be free and open-sourced or paid.\n\nBlind users tend to call other printers \"ink printers,\" to distinguish them from their braille counterparts. This is often the case regardless of the type of printer being discussed (e.g., thermal printers being called \"ink printers\" even though they use no ink).\n\nAs with ink printers and presses, embossers range from those intended for consumers to those used by large publishers. The price of embossers increase with the volume of braille it produces .\n\nTypes \nThe fastest industrial braille embosser is probably the $92,000 Belgian-made NV Interpoint 55, first produced in 1991, which uses a separate air compressor to drive the embossing head and can output up to 800 braille characters per second. Adoption was slow at first; in 2000 the National Federation of the Blind said there were only three of these in the US, one owned by the NFB itself and the other two by the Watchtower Bible and Tract Society. As of 2008, there are more than 60 in use across the world."
+  },
+  "wiki:13": {
+   "title": "Basic Role-Playing",
+   "domain": "wiki_gen",
+   "context": "Basic Role-Playing (BRP) is a tabletop role-playing game which originated in the RuneQuest fantasy role-playing game. Chaosium released the BRP standalone booklet in 1980 in the boxed set release of the second edition of RuneQuest. Greg Stafford and Lynn Willis are credited as the authors. Chaosium used the percentile skill-based system as the basis for most of their games, including  Call of Cthulhu, Stormbringer, and Elfquest.\n\nHistory \nThe core rules were originally written by Steve Perrin as part of his game RuneQuest. It was Greg Stafford's idea to simplify the rules (eliminating such things as Strike Ranks and Hit Locations) and issue them in a 16-page booklet called Basic Role-Playing. Over the years several others, including Sandy Petersen, Lynn Willis, and Steve Henderson, contributed to the system.\n\nThe BRP was notable for being the first role-playing game system to introduce a full skill system to characters regardless of their profession. This was developed in RuneQuest but was also later adopted by the more skill-oriented Call of Cthulhu.\n\nBRP was conceived of as a generic system for playing any sort of RPG. Specific rule systems to support differing genres can be added to the core rules in a modular design."
+  },
+  "wiki:14": {
+   "title": "Peirce\u2013Nichols House",
+   "domain": "wiki_gen",
+   "context": "The Peirce\u2013Nichols House is a historic house museum located at 80 Federal Street in Salem, Massachusetts.  Designed early in the career of noted Salem builder Samuel McIntire (1757\u20131811), and modified later by him, the building gives a unique view into the methods and styles of McIntire.  It was designated a National Historic Landmark in 1973 for its significance as an early masterwork of one of the country's first recognized master builders.  It is now owned by the Peabody Essex Museum.\n\nHistory\nJerathmiel Peirce (1747\u20131827), began his career as a leather dresser. In about 1778, he formed a partnership with Aaron Waite, and purchased a two-gun schooner, the Greyhound, to serve as a privateer against British merchant vessels in the Revolutionary War. The partnership prospered, and over the next half a century, purchased/built at least 10 vessels, sending them to ports around the world. In 2000, the National Park Service had a full-scale replica of one of the Waite & Peirce ships built, the Friendship of Salem, which is the centerpiece of Salem Maritime National Historic Site. Waite and Peirce were also major investors in the newly incorporated Beverly Bank, and were members of Salem's merchant aristocracy."
+  },
+  "wiki:15": {
+   "title": "Confederation of Independent Trade Unions of Bulgaria",
+   "domain": "wiki_gen",
+   "context": "The Confederation of Independent Trade Unions of Bulgaria (KNSB/CITUB; ) is a trade union confederation in Bulgaria. The CITUB is Bulgaria's largest, most influential and well-established trade union, having several times more members than its largest rival - KT Podkrepa.\n\nThe KNSB is affiliated with the International Trade Union Confederation and the European Trade Union Confederation.\n\nIn addition to its unionist activities, the CITUB also has a research department dubbed the Institute for Social and Syndicalist Studies, which analyzes social and economic issues, conducts polls and publishes informational bulletins.\n\nHistory\n\nFoundation and Heritage \nThe CITUB considers itself to be the \"inheritor of a 140-year history of the labour movement\" in the country.\n\nIn its modern form, CITUB was formed as a result of a reorganization of the Socialist era Central Council of Trade Unions (CCTU) during an extraordinary congress in February 1990.\n\nThe CCTU itself was founded in 1945 as a replacement for the Tsarist era Bulgarian Workers Union, which existed between 1935 and 1944 and was formed by the royalist government after it had banned all other trade unions in the country."
+  },
+  "wiki:16": {
+   "title": "Dundalk railway station",
+   "domain": "wiki_gen",
+   "context": "Dundalk Clarke railway station () serves Dundalk in County Louth, Ireland.\n\nIt consists of an island platform, with a bay facing south. It is served by the Dublin-Belfast \"Enterprise\" express trains as well as local Commuter services to and from Dublin. There is a small museum located in one of the station buildings, displaying various railway artefacts and photographs.\n\nHistory\nThe original station opened on 15 February 1849 as Dundalk Junction (being located at the Junction of the Dublin-Belfast line and the Dundalk and Enniskillen line), the current Dundalk Station, 350m to the north, opened in June 1894. It was given the name Clarke on Sunday 10 April 1966 in commemoration of Tom Clarke, one of the executed leaders of the Easter Rising of 1916.\n\nArchitecture\nThe ticket office and modern waiting area are located at road level, whereas the station proper is beneath this at track level. The two sections are connected by a Victorian covered walkway, and by a 21st-century lift for disabled access. The station is noted for its fine iron, glass, and polychromic brickwork. It has been said to be the finest station on the Dublin-Belfast line.\n\nGNR Railway Works\nThe town had the important Railway Works on the Great Northern Railway of Ireland system.  Amongst the products developed was the railbus."
+  },
+  "wiki:17": {
+   "title": "Rypin",
+   "domain": "wiki_gen",
+   "context": "Rypin  () is a town in north-central Poland, in Kuyavian-Pomeranian Voivodeship, about 50\u00a0km east of Toru\u0144.  It is the capital of Rypin County.  Population is 16,950 (2009).\n\nHistory\n\nRypin was founded in the Middle Ages, and was part of Poland since the establishment of the state in the 10th century. From the 11th century it was the seat of a local castellany, and from the 14th century it was a county seat. It was granted town rights in the early 14th century, and afterwards it was a royal town of the Polish Crown, administratively located in the Dobrzy\u0144 Land in the Inowroc\u0142aw Voivodeship in the Greater Poland Province of the Polish Crown. In the early 14th century, local dukes of the Polish Piast dynasty founded a hospital in Rypin to commemorate their deceased father Duke Siemowit of Dobrzy\u0144. In 1352, the hospital was granted various privileges by Duke W\u0142adys\u0142aw the Hunchback.\n\nWorld War II\nDuring the German invasion of Poland, which started World War II in September 1939, the town was invaded and then occupied by Germany until 1945. The Polish population was subjected to an extensive genocidal campaign. In September 1939, a German police prison was established in the town, and in October 1939, the German police and Selbstschutz carried out mass arrests of local Poles."
+  },
+  "wiki:18": {
+   "title": "Bobby Dunn",
+   "domain": "wiki_gen",
+   "context": "Robert P. Dunn (August 28, 1890 \u2013 March 24, 1937) was a comic actor who was one of the original Keystone Kops in Hoffmeyer's Legacy.\n\nEarly years \nDunn was born in Milwaukee, Wisconsin, to Richard P. and Melissa Dunn, and attended St. Johns Military Academy. He was a world-champion high-diver with Dr. Carver's diving horses.\n\nCareer\nDunn started his film career at Keystone Studios with Mack Sennett and worked as a comedian and stuntman for a variety of other film studios as well. He lost many of his teeth and suffered other injuries performing stunts as well, including the loss of one of his eyes when he fell into a barrel of water and his eye was irreparably damaged by a floating matchstick. The glass eye he wore after that accident gave him a somewhat \"cross-eyed\" appearance, although that effect \"served only to empower his comedic career.\" Later, during the 1920s and 1930s, he performed as a supporting player for many of the film industry's leading comedians, such as Harold Lloyd, W. C. Fields, Charley Chase, the Marx Brothers, and Laurel and Hardy.\n\nDeath\nDunn died of a heart attack on March 24, 1937, in Hollywood, California, at the age of 46. His grave site is at Hollywood Forever Cemetery in Los Angeles."
+  },
+  "wiki:19": {
+   "title": "Hyperekplexia",
+   "domain": "wiki_gen",
+   "context": "Hyperekplexia (; \"exaggerated surprise\") is a very rare neurologic disorder, classically characterised by a pronounced startle responses to tactile or acoustic stimuli and an ensuing period of hypertonia. The hypertonia may be predominantly truncal, attenuated during sleep, or less prominent after one year of age.\n\nClassic hyperekplexia is caused by genetic mutations in a number of different genes, all of which play an important role in glycine neurotransmission. Glycine is used by the central nervous system as an inhibitory neurotransmitter. Hyperekplexia is generally classified as a genetic disease; some disorders can mimic the exaggerated startle of hyperekplexia.\n\nSigns and symptoms\nThe three main signs of hyperekplexia are generalized stiffness, excessive startle beginning at birth and nocturnal myoclonus. Affected individuals are fully conscious during episodes of stiffness, which consist of forced closure of the eyes and an extension of the extremities followed by a period of generalised stiffness and uncontrolled falling at times. Initially, the disease was classified into a \"major\" and a \"minor\" form, with the minor form being characterized by an excessive startle reflex, but lacking stiffness. Genetic evidence has only been found for the  major form of the condition."
+  },
+  "wiki:20": {
+   "title": "Catherine Webb",
+   "domain": "wiki_gen",
+   "context": "Catherine Webb (born 1986) is a British author. She also writes fantasy novels for adults under the name Kate Griffin, and she writes science fiction as Claire North.\n\nLife\nWebb was educated at the Godolphin and Latymer School, London, and the London School of Economics.\n\nShe was 14 years old when she completed Mirror Dreams, which was written during her school holidays. Her father is author and publisher Nick Webb, and he suggested she should send the manuscript to an agent he knew, who eventually offered to represent her. The book was published in 2002 by Atom Books, and Webb was named Young Trailblazer of the Year by the magazine CosmoGirl UK. She has published eight young adult novels, all with Atom Books, and studied at the Royal Academy of Dramatic Art, from which she graduated in 2010.\n\nA lifelong Londoner, Webb enjoys walking through the areas she describes in her books \u2013 Bethnal Green, Clerkenwell, and along the River Thames \u2013 comparing the city of London as it is now with how it was at various times in the past. She appeared in CosmoGirl in 2006/7 in an interview. She also appeared in online interviews with CBBC and nzgirl when she was 15, and also with The Daily Telegraph, which described her as a teen queen."
+  },
+  "wiki:21": {
+   "title": "14th Infantry Brigade (United Kingdom)",
+   "domain": "wiki_gen",
+   "context": "The 14th Infantry Brigade was a British Army formation during both the First World War and the Second World War.\n\nHistory\n\nFirst World War \nIn 1914 this brigade was part of the 5th Division and moved over to France. On 30 December 1915 the brigade was transferred to the 32nd Division."
+  },
+  "wiki:22": {
+   "title": "Woo Bum-kon",
+   "domain": "wiki_gen",
+   "context": "Woo Bum-kon (, March 18, 1955 \u2013 April 27, 1982) was a South Korean policeman and spree killer who murdered 62 people and wounded around 35 others in several villages in Uiryeong County, South Gyeongsang Province, South Korea, during the night from April 26 to April 27, 1982, before committing suicide.\n\nAt the time, Woo's rampage was the worst mass shooting in modern history committed by a single perpetrator, and remains the second deadliest, later surpassed only by the 2011 Norway terrorist attacks. It was also the deadliest deliberate single loss of life in South Korean history until the Daegu Subway Inferno in 2003.\n\nBackground \nWoo Bum-kon had served in the Republic of Korea Marine Corps, where he was recognized as a skilled marksman until his discharge in 1978. From April 11 until December 30 of 1981, he served as a police officer and, with his marksmanship ability, was able to work as a guard at the Blue House. However, Woo's excessive drinking habits and subsequent behavior caused him to be demoted to his position at Kungyu Village in Uiryeong County, South Gyeongsang Province.\n\nUiryeong massacre\n\nPrelude \nOn the afternoon of April 26, 1982, Woo had an argument with his live-in girlfriend, Chun Mal-soon (\uc804\ub9d0\uc21c), after she had woken him by swatting a fly on his chest. Enraged, Woo left the house and went to the police station, where he reported for duty at 4:00\u00a0p.m."
+  },
+  "wiki:23": {
+   "title": "Charles Martin (poet)",
+   "domain": "wiki_gen",
+   "context": "Charles Martin (born 1942, New York City) is a poet, critic and translator. He grew up in the Bronx. He graduated from Fordham University and received his Ph.D. from the University at Buffalo, The State University of New York. He now teaches at Queensborough Community College of the City University of New York, Syracuse University, and the Stonecoast MFA Program at the University of Southern Maine. Martin's specialty is Latin poetry. Martin is also a New Formalist, and was an original faculty member of the West Chester University Poetry Conference.\n\nHonors and awards\nHe received the Poetry Foundation's Beth Hokin Prize in 1970. His poem, \"Against a Certain Kind of Ardency,\" was in the 2001 Pushcart Prize collection, and in 2005 he won the American Academy of Arts and Letters' Award for Literature.  Martin's Ovid literary translation won the 2004 Harold Landon Translation Award from the Academy of American Poets.\n\nPublished works\nFull-length poetry collections\n\nCritical works\n\nTranslations\n\nReferences\n\nExternal links\nCharles Martin's website\nQueensborough Community College > Martin's Faculty Page Retrieved December 28, 2006.\nSturgeon, Shawn (2003). \"Starting Point\" (description of Starting from Sleep: New and Selected Poems), website of Sewanee Writers Conference. Retrieved December 28, 2006.\nBiography and links to poems, website of the Academy of American Poets."
+  },
+  "wiki:24": {
+   "title": "Moya Henderson",
+   "domain": "wiki_gen",
+   "context": "Moya Patricia Henderson  (born 2 August 1941 in Quirindi, New South Wales) is an Australian composer.\n\nA graduate of the University of Queensland, Henderson was Resident Composer at Opera Australia during their first season at the Sydney Opera House in 1973. \nIn the mid-1970s, Henderson studied composition with Karlheinz Stockhausen and music-theatre with Mauricio Kagel at the Cologne Musikhochschule.\nHenderson's compositions include such pieces as the work for organ and pre-recorded tape, Sacred Site (1983), The Dreaming written for the Australian Chamber Orchestra, \"Six Urban Songs: The Patrick White Song Cycle\" for soprano and orchestra (1983), and an opera, Lindy (1997), with Judith Rodriguez (as co-librettist), based on the disappearance of baby Azaria Chamberlain at Uluru in 1980. The mother, Lindy Chamberlain, was tried for the murder of the child. The opera documents the travesty of justice as it was meted out to Lindy Chamberlain and her then husband, Michael. It premiered at the Sydney Opera House in 2002.\n\nEarly career \nIn 1973, after being appointed resident composer to the Australia Opera during inaugural season at the Sydney Opera House, Henderson was awarded a DAAD Scholarship and a travel grant to the Music Board from the Music Board of Australia Council for the Arts."
+  },
+  "wiki:25": {
+   "title": "Tick! Tack!",
+   "domain": "wiki_gen",
+   "context": "Tick! Tack! is the second eroge visual novel in the Shuffle! series created by Navel for Microsoft Windows. The game is the first sequel to Navel's first game, Shuffle!, continuing Nerine's path.\n\nThe basic set-up is that Rin, Nerine, Itsuki, and Mayumi find a strange watch that transports them back in time, where they met Forbesii before he is married and has Nerine. While he is engaged to Ai, his maid, Sage, is also in love with him, causing a love triangle. The players actions determine who Forbesii ultimately ends up with, and thus who is the mother of Nerine.\n\nNerine Watch system\nJust like in Shuffle!, the player will encounter events that will ask them to choose some option. Choosing one of them may cause an event to happen, while choosing the other may not have any effect on the game. This feature returns in Tick! Tack!. However, the company has included a new feature by displaying an antique watch on the top left-hand side of the screen. This watch is a gauge that shows the player Nerine's changes as a result of the player's meddling with the past.\n\nWhen the player chooses an option, the watch will either tick counter-clockwise (the green side, by making random contacts with all the characters), clockwise (the red side, usually by making contact with Sage and diverting her interest away from Forbesii), or may not tick at all."
+  },
+  "wiki:26": {
+   "title": "Yakir",
+   "domain": "wiki_gen",
+   "context": "Yakir () is an Israeli settlement in the West Bank,  southwest of the Palestinian city of Nablus, near Revava and Nofim, on Road 5066, roughly between Barkan and Karnei Shomron. Organised as a community settlement founded in February 1981 on lands that the Israeli government expropriated from the nearby Palestinian village of Deir Istiya, it sits at 420 metres above sea level and is under the jurisdiction of Shomron Regional Council. In , it had a population of .\n\nThe international community considers Israeli settlements in the West Bank illegal under international law, but the Israeli government disputes this.\n\nEtymology\nThe name is taken from a passage in the Book of Jeremiah (31:20) 'Is Ephraim a darling (yakir) son unto Me?'\"\n\nHistory\nAccording to ARIJ, Israel confiscated 659 dunams of land from the nearby Palestinian village of Deir Istiya in order to construct Yakir.\n\nThe settlement was established in 1981. As of 2013, the property was being developed to accommodate a growing need for housing in the town.\n\nIn March 2013, the Biton's family car was attacked, near neighboring village of Kif el-Hares, with stones which caused it to get out of control and collide with a truck. Adele Biton was critically injured along with her mother and two sisters who were moderately injured. After almost two years in different hospitals and home care, she died on February 17, 2015."
+  },
+  "wiki:27": {
+   "title": "Ernst Wilimowski",
+   "domain": "wiki_gen",
+   "context": "Ernest Otton Wilimowski (, born Ernst Otto Prandella; 23 June 1916 \u2013 30 August 1997), nicknamed \"Ezi\", was a footballer who played as a forward. He ranks among the best goalscorers in the history of both the Poland national team and Polish club football. After re-taking German citizenship following the invasion of Poland, he also played for the Germany national team.\n\nWilimowski was the first player to score four goals in a single FIFA World Cup game. According to RSSSF, Wilimowski scored over 1077 total goals in at least 688 total matches, making him the 14th greatest goalscorer of all time. He is the most prolific goalscorer in official matches in one season in recorded history according to RSSSF, with 107 goals scored in 45 matches.\n\nWilimowski also occasionally played ice hockey for the team Pogo\u0144 Katowice.\n\nEarly life\nBorn in Kattowitz (Katowice), Prussian Silesia, German Empire, Wilimowski was raised in a Silesian family, typical of the Upper Silesian Polish-German borderland. After eastern Upper Silesia became part of Poland in 1922, he became a citizen of the Second Polish Republic.\n\nHis parents, Ernst-Roman and Paulina, were German. His father, a soldier for the German Empire, died on the Western Front in the First World War. His mother sent him to a German kindergarten, a German primary school and, when he was nine years old, to the German football team 1."
+  },
+  "wiki:28": {
+   "title": "Napakpapha Nakprasitte",
+   "domain": "wiki_gen",
+   "context": "Napakpapha Nakprasitte (; , and better known as Mamee, born  April 19, 1981) is a Thai film actress. She is sometimes credited as Napakapa Nakprasit.\n\nEducation\nDhurakij Pundit University\n\nCareer\nMamee's first film role was as the star of the 2001 horror film, Mae bia (Snake Lady), in which she portrayed a woman who has a symbiotic relationship with a cobra. She then starred in Butterfly Man, an Anglo-Thai production directed by Kaprice Kea where she portrayed a traditional Thai masseuse who becomes the love object for a young British backpacker, portrayed by Stuart Laing. It was her first English-speaking role.\n\nIn 2005, Mamee starred in Art of the Devil 2, a thriller in which she portrayed a teacher at a rural school who has a cruel prank played on her by some students. She then gets her revenge by learning black magic and using it on her former students. For her role in Art of the Devil 2, she was nominated for best actress by the Bangkok Critics Assembly. She was also nominated for best supporting actress for the Thailand National Film Awards, but asked that the nomination be withdrawn out of protest."
+  },
+  "wiki:29": {
+   "title": "US Field artillery team",
+   "domain": "wiki_gen",
+   "context": "In the US system for land-based field artillery, the field artillery team is organized to direct and control indirect artillery fire on the battlefield.\n\nSince World War I, to conduct indirect artillery fire, three distinct components have evolved in this organization: the forward observer (FO), the fire direction center (FDC), and the firing unit, sometimes referred to as the gun line. On the battlefield, the field artillery team consists of some combinations of all of these elements. In other words, there may be multiple FOs calling in fire on multiple targets to multiple FDCs and any component may be in communication with some of the other elements depending on the situational requirements.\n\nHistory \nModern artillery shoots at targets miles away, a hundredfold increase in range over 18th century guns, a result of development of rifled cannons, improvements in propellants, better communications, and technical improvements such as computing the aim. The  enemy is engaged at such distances that soldiers manning the guns cannot see the target that they are firing upon. Since the target is not visible, these gunners have to rely on a trained artillery observer (also called a \"forward observer\"), who sees the target and relays its coordinates to their fire direction center."
+  },
+  "wiki:30": {
+   "title": "Ann Rohmer",
+   "domain": "wiki_gen",
+   "context": "Ann Margaret Rohmer (born March 2, 1958) is a Canadian television personality known for her work on Citytv and CP24 in Toronto, Ontario, Canada.\n\nEarly life and career\n\nRohmer's father is Richard Rohmer, an officer with the Royal Canadian Air Force. She grew up in Don Mills. \n\nRohmer was trained by top figure skating coach Sheldon Galbraith, Rohmer competed at the provincial level until she was involved in a car accident at the age of 14. Although this ended her skating career, it has not stopped her from playing tennis, being an aerobics instructor and avidly participating in both water and downhill skiing.\n\nShe attended Branksome Hall before transferring to Northern Secondary School in her final year of high school, graduating in 1974. As a university student, she began acting in television commercials as a means of earning extra money. Her desire to write and edit the scripts sparked a desire to work as a television presenter.\n\nDuring the 1970s, she worked as a flight attendant for Air Canada.\n\nTelevision career \n\nIn 1979, she landed her first major television gig hosting the syndicated program Show Biz where she interviewed celebrities. Afterwards, she was hired by the Global Television Network as a co-host on the magazine show That's Life which lasted from 1983 to 1987."
+  },
+  "wiki:31": {
+   "title": "Remchingen",
+   "domain": "wiki_gen",
+   "context": "Remchingen () is a municipality in the Enz district, in Baden-W\u00fcrttemberg, Germany, situated on the river Pfinz, 14\u00a0km southeast of Karlsruhe, and 12\u00a0km northwest of Pforzheim.\n\nHistory\n\nOlder history \n\n 1st millennium BC: Celtic settlement (grave finds 1947 in Singen)\n Roman settlement between 80 and 90 AD (numerous finds, including two pillars of denial from N\u00f6ttingen, two four-god stones immured in the churches of N\u00f6ttingen, inscription plate from the settlement Vicus Senotensis)\n After the Romans fled their flight around 260 AD, the Alamanni settled the land to the right of the Rhine, but a little over two centuries later, after a great battle in 496, they were forced by the Franconian tribe to give up the Kraichgau and the landscape up to vacate the Murg.\n The first written mentions of Remchingen districts date from the 8th century: On June 1, 769 in \u201cSigincheim im Pfinzgau\u201d (first mention of Singen), four Franks gave Lorsch monastery a farmyard, 34 acres of arable land, a meadow and a piece of forest . Between 888 and 893, the abbot of this monastery exchanged further ownership of this monastery in \"Vulvirincha\", today's Wilferdingen, for the same area in Illingen, southeast of Maulbronn (Wilferdingen is mentioned for the first time)."
+  },
+  "wiki:32": {
+   "title": "History of information theory",
+   "domain": "wiki_gen",
+   "context": "The decisive event which established the discipline of information theory, and brought it to immediate worldwide attention, was the publication of Claude E. Shannon's classic paper \"A Mathematical Theory of Communication\" in the Bell System Technical Journal in July and October 1948.\n\nIn this revolutionary and groundbreaking paper, the work for which Shannon had substantially completed at Bell Labs by the end of 1944, Shannon for the first time introduced the qualitative and quantitative model of communication as a statistical process underlying information theory, opening with the assertion that \n\"The fundamental problem of communication is that of reproducing at one point, either exactly or approximately, a message selected at another point.\"\n\nWith it came the ideas of \n the information entropy and redundancy of a source, and its relevance through the source coding theorem;\n the mutual information, and the channel capacity of a noisy channel, including the promise of perfect loss-free communication given by the noisy-channel coding theorem;\n the practical result of the Shannon\u2013Hartley law for the channel capacity of a Gaussian channel; and of course\n the bit - a new way of seeing the most fundamental unit of information."
+  },
+  "wiki:33": {
+   "title": "Icelandic cuisine",
+   "domain": "wiki_gen",
+   "context": "The cuisine of Iceland has a long history. Important parts of Icelandic cuisine are lamb, dairy, and fish, the latter due to the fact that Iceland has traditionally been inhabited only near its coastline. Popular foods in Iceland include skyr, hangikj\u00f6t (smoked lamb), kleinur, laufabrau\u00f0, and bollur. \u00deorramatur is a traditional buffet served at midwinter festivals called \u00deorrabl\u00f3t; it includes a selection of traditionally cured meat and fish products served with r\u00fagbrau\u00f0 (dense dark and sweet rye bread) and brenniv\u00edn (an Icelandic akvavit). The flavors of this traditional country food originate in its preservation methods: pickling in fermented whey or brine, drying, and smoking.\n\nModern Icelandic chefs usually emphasise the quality of available ingredients rather than age-old cooking traditions and methods. Numerous restaurants in Iceland specialise in seafood. At the annual Food and Fun chef's competition (held since 2004), competitors create innovative dishes with fresh ingredients produced in Iceland. Points of pride are the quality of the lamb meat, seafood, and (more recently) skyr. Other local ingredients include seabirds and waterfowl (including their eggs), salmon and trout, crowberry, blueberry, rhubarb, Iceland moss, wild mushrooms, wild thyme, lovage, angelica, and dried seaweed, as well as a wide array of dairy products."
+  },
+  "wiki:34": {
+   "title": "Alltwen",
+   "domain": "wiki_gen",
+   "context": "Alltwen (or Allt-wen; translates to \"white wooded slope\") is a village in the Swansea Valley (Welsh: Cwmtawe) in Wales. Alltwen forms part of the community of Cilybebyll and is administered separately from adjoining Pontardawe on the opposite bank of the River Tawe.\n\nAlltwen is served by Alltwen Primary School and the village has a rugby union club, Alltwen RFC (Welsh: Clwb Rygbi Alltwen).\n\nGovernment and politics\nAllt-wen is an electoral ward of Neath Port Talbot county borough and is a part of the community of Cilybebyll. The ward is bounded by Trebanos and Pontardawe to the northwest; Rhos to the northeast; Bryn-c\u00f4ch North to the southeast; Dyffryn to the south; and Clydach (in Swansea) to the southwest.\n\nMost of Allt-wen consists of farmland and woods. Occupying a strip of land in the northwest of the ward is Alltwen village, which is part of the built-up area surrounding Pontardawe.\n\nNotable people\n Alltwen was the home of Ronnie James, British Lightweight Boxing Champion in the 1940s and World Title challenger in 1946\n Rachel Thomas (actress), born in the village\n Si\u00e2n Phillips, much of her childhood  in the village\n Justin Tipuric, born in the village before moving to Trebanos as a child\n D."
+  },
+  "wiki:35": {
+   "title": "U.S. Route 50 in California",
+   "domain": "wiki_gen",
+   "context": "U.S. Route 50 (US\u00a050) is a transcontinental United States Numbered Highway, stretching from West Sacramento, California, in the west to Ocean City, Maryland, in the east. The California portion of US\u00a050 runs east from Interstate 80 (I-80) in West Sacramento to the Nevada state line in South Lake Tahoe. A portion in Sacramento also has the unsigned designation of Interstate 305. The western half of the highway in California is a four-or-more-lane divided highway, mostly built to freeway standards, and known as the El Dorado Freeway outside of downtown Sacramento. US 50 continues as an undivided highway with one eastbound lane and two westbound lanes until the route reaches the canyon of the South Fork American River at Riverton. The remainder of the highway, which climbs along and out of the canyon, then over the Sierra Nevada at Echo Summit and into the Lake Tahoe Basin, is primarily a two-lane road.\n\nThe US 50 corridor is a historic one, used by many 49ers who came to California during the Gold Rush as well as the Pony Express. In 1895, part of the present-day route was designated as California's first state highway, and it was later designated as one of two routes of the Lincoln Highway across the Sierra Nevada. Much of US 50 was constructed during the initial construction of the California state highway system."
+  },
+  "wiki:36": {
+   "title": "Breathe (Faith Hill song)",
+   "domain": "wiki_gen",
+   "context": "\"Breathe\" is a song written by Stephanie Bentley and Holly Lamar and recorded by American country music artist Faith Hill. Warner Bros. Records released it on October 4, 1999, as the first single from Hill's fourth album of the same name (1999). The song was produced by Byron Gallimore and Hill. \"Breathe\" became Hill's seventh number one on the Hot Country Songs chart in the United States, spending six weeks at number one. It also peaked at number two on the Billboard Hot 100 chart in April 2000. Despite not peaking at number one, it was the number-one single of 2000.\n\nCritical reception\nBill Lamb from About.com said that country singer Faith Hill \"leaned heavily in a pop direction\" on \"Breathe\". He described it as \"a classic power ballad\". In 2005, Blender ranked it at number 167 in their list of \"Greatest Songs Since You Were Born\". They described it as a \"swooning ballad [that] turns country gal into Mississippi queen.\" The Daily Vault's Alfredo Narvaez said it is a \"great song\", adding, \"if it is not a single already, it must be soon. This song is destined for the prom night halls and the wedding receptions of tomorrow. (Yeah, it's that good and strong.)\"\n\nChart performance\nOn October 4, 1999, \"Breathe\" was released US radio, and on February 8, 2000, it was issued as a physical single."
+  },
+  "wiki:37": {
+   "title": "John James",
+   "domain": "wiki_gen",
+   "context": "John James may refer to:\n\nEntertainment\n John Wells James (1873\u20131951), American artist\n John James (writer) (1923\u20131993), British writer of historical novels\n John James (British poet) (1939\u20132018), British poet\n John James (guitarist) (born 1947), Welsh fingerstyle guitarist\n John James (actor) (born 1956), American television actor\n John James (American poet) (born 1987)\n John James (Canadian musician) (active 1980s\u20132016), Canadian dance musician\n John James (active 1986\u20131997), Australian musician formerly associated with the band Newsboys\n\nPolitics\n John James (MP for Wallingford), 1364\u20131378, Member of Parliament (MP) for Wallingford\n John James (14th-century MP), MP for Melcombe Regis\n John James (died 1601), MP for St Ives and Newcastle-under-Lyme\n John James (Parliamentarian) (died 1681), English politician who sat in the House of Commons in 1653 for Worcestershire\n John James (died 1718), MP for Brackley\n Sir John James, 1st Baronet (1784\u20131869), Dublin wine merchant and Lord Mayor of Dublin\n John H. James (mayor) (1830\u20131917), mayor of Atlanta\n John M. James (fl. 1867\u20131869), California State Assembly\n John James (Canadian politician) (1911\u20131999), Canadian Member of Parliament\n John James (Michigan politician) (born 1981), Michigan politician\n John S."
+  },
+  "wiki:38": {
+   "title": "Born to Reign",
+   "domain": "wiki_gen",
+   "context": "Born to Reign is the third studio album released by American actor and rapper Will Smith. The album was released on Columbia Records in the United States on June 25, 2002 and was considered a drop from his previous level of success, having only reached Gold status by the Recording Industry Association of America (RIAA), whereas Big Willie Style and Willennium both reached multi-platinum status. This album includes \"Black Suits Comin, which was also the lead single from the original motion picture soundtrack of Men in Black II. The album also spawned the European hit single \"1000 Kisses\", which features vocals from Smith's wife Jada Pinkett Smith.\n\nReception\n\nCritical\nAllMusic gave the album a four-star rating, claiming: \n\n\"It'd be inaccurate to call Will Smith's third album the musical equivalent of Ali -- a bid for artistic credibility from an artist so assured and smooth, it's been easy to pigeonhole him as merely a pop artist -- but given the range and harder edge on Born to Reign, it's hard not to think of it at first. Make no mistake, this is not as serious as Ali, nor is it a record whose first intent is to enlighten and educate. It's a fun, pop-leaning record, much like his first two records, and never is it afraid to return to the sounds and styles that brought the former Fresh Prince big hits, but among comfortably familiar jams, Smith stretches his legs."
+  },
+  "wiki:39": {
+   "title": "Gauss Moutinho Cordeiro",
+   "domain": "wiki_gen",
+   "context": "Gauss Moutinho Cordeiro (born April 17, 1952) is a Brazilian engineer, mathematician and statistician who has made significant contributions to the theory of statistical inference, mainly through asymptotic theory and applied probability.\n\nEducation\nHe received his PhD in statistics in 1982 at Imperial College London supervised by David Roxbee Cox and Peter McCullagh.\n\nResearch\nCurrently, Cordeiro is a Class A researcher of the Brazilian Research Council-CNPq, Full Professor at Federal University of Pernambuco (Brazil) and Member of the Graduate Program in Statistics at the same university. He has published more than 360 research articles in international scientific journals with referee practice (2015) and supervised more than 60 MSc dissertations and DSc theses. He was also president of the Associa\u00e7\u00e3o Brasileira de Estat\u00edstica, 2000\u20132002. He was one of the founder editors of the Brazilian Journal of Probability and Statistics and its Editor in Chief between 1995 and 2000. Cordeiro's main research interests in Statistics include Asymptotic Theory, Distribution Theory and Regression Models. He created, developed and organized several statistical meetings in Brazil and abroad. He has acted as referee for several important statistical journals.  In 2010, Cordeiro awarded from the Brazilian Government the National Medal for Scientific Merit at the order of Comendador."
+  },
+  "wiki:40": {
+   "title": "Manuel Komnenos (son of Andronikos I)",
+   "domain": "wiki_gen",
+   "context": "Manuel Komnenos (; 1145\u20131185?) was the eldest son of Byzantine emperor Andronikos I Komnenos, and the progenitor of the Grand Komnenos dynasty of the Empire of Trebizond. He served his uncle, Manuel I Komnenos, as a diplomatic envoy to the Russian principalities and the Kingdom of Jerusalem, but also helped his father escape imprisonment in Constantinople. His opposition to the regency of Empress-dowager Maria of Antioch and the protosebastos Alexios Komnenos landed him in prison, but he was released in April 1182, when his father stood poised to take power in the Byzantine capital. \n\nNevertheless, Manuel opposed his father's policy of persecuting the aristocracy, and refused to sanction or supervise the execution of Maria of Antioch. As a result, when Andronikos crowned himself emperor in 1183, Manuel was bypassed in the succession, and his younger brother John Komnenos was made co-emperor instead; Manuel received the title of sebastokrator. Despite his well-known opposition to Andronikos' more tyrannical policies, Manuel was blinded by Isaac II Angelos when the latter overthrew Andronikos in 1185. His subsequent fate is unknown, but his two sons, Alexios and David, went on to found the Empire of Trebizond in 1204, which was ruled by Manuel's descendants until its fall in 1461."
+  },
+  "wiki:41": {
+   "title": "Cymmer, Neath Port Talbot",
+   "domain": "wiki_gen",
+   "context": "Cymmer () is a small village in the community of Clymer and Glyncorrwg, in Neath Port Talbot in Wales, set on a hillside in the Afan Valley near the confluence of the River Afan and the River Corrwg. In 2001, Cymmer had a population of 2,883.\n\nDescription\nCymmer can also be spelled \"Cymer\", with \"Cymmer\" being the English-language version, and \"Cymer\" the Welsh language one. The word \"Cymmer\" translates from Welsh into English as \"joining place of two rivers\", and it is here that the Afon Corrwg and the Afon Afan meet, to flow onward as the River Afan until entering the sea at Aberavon/Port Talbot.\n\nThe immediate area is set in a densely forested upland area with steep sided river valleys cut through by the Rivers Afan and Corrwg. Patches of open moorland exist to the north and south.\n\nSocial conditions\nThe Cymmer electoral ward was one of the top 10% most deprived wards in Wales according to the 2005 Welsh Index of Multiple Deprivation.\n\nAmenities \nLocal public houses include The Refreshment Rooms (the preserved Rhondda and Swansea Bay Railway station) and a working men's club called The Coronation Club. Local amenities include a library, a community swimming pool, a sports hall, primary school, a police station and fire station.\n\nGovernment and politics\nCymmer is also the name of the electoral ward for the immediate area around the village."
+  },
+  "news:0": {
+   "title": "cnn_8215",
+   "domain": "news_gen",
+   "context": "Tara and Gavin Hills, from Kanata, Canada, have been firmly in the anti-vaccination camp, that is until their seven children contracted whooping cough. At first, Mrs Hills thought her kids had a bad cold, but then she heard their deep, booming cough that made them gag and vomit - 'the kind of cough that stops a parent's heart,' she recalled to National Post. After looking up the symptoms online - powerful coughing fits, runny nose, stringy phlegm - the Hills took their ailing brood to the hospital on the morning of April 2. Scroll down for video . Change of heart: Tara and Gavin Hills, have been anti-vaxxers for six years, but all that changed when their seven young children came down with whooping cough . Public confession: Mrs Hills, pictured left and right with her husband, penned a blog post about her decision to ditch the anti-vaxxer stance . Large brood: The Hills' six sons and a daughter between the ages of 10 months and 10 years (pictured) remain in quarantine and are being treated with antibiotics . Four days later, lab tests confirmed whooping cough - an infection of the respiratory system characterized by severe coughing spells, which mainly affects infants and children between the ages of 11 and 18. According to KidsHealth.org, before a vaccine was developed, whooping cough - also known as pertussis - killed up to 10,000 people in the US annually."
+  },
+  "news:1": {
+   "title": "cnn_10154",
+   "domain": "news_gen",
+   "context": "A company has released matches that continue to burn even when submerged in water or buried underground in dirt. The UCO Stormproof Matches are made using an incredibly tough coating that smoulders no matter what happens to them and will start burning again once they come into contact with oxygen. The unique matches have to go through rigorous testing to make sure they keep alight in even the most difficult situations. Scroll down for video . Indestructable: The UCO Stormproof Matches (pictured) are made using an incredibly tough coating that smoulders no matter what happens to it and will start burning again once it comes into contact with oxygen . Eric Moe, the product specialist at Industrial Revolution which owns Utility, Comfort and Originality (UCO), explained the process. The Stormproof matches are made by UCO which has been making outdoor accessories for the past 44 years. They include 25 matches in a completely waterproof case with and three strike pads. The matches cost \u00a35.47 ($7.99) from UCO's website and are available from the UK distributor Dalesman International. He said: 'The match sticks are dipped into our coating, which keeps smouldering even underwater, then reignites once exposed to oxygen. 'Essentially, you aren't burning the match stick, but burning the coating on the stick."
+  },
+  "news:2": {
+   "title": "cnn_7484",
+   "domain": "news_gen",
+   "context": "A billionaire tycoon wants planning authorities to grant permission for his new \u00a34 million beachfront mansion which can jack itself up in the case of flooding which heats itself using the outside air in temperatures as low as -25C. Jim Ratcliffe, founder and chairman of chemical company Ineos, has applied to planning officials in the New Forest to seek to demolish an existing beach hut and replace it with a 'carbon neutral' mansion. The 62-year-old businessman who is based in Switzerland claims that the new house, if built, will be his only UK residence. The proposed beach house in this computer generated image would only be visible from yachts on the Solent . The high-tech planned mansion will be virtually 'carbon-zero' and uses renewable energy such as solar power . Billionaire tycoon Jim Ratcliffe wants to build a futuristic beach house on a site he owns overlooking the Solent . The planning application claims the building will be 'climate-change proof due to its jacking system. The building has been designed by Charles Morris, who was the architect responsible for the Orchard Room at Prince Charles's Highgrove Estate. According the document: 'The development proposals incorporate domestic-scale micro renewable energy systems, including an array of photovoltaic cells, solar hot water and an air source heat pump."
+  },
+  "news:3": {
+   "title": "cnn_11055",
+   "domain": "news_gen",
+   "context": "A school has allowed a pupil who suffers badly with nerves to take her pet Labrador into a GCSE exam to help keep her calm. Rebecca Rice, 16, had tried everything to calm her nerves but knew the only thing that made her feel comfortable was her 11-year-old dog Holly. After confiding in her teacher Lorette Esteve it was decided she could take Holly into the five-minute recorded French oral test. Rebecca Rice, 16, (right) told her French teacher Lorette Esteve (left) that she had struggled with her nerves ahead of her French GCSE oral exam. Ms Esteve advised her to bring her pet dog Holly (middle) to help . Ms Esteve, who is joint head of foreign modern languages at the school, said: 'Over the years, both pupils and teachers have worked hard to reduce the stress involved in the whole experience and tactics include bringing in drinks, lucky key rings and having a friend in the room. 'When Rebecca came to do her speaking exam, though, nothing seemed to work. 'She'd spent hours at home learning what to say, but when faced with the idea of having to sit through the exam she knew that she couldn't do it and I talked through with Rebecca what made her feel comfortable. 'So Rebecca's mum delivered 11-year-old Labrador Holly to school, and Rebecca spent her five minutes with Holly who sat reassuringly at her side - and it worked."
+  },
+  "news:4": {
+   "title": "cnn_2364",
+   "domain": "news_gen",
+   "context": "Jose Mourinho believes that the Ballon d\u2019or, the trophy awarded to the world\u2019s best footballer, should be scrapped. The Chelsea manager has sided with Arsene Wenger in calling into the question the legitimacy of the award. Real Madrid superstar Cristiano Ronaldo is the current holder of the trophy which is voted for by national team managers and captains. Jose Mourinho, pictured on the Chelsea bench during their win against Stoke, has sided with Arsene Wenger . Cristiano Ronaldo, winner of the Ballon d'Or on three occasions, is presented with last year's award . Lionel Messi, who finished runner-up to Ronaldo in 2014, has previously won the compeition three times . Speaking last year, Wenger said he was \u2018totally against\u2019 the Ballon d\u2019Or, and in a wide-ranging interview with the Telegraph, Mourinho moved to side with his great Premier League rival. \u2018I think Wenger said something that is interesting; he is against the Ballon d\u2019Or, and I think he\u2019s right, because in this moment football is losing a little bit the concept of the team to focus more on the individual,\u2019 said Mourinho. \u2018We are always looking at the individual performance, the individual stat, the player that runs more. Because you run 11km in a game and I run nine you did a better job than I did? Maybe not! Maybe my 9km were more important than your 11."
+  },
+  "news:6": {
+   "title": "cnn_9800",
+   "domain": "news_gen",
+   "context": "Court battle: Lord Janner's alleged victims could sue him for \u00a32.5million after the CPS dropped a prosecution against him for the fourth time . Lord Janner's alleged victims could sue him for \u00a32.5million after being denied justice for the fourth time in 25 years when the CPS refused to prosecute him. Police have identified 25 people who claim the Labour peer attacked them and each could claim for up to \u00a3100,000. One man, allegedly attacked by Janner when he was living in a  children's homes between 1981 and 1988, has already instructed lawyers to sue him and Leicestershire County Council for damages. His solicitor Peter Garsden, president of the Association of Child Abuse Lawyers, has said that after a string of bungled investigations suing 'may be the only way the alleged victims are going to get some sort of justice'. Several of those who claim to have been sexually abused say Janner got to them through paedophile Frank Beck, a manager of Leicester children's homes accused of abusing more than 200 boys. The CPS last week said the 'core allegation' was that Lord Janner befriended Beck to access children 'to allow him to perpetrate serious sexual offences' on them. Beck died in jail in 1994. Mr Garsden said: 'We are preparing a claim for this man against Lord Janner and Leicestershire County Council. 'The allegations involved the most extreme abuse."
+  },
+  "news:7": {
+   "title": "cnn_1830",
+   "domain": "news_gen",
+   "context": "Hector Bellerin has enjoyed a superb breakthrough year at Arsenal this season, so much so that he is already being tipped for a move back to La Liga leaders Barcelona. The 20-year-old right back left the Catalan giants four years ago as he pursued a faster route to first-team football, eventually opting for Arsenal in the Premier League. But now, it seems Barca fans are keen for the Spaniard to return to the Nou Camp as they voted the youth international as their preferred choice to replace Dani Alves should the Brazilian leave the club. Arsenal right back Hector Bellerin has been linked with a return to former club Barcelona . PSG and Man United target Dani Alves could leave the Catalan giants as his contract expires this summer . In a poll carried out by Spanish publication 'Sport', Bellerin carries 12 per cent of the vote, with Glen Johnson also included with a mere two per cent. A move would see him follow the route of Cesc Fabregas, who also left Barca before ever playing a first-team game. However, it seems supporters would be happier if Alves stayed, with 62 per cent voting in favour of a contract renewal. The 31-year-old's current deal expires at the end of the season, with PSG and Manchester United potential suitors."
+  },
+  "news:8": {
+   "title": "cnn_10941",
+   "domain": "news_gen",
+   "context": "Set in the grey stones of the Victorian chapel, the red of the two doors makes a bold, slightly unexpected statement. But that distinctive splash of colour is the only clue to the identity of the man who turned this building into a family home. In the early 1970s, Sir Richard Branson brought the chapel into residential use while he was setting up his Virgin recording business. And from then until the present day, the Virgin logo \u2013 which has gone on to adorn trains, planes and a multitude of other businesses \u2013 has always been printed in the red of those humble chapel doors. Sir Richard Branson converted The Old Chapel in Shipton-on-Cherwell, Oxfordshire, into a home in the 1970s . At the time he converted the property, Branson had a recording studio in an old manor house a few miles away from the chapel at South Leigh in Shipton-on-Cherwell, Oxfordshire. At The Manor, the first Virgin albums, such as Mike Oldfield's Tubular Bells, were recorded and Branson would use The Old Chapel as a weekend retreat. Other artists using The Manor included Sandy Denny, The Bonzo Dog Doo-Dah Band and John Cale. 'I saw Richard coming and going into The Old Chapel in the 1970s,' says South Leigh resident Martin Collet, 57. 'I often used to see him in the village pub, The Mason Arms, having a meal with family and friends and he was always very pleasant."
+  },
+  "news:9": {
+   "title": "cnn_2746",
+   "domain": "news_gen",
+   "context": "Russian Premier League team Torpedo Moscow must play two home games in an empty stadium after fans displayed a banner with a Nazi symbol, the club's fourth racism-related punishment this season. Torpedo supporters showed the flag during the club's 3-1 win over Arsenal Tula on Sunday. The punishment will not take effect until May because Torpedo are already required to play their next two home games behind closed doors for a separate incident in which fans abused Zenit St Petersburg striker Hulk with monkey chants. Sunday's clash between Torpedo Moscow and Arsenal Tula was marred by violence and racism . A fan lays on the ground after being attacked by rival supporters during Torpedo's latest away game . Sunday's game was also marred by crowd violence, with Torpedo fans attacking Arsenal supporters and police. For that, Torpedo fans will be barred from the club's next three away games, with the exception of women and children under 13. Torpedo was fined a total of 900,000 rubles (\u00a311,000) for various offenses including the Nazi banner, the fighting, use of pyrotechnics by fans, and insulting chants. Arsenal received a 480,000-ruble (\u00a36,000) fine on charges including failing to secure the stadium properly. Police detained 15 fans at the game, of which seven face charges, Russian agency Tass reported on Monday."
+  },
+  "news:10": {
+   "title": "cnn_6273",
+   "domain": "news_gen",
+   "context": "We know him as 'Success Kid' - the toddler with a clenched fist and look of satisfaction who's become the internet's most positive meme. But now Sam Griner is eight years old and is using his online fame to help out his sick dad. His mother, Laney Griner from Jacksonville, Florida, set up a\u00a0GoFundMe page to raise the $75,000 her husband, Justin, needs for the kidney transplant and years of subsequent medications. 'Please help us reach our goal so that Justin may get the pre-treatments and transplant he desperately needs,' she wrote on the fundraising page. Scroll down for video . Plea: Sammy Griner is pictured with his 39-year-old father, Justin, who needs a kidney transplant . Famous face: Sammy is better known as the face of the 'Success Kid' meme. His mother snapped the photo - which actually shows him just moments before trying to put sand in his mouth - when he was 11 months . 'His mother died from this disease, please help us write a different story for Justin and his son, Sam.' By Tuesday afternoon, the page had raised more than $38,000 of the goal. Although Griner initially decided against using the notoriety of 'Success Kid' to help raise funds, she eventually spoke to\u00a0The Daily Dot about the campaign because of her fears for her husband."
+  },
+  "news:11": {
+   "title": "cnn_6570",
+   "domain": "news_gen",
+   "context": "Hanging on one 93-year-old man's wall at a Kentucky nursing home was a photo collage of him and his wife. It was titled 'Lill & Bill, together forever'. That sentiment came true this week when, after 73 years of marriage, William 'Wild Bill' Wilson and his wife Lillian Karr Wilson died just two minutes apart from each other. Both Lillian, 89, and Bill were Alzheimer's patients and for the last couple of years had to live in separate nursing homes. Lillian resided at Richmond Place in Lexington, while Bill stayed at the Thomson-Hood Veterans Center in Wilmore. After 73 years of marriage, high school sweethearts Doug Wilson, 93, and Lillian Kerr Wilson, 89, passed away just two minutes apart from each other this week . But on Tuesday their connection proved strong as ever when one of their sons, Doug, received a phone call at 3.52am to inform him that his father had passed away. Just five minutes later the phone rang again. Doug said it was his mother's nursing home, calling with the same sad news. 'We all look at it as a blessing,' Doug told the Lexington-Herald Leader, 'because we're going to have one funeral for both of them.' Doug, 66, believes it will also make it easier for the family to grieve. 'We\u2019re looking at it as a celebration of life because they had a great life,' he told the Washington Post."
+  },
+  "news:12": {
+   "title": "cnn_2990",
+   "domain": "news_gen",
+   "context": "When these villagers in China spent \u00a31,000 and hours of hard labour digging a new well, the least they expected was some fresh drinking water. But they were left disappointed after pumping the liquid to the surface, only to discover it was so polluted that they could set it on fire. Residents of\u00a0Ansai, in Shaanxi Province, central China, said they could smell gas and petrol coming from the well, and blame a leak from a local petrol station, The People's Daily Online\u00a0reports. Villagers in\u00a0Ansai,\u00a0Shaanxi Province, in central China, dug a 46m well in order to get fresh drinking water, but when the pumped it to the surface the found it was so polluted it could be set on fire . Local officials say they have now launched an investigation into how the water from the well, which cost \u00a31,000 to build, became so polluted . Locals said they could smell \u00a0petrol when the water surfaced, and blame the pollution on a leak from a local gas petrol station, a claim which the owner denies . However, when Chinese officials investigated, they said they could find no trace of a spillage, leading some people to theorise that the villagers could have struck oil. However this is highly unlikely, as oil deposits only occur between 750 and 4,500m underground, and the well is only 46m deep."
+  },
+  "news:13": {
+   "title": "cnn_9136",
+   "domain": "news_gen",
+   "context": "A pensioner is living in fear after his Jack Russell saved him from a badger the size of a large pig with six-inch teeth. Shocked Terry Cooper, 79, was enjoying the sunshine in his garden with his dog Sam when the huge animal burst through a hedge with two cubs. Mr Cooper, from Curry Rivel, Somerset\u00a0said his dog  dragged him back indoors and fears he could have been attacked if his pet had not been there. Scroll down for video . Shocked: Pensioner Terry Cooper said the huge badger burst through a hedge with two cubs (stock image) Mr Cooper spotted the huge badger while sitting in his garden in the sunshine with his Jack Russell Sam . The retired charity worker said: 'I've got a little Jack Russell and I took him out just after tea at 5pm. 'Suddenly there was a badger and two little'uns in my garden. 'He was the size of a pig, with teeth about six inches long. They were as long as a lemonade bottle is wide.' 'My dog turned me round and quickly pulled me in,' Mr Cooper added.\u00a0'The badger didn't attack me, so I didn't seek medical attention, but I was left badly shaken. 'If I hadn't have had my dog there, the badger could have had me.' Following the scare, the National Farmers' Union has issued advice for residents on protecting their property from invading badgers (stock photo) He has covered the gap in his hedge with two pieces of metal and a bag of compost."
+  },
+  "news:14": {
+   "title": "cnn_9049",
+   "domain": "news_gen",
+   "context": "Backache is striking us younger than ever \u2013 with almost half of the under-30s saying they are battling constant pain. Experts blame increasingly sedentary lifestyles and an obsession with mobile phones for a sharp rise in the number of young people with back and neck problems. And they warn that children as young as 12 are seeking treatment. As gadgets get smaller, users lean over them more, putting the neck and shock-absorbing discs that cushion the vertebrae under added pressure . Some 45 per cent of the under-30s surveyed for the British Chiropractic Association said they had a painful back or neck \u2013 up from 28 per cent last year. Across all age groups, 86 per cent said it was a problem \u2013 compared with 77 per cent last year. Almost one in four said that they are in pain on a daily basis. Chiropractors blame the increase on days and nights spent sitting hunched over mobile phones and tablet computers. Rishi Loatey, a chiropractor in North-West London, sees patients who are still at school, including some as young as 12. He said working on laptops and tablets rather than desktop computers, as well as using mobile phones, can affect posture and put the back under extra strain. As gadgets get smaller, users lean over them more, putting the neck and shock-absorbing discs that cushion the vertebrae under added pressure."
+  },
+  "news:15": {
+   "title": "cnn_32",
+   "domain": "news_gen",
+   "context": "(CNN)The world's biggest and most powerful physics experiment is taking place as you read this. The Large Hadron Collider (LHC), a particle accelerator and the largest machine in the world, is ready for action following a two-year shutdown. After problems that delayed the restart in March, scientists at the European Organization for Nuclear Research (CERN) completed final tests, enabling the first beams to start circulating Sunday inside the LHC's 17 mile (27 km) ring. \"Operating accelerators for the benefit of the physics community is what CERN's here for,\" CERN Director-General Rolf Heuer said on the organization's website. \"Today, CERN's heart beats once more to the rhythm of the LHC.\" The LHC generates up to 600 million particles per second, with a beam circulating for 10 hours, traveling more than 6 billion miles (more than 10 billion kilometers) -- the distance from Earth to Neptune and back again. At near light-speed, a proton in the LHC makes 11,245 circuits per second. It took thousands of scientists, engineers and technicians decades to devise and build the particle accelerator, housed in a tunnel between Lake Geneva and the Jura mountain range. The purpose of the lengthy project is to recreate the conditions that existed moments after the \"Big Bang\" -- the scientific theory said to explain the creation of the universe."
+  },
+  "news:16": {
+   "title": "cnn_11225",
+   "domain": "news_gen",
+   "context": "When leaving a place of work, most people will usually avoid burning  bridges. Engineering an amicable exit is common protocol, even when the employee can't wait to get the hell out of there. But one disgruntled staff member at an anonymous firm decided to skip the pleasantries and pen an incredibly sarcastic resignation letter announcing their impending departure to bosses. A Reddit user wrote an incredibly sarcastic resignation letter to their boss . A Reddit user\u00a0decided that it was a good idea to write a biting leaving note to their boss.It's not known exactly where the letter is from, but the writer is believed to be America since the American spelling of \u2018apologize\u2019 is used and the date is 4/24/15 which is the U.S. way of writing it. In the note, the Reddit user passive-aggressively vents their frustration and discontent with the company policies as well as the lack of emopion shown during recent events. Throughout the letter, the Reddit user repeatedly apologises for a number of unfortunate incidents - all of which seem to be out of their control. They apologise for the death of a step-mother, sickness and \u00a0subsequent doctor's appointments. The letter reads: 'I am sorry that my step-mother died so suddenly from cancer. I am sorry that I am not a robot and was emotionally affected by her passing and had to miss work."
+  },
+  "news:17": {
+   "title": "cnn_2270",
+   "domain": "news_gen",
+   "context": "Phil Jagielka swapped Everton's training ground for a kitchen earlier this week as he learned to cook a traditional Thai dish to celebrate the sacred festival of Songkran. The Toffees have been sponsored by Thai beverage Chang Beer for over 11 years and Jagielka, who scored the winner against Southampton on Saturday, was on hand to visit\u00a0Chaophraya restaurant in Liverpool for a special cookery lesson. Having teamed up with expert chef\u00a0Kim Kaewkraikhot, Everton's captain prepared some Pad Thai - a stir-fried noodle dish - before taste testing his own food. VIDEO Scroll down to watch Phil Jagielka's trip to Thai restaurant Chaophraya . Everton defender Phil Jagielka shares a joke with Thai chef\u00a0Kim Kaewkraikhot at\u00a0Chaophraya restaurant . The Toffees skipper tucks into a plate of Pad Thai after learning to cook the dish himself . Jagielka took part in a cookery lesson to celebrate the Thai festival of Songkran with sponsors Chang Beer . Jagielka said: 'I've mixed it up with the head chef and we've made some Pad Thai, I think they were very kind to me, giving me all the ingredients ready-made, it was a full proof plan but I'm pretty proud, it tasted pretty nice and I can go and brag now that I can cook a full Thai dish."
+  },
+  "news:18": {
+   "title": "cnn_5990",
+   "domain": "news_gen",
+   "context": "An Italian model who accused Harvey Weinstein of groping her breasts and putting his hand up her skirt attended the Hollywood mogul's new Broadway show just a day after his alleged attack. Ambra Battilana, 22, told police Weinstein asked her for a kiss and then groped her during a 'business meeting' at his Tribeca office in Manhattan on Friday night. However, the very next day she snapped a picture of her matinee ticket to a preview showing of Finding Neverland, which Weinstein is producing, from the Lunt-Fontanne Theater and posted it on her Instagram. Scroll down for video . Italian model Ambra Battilana, 22, told police Hollywood mogul Harvey Weinstein groped her during a 'business meeting' at his Tribeca office in Manhattan on Friday night . The next day she snapped a picture of her matinee ticket to a preview showing of Finding Neverland, which Weinstein is producing, at the Lunt-Fontanne Theater and posted it on her Instagram . Sober: Directly after the show, Battilana posted a picture of an empty glass of water from the Tribeca HOtel where the NYPD picked up Weinstein very soon after . A movie industry source said Weinstein gave Battilana the $227 sixth-row-center-seat ticket during their Friday night meeting and told her he would be backstage during the show ."
+  },
+  "news:19": {
+   "title": "cnn_9696",
+   "domain": "news_gen",
+   "context": "A young woman has revealed details about her lengthy battle with a rare condition that left her unable to eat anything for a year and a half \u2013 despite the fact that she still felt desperately hungry. Kyli Wilfson, a self-confessed \u2018food person\u2019, was 26 when she first started experiencing agonizing pain \u2013 which made her feel like she had been \u2018kicked in the abdomen' \u2013 whenever she ate, a symptom which doctors initially brushed off as being due to a mild pancreatic problem which would \u2018resolve itself\u2019 in a matter of days. Kyli, now 29, was eventually diagnosed with chronic pancreatitis, and the North Carolina resident found herself looking at a lifetime spent on a feeding tube, as the disease, which effects less than .01 per cent of people, would only get worse. Within months she had dropped to a startling 80lbs, she revealed to\u00a0Cosmopolitan.com, and  had to postpone her wedding as she spent more and more time in hospitals. Mystery illness:\u00a0Kyli Wolfson, pictured, had trouble getting a correct diagnosis when she woke up in excruciating pain in October 2012; her illness left her unable to eat for a year and a half . At first, doctors faced difficulties even diagnosing Kyli; though she'd had digestive problems for years, her rare disease wasn't initially considered."
+  },
+  "news:20": {
+   "title": "cnn_9422",
+   "domain": "news_gen",
+   "context": "Spain remains Britons' favourite destination to fly to, as it has been for more than 25 years, with its more than 34 million journeys in 2014 over double that of the next most popular, the United States. New figures from the UK Civil Aviation Authority shows 238m passengers passed through British airports in 2014, just three million less than the pre-recession boom peak of 241m in 2007 and 10m more (a 4.4 per cent rise) than 2013. As would be expected, most passengers (144m) fly to Europe which enjoyed a 5.4 per cent rise year on year in visitors from the UK. Perhaps surprisingly though, Germany proved a more visited destination even than France and Italy, which were all ranked behind Spain and the US and ahead of Ireland and the Netherlands. The United Arab Emirates also ranks in the top 10 countries British flyers most travel to and enjoyed the largest passenger increase in the past year with a 430,000 boost (7.4 per cent) to 6.2m. The UAE  ranked ahead of Portugal and Switzerland, who round out the top 10, and Turkey in 11th. While only the 12 most visited country by plane, Greece is the biggest improver over the past year with its 5.6 million incoming passengers from Britain a 13.2 per cent increase. While topping numerous polls as UK travellers' dream destination, Australia suffered the biggest drop in UK arrivals losing a third of visitors from 744,000 to 488,000."
+  },
+  "news:21": {
+   "title": "cnn_3473",
+   "domain": "news_gen",
+   "context": "Brendan Rodgers has come out fighting after suffering Wembley disappointment and insisted he is the right man to lead Liverpool next season. Another trophyless season is nearing an end after losing to Aston Villa but Rodgers said: 'I don't think there is anyone better. That is the reality of how I see it. Three months ago I was a tactical genius. Now I have lost a game and it is not so good. 'I have got a strong relationship with the owners and they understand that this was going to be the process. I haven't taken over a machine that was for 10 years used to winning trophies.' Liverpool manager Brendan Rodgers has backed himself to improve the club next season . Steven Gerrard (left) trains alongside Jordan Henderson, who signed a new Liverpool contract on Thursday . Adam Lallana (left) was back in training for Liverpool as they prepare to take on West Brom . Henderson (left) shakes hands with captain Gerrard on the day he signed a new Liverpool contract . Liverpool have been putting in the hard yards on the Melwood training pitch in a bid to ensure they hit back from their FA Cup nightmare when they take on West Bromwich Albion in the Premier League on Saturday. Rodgers leads his side to The Hawthorns after watching them wilt on the big stage against Aston Villa in the FA Cup semi-final at Wembley last weekend, crashing out of the cup with a 2-1 defeat and a toothless display."
+  },
+  "news:22": {
+   "title": "cnn_8222",
+   "domain": "news_gen",
+   "context": "Realtors in Indianapolis are looking to unload what's likely the Midwestern city's gaudiest and most famous home--a 26,000-square-foot castle built of ranch homes glued together by a former pimp turned construction king. For a meager $862,000, its gargoyles, endless balconies and ornate fountains can be yours with which to carry on the eccentric torch of quirky Indy celebrity\u00a0Jerry A. Hostetler. It sprang from inimitable Hostetler's imagination after he went from 24-year-old pimp known to police as Mr. Big to a local mini-magnate. Now, as it sits largely unoccupied, it's a cause for both concern and awe as neighbors wonder how something so immensely unique and bound to its creator can remain among the neighborhood's modest ranchers and middle class homes. Scroll down for video . Went big: Realtors in Indianapolis are looking to unload what's likely the Midwestern city's gaudiest and most famous home--a 26,000 square foot castle built of ranch homes glued together by a former pimp turned construction king . Uncertain future: Hostetler realized his vision, but after he died in 2006 the home became a spectacle when no longer attached to its creator . Currently trying to sell off the home is Indiana-born, Florida-based tech investor Chad Folkening, reports the\u00a0Indy Star. He purchased the home in foreclosure following Hostetler's 2006 death. He listed it for $2."
+  },
+  "news:23": {
+   "title": "cnn_2894",
+   "domain": "news_gen",
+   "context": "Manchester United have become favourites to sign Danny Ings after holding talks with Burnley about a summer deal. Liverpool maintain an interest in the player and were prepared to exploit a Premier League loophole to guarantee a transfer in the summer. But Louis van Gaal is attempting to use the same method to trump their rivals and secure the services of the 22-year-old. Ings has scored nine goals in his first season in the Premier League and United consider him to be a future England international. Manchester United are favourites to sign Burnley striker Danny Ings this summer . Ings jokes with Arsenal forward Danny Welbeck during Burnley's 1-0 defeat at Turf Moor on Saturday . Van Gaal was particularly impressed by Ings\u2019 performance against United at Old Trafford in February when he scored in Burnley\u2019s 3-1 defeat. Ings has become one of the most sought-after strikers in Europe and United are keen to ensure that they win the race for his signature. Real Sociedad, Tottenham and Manchester City are all interested in the player, but Sportsmail understands that United have opened dialogue with Burnley to hurry through a move. The player is out of contract in the summer and due to his age Burnley would be set to receive around \u00a35million in compensation if he moved to a domestic rival. Ings impressed Louis van Gaal when he scored against United at Old Trafford in February ."
+  },
+  "news:24": {
+   "title": "cnn_11240",
+   "domain": "news_gen",
+   "context": "A Soviet dissident who spent 12 years in prison and forced labour camps is to be charged with making and possessing indecent images of children after a police investigation. Vladimir Bukovsky, 72, has lived in the UK since he fled the Soviet Union in the 1970s after he was accused of spreading anti-Soviet propaganda. It came after he managed to smuggle to the West 150 pages of documents detailing the abuse of psychiatric institutions for political reasons in the Communist state. Soviet-era dissident Vladimir Bukovsky, who has been summonsed to appear in court next month to be charged with making and possessing indecent images of children . But now Bukovsky has been summonsed to appear at Cambridge Magistrates early next month following an investigation by Cambridgeshire Police, the Crown Prosecution Service said. He will be charged with five counts of making an indecent photograph of a child, five counts of possessing indecent photographs of children, and one count of possessing a prohibited image. Jenny Hopkins, Chief Crown Prosecutor for the CPS in the East of England, said: 'Following an investigation by Cambridgeshire Police, we have concluded that there is sufficient evidence and it is in the public interest to prosecute Vladimir Bukovsky in relation to the alleged making and possessing of indecent images of children."
+  },
+  "news:25": {
+   "title": "cnn_11363",
+   "domain": "news_gen",
+   "context": "The Navy says a second SEAL has died following a training accident in a swimming pool at a base in Virginia. Lt. David Lloyd tells media outlets that Special Warfare Operator 1st Class Brett Allen Marihugh of Livonia, Michigan, died Sunday. The 34-year-old Marihugh and 32-year-old Special Warfare Operator 1st Class Seth Cody Lewis of Queens, New York, were found unresponsive on Friday at the bottom of the Combat Swimming Training Facility at Joint Expeditionary Base Little Creek-Fort Story. Lewis died Friday. Lloyd says both sailors were members of Naval Special Warfare Group 2. 'Training accident': Special Warfare Operator 1st Class Brett Allen Marihugh (left) of Livonia, Michigan, died Sunday after he and\u00a032-year-old Special Warfare Operator 1st Class Seth Cody Lewis were found unresponsive at the bottom of a swimming pool from what officials called a 'training accident' While an investigation of the incident is continuing,\u00a0Navy spokesman Lieutenant David Lloyd told Reuters Friday, 'They were working out in the pool...They were swimming. It was not dive training.' Marihugh and Lewis both served in the U.S. Marine Corps before they enlisted in the Navy. 'We are all deeply saddened by Brett's passing and would ask for your thoughts, prayers and support for the Marihugh and Lewis family, NSW community, and our friends and teammates at this time,' said Capt."
+  },
+  "news:26": {
+   "title": "cnn_6972",
+   "domain": "news_gen",
+   "context": "A Banksy mural painted on the only remaining piece of a bombed out house in Gaza could be reunited with the homeless owner who claims he was duped into selling it for just $200. Gaza police have seized the work 'under a court order' from Bilal Khaled, who is accused of buying the piece painted on a door belonging to the Darduna family without telling them its real value. The now homeless family in the impoverished Islamist-run Palestinian enclave says they were 'tricked' into parting with the valuable collector's item by the world famous street artist. Scroll down for video . The Niobe mural has been seized from Bilal Khaled, accused of buying the work painted on a door belonging to the Darduna family without telling them its real value. It is now being held at Khan Yunis public library . The mural painted on the Darduna family's door (left) and the doorway of the ruined house after it was sold . At the end of February, the artist, who chooses to remain anonymous, released an online video showing three works he painted on the walls of Gaza homes destroyed in Israeli air strikes. The disputed graffiti shows Greek goddess Niobe weeping on a metal doorway which was all that remained standing of the Darduna family home. Khaled said it 'will be stored at Khan Yunis public library until this issue is resolved'."
+  },
+  "news:27": {
+   "title": "cnn_10393",
+   "domain": "news_gen",
+   "context": "Hillsborough investigators have launched an appeal to track down  fans who tended to the wounded as they lay dying on the pitch at the 1989 disaster. Photographs which show the men and woman rushing towards those crushed in the tragedy have been released, with investigators urging anyone who recognises them to come forward. It comes at the request of some of the victims' families, said officials, with officers having been previously unable to identify the individuals in the images. They form part of an ongoing Home Office inquiry aiming to establish whether any individual or organisation was to blame for the disaster which claimed the lives of 96 Liverpool fans. Investigators have released these images of football fans who were pictured carrying the wounded on stretchers and tending to others at the 1989 Hillsborough disaster . Police say the 'unusual' appeal \u00a0is necessary as those photographed may be able to answer questions of the victims' families . Issued on behalf of the Coroner Sir John Goldring, the people in the photographs may be able to tell victims' families' more about how they died, officials said. Asked why it had taken more than a year to release the images, a spokesman said police had been trying to identify the people in the footage by poring over statements and other CCTV footage."
+  },
+  "news:28": {
+   "title": "cnn_8679",
+   "domain": "news_gen",
+   "context": "Kelli Jo Bauer, is accused of stealing more than $100,000 worth of women's clothing and selling these goods out of her nearly $1 million home . A woman has been accused of stealing more than $100,000 worth of women's clothing which she then advertised on Facebook to sell from her plush mansion. Kelli Jo Bauer, 45, was arrested at her Kansas City home after undercover officers visited her and were allegedly shown dozens of clothes, many still with tags of them, that she was selling. Bauer, who lives in a $900,000 home in Overland Park had advertised more than 1,000 items of high-end women's clothing on Facebook, including dozens of fake designer handbags. She has been accused of theft, according to documents filed in Johnson County District Court. Bauer, who is on house arrest as a condition of bond, is accused of showing officers clothes \u2014 many with tags still on them \u2014 hanging on a rack and folded on a bed in an upstairs bedroom, according to the\u00a0Kansas City Star. It is alleged that Bauer told undercover officers there was more merchandise downstairs, including an 'armful' of purses she showed them. Bauer told the officers that she was selling the items because she was a 'compulsive shopper' and had lost weight, the court documents said. The officers bought several items, including what Bauer said was a fake Louis Vuitton bag for $50. Scroll down for video ."
+  },
+  "news:29": {
+   "title": "cnn_7604",
+   "domain": "news_gen",
+   "context": "We're always hearing about the latest 'superfoods' - and how they could have a powerful effect on our health and wellbeing. And while the term 'superfood' might be thrown around a little too freely sometimes, there are some fruits and seeds that really are a power-house of nutritional value. Here, I reveal which ones are worth adding to your shopping basket today... Scroll down for video . Sour cherries contain high levels of antioxidants and as a result are anti-inflammatory, can help a person sleep and can improve recovery after a sports injury, Dr Sally Norton said . TART CHERRIES . What are the benefits? Tart or sour cherries  have been found to contain high levels of antioxidants. As a result the benefits  include anti-inflammation, boosted sleep, and improved sports recovery. Reports have suggested that an increased intake of tart cherries could help to reduce certain post-workout side-effects, such as muscle aches, inflammation and weakness. AVOCADO . What are the benefits? More than just the main ingredient in guacamole, avocados seem to be having a real moment in the spotlight, and it's not surprising. They're a great source of healthy, mono-saturated fats \u2013 which have been known to help lower bad cholesterol, and as a result, reduce our risk of heart attack and stroke."
+  },
+  "news:30": {
+   "title": "cnn_7012",
+   "domain": "news_gen",
+   "context": "A large protest opposing the closure of remote indigenous communities in WA has shut down streets in central Melbourne. Several thousand people gathered outside the city's main railway station Flinders Street at 4pm on Friday. 'Enough is enough - where is the justice for Aboriginal people?' a speaker shouted to the crowd before the walk through CBD streets, flanked by police. This comes as the Queensland Police Service refuses to issue an apology to an Indigenous officer after claims the word 'Abor' was written on his station roster by a senior sergeant, the\u00a0ABC reports. Protesters march through the streets of Melbourne on Friday afternoon against\u00a0government plans to close down remote indigenous communities in Western Australia . Several thousand people gathered outside the city's main railway station Flinders Street at 4pm on Friday . Protesters take part in a traditional smoking ceremony in Melbourne during the rally . Indigenous leaders have also been highly critical of the state government's plans, which could involve the forced removal of more than 1000 people . The rally forced the closure of Flinders and Elizabeth streets, where surrounding streets soon became clogged with cars and trams forced to stop. Rally goers gathered again outside Flinders Street station, blocking the intersection, just on 5pm. Police, on foot and on riot horses, followed the marchers all the way."
+  },
+  "news:31": {
+   "title": "cnn_4006",
+   "domain": "news_gen",
+   "context": "West Ham are confident that the deal to move into the Olympic Stadium does not contravene domestic or European legislation and 'categorically' stated that it does not constitute state aid. The Premier League club are set to move into the London 2012 showpiece venue for the start of 2016-17 season, but the journey there has been a tortuous one, fraught with controversy. Fresh questions were raised about the award of the 99-year lease to West Ham on Tuesday, when it was suggested the deal may contravene European state aid law. David Sullivan, Boris Johnson,  Karren Brady, Sir Robin Wales and David Gold at the Olympic Stadium . West Ham trio Diafra Sakho, Winston Reid and Mark noble smile for the camera at the Olympic Stadium . The report suggests the failure of London Mayor Boris Johnson and the London Legacy Development Corporation to obtain prior approval from the European Commission before signing the deal opens up the possibility of challenges from anyone who feels disadvantaged. That could leave West Ham facing a large compensation bill, but the club defended their position in a lengthy statement about the Olympic Stadium deal. A West Ham spokesman said: 'West Ham United is confident that its agreement with the LLDC complies with all relevant UK and European legislation and categorically does not constitute state aid."
+  },
+  "news:32": {
+   "title": "cnn_9216",
+   "domain": "news_gen",
+   "context": "An impoverished father has revealed that he plans to sell his own kidney to fund life-saving treatment for his three morbidly-obese children. Sisters Yogita Rameshbhai Nandwana, five, and Anisha, three, and their 18-month-old brother Harsh, are among the world's heaviest young children. Weighing 5st 5lbs (34kg), 7st 8lbs (48kg) and 2st 5lbs (15kg) respectively, the food they eat in a week is enough to feed two families in a month. Now their father Rameshbhai Nandwana, 34, of Gurjarat, India, is planning to sell his kidney to earn the money needed to see top specialists. He said: \u2018If my kids continue to grow at this rapid rate they will have major health issues. We\u2019re terrified they will die.\u2019 Scroll down for video . Obese: (From left) Yogita, five, Harsh, 18 months, and Anisha, three, weigh 5st 5lbs (34kg), 2st 5lbs (15kg) and 7st 8lbs (48kg) respectively . Yogita and Anisha eat 18 chapatis, 3lbs of rice, two bowls of broth, six packets of crisps, five packs of biscuits, 12 bananas and a litre of milk daily. And their extreme hunger means their mother Pragna Ben, 30, spends most of her day making their meals. She said: \u2018My day starts with making 30 chapatis and 1kg vegetable curry in the morning. After that I am again in the kitchen preparing more food. \u2018Their hunger never stops. They demand food all the time and cry and scream if they\u2019re not fed."
+  },
+  "news:33": {
+   "title": "cnn_4984",
+   "domain": "news_gen",
+   "context": "A wife has told how she has put her husband on a lifelong sex ban and tracks his every move, after discovering he had cheated on her after taking a lie detector test. Despite his infidelity, Haley and Kev Mulholland still share a house in Bristol, though Mr Mulholland has to sleep on the living room sofa. The mother-of-eight says that while she does not want her husband, she does not want any other woman to have him either. Haley Mulholland became suspicious husband Kevin was having an affair after reading his Facebook page . Mrs Mulholland monitors her husband\u2019s movements, checks his phone and even sniffs him to see if she can smell another woman\u2019s perfume. 'I might not want Kev, but I don\u2019t want anyone else to have him either,' said the 45 year old, who is mum to Sophie, 27, Kerrie, 25, Kasey, 14, Brittany, 13, Paige ten, Tyler, nine, Madison, eight and five-year-old Alexius. 'I keep tabs on his phone and on his Facebook page. He swears he\u2019s staying true, but I couldn\u2019t trust him as far as I could throw him. Over the past few months I\u2019ve become quite the detective.' Though Mrs Mulholland has so far found no evidence to suggest he is straying, she refuses to take her husband of 15 years back. She said: 'While we\u2019re not divorced, we\u2019re not together. There\u2019s no kissing, sex or anything like that, though Kev\u2019s tried his luck."
+  },
+  "news:34": {
+   "title": "cnn_7382",
+   "domain": "news_gen",
+   "context": "The family of a murdered mother have spoken of their fury after it was revealed that she tried to call 999 hours before she was killed but call handlers failed to alert police. Karen Catherall, 45, was viciously beaten and strangled to death by Darren Jeffreys, who she met only weeks earlier on dating site Plenty of Fish. The pair had been drinking at the pub before she returned to her home in Gwernaffield near Mold, Flintshire, North Wales, when Jeffreys, 47, followed and attacked in an alcohol-fuelled rage. Scroll down for video . Karen Catherall, 45, (right) was brutally murdered by Darren Jefferys (left) who she met on a dating site just weeks before her death. He was jailed for a minimum of 17 and a half years in February . He only called paramedics the following morning and claimed he thought Ms Catherall was sleeping, but later admitted murder and was jailed for life in February. Police have since told the family that the mother-of-two made a 999 call from her mobile just after she returned from the pub, which went through to BT to deal with. Operators at the telecommunications company connects both mobile and landline numbers with the requested emergency service and follow strict protocol. But when Ms Catherall called on September 13, last year, the call handler said they could not hear anything and therefore did not connect the call to the police or send help."
+  },
+  "news:35": {
+   "title": "cnn_6270",
+   "domain": "news_gen",
+   "context": "A 7ft 8in tall man  so embarrassed by his height he hid at home for 'half his life' has found love with a woman three feet smaller than him. Joelison Fernandes da Silva, 28, developed gigantism as a child and his rapidly soaring height forced him to drop out of school due to bullying and then refuse to leave the family house for years. But true  happiness eventually found the shy Brazilian - who has come to be known as 'the gentle giant' - in the form of Evem Medeiros, a 5ft 21-year-old woman he met online. Scroll down for video . Half his size: Joelison Fernandes da Silva, 28 (right), who at 7ft 8in tall has come to be known as 'the gentle giant', married Evem Medeiros (left), a 5ft 21-year-old woman he met online . 'The first time I saw her it was love at first sight,' Joelison said. 'I was charmed by her. I wanted to be with her all the time. It didn't matter about her size.' The former gold miner admits their huge height difference has left a few people bewildered, especially when it comes to the dynamics of their love-life. 'I get asked a lot about this and at first it annoyed me but nowadays it's normal and I am used to it. I take it in good humour,' explained the real-life Goliath. 'Some people like to talk about my shoe size and then imagine how big my member might be. 'I think the size of my feet is false advertising. Our love life is normal. We adapt."
+  },
+  "news:36": {
+   "title": "cnn_11210",
+   "domain": "news_gen",
+   "context": "The U.S. Supreme Court's . arguments on Tuesday over same-sex marriage will cap more than . two decades of litigation and a transformation in public . attitudes. Based on the court's actions during the past two years, a . sense of inevitability is in the air: That a majority is on the . verge of declaring gay marriage legal nationwide. Justice Anthony Kennedy, the court's pivotal member on gay . rights, has been marching in this direction with opinions dating . to 1996. In his most recent gay rights decision for the court in . 2013, rejecting a legal definition of marriage limited to a man . and woman for purposes of federal benefits, Kennedy deplored . that U.S. law for making gay marriages 'unequal.' Scroll down for video . A moment in history: People line up outside the Supreme Court in Washington April 26 ahead of Tuesday's arguments focusing on gay marriage . That 5-4 decision did not address a constitutional right to . same-sex marriage, but lower court judges interpreted the ruling . as an endorsement of it and began invalidating state bans. When states appealed rulings striking down their same-sex . marriage prohibitions, the Supreme Court declined to intervene, . most notably in October 2014 when it denied appeals in seven . cases on a single day. Instead, the nine justices are hearing in Tuesday's oral . arguments an appeal of the sole decision from a regional U.S."
+  },
+  "news:37": {
+   "title": "cnn_7036",
+   "domain": "news_gen",
+   "context": "Nigel Farage has dismissed criticism of the lack of diversity in Ukip's manifesto by claiming there was a 'half black' party spokesman featured prominently - and 'one fully black person'. The Ukip leader made the remarks after being asked at his manifesto launch last week to justify the scarcity of black and Asian faces in the Ukip manifesto. It includes several photographs of the party's top team although it was suggested the only black face in the document appeared on a page about overseas aid. Scroll down for video . Nigel Farage has dismissed criticism of the lack of diversity in Ukip's manifesto by claiming there was a 'half black' party spokesman featured prominently - and 'one fully black person' The question provoked noisy barracking, including from a group of black and Asian candidates attending the launch. Mr Farage said the premise was wrong, with the picture of the party's immigration spokesman Steven Woolfe ignored. He told Magic Radio: 'Well firstly there was one fully black person.' Mr Farage added: 'There was another one of our leading spokesman who is half black and that didn't get a mention. And he featured very prominently on page six. So the premise was wrong. 'I thought what happened was really interesting. There was a journalist from one of our leading daily newspapers who made the comment you know, there's only one black."
+  },
+  "news:38": {
+   "title": "cnn_7373",
+   "domain": "news_gen",
+   "context": "Since Ellen Degeneres broke the internet with her celebrity selfie at last year's Oscars, taking mobile phone snaps on the red carpet has become a must-do for A list stars. But this year's Cannes Film Festival has been declared a selfie-free zone after organisers asked celebrities to stop taking the\u00a0'ridiculous and grotesque' images. While Cannes director Thierry Fremaux admitted that he did not have the powers to ban the pictures altogether, he urged movie starts to resist the temptation. Scroll down for video . Celebrities have been told to stop taking selfies at this year's Cannes Film Festival by director Thierry Fremaux (pictured, models Petra Nemcova, left, and Victoria Bonya and Hofit Golan, right, at last year's event) Mr Fremaux said that the 'ridiculous and grotesque' pictures slowed the entire event down, causing problems for organisers (pictured, Jeremie Renier takes a selfie at the photocall for Saint Laurent last year) The Cannes director blasted celebrities such as Rosario Dawson (left) and\u00a0Nabilla Benattias (right) who 'stop every two metres to take a picture of themselves, with themselves' Quoted in the Guardian, he said: 'We don't want to prohibit it but it's really a matter of timing."
+  },
+  "news:39": {
+   "title": "cnn_4372",
+   "domain": "news_gen",
+   "context": "The future of Andy Murray\u2019s coaching arrangement with Amelie Mauresmo looks shrouded in doubt after he confirmed that they will take a prolonged break from each other after Wimbledon. Mauresmo, who is expecting a baby in August, will be replaced by Swede Jonas Bjorkman in the lead-up to the US Open and quite possibly after that, depending on how she assesses her priorities. The 27-year-old Scot, who is in Munich for this week\u2019s BMW Open and joined in the 100-year celebrations at the Iphitos Tennis Club on Monday night, parted company with Ivan Lendl last year because the Czech was no longer able to spend half the year travelling. Andy Murray (centre), Tommy Haas (left) and Roberto Bautista-Agut help to blow out the candles on a cake to celebrate 100 years at the Iphitos Tennis Club in Munich, the venue for this week's BMW Open . Murray (left) and coach Jonas Bjorkman enjoy the celebrations in Munich on Monday evening . Murray (left) arrives at the party alongside German sports manager Michael Mronz . Murray (right) poses for a picture alongside WBO Super Middleweight champion Arthur Abraham . Murray made it clear that if the responsibilities of parenthood prevent Mauresmo from fulfilling her 26-week commitment, then their relationship may have to go the same way."
+  }
+ }
+}

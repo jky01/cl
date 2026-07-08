@@ -88,6 +88,15 @@ it relocates the exception ledger into the model without solving the deep proble
   a sufficient router, no label needed); lowbits ties random (direction matters); on-manifold skipped stays
   safe (0.700). → deployable **O(#exceptions)** allocation policy, routed by the model's own surprise, no new
   arch. TODO: SEEDS=2 + budget ladder (0.25/0.5/0.75) for the exact exception-tail density number.
+- **Rung 1½ (R42 Step-A census): ✅ DONE — the REAL-text density number is in.** `s3/census.py`,
+  `docs/cloud_results/r42_census.*`. Tail at the R40 off-manifold anchor (τ=10 bpt): **squad_human 7.3%,
+  wiki_gen 7.6%, news_gen 14.0%** (τ=8: 21/24/29%); constructed 50/50 overstated real tails ~4–7×.
+  Distribution is smooth/UNIMODAL (no natural binary class → τ is a budget/risk knob); tail is
+  TYPE-structured (novel proper names & open-class phrases, ~never numbers/dates); short answers have
+  fatter per-token tails (length confound — stratify in Step B); part of the news tail is context-deictic
+  probe noise (self-containedness screen needed). Quality: judge calibration 0.865 (≥0.85 gate), dup ≤2%,
+  paraphrase stability corr 0.986. **Rung 2 density trigger NOT met** (CI-upper 0.20–0.37 at τ=8 vs ≈0.5
+  trigger). → Step B: REAL-stratified budget ladder, tail-aware grid {f/2, f, 2f, 0.5}, f≈0.2–0.3.
 - **Rung 2 (gated by density): fixed-capacity content-addressed associative memory layer for exceptions.**
 - **Rung 3 (gated by Rung 2 wall): TTT/Titans (surprise-gated state=weights), local/predictive-coding update
   rules, VSA superposition (graceful √ interference vs hard null-space saturation).** Titans independently uses

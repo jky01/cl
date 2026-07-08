@@ -1,5 +1,39 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R42 (Step A — real-text exception-density CENSUS, inference-only) — the real tail is a MINORITY
+> (≈7–14% at the synth-anchor threshold, ≈21–29% at τ=8), the distribution is a smooth UNIMODAL continuum
+> (no natural binary exception class), and bits/token is answer-TYPE- and LENGTH-structured.**
+> `s3/census.py` (codex-reviewed GO `qa/codex/2026-07-08.21.48.44.md`), artifacts
+> `docs/cloud_results/r42_census.{json,jsonl,log}`, Qwen2.5-0.5B base bits/token (same unit as R41 `_bpt`),
+> 3B-generated atomic probes + human-QA anchor, ~15min on one 3090 (two relaunches: HF hub namespace id;
+> 3B copies a literal `<TAB>` from format prompts — fixed with pipe format + one-shot example).
+>
+> | domain (gated probes) | n | faith | mean bpt | tail τ=6 | tail τ=8 [CI95] | tail τ=10 [CI95] |
+> |---|---|---|---|---|---|---|
+> | squad_human (wiki, HUMAN QAs) | 177 | 0.865* | 5.82 | 0.429 | 0.209 [0.14,0.28] | 0.073 [0.03,0.12] |
+> | wiki_gen (wiki, 3B probes) | 119 | 0.685 | 5.77 | 0.420 | 0.244 [0.16,0.33] | 0.076 [0.02,0.14] |
+> | news_gen (CNN, 3B probes) | 150 | 0.844 | 6.61 | 0.547 | 0.293 [0.21,0.37] | 0.140 [0.08,0.20] |
+>
+> *squad_human faith = 3B judge CALIBRATION on known-good human probes → 0.865 clears codex's ≥0.85
+> interpret gate (short of the 0.90 "clean" bar). Quality audit: dup rate 0.6–2.2% (tail not dup-driven);
+> paraphrase stability corr **0.986** / mean|Δ|=0.31 bpt (bits/token measures the ITEM, not the wording);
+> base already-correct ≈0% → need_write ≈ everything; R40 anchors: on-manifold ≈4.45, off-manifold ≈11.37.
+> **Findings:** (1) **Real-text exception density at the R40 off-manifold anchor (τ=10) is only 7–14%**
+> — the constructed 50/50 of R41 overstates real tails by ~4–7×; surprise-routed compact replay at
+> B≈10–25% is a genuine O(#exceptions) compute advantage on real text. **Rung 2 density trigger NOT met**
+> (CI-upper 0.20–0.37 at τ=8, trigger was ≈0.5). (2) **Deciles are smooth (2.5→10, no gap)** — real text
+> has NO bimodal on/off-manifold split; τ must be chosen by budget/risk tradeoff, and Step B's grid should
+> be tail-aware ({f/2, f, 2f, 0.5} with f≈0.2–0.3). (3) **The tail is TYPE-structured:** number/date
+> answers are ~never in the τ=8 tail (0–2%) while proper names hit 12–43% and open-class phrases 38–50% —
+> novel NAMES are the real-text analogue of R40's invented-name synth facts. (4) **Confound (flagged):**
+> 1–2-token answers have much fatter bpt tails (0.43–0.68) than 5+ (0.05–0.19) — later answer tokens
+> condition on earlier ones, amortizing per-token surprise; Step B selection should stratify or
+> length-adjust. (5) **Caveat (spot-check):** part of the news tail is context-DEICTIC probes ("What is
+> the name of the dog?" → Sam) — not globally addressable facts; a self-containedness screen is needed
+> before treating the news tail as pure knowledge novelty. Two-hop canary: 33 faithful, distribution ≈
+> one-hop (mean 5.71) — composition probes are not surprise-visible at the span level (consistent with
+> R32/R34: composition is a different axis than storage cost).
+
 > **R41 (Rung 1 — surprise-gated replay BUDGET on a mixed squad+synth stream) — STRONG PASS: the model's own
 > frozen-base bits/token is an ACTIONABLE routing signal, not just a category marker.** `s3/wikibridge.py`
 > `build_mixed` + `select_budget`, logs `docs/cloud_results/r41_rung1.{json,perqa.json,log}`, Qwen2.5-0.5B,
