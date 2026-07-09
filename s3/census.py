@@ -69,22 +69,32 @@ class Instruct:
 
 # NOTE first pod run: the 3B copies "<TAB>" LITERALLY instead of emitting a tab, and omits question
 # marks without an example -> 0 parsed probes. Fix: pipe separator + one-shot example + explicit "?".
+# NOTE 2nd XL run: original PSYS said "answerable from the passage alone", which produced passage-SCOPED
+# (deictic) questions -> only ~4-7% survived the self-contained screen. Fix: require the question to NAME
+# its specific subject so it is globally answerable closed-book (the Step-B training surface).
 PSYS = ("You extract atomic factual question-answer pairs from a passage. Rules: each answer MUST be an "
-        "exact short span copied verbatim from the passage (at most 6 words); each question must be fully "
-        "answerable from the passage alone, must test exactly ONE fact, must end with a question mark, and "
-        "must not contain the answer. Label each pair with one category word: entity, relation, number, "
+        "exact short span copied verbatim from the passage (at most 6 words); each question must test "
+        "exactly ONE fact, end with a question mark, and must not contain the answer. CRITICAL: each "
+        "question must NAME its specific subject — the real person, place, organization, work, or event "
+        "(e.g. 'the Treaty of Kanagawa', 'Blind Lemon Jefferson') — so it can be answered on its own "
+        "WITHOUT the passage. Never use pronouns (he, it, they) or vague references (the man, this city, "
+        "the author, the company). Label each pair with one category word: entity, relation, number, "
         "date, causal, procedural, or claim. Output ONLY lines in this exact format (one pair per line):\n"
         "category | question | answer\n"
-        "Example:\ndate | When did the treaty enter into force? | 1854")
+        "Example:\ndate | When did the Treaty of Kanagawa enter into force? | 1854")
 PUSR = "Passage:\n{c}\n\nExtract up to {k} pairs."
 FSYS = ("Judge whether the passage supports the given answer to the question. Minor wording differences "
         "are acceptable. Reply with exactly one word: yes or no.")
 # Step-B screen (codex 2026-07-08): deictic probes ("What is the name of the dog?") are not globally
 # addressable closed-book facts; training them inflates the exception tail with in-principle-unanswerable
 # items. Screen is a property of the QUESTION alone (no passage shown to the judge).
-SSYS = ("Judge whether the question identifies its subject specifically enough that a person who knows "
-        "the relevant facts could answer it without any additional context. Reply with exactly one word: "
-        "yes or no.")
+# NOTE 2nd XL run: the original wording rejected ~93% of even human SQuAD questions (judge miscalibrated).
+# Fix with explicit yes/no exemplars spanning the boundary.
+SSYS = ("Decide if a question is self-contained: it names its specific subject clearly enough that "
+        "someone could answer it with NO passage in front of them. Examples: 'What is the capital of "
+        "France?' -> yes. 'When did the Battle of Hastings take place?' -> yes. 'Who wrote Hamlet?' -> yes. "
+        "'What is the name of the dog?' -> no. 'What year did he die?' -> no. 'What did the company "
+        "announce?' -> no. Reply with exactly one word: yes or no.")
 FUSR = "Passage:\n{c}\n\nQuestion: {q}\nProposed answer: {a}\n\nDoes the passage state this? Answer yes or no."
 RSYS = ("Reword the question so it has the SAME meaning and the SAME answer but DIFFERENT wording. "
         "Output only the reworded question, nothing else.")
