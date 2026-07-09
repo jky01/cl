@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+CENSUS (base=Qwen/Qwen2.5-0.5B, probe_gen=Qwen/Qwen2.5-3B-Instruct, cuda) squad=120 wiki=120 news=120 probes/passage<=8 taus=[6.0, 8.0, 10.0]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4786.85it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights:  92%|█████████▏| 399/434 [00:00<00:00, 3988.62it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 3997.81it/s]
+  squad_human: 120 passages (human QAs)
+  wiki_gen: 116 passages with >=2 parsed probes (658 probes)
+  news_gen: 119 passages with >=2 parsed probes (683 probes)
+  total probes: 1907
+  faithfulness[squad_human] = 0.906 (513/566)  <- judge CALIBRATION (human probes)
+  faithfulness[wiki_gen] = 0.755 (497/658)
+  faithfulness[news_gen] = 0.813 (555/683)
+  self_contained[squad_human] = 132/566
+  self_contained[wiki_gen] = 305/658
+  self_contained[news_gen] = 136/683
+  two-hop canary: 40 parsed, faithful=33
+  scored 200/1907
+  scored 400/1907
+  scored 600/1907
+  scored 800/1907
+  scored 1000/1907
+  scored 1200/1907
+  scored 1400/1907
+  scored 1600/1907
+  scored 1800/1907
+  scored 1907/1907
+SUMMARY {"squad_human": {"n": 554, "n_sc": 131, "faith": 0.906, "sc": 0.233, "mean_bpt": 6.15, "tails": {"tau6": 0.466, "tau8": 0.256, "tau10": 0.11}, "sc_tails": {"tau6": 0.351, "tau8": 0.198, "tau10": 0.076}}, "wiki_gen": {"n": 487, "n_sc": 223, "faith": 0.755, "sc": 0.464, "mean_bpt": 5.64, "tails": {"tau6": 0.407, "tau8": 0.193, "tau10": 0.078}, "sc_tails": {"tau6": 0.35, "tau8": 0.157, "tau10": 0.058}}, "news_gen": {"n": 531, "n_sc": 106, "faith": 0.813, "sc": 0.199, "mean_bpt": 6.43, "tails": {"tau6": 0.542, "tau8": 0.284, "tau10": 0.113}, "sc_tails": {"tau6": 0.434, "tau8": 0.245, "tau10": 0.075}}}
+[done] wall=578s

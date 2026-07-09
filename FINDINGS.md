@@ -1,5 +1,29 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R43 (census-XL — 4× scale + self-containedness screen) — the CLEAN Step-B planning number: after
+> removing context-deictic probes, the real-text exception tail is EVEN SMALLER (τ=8 ≈ 16–25%, τ=10 ≈
+> 6–8%), confirming R42 and confirming deictic probes were inflating the apparent tail.** `s3/census.py`
+> (self-contained judge, generator names-the-subject; two prompt-bug fixes: 3B was answering the trivia
+> instead of judging, and generator was making passage-scoped Qs — both caught by pod-side judge unit
+> test 9/10), `docs/cloud_results/r43_censusxl.{json,jsonl,log}`, 120 passages/domain × 8 probes, 3090.
+>
+> | domain | n_gated | n_sc | sc_rate | faith | **SC tail τ=8 [CI95]** | SC tail τ=10 [CI95] |
+> |---|---|---|---|---|---|---|
+> | squad_human | 554 | 131 | 0.233 | 0.906 | 0.198 [0.12,0.28] | 0.076 [0.04,0.12] |
+> | wiki_gen | 487 | 223 | 0.464 | 0.755 | 0.157 [0.11,0.21] | 0.058 [0.03,0.09] |
+> | news_gen | 531 | 106 | 0.199 | 0.813 | 0.245 [0.16,0.34] | 0.075 [0.03,0.12] |
+>
+> **Findings:** (1) **Self-containedness screen LOWERS the tail** (gated→SC: squad τ=8 0.256→0.198, news
+> 0.284→0.245) — the deictic probes R42 flagged really were fake high-surprise exceptions; the honest
+> globally-addressable exception tail is τ=8 ≈16–25%, τ=10 ≈6–8%. (2) **Density reproduced R42 at 4×
+> scale** before screening (wiki τ=10 0.078 vs R42 0.076; news 0.113 vs 0.140). (3) **Self-contained yield
+> is domain-structured:** wiki_gen 46% (richest, generator can name wiki entities), news 20% / squad-human
+> 23% (news is deictic-heavy; human SQuAD Qs are often passage-scoped). 460 SC-gated probes total; 67
+> passages with ≥3 SC probes (29 with ≥4) → enough for a 7-stream ladder. (4) paraphrase stability corr
+> 0.981 (bpt measures the item). **Rung-2 density trigger still NOT met** (SC τ=8 CI-upper 0.21–0.34 < 0.5).
+> → Step-B ladder on `WB_SOURCE=census` (natural density, self-contained only). NOTE the two prompt bugs are
+> a reusable lesson: an LLM judge's user-turn must ASK the judgment question, or it just answers the content.
+
 > **R42 (Step A — real-text exception-density CENSUS, inference-only) — the real tail is a MINORITY
 > (≈7–14% at the synth-anchor threshold, ≈21–29% at τ=8), the distribution is a smooth UNIMODAL continuum
 > (no natural binary exception class), and bits/token is answer-TYPE- and LENGTH-structured.**
