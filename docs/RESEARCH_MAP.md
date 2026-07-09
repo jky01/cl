@@ -4,7 +4,23 @@
 > pass/null gates. Update the STATUS column and the "last updated" line every time an experiment returns.
 > This is the plan-of-record; `FINDINGS.md` is the evidence log, `docs/CAPSTONE.md` is the narrative.
 >
-> **Last updated:** 2026-07-07 (after R40-s3: surprise PASSES categorically (on/off-manifold), NULL as continuous bits law → cost = O(#off-manifold exceptions); next = Phase-1 surprise-gated residual write).
+> **Last updated:** 2026-07-09 (after R43-ladder: surprise is a RISK SIGNAL, NOT a reliable ROUTER on real
+> text — the R41 routing win was a bimodal-construct artifact; real text is unimodal so there is no
+> safe-to-skip class. **STRATEGIC PIVOT:** the item-replay+surprise-routing+generic-growth family is at its
+> ceiling for the FULL goal. Bank R33/R38 as the engineering result; the one wall-moving shot = R44
+> schema-compressibility (does reusable structure make marginal cost/book FALL?). Adopt the honest reframe
+> below. Next = R44 schema_comp with matched-budget + deranged control + slope pass/fail.).
+>
+> **HONEST REFRAME OF THE GOAL (2026-07-09, codex+claude converged).** The full frontier goal (rehearsal-free
+> + compositional + growth-justified + sublinear, unbounded arbitrary-fact memorization) is unsolved by us AND
+> by the field, and our current mechanism family is near its ceiling. Replace it with a *scientific cost model*
+> that is honest AND still ambitious:
+> `lifetime cost = reusable structure + exceptions + write interference + recompression`.
+> Claim progress iff the **reusable-structure term grows SUBLINEARLY with books** and the **exception term is
+> measured honestly**. Story: small models first COMPRESS and REUSE structure into weights; growth is justified
+> only by OBSERVED saturation, not aspiration. The composition wall is TWO walls: existing-schema ACTIVATION
+> (base already knows biography/geography/causality schemas — probably reachable on real text, NOT killed by
+> R32/R34) vs new-schema ACQUISITION (R32/R34 kill AUTOMATIC acquisition). R44 attacks the first.
 > **Governing constraints (never relax):** knowledge must end in ONE dense checkpoint; no inference-time
 > memory / router / task-id / retrieval; no joint full retraining; catastrophic forgetting measured
 > explicitly (old-only, non-replayed, paraphrase EM over streams 0..R-2 is the headline).
