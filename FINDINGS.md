@@ -1,5 +1,50 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R46 (shared-associative-bridge composition probe) — FIRST POSITIVE on the composition wall: a
+> weights-only, NO-A→C-label, rehearsal-free consolidation primitive (hidden-state BRIDGE UNIFICATION)
+> induces latent 2-hop composition (0.23–0.62) where independent bindings + all four controls give ~0.**
+> `s2/assoc_bridge.py` (forks the R34 `composition_grok` generator), `docs/cloud_results/r46_full.{json,log}`,
+> Qwen2.5-0.5B fp32, single-token synthetic entities, atomic-only training (A→B, B→C), held-out A→C NEVER
+> trained, 60 bridges × 6 A/bridge, 8000 steps, 2 seeds, ATTR=identity. Successor-feature loss
+> `L += λ(1 − cos(h("A's friend is"), stopgrad(h("B"))))`, DIRECT cosine (no proj head, codex), deleted-
+> nothing at eval (one dense checkpoint). **Held-out A→C EM (never trained):**
+>
+> | arm | seed0 | seed1 | mean | hidden-sim margin |
+> |---|---|---|---|---|
+> | unique_bridge_atomic (R32 floor) | 0.0 | 0.0 | **0.0** | 0.016 |
+> | shared_bridge_atomic (hub multiplicity only) | 0.0 | 0.0 | **0.0** | 0.06 |
+> | **shared_bridge_attractor (identity)** | **0.617** | **0.228** | **~0.42** | 0.50 / 0.75 |
+> | deranged_attractor (align to WRONG bridge) | 0.003 | 0.006 | **0.005** | 0.03 |
+> | freq_matched_unique (same volume, NO hub) | 0.0 | 0.0 | **0.0** | 0.05 |
+> | r34_direct_2hop (upper bound, trains sibling 2-hop) | 0.992 | ~0.99 | ~0.99 | 0.25 |
+>
+> **Clears codex's pre-registered gate on the trained surface:** shared_bridge_attractor beats
+> unique/shared/freq_matched/deranged by ≫+0.20 (and ≥0.30 abs on seed0), atomic recall 1.0 everywhere,
+> NO A→C target/scratchpad/task-id/graph, one dense checkpoint. **Mechanism confirmed:** the attractor loss
+> drives hidden-sim margin cos(h(A friend), h(correct B)) − cos(·, wrong B) to 0.50–0.75 (vs ~0.03–0.06
+> controls), i.e. it really unifies "A's friend" with B's subject-state; and the DERANGED control (aligning
+> to the wrong bridge) gives ~0 with near-zero margin — the composition comes from the CORRECT bridge
+> geometry, not from the auxiliary per se. **Grokking-like onset + plateau:** both seeds show a delayed jump
+> (seed0 →0.67 at step 6500, seed1 →0.29 at step 5500) then plateau by 8000 (not still rising → no 15k
+> extension). Bridge unification is essentially COMPLETE: cos(h(A friend), h(correct B)) = 0.9995 (vs wrong-B
+> 0.25–0.50); non-monotonic across seeds (seed1 higher margin 0.75 but lower composition 0.23 vs seed0
+> 0.50/0.62) — unification is necessary but the composition ceiling it buys is seed-variable.
+> R32-floor cleanly reproduced (independent bindings = 0);
+> **hub multiplicity ALONE is insufficient (shared_bridge_atomic = 0)** — the explicit bridge-unification
+> objective is load-bearing. **Honest caveats (do NOT overclaim):** (1) **paraphrase transfer = 0.0 for the
+> attractor arm — BUT the r34_direct upper bound is ALSO 0.0 on paraphrase**, so the paraphrase surface
+> ("the pet of A's friend is") is uninformative/too-hard for a 0.5B even under direct composition training;
+> the composition is bound to the trained 2-hop surface, not a fully abstract traversal. (2) **Magnitude is
+> seed-variable** (0.62 vs 0.23). (3) single-token SYNTHETIC entities, not real text; not yet a
+> continual/lifecycle test (old-hop retention untested); not shown to beat the R43 `random@0.5` retention
+> baseline (this is a COMPOSITION-axis result, a different axis than fact-retention). **Verdict:** the FIRST
+> mechanism in the whole arc (R32/R34/R40/R42/R43/R44) to move our only zero-signal wall (latent
+> composition) off exactly 0 — a real rehearsal-free, weights-only composition primitive — but "composition
+> solved" it is NOT. Next: mechanism probe (does it route the actual 2-hop prefix through B?), real-text /
+> multi-token bridges, and a lifecycle version (does bridge unification survive later writes + preserve old
+> hops). Connects the 3-round brainstorm: transformers-as-associative-memory + composition=graph-traversal;
+> the bridge is made a shared attractor by an explicit training-time objective, distilled into weights.
+
 > **R44 (schema-compressibility, prime-then-bind on real T-REx relations) — NULL for RELATION-specific
 > schema compression (the deranged same-kind control matches schema_commit), but a REAL coarser effect:
 > reusable structure exists at the ANSWER-KIND granularity, and consolidating incompatible-kind facts

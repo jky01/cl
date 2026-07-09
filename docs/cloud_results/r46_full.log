@@ -1,0 +1,229 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+ASSOC_BRIDGE (Qwen/Qwen2.5-0.5B, cuda) bridge=60 A/bridge=6 steps=8000 seeds=2 lambda=1.0 attr=identity arms=['unique_bridge_atomic', 'shared_bridge_atomic', 'shared_bridge_attractor', 'deranged_attractor', 'freq_matched_unique', 'r34_direct_2hop'] | single-tok pool=13262
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  49%|████▉     | 143/290 [00:00<00:00, 1429.33it/s]Loading weights:  99%|█████████▊| 286/290 [00:00<00:00, 1391.07it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1413.69it/s]
+    [unique_bridge_atomic s0 step 500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 1000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 1500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 2000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [unique_bridge_atomic s0 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+  => unique_bridge_atomic s0: held2_em=0.0 para=0.0 derange=0.0 hsim_margin=0.0159 (wall 1113.4s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 65/290 [00:00<00:00, 640.28it/s]Loading weights:  69%|██████▉   | 201/290 [00:00<00:00, 1051.27it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1033.10it/s]
+    [shared_bridge_atomic s0 step 500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 1000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 1500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 2000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.006 derange 0.000
+    [shared_bridge_atomic s0 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.008 derange 0.000
+    [shared_bridge_atomic s0 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.008 derange 0.000
+    [shared_bridge_atomic s0 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.008 derange 0.000
+  => shared_bridge_atomic s0: held2_em=0.0 para=0.008 derange=0.0 hsim_margin=0.0667 (wall 1126.8s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 121/290 [00:00<00:00, 804.49it/s]Loading weights:  84%|████████▍ | 245/290 [00:00<00:00, 1015.79it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1102.33it/s]
+    [shared_bridge_attractor s0 step 500] atomic 0.99/1.00 held2 0.083 (gp 0.081 g-w +0.0811) para 0.017 derange 0.000
+    [shared_bridge_attractor s0 step 1000] atomic 1.00/1.00 held2 0.306 (gp 0.291 g-w +0.2907) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 1500] atomic 1.00/1.00 held2 0.300 (gp 0.300 g-w +0.3000) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 2000] atomic 1.00/1.00 held2 0.331 (gp 0.307 g-w +0.3071) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 2500] atomic 1.00/1.00 held2 0.331 (gp 0.315 g-w +0.3148) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 3000] atomic 1.00/1.00 held2 0.347 (gp 0.325 g-w +0.3251) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 3500] atomic 1.00/1.00 held2 0.358 (gp 0.331 g-w +0.3305) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 4000] atomic 1.00/1.00 held2 0.358 (gp 0.338 g-w +0.3375) para 0.003 derange 0.000
+    [shared_bridge_attractor s0 step 4500] atomic 1.00/1.00 held2 0.378 (gp 0.351 g-w +0.3506) para 0.003 derange 0.000
+    [shared_bridge_attractor s0 step 5000] atomic 1.00/1.00 held2 0.364 (gp 0.355 g-w +0.3546) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 5500] atomic 1.00/1.00 held2 0.375 (gp 0.361 g-w +0.3610) para 0.006 derange 0.000
+    [shared_bridge_attractor s0 step 6000] atomic 1.00/0.97 held2 0.519 (gp 0.446 g-w +0.4365) para 0.000 derange 0.006
+    [shared_bridge_attractor s0 step 6500] atomic 1.00/1.00 held2 0.672 (gp 0.608 g-w +0.6021) para 0.000 derange 0.003
+    [shared_bridge_attractor s0 step 7000] atomic 1.00/1.00 held2 0.619 (gp 0.587 g-w +0.5839) para 0.000 derange 0.003
+    [shared_bridge_attractor s0 step 7500] atomic 1.00/1.00 held2 0.608 (gp 0.594 g-w +0.5910) para 0.000 derange 0.003
+    [shared_bridge_attractor s0 step 8000] atomic 1.00/1.00 held2 0.617 (gp 0.587 g-w +0.5838) para 0.000 derange 0.003
+  => shared_bridge_attractor s0: held2_em=0.617 para=0.0 derange=0.003 hsim_margin=0.4984 (wall 1847.0s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  30%|███       | 87/290 [00:00<00:00, 867.03it/s]Loading weights:  76%|███████▌  | 220/290 [00:00<00:00, 1136.65it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1053.55it/s]
+    [deranged_attractor s0 step 500] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [deranged_attractor s0 step 1000] atomic 1.00/1.00 held2 0.000 (gp 0.003 g-w +0.0024) para 0.003 derange 0.000
+    [deranged_attractor s0 step 1500] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w -0.0003) para 0.000 derange 0.000
+    [deranged_attractor s0 step 2000] atomic 1.00/1.00 held2 0.006 (gp 0.004 g-w +0.0036) para 0.019 derange 0.000
+    [deranged_attractor s0 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.001 g-w -0.0000) para 0.014 derange 0.000
+    [deranged_attractor s0 step 3000] atomic 0.99/1.00 held2 0.003 (gp 0.003 g-w +0.0027) para 0.017 derange 0.000
+    [deranged_attractor s0 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.002 g-w +0.0022) para 0.025 derange 0.000
+    [deranged_attractor s0 step 4000] atomic 1.00/1.00 held2 0.017 (gp 0.016 g-w +0.0128) para 0.025 derange 0.003
+    [deranged_attractor s0 step 4500] atomic 1.00/1.00 held2 0.003 (gp 0.007 g-w +0.0007) para 0.017 derange 0.006
+    [deranged_attractor s0 step 5000] atomic 1.00/0.95 held2 0.014 (gp 0.012 g-w +0.0110) para 0.028 derange 0.003
+    [deranged_attractor s0 step 5500] atomic 0.99/1.00 held2 0.008 (gp 0.012 g-w +0.0077) para 0.019 derange 0.008
+    [deranged_attractor s0 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.022 derange 0.000
+    [deranged_attractor s0 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.001 g-w -0.0003) para 0.017 derange 0.000
+    [deranged_attractor s0 step 7000] atomic 0.99/1.00 held2 0.003 (gp 0.004 g-w +0.0024) para 0.019 derange 0.000
+    [deranged_attractor s0 step 7500] atomic 1.00/1.00 held2 0.017 (gp 0.012 g-w +0.0093) para 0.025 derange 0.000
+    [deranged_attractor s0 step 8000] atomic 1.00/1.00 held2 0.014 (gp 0.013 g-w +0.0102) para 0.019 derange 0.003
+  => deranged_attractor s0: held2_em=0.014 para=0.019 derange=0.003 hsim_margin=0.03 (wall 1847.2s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 1686.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1904.43it/s]
+    [freq_matched_unique s0 step 500] atomic 0.97/0.99 held2 0.000 (gp 0.000 g-w +0.0001) para 0.000 derange 0.000
+    [freq_matched_unique s0 step 1000] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s0 step 1500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s0 step 2000] atomic 1.00/0.99 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s0 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+    [freq_matched_unique s0 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.003 derange 0.000
+  => freq_matched_unique s0: held2_em=0.0 para=0.003 derange=0.0 hsim_margin=0.0488 (wall 1143.1s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3037.27it/s]
+    [r34_direct_2hop s0 step 500] atomic 0.99/0.98 held2 0.942 (gp 0.917 g-w +0.9166) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 1000] atomic 1.00/1.00 held2 0.992 (gp 0.976 g-w +0.9757) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 1500] atomic 1.00/1.00 held2 0.992 (gp 0.982 g-w +0.9817) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 2000] atomic 1.00/1.00 held2 0.992 (gp 0.984 g-w +0.9841) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 2500] atomic 1.00/1.00 held2 0.992 (gp 0.986 g-w +0.9856) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 3000] atomic 1.00/1.00 held2 0.992 (gp 0.987 g-w +0.9866) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 3500] atomic 1.00/1.00 held2 0.992 (gp 0.987 g-w +0.9872) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 4000] atomic 1.00/1.00 held2 0.992 (gp 0.988 g-w +0.9878) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 4500] atomic 1.00/1.00 held2 0.992 (gp 0.988 g-w +0.9882) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 5000] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9886) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 5500] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9887) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 6000] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9889) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 6500] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9889) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 7000] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9888) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 7500] atomic 1.00/1.00 held2 0.992 (gp 0.989 g-w +0.9885) para 0.000 derange 0.000
+    [r34_direct_2hop s0 step 8000] atomic 1.00/1.00 held2 0.992 (gp 0.988 g-w +0.9881) para 0.000 derange 0.000
+  => r34_direct_2hop s0: held2_em=0.992 para=0.0 derange=0.0 hsim_margin=0.2494 (wall 1246.9s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 76/290 [00:00<00:00, 756.03it/s]Loading weights:  74%|███████▍  | 215/290 [00:00<00:00, 1127.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1026.98it/s]
+    [unique_bridge_atomic s1 step 500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 1000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 1500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 2000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.017 derange 0.000
+    [unique_bridge_atomic s1 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+  => unique_bridge_atomic s1: held2_em=0.0 para=0.0 derange=0.0 hsim_margin=0.0157 (wall 1111.8s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 153/290 [00:00<00:00, 1209.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1682.89it/s]
+    [shared_bridge_atomic s1 step 500] atomic 0.98/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 1000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 1500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 2000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [shared_bridge_atomic s1 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+  => shared_bridge_atomic s1: held2_em=0.0 para=0.0 derange=0.0 hsim_margin=0.0529 (wall 1147.7s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  47%|████▋     | 135/290 [00:00<00:00, 1111.61it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 1287.10it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1303.97it/s]
+    [shared_bridge_attractor s1 step 500] atomic 0.99/1.00 held2 0.075 (gp 0.090 g-w +0.0890) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 1000] atomic 0.98/1.00 held2 0.025 (gp 0.031 g-w +0.0310) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 1500] atomic 1.00/1.00 held2 0.058 (gp 0.057 g-w +0.0569) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 2000] atomic 1.00/1.00 held2 0.061 (gp 0.058 g-w +0.0575) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 2500] atomic 1.00/1.00 held2 0.056 (gp 0.050 g-w +0.0500) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 3000] atomic 1.00/1.00 held2 0.039 (gp 0.040 g-w +0.0401) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 3500] atomic 1.00/1.00 held2 0.039 (gp 0.036 g-w +0.0359) para 0.000 derange 0.000
+    [shared_bridge_attractor s1 step 4000] atomic 0.91/0.93 held2 0.014 (gp 0.016 g-w +0.0116) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 4500] atomic 0.99/0.97 held2 0.208 (gp 0.204 g-w +0.1979) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 5000] atomic 1.00/1.00 held2 0.206 (gp 0.204 g-w +0.2013) para 0.000 derange 0.003
+    [shared_bridge_attractor s1 step 5500] atomic 1.00/1.00 held2 0.294 (gp 0.282 g-w +0.2695) para 0.000 derange 0.017
+    [shared_bridge_attractor s1 step 6000] atomic 1.00/1.00 held2 0.239 (gp 0.218 g-w +0.2117) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 6500] atomic 1.00/1.00 held2 0.211 (gp 0.214 g-w +0.2075) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 7000] atomic 1.00/1.00 held2 0.225 (gp 0.218 g-w +0.2110) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 7500] atomic 1.00/1.00 held2 0.225 (gp 0.215 g-w +0.2089) para 0.000 derange 0.006
+    [shared_bridge_attractor s1 step 8000] atomic 1.00/1.00 held2 0.228 (gp 0.222 g-w +0.2158) para 0.000 derange 0.006
+  => shared_bridge_attractor s1: held2_em=0.228 para=0.0 derange=0.006 hsim_margin=0.7477 (wall 1870.9s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1596.19it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1973.46it/s]
+    [deranged_attractor s1 step 500] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w -0.0001) para 0.000 derange 0.000
+    [deranged_attractor s1 step 1000] atomic 1.00/0.98 held2 0.000 (gp 0.000 g-w -0.0000) para 0.000 derange 0.000
+    [deranged_attractor s1 step 1500] atomic 0.99/0.98 held2 0.000 (gp 0.001 g-w +0.0001) para 0.000 derange 0.000
+    [deranged_attractor s1 step 2000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [deranged_attractor s1 step 2500] atomic 1.00/0.98 held2 0.003 (gp 0.003 g-w +0.0015) para 0.000 derange 0.003
+    [deranged_attractor s1 step 3000] atomic 1.00/1.00 held2 0.003 (gp 0.003 g-w +0.0023) para 0.000 derange 0.000
+    [deranged_attractor s1 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [deranged_attractor s1 step 4000] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w -0.0031) para 0.003 derange 0.003
+    [deranged_attractor s1 step 4500] atomic 0.99/1.00 held2 0.000 (gp 0.001 g-w +0.0002) para 0.000 derange 0.000
+    [deranged_attractor s1 step 5000] atomic 0.99/1.00 held2 0.003 (gp 0.001 g-w +0.0010) para 0.000 derange 0.000
+    [deranged_attractor s1 step 5500] atomic 0.99/1.00 held2 0.000 (gp 0.000 g-w +0.0001) para 0.000 derange 0.000
+    [deranged_attractor s1 step 6000] atomic 1.00/1.00 held2 0.003 (gp 0.007 g-w +0.0003) para 0.000 derange 0.006
+    [deranged_attractor s1 step 6500] atomic 1.00/1.00 held2 0.011 (gp 0.015 g-w +0.0090) para 0.000 derange 0.006
+    [deranged_attractor s1 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0006) para 0.000 derange 0.003
+    [deranged_attractor s1 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w -0.0004) para 0.000 derange 0.000
+    [deranged_attractor s1 step 8000] atomic 1.00/1.00 held2 0.003 (gp 0.005 g-w -0.0045) para 0.000 derange 0.008
+  => deranged_attractor s1: held2_em=0.003 para=0.0 derange=0.008 hsim_margin=-0.029 (wall 1868.0s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  37%|███▋      | 106/290 [00:00<00:00, 1056.64it/s]Loading weights:  92%|█████████▏| 268/290 [00:00<00:00, 1382.62it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1411.50it/s]
+    [freq_matched_unique s1 step 500] atomic 0.99/0.97 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 1000] atomic 0.99/0.99 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 1500] atomic 0.99/0.99 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 2000] atomic 0.99/0.99 held2 0.000 (gp 0.000 g-w +0.0004) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 2500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 3000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 3500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 4000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 4500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 5000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 5500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 6000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 6500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 7000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 7500] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+    [freq_matched_unique s1 step 8000] atomic 1.00/1.00 held2 0.000 (gp 0.000 g-w +0.0000) para 0.000 derange 0.000
+  => freq_matched_unique s1: held2_em=0.0 para=0.0 derange=0.0 hsim_margin=0.0309 (wall 1147.4s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 2079.12it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1723.22it/s]
+    [r34_direct_2hop s1 step 500] atomic 0.99/0.95 held2 0.900 (gp 0.883 g-w +0.8834) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 1000] atomic 1.00/1.00 held2 0.983 (gp 0.980 g-w +0.9804) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 1500] atomic 1.00/1.00 held2 0.983 (gp 0.982 g-w +0.9819) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 2000] atomic 1.00/1.00 held2 0.983 (gp 0.982 g-w +0.9824) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 2500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9827) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 3000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9828) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 3500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9830) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 4000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9831) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 4500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9831) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 5000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9832) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 5500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9832) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 6000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9833) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 6500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9833) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 7000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9833) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 7500] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9833) para 0.000 derange 0.000
+    [r34_direct_2hop s1 step 8000] atomic 1.00/1.00 held2 0.983 (gp 0.983 g-w +0.9834) para 0.000 derange 0.000
+  => r34_direct_2hop s1: held2_em=0.983 para=0.0 derange=0.0 hsim_margin=0.1118 (wall 1245.5s)
+
+== ASSOC_BRIDGE SUMMARY (final held-out A->C EM, mean over seeds) ==
+  unique_bridge_atomic     atomic=1.0/1.0 held2=0.0 para=0.0 derange=0.0
+  shared_bridge_atomic     atomic=1.0/1.0 held2=0.0 para=0.004 derange=0.0
+  shared_bridge_attractor  atomic=1.0/1.0 held2=0.422 para=0.0 derange=0.005
+  deranged_attractor       atomic=0.998/1.0 held2=0.009 para=0.009 derange=0.005
+  freq_matched_unique      atomic=1.0/1.0 held2=0.0 para=0.002 derange=0.0
+  r34_direct_2hop          atomic=1.0/1.0 held2=0.988 para=0.0 derange=0.0
+  PASS: shared_bridge_atomic OR shared_bridge_attractor beats unique_bridge_atomic AND deranged
+        by >=+0.20 held2 (or >=0.30 abs), transfers to paraphrase, atomic>=0.95, no A->C trained.
+[done wrote docs/cloud_results/r46_full.json]
