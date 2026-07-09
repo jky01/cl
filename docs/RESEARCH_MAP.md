@@ -4,7 +4,20 @@
 > pass/null gates. Update the STATUS column and the "last updated" line every time an experiment returns.
 > This is the plan-of-record; `FINDINGS.md` is the evidence log, `docs/CAPSTONE.md` is the narrative.
 >
-> **Last updated:** 2026-07-09 (after R43-ladder: surprise is a RISK SIGNAL, NOT a reliable ROUTER on real
+> **Last updated:** 2026-07-10 (after R46: FIRST POSITIVE on the composition wall. A training-time,
+> weights-only, NO-A→C-label, rehearsal-free consolidation primitive — hidden-state BRIDGE UNIFICATION
+> (align h("A's friend is")→h("B"), direct cosine) — induces latent 2-hop composition 0.42 (0.62/0.23
+> seeds) where independent bindings + shared-hub + freq-matched + deranged controls ALL give ~0; atomic
+> 1.0; grokking onset then plateau; unification cos 0.9995. Caveats: paraphrase null (BUT so is the direct
+> upper bound → surface too hard, uninformative); seed-variable; synthetic single-token; NOT yet a
+> lifecycle/retention result. This cracks the R32 failure mode (atomic knowledge in weights, bridge not a
+> reusable node) — but "composition solved" it is NOT. NEXT = R47 lifecycle bridge consolidation (phase1
+> old B→C, phase2 new A→B + attractor, eval A→C + old-B→C RETENTION vs replay/distill controls) + mechanism
+> probe cos(h("A's friend's"),h(B)) (raw 2-hop bridge position). Growth still OUT until bridge unification
+> saturates. This is the association/composition shot from the 3-round brainstorm — the ONLY wall with a
+> positive.)
+>
+> **Prior last-updated:** 2026-07-09 (after R43-ladder: surprise is a RISK SIGNAL, NOT a reliable ROUTER on real
 > text — the R41 routing win was a bimodal-construct artifact; real text is unimodal so there is no
 > safe-to-skip class. **STRATEGIC PIVOT:** the item-replay+surprise-routing+generic-growth family is at its
 > ceiling for the FULL goal. Bank R33/R38 as the engineering result; the one wall-moving shot = R44
