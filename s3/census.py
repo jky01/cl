@@ -90,11 +90,14 @@ FSYS = ("Judge whether the passage supports the given answer to the question. Mi
 # items. Screen is a property of the QUESTION alone (no passage shown to the judge).
 # NOTE 2nd XL run: the original wording rejected ~93% of even human SQuAD questions (judge miscalibrated).
 # Fix with explicit yes/no exemplars spanning the boundary.
-SSYS = ("Decide if a question is self-contained: it names its specific subject clearly enough that "
-        "someone could answer it with NO passage in front of them. Examples: 'What is the capital of "
-        "France?' -> yes. 'When did the Battle of Hastings take place?' -> yes. 'Who wrote Hamlet?' -> yes. "
-        "'What is the name of the dog?' -> no. 'What year did he die?' -> no. 'What did the company "
-        "announce?' -> no. Reply with exactly one word: yes or no.")
+SSYS = ("Decide if a question NAMES its specific subject — a real person, place, organization, work, or "
+        "event — so the exact same question could be asked with no passage present. The answer being "
+        "obscure, technical, or little-known does NOT matter; only whether the subject is named. "
+        "Examples: 'What is the capital of France?' -> yes. 'What is the undergraduate enrollment at "
+        "Harvard?' -> yes (Harvard is named). 'When was the Tesla Electric Light Company formed?' -> yes "
+        "(the company is named). 'Who wrote Hamlet?' -> yes. 'What is the name of the dog?' -> no. "
+        "'What year did he die?' -> no (no name). 'What did the company announce?' -> no (which company?). "
+        "'Where was his new lab?' -> no. Reply with exactly one word: yes or no.")
 FUSR = "Passage:\n{c}\n\nQuestion: {q}\nProposed answer: {a}\n\nDoes the passage state this? Answer yes or no."
 RSYS = ("Reword the question so it has the SAME meaning and the SAME answer but DIFFERENT wording. "
         "Output only the reworded question, nothing else.")
