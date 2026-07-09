@@ -358,10 +358,19 @@ def train_main():
                     binds = bind_progressive(M, targets[pid], base, rng)
                     prime_para_post = para_em(M, pr, "eval_question") if pr else None
                     del M; torch.cuda.empty_cache()
+                    tg = targets[pid]
+                    tgt_ntok_sum = sum(q["ans_ntok"] + 1 for q in tg)   # +1 stop token (answer-target-token unit)
+                    def mdelta(k):                                     # nearest-neighbor match quality (codex diag)
+                        return None if not pr else round(sum(min(abs(p[k] - t[k]) for t in tg) for p in pr) / len(pr), 3)
                     row = dict(seed=seed, pid=pid, kind=R["kind"], arm=(arm if N > 0 else "floor"),
                                N=N, n_prime=len(pr), prime_committed=prime_committed,
                                prime_para_pre=prime_para_pre, prime_para_post=prime_para_post,
-                               tgt_ans_ntok=round(sum(q["ans_ntok"] for q in targets[pid]) / T_TARGET, 2),
+                               tgt_ans_ntok=round(sum(q["ans_ntok"] for q in tg) / T_TARGET, 2),
+                               n_tgt_3b=sum(1 for q in tg if q.get("rag_em_3b")),
+                               tok_updates={b: b * tgt_ntok_sum for b in B_SCHED},   # answer-target-token updates
+                               match_delta=dict(ans_ntok=mdelta("ans_ntok"), bpt_para=mdelta("bpt_para"),
+                                                subj_bits=mdelta("subj_bits"), subj_ntok=mdelta("subj_ntok")),
+                               tgt_subs=[q["sub"] for q in tg], prime_subs=[p["sub"] for p in pr],
                                binds=binds)
                     results.append(row)
                     b_last = binds[B_SCHED[-1]]

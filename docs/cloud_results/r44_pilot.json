@@ -1,0 +1,734 @@
+{
+ "config": {
+  "N": [
+   0,
+   16
+  ],
+  "B": [
+   2,
+   5,
+   10,
+   20,
+   40
+  ],
+  "T": 8,
+  "prime_steps": 12,
+  "arms": [
+   "schema_commit",
+   "item_k_matched"
+  ],
+  "seeds": 1,
+  "relations": [
+   "P50",
+   "P57",
+   "P86",
+   "P58",
+   "P178",
+   "P176"
+  ]
+ },
+ "rows": [
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.62,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 4.62,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.25
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 4.62,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.5
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.25,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 4.25,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.25,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 3.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.167
+    },
+    "5": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.833
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.562,
+   "tgt_ans_ntok": 3.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 5.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 5.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.4
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.5,
+   "tgt_ans_ntok": 5.75,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.4
+    },
+    "5": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.88,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.4
+    },
+    "5": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.8
+    },
+    "10": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.812,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 3.88,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.2
+    },
+    "5": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 3.88,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.5,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.562,
+   "tgt_ans_ntok": 3.5,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 3.5,
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "5": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "10": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "20": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "40": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  }
+ ]
+}
