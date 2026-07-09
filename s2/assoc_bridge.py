@@ -45,7 +45,7 @@ SEEDS = int(os.environ.get("AB_SEEDS", 2))
 LR = float(os.environ.get("AB_LR", 1e-4))
 BS = int(os.environ.get("AB_BS", 64))
 LAMBDA = float(os.environ.get("AB_LAMBDA", 1.0))
-ATTR = os.environ.get("AB_ATTR", "bpet")             # bpet | identity
+ATTR = os.environ.get("AB_ATTR", "identity")         # identity (primary, codex) | bpet (secondary ablation)
 PROJ = int(os.environ.get("AB_PROJ", 256))
 OUT = os.environ.get("AB_OUT", "assoc_bridge_result.json")
 ALL_ARMS = ["unique_bridge_atomic", "shared_bridge_atomic", "shared_bridge_attractor",
@@ -150,6 +150,25 @@ def acc(m, items):
         n += len(ch)
     return ok / n, gp / n
 
+@torch.no_grad()
+def held_probs(m, held2, der):
+    """codex #4a: held-out A->C EM + gold-C prob AND wrong-C prob (deranged target) → goldC-wrongC margin.
+    deranged EM saturates at 0 and misses a wrong-attractor probability lift."""
+    if not held2:
+        return 0.0, 0.0, 0.0, 0.0
+    ok = 0.0; gp = 0.0; wp = 0.0; n = 0
+    for i in range(0, len(held2), 256):
+        ch = held2[i:i + 256]; cw = der[i:i + 256]
+        e = tok([x[0] for x in ch], return_tensors="pt", padding=True).to(device)
+        sm = F.softmax(m.lm_head(m.model(**e).last_hidden_state[:, -1]).float(), -1)
+        gold = torch.tensor([x[1] for x in ch], device=device)
+        wrong = torch.tensor([x[1] for x in cw], device=device)
+        ok += (sm.argmax(-1) == gold).sum().item()
+        gp += sm.gather(1, gold[:, None]).sum().item()
+        wp += sm.gather(1, wrong[:, None]).sum().item()
+        n += len(ch)
+    return ok / n, gp / n, wp / n, (gp - wp) / n
+
 def run(seed, arm, pool):
     cfg = dict(unique_bridge_atomic=(BRIDGE, 1, False, None),
                shared_bridge_atomic=(BRIDGE, APER, False, None),
@@ -175,8 +194,9 @@ def run(seed, arm, pool):
     m = AutoModelForCausalLM.from_pretrained(NAME, dtype=torch.float32).to(device)
     for p in m.parameters():
         p.requires_grad_(True)
-    P = nn.Linear(m.config.hidden_size, PROJ).to(device) if attr else None   # train-time only, deleted
-    params = list(m.parameters()) + (list(P.parameters()) if P else [])
+    # codex: NO trainable projection head — a disposable P (esp. with bias) can ABSORB the attractor loss
+    # instead of forcing geometry into the model, making a null uninterpretable. Cosine directly on hidden.
+    params = list(m.parameters())
     opt = torch.optim.AdamW(params, lr=LR)
     curve = []; t0 = time.time(); m.train()
     for step in range(1, STEPS + 1):
@@ -194,7 +214,7 @@ def run(seed, arm, pool):
             with torch.no_grad():
                 et = tok([x[1] for x in ap], return_tensors="pt", padding=True).to(device)
                 zt = m.model(**et, use_cache=False).last_hidden_state[:, -1].float()
-            la = (1 - F.cosine_similarity(P(za), P(zt).detach(), dim=-1)).mean()
+            la = (1 - F.cosine_similarity(za, zt.detach(), dim=-1)).mean()   # direct cosine, no head
             loss = loss + LAMBDA * la
         opt.zero_grad(); loss.backward()
         torch.nn.utils.clip_grad_norm_(params, 1.0); opt.step()
@@ -202,15 +222,16 @@ def run(seed, arm, pool):
             m.eval()
             a1, _ = acc(m, [x for x in atomic if "'s friend is" in x[0]])
             a2, _ = acc(m, [x for x in atomic if "'s pet is" in x[0]])
-            h_em, h_gp = acc(m, [(p, g) for (p, g, a) in held2])
+            h_em, h_gp, h_wp, h_mar = held_probs(m, [(p, g) for (p, g, a) in held2], der)
             hp_em, _ = acc(m, [(p, g) for (p, g, a) in held2p])
             d_em, _ = acc(m, der)
             m.train()
             curve.append(dict(step=step, atomic_r1=round(a1, 3), atomic_r2=round(a2, 3),
                               held2_em=round(h_em, 3), held2_goldprob=round(h_gp, 4),
+                              held2_wrongprob=round(h_wp, 4), held2_gold_minus_wrong=round(h_mar, 4),
                               held2_para_em=round(hp_em, 3), derange_em=round(d_em, 3)))
             print(f"    [{arm} s{seed} step {step}] atomic {a1:.2f}/{a2:.2f} "
-                  f"held2 {h_em:.3f} (gp {h_gp:.3f}) para {hp_em:.3f} derange {d_em:.3f}", flush=True)
+                  f"held2 {h_em:.3f} (gp {h_gp:.3f} g-w {h_mar:+.4f}) para {hp_em:.3f} derange {d_em:.3f}", flush=True)
             if step >= max(2000, STEPS // 3) and min(a1, a2) < 0.90:
                 print(f"    KILL: atomic recall {a1:.2f}/{a2:.2f} < 0.90 — fix data/prompt/steps.", flush=True)
                 break
@@ -219,15 +240,17 @@ def run(seed, arm, pool):
     hsim = None
     ha = held2[:min(len(held2), 200)]
     if ha:
+        tgt = (lambda b: q_ident(b)) if ATTR == "identity" else (lambda b: q_r2(b))   # match the ATTR target
         zA = hstate(m, [q_r1(a) for (p, g, a) in ha])
-        zBc = hstate(m, [q_r2(task["r1"][a]) for (p, g, a) in ha])
+        zBc = hstate(m, [tgt(task["r1"][a]) for (p, g, a) in ha])
         Bs = list(task["r2"].keys()); rdg = random.Random(1234 + seed)
-        zBw = hstate(m, [q_r2(rdg.choice([x for x in Bs if x != task["r1"][a]])) for (p, g, a) in ha])
+        zBw = hstate(m, [tgt(rdg.choice([x for x in Bs if x != task["r1"][a]])) for (p, g, a) in ha])
         cc = F.cosine_similarity(zA, zBc, dim=-1).mean().item()
         cw = F.cosine_similarity(zA, zBw, dim=-1).mean().item()
-        hsim = dict(cos_A_correctBpet=round(cc, 4), cos_A_wrongBpet=round(cw, 4), margin=round(cc - cw, 4))
+        hsim = dict(attr_target=ATTR, cos_A_correctB=round(cc, 4), cos_A_wrongB=round(cw, 4),
+                    margin=round(cc - cw, 4))
     fin = curve[-1] if curve else None
-    del m, P; torch.cuda.empty_cache()
+    del m; torch.cuda.empty_cache()
     return dict(arm=arm, seed=seed, n_bridge=n_bridge, aper=aper, n_held2=task["n_held2"],
                 n_train2=task["n_train2"], attr_target=(ATTR if attr else None),
                 hidden_sim=hsim, final=fin, curve=curve, wall=round(time.time() - t0, 1))
