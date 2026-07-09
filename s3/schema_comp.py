@@ -2,162 +2,104 @@
 
 Question (codex-converged 2026-07-09): does consolidating N same-RELATION facts into weights make the
 (N+1)th same-relation base-hard binding CHEAPER to write / more robust to retain? I.e. can lifetime cost
-move from item-ledger O(#facts) toward reusable structure? This is the "existing-schema ACTIVATION" case
-(the pretrained base already has latent relation structure) that R32/R34 do NOT kill — unlike automatic
-NEW-schema acquisition, which they do.
-
-R43-ladder killed surprise-as-ROUTER on real text (unimodal -> no safe-to-skip class); random@0.5 ≈ full.
-So the open cost-curve question is schema COMPRESSION, not item routing. R44 headline (codex): WITHIN-schema
-dose-response — B80(N) (budget to hit a retention threshold) FALLS with same-relation density N, and falls
-MORE for schema_commit than for item_k_matched. Growth stays OUT.
+move from item-ledger O(#facts) toward reusable structure? This is "existing-schema ACTIVATION" (the
+pretrained base already has latent relation structure) — the case R32/R34 do NOT kill (unlike automatic
+NEW-schema acquisition, which they do). R43-ladder killed surprise-as-ROUTER on real text; the open
+cost-curve question is schema COMPRESSION.
 
 THIS FILE = stage 1 only: build a relation-labeled, base-hard, RAG-answerable, self-contained, confound-
-logged dataset and AUDIT whether it can form matched blocks. Training GO only if the audit passes
-(codex: >=5 relations x >=20 usable, >=2 relations per answer-kind bucket for the deranged/item controls).
-Source priority (codex): real T-REx/LAMA triples > real-KB triples + templated evidence > controlled fake.
+logged dataset and AUDIT whether it can form MATCHED blocks. Training GO (codex 2026-07-09.19.35.55) only if:
+>=5 relations at >=WANT usable after original+manual-paraphrase+3B-paraphrase base-hard screening, >=2
+same-kind buckets where BOTH relations are >=WANT, and explicit matchable-block feasibility counts.
 
-Model: Qwen2.5-0.5B (base scoring), Qwen2.5-3B-Instruct (paraphrase). Reuses the WikiBridge eval contract.
+Source (real): `relbert/t_rex_relation_similarity` (721 relations, bulk head/tail pairs; the LAMA/T-REx
+script datasets are deprecated on HF). Evidence is TEMPLATED (real subjects/relations/objects, synthetic
+carrier sentence) = codex's "real-KB / templated-evidence" middle rung. `SC_SOURCE`: trex | controlled | auto.
+Relations chosen to be reliably base-hard for a 0.5B (obscure creative-work->creator, product->maker);
+geography/language relations are NOT base-hard (the base memorized them) — verified in the first audit.
+
+Model: Qwen2.5-0.5B (base scoring), Qwen2.5-3B-Instruct (held-out paraphrase). Reuses WikiBridge eval contract.
 """
 import os, json, re, random, collections, math
 import torch
-from s3.wikibridge import normalize, em, f1, QT, QT2, RT, gen, qa_answer_bits, load_model, tok, device
+from s3.wikibridge import normalize, em, QT, RT, gen, qa_answer_bits, load_model, tok, device
 from s3.census import Instruct, RSYS
 
 SEED = int(os.environ.get("SC_SEED", 0))
-PER_REL = int(os.environ.get("SC_PER_REL", 200))     # candidate triples pulled per relation before filtering
+PER_REL = int(os.environ.get("SC_PER_REL", 400))     # candidate pairs pulled per relation before filtering
 WANT = int(os.environ.get("SC_WANT", 24))            # target usable base-hard items per relation
+SOURCE = os.environ.get("SC_SOURCE", "auto")
 OUT = os.environ.get("SC_OUT", "schema_audit.json")
+JOUT = re.sub(r"\.json$", "", OUT) + ".jsonl"
 PARA_NAME = os.environ.get("WB_PARA_MODEL", "Qwen/Qwen2.5-3B-Instruct")
-MAXNEW = 12
+# match tolerances for the feasibility count (same-kind, other-relation neighbor within these)
+TOL = dict(ans_ntok=1, subj_ntok=2, bpt=2.5, subj_bits=3.0)
+MATCH_MIN = 3                                         # an item is "matchable" if >= this many same-kind neighbors
 
-# ------------------------- relation registry -------------------------
-# 6 relations forming 3 answer-kind buckets x 2 relations each (codex: >=2 per bucket so schema_shuffle_
-# same_kind has a real same-kind neighbor). q=closed-book question, p=held-out paraphrase seed, st=evidence
-# statement (real-KB / templated evidence: the middle rung when natural T-REx sentences are thin), kind=answer
-# bucket. {s}=subject {o}=object.
+# ------------------------- relation registry: base-hard-able, 2 answer-kind buckets -------------------------
+# q=closed-book question, p=manual held-out paraphrase, st=templated evidence, kind=answer bucket.
+# {s}=subject(work/product) {o}=object(creator/maker). head=subject, tail=object in relbert positives.
 RELATIONS = {
-    "P36":  dict(kind="place",    q="What is the capital of {s}?",           p="Which city is the capital of {s}?",       st="The capital of {s} is {o}."),
-    "P17":  dict(kind="place",    q="In which country is {s} located?",       p="{s} is located in which country?",        st="{s} is located in the country of {o}."),
-    "P37":  dict(kind="language", q="What is the official language of {s}?",   p="Which language is official in {s}?",       st="The official language of {s} is {o}."),
-    "P103": dict(kind="language", q="What is the native language of {s}?",     p="Which language is the native language of {s}?", st="The native language of {s} is {o}."),
-    "P50":  dict(kind="person",   q="Who is the author of {s}?",              p="Who wrote {s}?",                          st="The author of {s} is {o}."),
-    "P86":  dict(kind="person",   q="Who is the composer of {s}?",            p="Who composed {s}?",                       st="The composer of {s} is {o}."),
+    "P50":  dict(kind="person", q="Who wrote {s}?",                         p="Who is the author of {s}?",            st="{s} was written by {o}."),
+    "P57":  dict(kind="person", q="Who directed {s}?",                      p="Who is the director of {s}?",          st="{s} was directed by {o}."),
+    "P86":  dict(kind="person", q="Who composed the music for {s}?",         p="Who is the composer of {s}?",          st="The music for {s} was composed by {o}."),
+    "P58":  dict(kind="person", q="Who wrote the screenplay for {s}?",       p="Who is the screenwriter of {s}?",      st="The screenplay for {s} was written by {o}."),
+    "P178": dict(kind="org",    q="Which company developed {s}?",            p="Who is the developer of {s}?",         st="{s} was developed by {o}."),
+    "P176": dict(kind="org",    q="Which company manufactures {s}?",         p="Who is the manufacturer of {s}?",      st="{s} is manufactured by {o}."),
 }
 
-# ------------------------- source loaders (priority order) -------------------------
-def _norm_row(r):
-    """extract (predicate_id, subject, object) across the field-name variants T-REx/LAMA mirrors use."""
-    pid = r.get("predicate_id") or r.get("relation") or r.get("rel") or r.get("property")
-    sub = r.get("sub_label") or r.get("subject") or r.get("sub") or r.get("head")
-    obj = r.get("obj_label") or r.get("object") or r.get("obj") or r.get("tail")
-    evi = None
-    ev = r.get("evidences") or r.get("masked_sentences") or r.get("masked_sentence")
-    if isinstance(ev, list) and ev:
-        e0 = ev[0]
-        evi = e0.get("masked_sentence") if isinstance(e0, dict) else e0
-    elif isinstance(ev, str):
-        evi = ev
-    return pid, sub, obj, evi
-
+# ------------------------- source loaders -------------------------
 def load_trex(rng):
-    """try real T-REx/LAMA relation triples; keep only rows whose predicate is in RELATIONS."""
+    """real T-REx triples from relbert/t_rex_relation_similarity: rows = {relation_type, positives:[[h,t],..]}."""
     from datasets import load_dataset
-    cands = [("lama", "trex"), ("facebook/lama", "trex"), ("lama", None),
-             ("relbert/t_rex", None), ("community-datasets/lama", "trex")]
-    for name, cfg in cands:
-        try:
-            ds = load_dataset(name, cfg, split="train", streaming=True) if cfg else \
-                 load_dataset(name, split="train", streaming=True)
-            buf = collections.defaultdict(list); seen = set(); n = 0
-            for r in ds:
-                pid, sub, obj, evi = _norm_row(r)
-                if pid not in RELATIONS or not sub or not obj:
-                    continue
-                key = (pid, sub)
-                if key in seen:
-                    continue
-                if not (1 <= len(tok(str(obj), add_special_tokens=False).input_ids) <= 6):
-                    continue
-                seen.add(key)
-                buf[pid].append(dict(sub=str(sub), obj=str(obj), evi=evi))
-                n += 1
-                if all(len(buf[p]) >= PER_REL for p in RELATIONS) or n > 400000:
-                    break
-            if sum(len(v) for v in buf.values()) >= 3 * len(RELATIONS):
-                print(f"  SOURCE=trex[{name}/{cfg}] loaded { {p: len(buf[p]) for p in buf} }", flush=True)
-                return buf, "trex"
-        except Exception as e:
-            print(f"  trex source {name}/{cfg} FAIL: {type(e).__name__}: {str(e)[:80]}", flush=True)
-    return None, None
+    try:
+        ds = load_dataset("relbert/t_rex_relation_similarity", split="train")
+    except Exception as e:
+        print(f"  trex FAIL: {type(e).__name__}: {str(e)[:90]}", flush=True)
+        return None, None
+    buf = collections.defaultdict(list)
+    hits = collections.Counter()
+    for r in ds:
+        pid = r["relation_type"]
+        if pid not in RELATIONS:
+            continue
+        for pair in r["positives"]:
+            if not (isinstance(pair, (list, tuple)) and len(pair) == 2):
+                continue
+            sub, obj = str(pair[0]).strip(), str(pair[1]).strip()
+            hits[pid] += 1
+            if not sub or not obj or normalize(obj) in normalize(sub):
+                continue
+            if not (1 <= len(tok(obj, add_special_tokens=False).input_ids) <= 6):
+                continue
+            buf[pid].append(dict(sub=sub, obj=obj, evi=None))
+    for p in buf:
+        rng.shuffle(buf[p]); buf[p] = buf[p][:PER_REL]
+    print(f"  SOURCE=trex predicate-hits={dict(hits)} kept={ {p: len(buf[p]) for p in buf} }", flush=True)
+    return (buf, "trex") if sum(len(v) for v in buf.values()) >= 3 * len(RELATIONS) else (None, None)
 
-# curated fallback (real-KB triples; evidence templated) — guarantees the miner runs if HF is unavailable.
-# base-hard filtering picks the obscure ones; these are only the candidate pool.
-_CURATED = {
-    "P36": [("Tuvalu","Funafuti"),("Kiribati","Tarawa"),("Palau","Ngerulmud"),("Nauru","Yaren"),
-            ("Bhutan","Thimphu"),("Brunei","Bandar Seri Begawan"),("Suriname","Paramaribo"),
-            ("Eritrea","Asmara"),("Comoros","Moroni"),("Vanuatu","Port Vila"),("Belize","Belmopan"),
-            ("Bolivia","Sucre"),("Myanmar","Naypyidaw"),("Kazakhstan","Astana"),("Malawi","Lilongwe"),
-            ("Botswana","Gaborone"),("Lesotho","Maseru"),("Djibouti","Djibouti"),("Guyana","Georgetown"),
-            ("Tajikistan","Dushanbe"),("Turkmenistan","Ashgabat"),("Zambia","Lusaka"),("Moldova","Chisinau"),
-            ("Montenegro","Podgorica"),("Kyrgyzstan","Bishkek"),("Mauritania","Nouakchott")],
-    "P17": [("Timbuktu","Mali"),("Samarkand","Uzbekistan"),("Maracaibo","Venezuela"),("Surabaya","Indonesia"),
-            ("Chittagong","Bangladesh"),("Kaohsiung","Taiwan"),("Fez","Morocco"),("Cusco","Peru"),
-            ("Aleppo","Syria"),("Mombasa","Kenya"),("Galle","Sri Lanka"),("Bruges","Belgium"),
-            ("Oaxaca","Mexico"),("Kandy","Sri Lanka"),("Trondheim","Norway"),("Gdansk","Poland"),
-            ("Esfahan","Iran"),("Mandalay","Myanmar"),("Arequipa","Peru"),("Nuremberg","Germany"),
-            ("Salvador","Brazil"),("Kazan","Russia"),("Lviv","Ukraine"),("Medan","Indonesia"),
-            ("Antwerp","Belgium"),("Kochi","India")],
-    "P37": [("Suriname","Dutch"),("Angola","Portuguese"),("Andorra","Catalan"),("Palau","Palauan"),
-            ("Bhutan","Dzongkha"),("Eritrea","Tigrinya"),("Paraguay","Guarani"),("Kiribati","Gilbertese"),
-            ("Belarus","Belarusian"),("Moldova","Romanian"),("Malta","Maltese"),("Rwanda","Kinyarwanda"),
-            ("Madagascar","Malagasy"),("Kazakhstan","Kazakh"),("Mongolia","Mongolian"),("Laos","Lao"),
-            ("Cambodia","Khmer"),("Armenia","Armenian"),("Georgia","Georgian"),("Latvia","Latvian"),
-            ("Estonia","Estonian"),("Iceland","Icelandic"),("Albania","Albanian"),("Slovenia","Slovene"),
-            ("Tajikistan","Tajik"),("Turkmenistan","Turkmen")],
-    "P103": [("Franz Kafka","German"),("Joseph Conrad","Polish"),("Vladimir Nabokov","Russian"),
-             ("Rabindranath Tagore","Bengali"),("Naguib Mahfouz","Arabic"),("Pablo Neruda","Spanish"),
-             ("Orhan Pamuk","Turkish"),("Ivo Andric","Serbian"),("Halldor Laxness","Icelandic"),
-             ("Czeslaw Milosz","Polish"),("Kobo Abe","Japanese"),("Lu Xun","Chinese"),
-             ("Nikos Kazantzakis","Greek"),("Sandor Marai","Hungarian"),("Bruno Schulz","Polish"),
-             ("Andrei Platonov","Russian"),("Machado de Assis","Portuguese"),("Italo Svevo","Italian"),
-             ("Knut Hamsun","Norwegian"),("Yasar Kemal","Turkish"),("Tove Jansson","Swedish"),
-             ("Cesare Pavese","Italian"),("Bohumil Hrabal","Czech"),("Mikhail Bulgakov","Russian"),
-             ("Elias Canetti","German"),("Stanislaw Lem","Polish")],
-    "P50": [("The Leopard","Giuseppe Tomasi di Lampedusa"),("Petals of Blood","Ngugi wa Thiong'o"),
-            ("Kokoro","Natsume Soseki"),("The Radetzky March","Joseph Roth"),("Independent People","Halldor Laxness"),
-            ("The Master and Margarita","Mikhail Bulgakov"),("Snow Country","Yasunari Kawabata"),
-            ("The Tin Drum","Gunter Grass"),("Season of Migration to the North","Tayeb Salih"),
-            ("Pedro Paramo","Juan Rulfo"),("The Street of Crocodiles","Bruno Schulz"),
-            ("Hunger","Knut Hamsun"),("The Bridge on the Drina","Ivo Andric"),("Blindness","Jose Saramago"),
-            ("Zeno's Conscience","Italo Svevo"),("The Notebook","Agota Kristof"),
-            ("Life and Fate","Vasily Grossman"),("Memed My Hawk","Yasar Kemal"),
-            ("The Doll","Boleslaw Prus"),("Fatelessness","Imre Kertesz"),("Austerlitz","W. G. Sebald"),
-            ("The Book of Disquiet","Fernando Pessoa"),("Embers","Sandor Marai"),
-            ("Too Loud a Solitude","Bohumil Hrabal"),("The Vegetarian","Han Kang"),("Kristin Lavransdatter","Sigrid Undset")],
-    "P86": [("Bolero","Maurice Ravel"),("The Planets","Gustav Holst"),("Finlandia","Jean Sibelius"),
-            ("Peer Gynt","Edvard Grieg"),("Ma Vlast","Bedrich Smetana"),("Scheherazade","Nikolai Rimsky-Korsakov"),
-            ("Carmina Burana","Carl Orff"),("The Firebird","Igor Stravinsky"),("Enigma Variations","Edward Elgar"),
-            ("Pines of Rome","Ottorino Respighi"),("Gymnopedies","Erik Satie"),("Clair de Lune","Claude Debussy"),
-            ("Pavane","Gabriel Faure"),("Nimrod","Edward Elgar"),("Vltava","Bedrich Smetana"),
-            ("Danse Macabre","Camille Saint-Saens"),("Adagio for Strings","Samuel Barber"),
-            ("Appalachian Spring","Aaron Copland"),("Concierto de Aranjuez","Joaquin Rodrigo"),
-            ("The Lark Ascending","Ralph Vaughan Williams"),("Cavalleria Rusticana","Pietro Mascagni"),
-            ("Also sprach Zarathustra","Richard Strauss"),("Pictures at an Exhibition","Modest Mussorgsky"),
-            ("Karelia Suite","Jean Sibelius"),("Symphonie Fantastique","Hector Berlioz"),("Gayane","Aram Khachaturian")],
-}
-def load_curated(rng):
-    buf = {p: [dict(sub=s, obj=o, evi=None) for (s, o) in _CURATED[p]] for p in RELATIONS}
-    print(f"  SOURCE=curated { {p: len(buf[p]) for p in buf} }", flush=True)
-    return buf, "curated"
+_CONS = "bcdfghjklmnpqrstvwz"; _VOW = "aeiou"
+def _coin(rng, nsyl):
+    return "".join(rng.choice(_CONS) + rng.choice(_VOW) + (rng.choice(_CONS) if rng.random() < 0.4 else "")
+                   for _ in range(nsyl)).capitalize()
+def load_controlled(rng):
+    """controlled-fake smoke: real templates, invented subject+object (guaranteed base-hard). SECONDARY only."""
+    buf = collections.defaultdict(list)
+    for p in RELATIONS:
+        for _ in range(PER_REL):
+            s = _coin(rng, rng.choice([2, 3])) + " " + _coin(rng, 2)
+            o = _coin(rng, 2) + " " + _coin(rng, rng.choice([2, 3]))
+            buf[p].append(dict(sub=s, obj=o, evi=None))
+    print(f"  SOURCE=controlled { {p: len(buf[p]) for p in buf} }", flush=True)
+    return buf, "controlled"
 
-# ------------------------- familiarity proxy: subject NLL in a NEUTRAL carrier -------------------------
-NEUTRAL_CARRIER = "Here is some information about {s}."   # codex: measure subject familiarity OUTSIDE the relation Q
+# ------------------------- subject familiarity proxy: NLL in a NEUTRAL carrier -------------------------
 @torch.no_grad()
 def subject_bits(base, subs):
     res = []
+    pre = "Here is some information about"
     for i in range(0, len(subs), 16):
         chunk = subs[i:i + 16]
-        pre = "Here is some information about"
         full = [pre + " " + s + "." for s in chunk]
         tok.padding_side = "right"
         e = tok(full, return_tensors="pt", padding=True, truncation=True, max_length=64).to(device)
@@ -168,75 +110,95 @@ def subject_bits(base, subs):
         for r in range(len(chunk)):
             lab = labels[r].clone(); lab[:max(0, pl - 1)] = -100
             m = lab != -100
-            nll = -logp[r][m].gather(1, lab[m][:, None]).squeeze(1) if bool(m.any()) else torch.tensor([0.])
-            ntok = int(m.sum().item()) or 1
-            res.append(round((nll.sum() / math.log(2)).item() / ntok, 3))
+            if bool(m.any()):
+                nll = -logp[r][m].gather(1, lab[m][:, None]).squeeze(1)
+                res.append(round((nll.sum() / math.log(2)).item() / int(m.sum().item()), 3))
+            else:
+                res.append(0.0)
     tok.padding_side = "left"
     return res
 
+def _emlist(base, prompts, items):
+    return [em(x, q["answers"]) for x, q in zip(gen(base, prompts), items)]
+
 def main():
     rng = random.Random(4400 + SEED)
-    print(f"SCHEMA_COMP miner (base=Qwen2.5-0.5B, {device}) relations={list(RELATIONS)} want={WANT}/rel", flush=True)
+    print(f"SCHEMA_COMP miner (base=Qwen2.5-0.5B, {device}) rels={list(RELATIONS)} want={WANT} src={SOURCE}", flush=True)
     base = load_model()
-    src = os.environ.get("SC_SOURCE", "auto")
-    buf, used = (load_trex(rng) if src in ("auto", "trex") else (None, None))
+    used = None; buf = None
+    if SOURCE in ("auto", "trex"):
+        buf, used = load_trex(rng)
+        if buf is None and SOURCE == "trex":
+            print("  SC_SOURCE=trex but T-REx unavailable -> ABORT (no silent fallback)", flush=True)
+            json.dump(dict(meta=dict(source="trex", GO_for_training=False, error="trex_unavailable")), open(OUT, "w"))
+            print("[done]", flush=True); return
     if buf is None:
-        buf, used = load_curated(rng)
-    for p in buf:
-        rng.shuffle(buf[p]); buf[p] = buf[p][:PER_REL]
+        buf, used = (load_controlled(rng) if SOURCE in ("auto", "controlled") else (None, None))
 
-    # build candidate items with question/paraphrase/evidence
     items = []
     for pid, rows in buf.items():
         R = RELATIONS[pid]
         for r in rows:
             s, o = r["sub"], r["obj"]
-            evi = r.get("evi") or R["st"].format(s=s, o=o)     # natural evidence if present else templated
+            evi = r.get("evi") or R["st"].format(s=s, o=o)     # templated evidence (real-KB middle rung)
             items.append(dict(pid=pid, kind=R["kind"], sub=s, answers=[o],
                               question=R["q"].format(s=s), eval_question=R["p"].format(s=s),
                               context=evi, src=used))
     print(f"  candidate items: {len(items)}", flush=True)
 
-    # base-hard screen: closed-book WRONG on Q and paraphrase, RAG-answerable with evidence
-    e1 = [em(x, q["answers"]) for x, q in zip(gen(base, [QT.format(q=q["question"]) for q in items]), items)]
-    ep = [em(x, q["answers"]) for x, q in zip(gen(base, [QT.format(q=q["eval_question"]) for q in items]), items)]
-    rg = [em(x, q["answers"]) for x, q in zip(gen(base, [RT.format(c=q["context"], q=q["question"]) for q in items]), items)]
+    # base-hard screen on ORIGINAL + MANUAL paraphrase; RAG-answerable with evidence
+    e1 = _emlist(base, [QT.format(q=q["question"]) for q in items], items)
+    ep = _emlist(base, [QT.format(q=q["eval_question"]) for q in items], items)
+    rg = _emlist(base, [RT.format(c=q["context"], q=q["question"]) for q in items], items)
     for q, a, b, c in zip(items, e1, ep, rg):
         q["base_em_orig"], q["base_em_para"], q["rag_em"] = a, b, c
     hard = [q for q in items if q["base_em_orig"] == 0 and q["base_em_para"] == 0 and q["rag_em"] == 1]
-    print(f"  base-hard & RAG-answerable: {len(hard)}/{len(items)}", flush=True)
+    print(f"  base-hard(orig+manual-para) & RAG-answerable: {len(hard)}/{len(items)}", flush=True)
 
-    # confound features: answer bpt (orig+para), subject familiarity bpt, token counts
-    bo = qa_answer_bits(base, hard, "question"); bp = qa_answer_bits(base, hard, "eval_question")
-    sb = subject_bits(base, [q["sub"] for q in hard])
-    for q, o_, p_, s_ in zip(hard, bo, bp, sb):
-        q["ans_ntok"] = o_[1]
-        q["bpt_orig"] = round(o_[0] / max(o_[1], 1), 3)
-        q["bpt_para"] = round(p_[0] / max(p_[1], 1), 3)
-        q["subj_bits"] = s_
-        q["subj_ntok"] = len(tok(q["sub"], add_special_tokens=False).input_ids)
-
-    # held-out paraphrase via 3B (parity with census/wikibridge internalization surface)
+    # 3B held-out paraphrase, then SCREEN it too (codex: the held-out surface must itself be base-hard)
     inst = Instruct()
     paras = inst.chat([(RSYS, q["question"]) for q in hard], max_new=40, bs=16)
     for q, pp in zip(hard, paras):
         q["eval_question_3b"] = (pp.split("\n")[0].strip() or q["eval_question"])
     inst.free()
+    b3 = _emlist(base, [QT.format(q=q["eval_question_3b"]) for q in hard], hard)
+    r3 = _emlist(base, [RT.format(c=q["context"], q=q["eval_question_3b"]) for q in hard], hard)
+    for q, a, b in zip(hard, b3, r3):
+        q["base_em_3b"], q["rag_em_3b"] = a, b
 
-    # leakage flags + dedup
+    # confounds: answer bpt (orig+manual-para), subject familiarity, token counts
+    bo = qa_answer_bits(base, hard, "question"); bp = qa_answer_bits(base, hard, "eval_question")
+    sb = subject_bits(base, [q["sub"] for q in hard])
+    for q, o_, p_, s_ in zip(hard, bo, bp, sb):
+        q["ans_ntok"] = o_[1]; q["bpt_orig"] = round(o_[0] / max(o_[1], 1), 3)
+        q["bpt_para"] = round(p_[0] / max(p_[1], 1), 3); q["subj_bits"] = s_
+        q["subj_ntok"] = len(tok(q["sub"], add_special_tokens=False).input_ids)
+
+    # leakage + dedup; usable requires ALL held-out surfaces base-hard
     seen = set()
     for q in hard:
         na = normalize(q["answers"][0])
-        q["ans_in_q"] = int(na in normalize(q["question"]))
+        q["ans_in_q"] = int(na in normalize(q["question"]) or na in normalize(q["eval_question_3b"]))
         key = (q["pid"], normalize(q["sub"]))
         q["dup"] = int(key in seen); seen.add(key)
-
-    usable = [q for q in hard if not q["dup"] and not q["ans_in_q"]]
+    usable = [q for q in hard if not q["dup"] and not q["ans_in_q"]
+              and q["base_em_3b"] == 0 and q["rag_em"] == 1]
     byrel = collections.defaultdict(list)
     for q in usable:
         byrel[q["pid"]].append(q)
 
-    # ------- AUDIT report -------
+    # ------- matchable-block feasibility (codex #3): same-kind, OTHER-relation neighbor within TOL -------
+    for pid, qs in byrel.items():
+        others = [x for x in usable if x["kind"] == RELATIONS[pid]["kind"] and x["pid"] != pid]
+        for q in qs:
+            nb = sum(1 for x in others
+                     if abs(x["ans_ntok"] - q["ans_ntok"]) <= TOL["ans_ntok"]
+                     and abs(x["subj_ntok"] - q["subj_ntok"]) <= TOL["subj_ntok"]
+                     and abs(x["bpt_para"] - q["bpt_para"]) <= TOL["bpt"]
+                     and abs(x["subj_bits"] - q["subj_bits"]) <= TOL["subj_bits"])
+            q["match_nb"] = nb; q["matchable"] = int(nb >= MATCH_MIN)
+
+    # ------- AUDIT -------
     def dist(qs, k):
         v = sorted(q[k] for q in qs)
         return None if not v else dict(n=len(v), mean=round(sum(v) / len(v), 2),
@@ -245,33 +207,33 @@ def main():
     for pid in RELATIONS:
         qs = byrel.get(pid, [])
         audit[pid] = dict(kind=RELATIONS[pid]["kind"], n_usable=len(qs),
+                          n_matchable=sum(q["matchable"] for q in qs),
                           ans_bpt=dist(qs, "bpt_para"), subj_bits=dist(qs, "subj_bits"),
                           ans_ntok=dist(qs, "ans_ntok"), subj_ntok=dist(qs, "subj_ntok"))
+    # GO: relation counts use MATCHABLE usable (codex bug #1: don't count half-filled neighbors)
+    ok_rels = [p for p in RELATIONS if audit[p]["n_matchable"] >= WANT]
     kinds = collections.defaultdict(list)
-    for pid in RELATIONS:
-        if audit[pid]["n_usable"] >= WANT // 2:
-            kinds[RELATIONS[pid]["kind"]].append(pid)
-    ok_rels = [p for p in RELATIONS if audit[p]["n_usable"] >= WANT]
+    for p in ok_rels:
+        kinds[RELATIONS[p]["kind"]].append(p)
     ok_buckets = {k: v for k, v in kinds.items() if len(v) >= 2}
     GO = len(ok_rels) >= 5 and len(ok_buckets) >= 2
-    audit_meta = dict(source=used, n_candidate=len(items), n_hard=len(hard), n_usable=len(usable),
-                      relations_ge_want=ok_rels, want=WANT,
-                      same_kind_buckets_ge2={k: v for k, v in kinds.items()},
-                      GO_for_training=GO)
-    json.dump(dict(meta=audit_meta, per_relation=audit,
+    meta = dict(source=used, source_mode=SOURCE, n_candidate=len(items), n_hard=len(hard),
+                n_usable=len(usable), want=WANT, tol=TOL, match_min=MATCH_MIN,
+                relations_ge_want_matchable=ok_rels, same_kind_buckets_ge2=ok_buckets,
+                GO_for_training=GO,
+                note="real-KB/templated-evidence" if used == "trex" else used)
+    json.dump(dict(meta=meta, per_relation=audit,
                    items={q["pid"] + ":" + q["sub"]: {k: v for k, v in q.items() if k != "context"} for q in usable}),
               open(OUT, "w"), indent=1)
-    with open(OUT.replace(".json", ".jsonl"), "w") as f:
+    with open(JOUT, "w") as f:
         for q in usable:
             f.write(json.dumps({k: v for k, v in q.items() if k != "context"}) + "\n")
-    print(f"  AUDIT source={used} candidate={len(items)} hard={len(hard)} usable={len(usable)}", flush=True)
+    print(f"  AUDIT src={used} cand={len(items)} hard={len(hard)} usable={len(usable)}", flush=True)
     for pid in RELATIONS:
         a = audit[pid]
-        print(f"    {pid}[{a['kind']:8s}] usable={a['n_usable']:3d} "
+        print(f"    {pid}[{a['kind']:6s}] usable={a['n_usable']:3d} matchable={a['n_matchable']:3d} "
               f"ans_bpt={a['ans_bpt']} subj_bits={a['subj_bits']}", flush=True)
-    print(f"  relations>=WANT({WANT}): {ok_rels}", flush=True)
-    print(f"  same-kind buckets>=2: {ok_buckets}", flush=True)
-    print(f"  GO_for_training={GO}", flush=True)
+    print(f"  relations>=WANT(matchable): {ok_rels}  buckets>=2: {ok_buckets}  GO={GO}", flush=True)
     print("[done]", flush=True)
 
 if __name__ == "__main__":
