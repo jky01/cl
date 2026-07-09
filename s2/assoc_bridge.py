@@ -235,20 +235,26 @@ def run(seed, arm, pool):
             if step >= max(2000, STEPS // 3) and min(a1, a2) < 0.90:
                 print(f"    KILL: atomic recall {a1:.2f}/{a2:.2f} < 0.90 — fix data/prompt/steps.", flush=True)
                 break
-    # hidden-similarity diagnostic: h(A friend) vs correct/wrong h(B pet)
+    # mechanism probes (codex 2026-07-09.22.35): 3 hidden margins vs wrong-B. #2 (raw 2-hop bridge
+    # POSITION) is the key one — is the composed prompt actually routed through B's identity state, or is
+    # the held2 gain a shallow readout artifact of the aux position only?
     m.eval()
     hsim = None
     ha = held2[:min(len(held2), 200)]
     if ha:
-        tgt = (lambda b: q_ident(b)) if ATTR == "identity" else (lambda b: q_r2(b))   # match the ATTR target
-        zA = hstate(m, [q_r1(a) for (p, g, a) in ha])
-        zBc = hstate(m, [tgt(task["r1"][a]) for (p, g, a) in ha])
         Bs = list(task["r2"].keys()); rdg = random.Random(1234 + seed)
-        zBw = hstate(m, [tgt(rdg.choice([x for x in Bs if x != task["r1"][a]])) for (p, g, a) in ha])
-        cc = F.cosine_similarity(zA, zBc, dim=-1).mean().item()
-        cw = F.cosine_similarity(zA, zBw, dim=-1).mean().item()
-        hsim = dict(attr_target=ATTR, cos_A_correctB=round(cc, 4), cos_A_wrongB=round(cw, 4),
-                    margin=round(cc - cw, 4))
+        Bcorr = [task["r1"][a] for (p, g, a) in ha]
+        Bwrong = [rdg.choice([x for x in Bs if x != b]) for b in Bcorr]
+        def margin(qfn, tfn):
+            zQ = hstate(m, [qfn(a) for (p, g, a) in ha])
+            zc = hstate(m, [tfn(b) for b in Bcorr]); zw = hstate(m, [tfn(b) for b in Bwrong])
+            return round((F.cosine_similarity(zQ, zc, -1).mean() - F.cosine_similarity(zQ, zw, -1).mean()).item(), 4)
+        hsim = dict(
+            aux=margin(lambda a: q_r1(a), lambda b: q_ident(b)),                 # h("A's friend is") vs h(B)
+            raw_bridge=margin(lambda a: f"{a}'s friend's", lambda b: q_ident(b)),  # #2 KEY: h("A's friend's") vs h(B)
+            readout=margin(lambda a: q_2hop(a), lambda b: q_r2(b)),              # h("A's friend's pet is") vs h("B's pet is")
+            margin=None)
+        hsim["margin"] = hsim["aux"]                                             # back-compat headline
     fin = curve[-1] if curve else None
     del m; torch.cuda.empty_cache()
     return dict(arm=arm, seed=seed, n_bridge=n_bridge, aper=aper, n_held2=task["n_held2"],
