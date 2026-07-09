@@ -101,9 +101,14 @@ def run(seed, arm, pool):
         opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0); opt.step()
     m.eval(); bc0, _ = acc(m, bc); ab0, _ = acc(m, ab)
     teach = bc_logits(m, bc) if arm == "distill_old" else None      # frozen phase-1 teacher for distill
+    # codex: FREEZE the phase-1 h(B) identity bank as the attractor target — else it's a moving phase-2
+    # target. Frozen bank = "old knowledge already in weights becomes a train-time consolidation target",
+    # created at the phase boundary, deleted after training (NOT inference memory, NOT old B->C replay).
+    Bs = task["Bs"]; bidx = {b: i for i, b in enumerate(Bs)}
+    hB_frozen = hstate(m, [q_ident(b) for b in Bs]).detach() if arm in ("attractor", "deranged_attractor") else None
     print(f"    [{arm} s{seed}] after P1: B->C={bc0:.3f} A->B={ab0:.3f}", flush=True)
     # ---- phase 2: NEW A->B (+ arm extra) ----
-    Bs = task["Bs"]; rdg = random.Random(7000 + seed)
+    rdg = random.Random(7000 + seed)
     m.train(); curve = []
     for step in range(1, P2 + 1):
         loss = step_ce(m, opt, [random.choice(ab) for _ in range(BS)])   # new edges A->B
@@ -113,10 +118,8 @@ def run(seed, arm, pool):
                          use_cache=False).last_hidden_state[:, -1].float()
             tb = [task["r1"][a] if arm == "attractor" else rdg.choice([x for x in Bs if x != task["r1"][a]])
                   for a in aa]
-            with torch.no_grad():
-                zt = m.model(**tok([q_ident(b) for b in tb], return_tensors="pt", padding=True).to(device),
-                             use_cache=False).last_hidden_state[:, -1].float()
-            loss = loss + LAMBDA * (1 - F.cosine_similarity(zA, zt.detach(), -1)).mean()
+            zt = hB_frozen[torch.tensor([bidx[b] for b in tb], device=device)]   # FROZEN phase-1 target
+            loss = loss + LAMBDA * (1 - F.cosine_similarity(zA, zt, -1)).mean()
         elif arm == "replay_old":
             loss = loss + step_ce(m, opt, [random.choice(bc) for _ in range(BS)])   # replay old B->C
         elif arm == "distill_old":
@@ -147,10 +150,15 @@ def run(seed, arm, pool):
         return round((F.cosine_similarity(zQ, zc, -1).mean() - F.cosine_similarity(zQ, zw, -1).mean()).item(), 4)
     hsim = dict(aux=margin(lambda a: q_r1(a), q_ident), raw_bridge=margin(lambda a: f"{a}'s friend's", q_ident),
                 readout=margin(lambda a: q_2hop(a), q_r2)) if ha else None
+    # target-drift diagnostic (codex): how far did h(B) move from the frozen phase-1 bank during phase 2?
+    tdrift = None
+    if hB_frozen is not None:
+        hB_now = hstate(m, [q_ident(b) for b in Bs])
+        tdrift = round(F.cosine_similarity(hB_now, hB_frozen, -1).mean().item(), 4)
     fin = curve[-1] if curve else None
     del m; torch.cuda.empty_cache()
     return dict(arm=arm, seed=seed, bc_after_p1=bc0, ab_after_p1=ab0, hidden_sim=hsim,
-                final=fin, curve=curve, wall=round(time.time() - t0, 1))
+                target_drift_cos=tdrift, final=fin, curve=curve, wall=round(time.time() - t0, 1))
 
 def main():
     pool = harvest_pool()
