@@ -299,7 +299,8 @@ def consolidate(M, facts, base, steps, rng):
     M.train(); opt = torch.optim.AdamW(M.parameters(), lr=LR)
     for _ in range(steps):
         loss = qa_ce(M, [rng.choice(facts) for _ in range(min(8, len(facts)))])
-        ne, nb = base_anchor_logits(base, [rng.choice(NEUTRAL) for _ in range(8)])
+        with torch.no_grad():                        # frozen base anchor target (codex: no backward graph thru base)
+            ne, nb = base_anchor_logits(base, [rng.choice(NEUTRAL) for _ in range(8)])
         sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
         loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")
         opt.zero_grad(); loss.backward()
@@ -335,7 +336,7 @@ def train_main():
     t0 = time.time()
     print(f"SCHEMA_COMP train (prime-then-bind) N={N_LEVELS} B={B_SCHED} T={T_TARGET} "
           f"prime_steps={PRIME_STEPS} arms={ARMS} seeds={TRAIN_SEEDS}", flush=True)
-    base = load_model()
+    base = load_model(); base.requires_grad_(False)   # anchor teacher is frozen
     results = []
     for seed in range(TRAIN_SEEDS):
         rng = random.Random(9400 + seed)
