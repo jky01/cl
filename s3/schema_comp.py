@@ -20,9 +20,11 @@ geography/language relations are NOT base-hard (the base memorized them) — ver
 
 Model: Qwen2.5-0.5B (base scoring), Qwen2.5-3B-Instruct (held-out paraphrase). Reuses WikiBridge eval contract.
 """
-import os, json, re, random, collections, math
+import os, json, re, random, collections, math, copy, time
 import torch
-from s3.wikibridge import normalize, em, QT, RT, gen, qa_answer_bits, load_model, tok, device
+from s3.wikibridge import (normalize, em, QT, RT, gen, qa_answer_bits, qa_ce, base_anchor_logits,
+                           NEUTRAL, load_model, tok, device)
+import torch.nn.functional as F
 from s3.census import Instruct, RSYS
 
 SEED = int(os.environ.get("SC_SEED", 0))
@@ -121,7 +123,7 @@ def subject_bits(base, subs):
 def _emlist(base, prompts, items):
     return [em(x, q["answers"]) for x, q in zip(gen(base, prompts), items)]
 
-def main():
+def audit_main():
     rng = random.Random(4400 + SEED)
     print(f"SCHEMA_COMP miner (base=Qwen2.5-0.5B, {device}) rels={list(RELATIONS)} want={WANT} src={SOURCE}", flush=True)
     base = load_model()
@@ -236,5 +238,149 @@ def main():
     print(f"  relations>=WANT(matchable): {ok_rels}  buckets>=2: {ok_buckets}  GO={GO}", flush=True)
     print("[done]", flush=True)
 
+# ============================= STAGE 2: PRIME-then-BIND training ladder =============================
+# codex-approved 2026-07-09.19.49: isolate the dose-response — prior same-relation density N vs marginal
+# cost to BIND a held-out same-relation target at fixed budget. Arms differ ONLY in prime relation-coherence
+# (matched count + confounds). Eval surface = MANUAL held-out paraphrase (primary; 3B = secondary robustness).
+AUDIT_IN = os.environ.get("SC_AUDIT_IN", "docs/cloud_results/r44_audit.jsonl")
+N_LEVELS = [int(x) for x in os.environ.get("SC_N", "0,4,8,16").split(",")]
+B_SCHED = sorted(int(x) for x in os.environ.get("SC_B", "1,2,4").split(","))   # cumulative bind steps to measure at
+T_TARGET = int(os.environ.get("SC_T", 8))            # held-out targets per relation
+PRIME_STEPS = int(os.environ.get("SC_PRIME_STEPS", 12))  # per-prime-fact consolidation steps (calibrated in pilot)
+LR = float(os.environ.get("SC_LR", 1e-5))
+TRAIN_SEEDS = int(os.environ.get("SC_TRAIN_SEEDS", 2))
+ARMS = os.environ.get("SC_ARMS", "schema_commit,item_k_matched,schema_shuffle_same_kind").split(",")
+
+def load_audit(rng):
+    """read frozen audit jsonl; per relation split disjoint TARGET (held-out) and PRIME pools."""
+    rows = [json.loads(l) for l in open(AUDIT_IN)]
+    byrel = collections.defaultdict(list)
+    for r in rows:
+        byrel[r["pid"]].append(r)
+    targets, primes = {}, {}
+    for pid, qs in byrel.items():
+        qs = [q for q in qs if q.get("matchable")]
+        rng.shuffle(qs)
+        targets[pid] = qs[:T_TARGET]
+        primes[pid] = qs[T_TARGET:]                  # disjoint prime pool
+    return targets, primes
+
+def _match(cands, ref, k, rng):
+    """pick k prime facts from cands whose confounds match the ref target set's distribution (nearest)."""
+    out = []
+    pool = list(cands); rng.shuffle(pool)
+    for _ in range(k):
+        t = rng.choice(ref)
+        pool.sort(key=lambda q: (abs(q["ans_ntok"] - t["ans_ntok"]) + abs(q["bpt_para"] - t["bpt_para"]) / 3
+                                 + abs(q["subj_bits"] - t["subj_bits"]) / 3))
+        if pool:
+            out.append(pool.pop(0))
+    return out
+
+def select_primes(pid, arm, N, targets, primes, rng):
+    if N <= 0:
+        return []
+    ref = targets[pid]
+    if arm == "schema_commit":
+        pool = list(primes[pid])                     # same relation
+    elif arm == "item_k_matched":
+        pool = [q for p, qs in primes.items() if p != pid for q in qs]   # any other relation
+    elif arm == "schema_shuffle_same_kind":
+        kind = RELATIONS[pid]["kind"]
+        pool = [q for p, qs in primes.items() if p != pid and RELATIONS[p]["kind"] == kind for q in qs]
+    else:
+        raise ValueError(arm)
+    return _match(pool, ref, min(N, len(pool)), rng)
+
+def consolidate(M, facts, base, steps, rng):
+    """train QA-CE on facts (original question->answer) + neutral base anchor. This IS the prime write."""
+    if not facts:
+        return
+    M.train(); opt = torch.optim.AdamW(M.parameters(), lr=LR)
+    for _ in range(steps):
+        loss = qa_ce(M, [rng.choice(facts) for _ in range(min(8, len(facts)))])
+        ne, nb = base_anchor_logits(base, [rng.choice(NEUTRAL) for _ in range(8)])
+        sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
+        loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")
+        opt.zero_grad(); loss.backward()
+        torch.nn.utils.clip_grad_norm_(M.parameters(), 1.0); opt.step()
+    M.eval()
+
+@torch.no_grad()
+def para_em(M, qs, key):
+    if not qs:
+        return None
+    preds = gen(M, [QT.format(q=q[key]) for q in qs])
+    return round(sum(em(p, q["answers"]) for p, q in zip(preds, qs)) / len(qs), 3)
+
+def bind_progressive(M, targets, base, rng):
+    """BIND the T targets with QA-CE, measuring held-out paraphrase EM at each cumulative budget in B_SCHED."""
+    M.train(); opt = torch.optim.AdamW(M.parameters(), lr=LR)
+    out = {}; step = 0
+    for b in B_SCHED:
+        while step < b:
+            loss = qa_ce(M, targets)                 # one full-batch pass over the T targets = 1 step
+            opt.zero_grad(); loss.backward()
+            torch.nn.utils.clip_grad_norm_(M.parameters(), 1.0); opt.step()
+            step += 1
+        M.eval()
+        out[b] = dict(tgt_manual=para_em(M, targets, "eval_question"),
+                      tgt_orig=para_em(M, targets, "question"),
+                      tgt_3b=para_em(M, [q for q in targets if q.get("rag_em_3b")], "eval_question_3b"))
+        M.train()
+    M.eval()
+    return out
+
+def train_main():
+    t0 = time.time()
+    print(f"SCHEMA_COMP train (prime-then-bind) N={N_LEVELS} B={B_SCHED} T={T_TARGET} "
+          f"prime_steps={PRIME_STEPS} arms={ARMS} seeds={TRAIN_SEEDS}", flush=True)
+    base = load_model()
+    results = []
+    for seed in range(TRAIN_SEEDS):
+        rng = random.Random(9400 + seed)
+        targets, primes = load_audit(rng)
+        rels = [p for p in RELATIONS if len(targets.get(p, [])) >= T_TARGET and primes.get(p)]
+        print(f"  seed {seed}: relations usable={rels}", flush=True)
+        for pid in rels:
+            R = RELATIONS[pid]
+            # commit-check budget: PRIME must actually write the primes before we trust the density effect
+            for arm in ARMS:
+                for N in N_LEVELS:
+                    if N == 0 and arm != ARMS[0]:
+                        continue                      # N=0 floor is arm-independent; run once
+                    M = load_model()
+                    pr = select_primes(pid, arm, N, targets, primes, rng)
+                    consolidate(M, pr, base, PRIME_STEPS * len(pr), rng)   # steps scale with N so all primes commit
+                    prime_committed = para_em(M, pr, "question") if pr else None
+                    prime_para_pre = para_em(M, pr, "eval_question") if pr else None
+                    binds = bind_progressive(M, targets[pid], base, rng)
+                    prime_para_post = para_em(M, pr, "eval_question") if pr else None
+                    del M; torch.cuda.empty_cache()
+                    row = dict(seed=seed, pid=pid, kind=R["kind"], arm=(arm if N > 0 else "floor"),
+                               N=N, n_prime=len(pr), prime_committed=prime_committed,
+                               prime_para_pre=prime_para_pre, prime_para_post=prime_para_post,
+                               tgt_ans_ntok=round(sum(q["ans_ntok"] for q in targets[pid]) / T_TARGET, 2),
+                               binds=binds)
+                    results.append(row)
+                    b_last = binds[B_SCHED[-1]]
+                    print(f"    [s{seed} {pid} {row['arm']:22s} N={N:2d}] prime_commit={prime_committed} "
+                          f"tgt_manual@B={ {b: binds[b]['tgt_manual'] for b in B_SCHED} } "
+                          f"prime_post={prime_para_post}", flush=True)
+        json.dump(dict(config=dict(N=N_LEVELS, B=B_SCHED, T=T_TARGET, prime_steps=PRIME_STEPS,
+                                   arms=ARMS, seeds=seed + 1, relations=list(RELATIONS)),
+                       rows=results), open(OUT, "w"), indent=1)
+    # slope summary: mean target manual-para EM vs N per arm (at max B), per bucket
+    print("  -- slope: mean tgt manual-para EM vs N (at B={}) per arm/bucket --".format(B_SCHED[-1]), flush=True)
+    for kind in sorted(set(R["kind"] for R in RELATIONS.values())):
+        for arm in ["floor"] + ARMS:
+            for N in N_LEVELS:
+                vals = [r["binds"][B_SCHED[-1]]["tgt_manual"] for r in results
+                        if r["kind"] == kind and r["arm"] == arm and r["N"] == N
+                        and r["binds"][B_SCHED[-1]]["tgt_manual"] is not None]
+                if vals:
+                    print(f"     {kind:6s} {arm:22s} N={N:2d}: {round(sum(vals)/len(vals),3)} (n={len(vals)})", flush=True)
+    print(f"[done] wall={time.time()-t0:.0f}s", flush=True)
+
 if __name__ == "__main__":
-    main()
+    (train_main if os.environ.get("SC_STAGE", "audit") == "train" else audit_main)()
