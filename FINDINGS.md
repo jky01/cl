@@ -1,5 +1,38 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R44 (schema-compressibility, prime-then-bind on real T-REx relations) — NULL for RELATION-specific
+> schema compression (the deranged same-kind control matches schema_commit), but a REAL coarser effect:
+> reusable structure exists at the ANSWER-KIND granularity, and consolidating incompatible-kind facts
+> together INTERFERES.** `s3/schema_comp.py` (`SC_STAGE=train`), `docs/cloud_results/r44_ladder.{json,log}`,
+> Qwen2.5-0.5B, real T-REx triples (`relbert/t_rex_relation_similarity`), 6 base-hard relations (person:
+> P50/P57/P86/P58; org: P178/P176), 2 seeds, T=8 held-out targets/relation, MANUAL held-out paraphrase EM.
+> Protocol: PRIME N same/other/same-kind facts into weights, BIND T held-out same-relation targets at
+> cumulative budget B, measure target held-out-paraphrase EM. Mean target EM at bind-budget B=6 (mid-curve):
+>
+> | bucket | floor N=0 | schema_commit N=16 | item_k_matched N=16 | shuffle(deranged) N=16 |
+> |---|---|---|---|---|
+> | person | 0.438 | 0.891 | 0.828 | **0.906** |
+> | org | 0.719 | 0.969 | **0.562** | 0.875 |
+>
+> **Fails codex's pre-registered gate** (schema_commit steeper than item_k_matched in BOTH buckets AND
+> deranged shuffle NOT passing): (1) **person: schema_commit ≈ item_k_matched ≈ shuffle** — no
+> relation-specific advantage (schema_commit − item_k_matched flips sign across N, mean ≈0; shuffle even
+> highest). (2) **org: schema_commit > item_k_matched (Δ≈+0.31–0.41 at N=16) BUT schema_commit ≈ shuffle**
+> — the deranged same-kind control matches schema_commit, so by codex's criterion the effect is
+> answer-KIND/template support, NOT relation schema. **Findings:** (a) **Priming helps binding** (person
+> floor 0.44 → primed ~0.88 at B=6): consolidating facts first roughly doubles low-budget binding EM. (b)
+> **The reusable structure is answer-KIND, not relation-specific:** same-kind-different-relation priming
+> (shuffle) works as well as same-relation (schema_commit). (c) **Cross-kind consolidation INTERFERES:**
+> org `item_k_matched` (0.562) falls BELOW floor (0.719) — mixing person-name + org-name + other-kind facts
+> in one consolidation hurts org-target binding. This is a clean mechanistic datum: the write path shares
+> an answer-TYPE schema, and mixing incompatible types causes destructive interference (connects to the
+> R43 interference story). (d) Prime retention post-bind 0.77–0.97 (no catastrophic prime forgetting).
+> **Caveats:** org n=4/cell (2 rel × 2 seeds) — noisy; person n=8 is the cleaner (and clearly null) bucket.
+> **Verdict:** R44's specific claim (relation-schema compression → sublinear marginal cost) is NOT
+> supported; the compression that exists is coarse output-type priming. Per the reframe, this moves us to
+> "report the honest negative map" — with the new positive nuance that answer-KIND schema is reusable and
+> cross-kind mixing interferes. Consistent with R32/R34 (fine composition/schema does not emerge at 0.5B).
+
 > **R43-ladder (Step B — real-density budget ladder on self-contained real text) — HONEST NEGATIVE:
 > surprise-gated replay does NOT beat random subsampling on real text. The R41 Rung-1 win was an
 > artifact of the constructed bimodal 50/50 corpus; on real text (unimodal surprise, R42/R43) there is

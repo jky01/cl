@@ -1,0 +1,267 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+SCHEMA_COMP train (prime-then-bind) N=[0, 4, 8, 16] B=[2, 4, 6, 8] T=8 prime_steps=12 arms=['schema_commit', 'item_k_matched', 'schema_shuffle_same_kind'] seeds=2
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5597.09it/s]
+  seed 0: relations usable=['P50', 'P57', 'P86', 'P58', 'P178', 'P176']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7303.38it/s]
+    [s0 P50 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.5, 6: 0.625, 8: 0.75} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7715.94it/s]
+    [s0 P50 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.625, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7601.42it/s]
+    [s0 P50 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7078.66it/s]
+    [s0 P50 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=0.938
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7506.61it/s]
+    [s0 P50 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.5, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6617.46it/s]
+    [s0 P50 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.625
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6711.40it/s]
+    [s0 P50 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5293.65it/s]
+    [s0 P50 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.625, 8: 0.75} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7698.75it/s]
+    [s0 P50 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7799.45it/s]
+    [s0 P50 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=0.938
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6969.84it/s]
+    [s0 P57 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.25, 8: 0.375} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7030.59it/s]
+    [s0 P57 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.375, 6: 0.875, 8: 0.875} prime_post=0.5
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7792.06it/s]
+    [s0 P57 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.625, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10348.38it/s]
+    [s0 P57 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.5, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7612.79it/s]
+    [s0 P57 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.75, 8: 0.75} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6751.90it/s]
+    [s0 P57 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7488.77it/s]
+    [s0 P57 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 0.625, 8: 1.0} prime_post=0.625
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7008.15it/s]
+    [s0 P57 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.75, 8: 1.0} prime_post=0.5
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7818.50it/s]
+    [s0 P57 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 0.875, 8: 0.875} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7155.37it/s]
+    [s0 P57 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7411.20it/s]
+    [s0 P86 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.375, 6: 0.75, 8: 0.875} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6798.01it/s]
+    [s0 P86 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.5, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6375.83it/s]
+    [s0 P86 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.5, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7936.92it/s]
+    [s0 P86 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.625, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6823.95it/s]
+    [s0 P86 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7866.95it/s]
+    [s0 P86 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8314.69it/s]
+    [s0 P86 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4959.32it/s]
+    [s0 P86 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6337.79it/s]
+    [s0 P86 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8023.93it/s]
+    [s0 P86 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.688
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7238.19it/s]
+    [s0 P58 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.125, 6: 0.25, 8: 0.625} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7517.37it/s]
+    [s0 P58 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.5
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7535.86it/s]
+    [s0 P58 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6401.53it/s]
+    [s0 P58 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.938
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7281.43it/s]
+    [s0 P58 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.375, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6537.01it/s]
+    [s0 P58 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.625
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7692.66it/s]
+    [s0 P58 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 0.75, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7244.01it/s]
+    [s0 P58 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7870.10it/s]
+    [s0 P58 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7236.51it/s]
+    [s0 P58 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8073.46it/s]
+    [s0 P178 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.75, 8: 0.875} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7098.49it/s]
+    [s0 P178 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7887.05it/s]
+    [s0 P178 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.625
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7157.39it/s]
+    [s0 P178 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6619.08it/s]
+    [s0 P178 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.375, 6: 0.375, 8: 0.625} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10735.83it/s]
+    [s0 P178 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.5, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7105.63it/s]
+    [s0 P178 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 0.375, 8: 0.75} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4896.16it/s]
+    [s0 P178 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7362.61it/s]
+    [s0 P178 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 12834.33it/s]
+    [s0 P178 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6496.89it/s]
+    [s0 P176 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.625, 8: 0.875} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7359.05it/s]
+    [s0 P176 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.125, 8: 0.625} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5046.90it/s]
+    [s0 P176 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.375, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7612.64it/s]
+    [s0 P176 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7449.55it/s]
+    [s0 P176 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6614.22it/s]
+    [s0 P176 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 0.75, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4797.21it/s]
+    [s0 P176 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7655.28it/s]
+    [s0 P176 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6687.49it/s]
+    [s0 P176 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.75, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6958.95it/s]
+    [s0 P176 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.938
+  seed 1: relations usable=['P50', 'P57', 'P86', 'P58', 'P178', 'P176']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7836.69it/s]
+    [s1 P50 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.5, 8: 0.875} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7189.75it/s]
+    [s1 P50 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7830.48it/s]
+    [s1 P50 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7391.02it/s]
+    [s1 P50 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7276.07it/s]
+    [s1 P50 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.625, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5058.34it/s]
+    [s1 P50 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6608.07it/s]
+    [s1 P50 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.688
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7571.32it/s]
+    [s1 P50 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.875, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6800.37it/s]
+    [s1 P50 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4934.44it/s]
+    [s1 P50 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7374.04it/s]
+    [s1 P57 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.125, 6: 0.375, 8: 0.5} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8035.22it/s]
+    [s1 P57 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7478.45it/s]
+    [s1 P57 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6841.37it/s]
+    [s1 P57 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7948.38it/s]
+    [s1 P57 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 0.5, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6887.82it/s]
+    [s1 P57 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 0.875} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7587.14it/s]
+    [s1 P57 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.75, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7796.90it/s]
+    [s1 P57 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.375, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6550.92it/s]
+    [s1 P57 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7864.76it/s]
+    [s1 P57 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 1.0, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7776.81it/s]
+    [s1 P86 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.625, 8: 0.75} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8047.19it/s]
+    [s1 P86 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.5, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6589.10it/s]
+    [s1 P86 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.5, 8: 0.875} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7424.18it/s]
+    [s1 P86 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.625, 6: 0.875, 8: 0.875} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6058.36it/s]
+    [s1 P86 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.625, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7813.13it/s]
+    [s1 P86 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6831.11it/s]
+    [s1 P86 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6246.46it/s]
+    [s1 P86 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7555.24it/s]
+    [s1 P86 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.375, 6: 0.625, 8: 0.875} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7094.89it/s]
+    [s1 P86 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.625, 6: 0.875, 8: 0.875} prime_post=0.625
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7689.94it/s]
+    [s1 P58 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.0, 4: 0.0, 6: 0.125, 8: 0.125} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7929.98it/s]
+    [s1 P58 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.75, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7880.05it/s]
+    [s1 P58 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.125, 6: 0.5, 8: 0.875} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7153.52it/s]
+    [s1 P58 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 1.0, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7607.31it/s]
+    [s1 P58 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.25, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6733.85it/s]
+    [s1 P58 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7018.01it/s]
+    [s1 P58 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=0.688
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6497.07it/s]
+    [s1 P58 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.25, 6: 0.5, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7417.71it/s]
+    [s1 P58 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.75, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6652.35it/s]
+    [s1 P58 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.125, 6: 0.625, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7540.77it/s]
+    [s1 P178 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.125, 4: 0.5, 6: 0.625, 8: 0.875} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8735.81it/s]
+    [s1 P178 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.5, 6: 0.875, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6362.19it/s]
+    [s1 P178 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.5, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7945.21it/s]
+    [s1 P178 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.5, 4: 0.75, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8215.63it/s]
+    [s1 P178 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.125, 4: 0.125, 6: 0.25, 8: 0.25} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6395.30it/s]
+    [s1 P178 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.0, 6: 0.75, 8: 0.75} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7548.30it/s]
+    [s1 P178 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.0, 6: 0.0, 8: 0.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7102.35it/s]
+    [s1 P178 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.625, 6: 0.875, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6356.37it/s]
+    [s1 P178 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.0, 4: 0.25, 6: 0.75, 8: 0.875} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6469.63it/s]
+    [s1 P178 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.25, 4: 0.5, 6: 0.75, 8: 0.875} prime_post=0.938
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7319.46it/s]
+    [s1 P176 floor                  N= 0] prime_commit=None tgt_manual@B={2: 0.375, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=None
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7292.74it/s]
+    [s1 P176 schema_commit          N= 4] prime_commit=1.0 tgt_manual@B={2: 0.625, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5028.81it/s]
+    [s1 P176 schema_commit          N= 8] prime_commit=1.0 tgt_manual@B={2: 0.5, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=0.75
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7573.96it/s]
+    [s1 P176 schema_commit          N=16] prime_commit=1.0 tgt_manual@B={2: 0.375, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=0.812
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6403.65it/s]
+    [s1 P176 item_k_matched         N= 4] prime_commit=1.0 tgt_manual@B={2: 0.625, 4: 0.75, 6: 0.875, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7894.67it/s]
+    [s1 P176 item_k_matched         N= 8] prime_commit=1.0 tgt_manual@B={2: 0.75, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7437.62it/s]
+    [s1 P176 item_k_matched         N=16] prime_commit=1.0 tgt_manual@B={2: 0.75, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.938
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6717.67it/s]
+    [s1 P176 schema_shuffle_same_kind N= 4] prime_commit=1.0 tgt_manual@B={2: 0.625, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=1.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7078.58it/s]
+    [s1 P176 schema_shuffle_same_kind N= 8] prime_commit=1.0 tgt_manual@B={2: 0.625, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.875
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 7913.42it/s]
+    [s1 P176 schema_shuffle_same_kind N=16] prime_commit=1.0 tgt_manual@B={2: 0.75, 4: 0.875, 6: 1.0, 8: 1.0} prime_post=0.875
+  -- slope: mean tgt manual-para EM vs N (at B=8) per arm/bucket --
+     org    floor                  N= 0: 0.906 (n=4)
+     org    schema_commit          N= 4: 0.875 (n=4)
+     org    schema_commit          N= 8: 1.0 (n=4)
+     org    schema_commit          N=16: 1.0 (n=4)
+     org    item_k_matched         N= 4: 0.719 (n=4)
+     org    item_k_matched         N= 8: 0.906 (n=4)
+     org    item_k_matched         N=16: 0.688 (n=4)
+     org    schema_shuffle_same_kind N= 4: 0.969 (n=4)
+     org    schema_shuffle_same_kind N= 8: 0.969 (n=4)
+     org    schema_shuffle_same_kind N=16: 0.969 (n=4)
+     person floor                  N= 0: 0.609 (n=8)
+     person schema_commit          N= 4: 0.969 (n=8)
+     person schema_commit          N= 8: 0.969 (n=8)
+     person schema_commit          N=16: 0.984 (n=8)
+     person item_k_matched         N= 4: 0.938 (n=8)
+     person item_k_matched         N= 8: 0.984 (n=8)
+     person item_k_matched         N=16: 1.0 (n=8)
+     person schema_shuffle_same_kind N= 4: 0.953 (n=8)
+     person schema_shuffle_same_kind N= 8: 0.953 (n=8)
+     person schema_shuffle_same_kind N=16: 0.984 (n=8)
+[done] wall=2940s

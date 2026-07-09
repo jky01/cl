@@ -1,0 +1,8110 @@
+{
+ "config": {
+  "N": [
+   0,
+   4,
+   8,
+   16
+  ],
+  "B": [
+   2,
+   4,
+   6,
+   8
+  ],
+  "T": 8,
+  "prime_steps": 12,
+  "arms": [
+   "schema_commit",
+   "item_k_matched",
+   "schema_shuffle_same_kind"
+  ],
+  "seeds": 2,
+  "relations": [
+   "P50",
+   "P57",
+   "P86",
+   "P58",
+   "P178",
+   "P176"
+  ]
+ },
+ "rows": [
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.75
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.182,
+    "subj_bits": 0.168,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Adam Bede",
+    "Starship Titanic",
+    "The Sacred Flame",
+    "Burmese Days"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.75
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.176,
+    "subj_bits": 0.242,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Starship Titanic",
+    "Burmese Days",
+    "Adam Bede",
+    "Pseudodoxia Epidemica",
+    "Desolation Angels",
+    "The Poison Belt",
+    "The Three Pigs",
+    "The Sacred Flame"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.198,
+    "subj_bits": 0.262,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "The Sacred Flame",
+    "Adam Bede",
+    "The Poison Belt",
+    "Pseudodoxia Epidemica",
+    "The Wild Swans",
+    "The Cornelius Quartet",
+    "23 unsolved problems",
+    "Starship Titanic",
+    "The Three Pigs",
+    "Fire and Hemlock",
+    "A Wild Sheep Chase",
+    "The Water of the Wondrous Isles",
+    "The Human Voice",
+    "Typee",
+    "Rodney Stone",
+    "The Light That Failed"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.072,
+    "subj_bits": 0.054,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Profondo Rosso",
+    "The Human Contract",
+    "Hirak Rajar Deshe",
+    "The Chess Players"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.25
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.096,
+    "subj_bits": 0.115,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "The Human Contract",
+    "An Unmarried Woman",
+    "The Purge",
+    "Profondo Rosso",
+    "Down and Out in Beverly Hills",
+    "Nissan Skyline",
+    "The Great Dictator",
+    "Night Shift"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.137,
+    "subj_bits": 0.109,
+    "subj_ntok": 0.188
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Nissan Skyline",
+    "The Human Contract",
+    "Deadly Blessing",
+    "Schlock",
+    "The Impostors",
+    "Manjadikuru",
+    "An Unmarried Woman",
+    "Profondo Rosso",
+    "Hirak Rajar Deshe",
+    "The Chess Players",
+    "DRG Class 62",
+    "Santa Sangre",
+    "Mean Streets",
+    "The Great Dictator",
+    "The Purge",
+    "Night Shift"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.5
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.143,
+    "subj_bits": 0.108,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Deadly Blessing",
+    "Profondo Rosso",
+    "Night Shift",
+    "Mean Streets"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.25
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.75
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.107,
+    "subj_bits": 0.128,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Deadly Blessing",
+    "Schlock",
+    "The Great Dictator",
+    "Manjadikuru",
+    "An Unmarried Woman",
+    "Mumbai Xpress",
+    "The Claim",
+    "Poppea"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 4.62,
+   "n_tgt_3b": 4,
+   "tok_updates": {
+    "2": 90,
+    "4": 180,
+    "6": 270,
+    "8": 360
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.159,
+    "subj_bits": 0.142,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Cosmicomics",
+    "International Phonetic Alphabet",
+    "Professor Shonku",
+    "The Subtle Knife",
+    "Fever Pitch",
+    "picture theory",
+    "Zuleika Dobson",
+    "Clarissa"
+   ],
+   "prime_subs": [
+    "Profondo Rosso",
+    "Mean Streets",
+    "The Human Contract",
+    "Manjadikuru",
+    "The Great Dictator",
+    "Mumbai Xpress",
+    "O Convento",
+    "Deadly Blessing",
+    "The Impostors",
+    "Poppea",
+    "Night Shift",
+    "Ballo della Regina",
+    "The Skeleton Dance",
+    "A Dangerous Method",
+    "Movie 43",
+    "Hirak Rajar Deshe"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.25
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.5,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.231,
+    "subj_bits": 0.255,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Tracing Shadow",
+    "Lady for a Day",
+    "A Girl in Black",
+    "Chelsea Girls"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.271,
+    "subj_bits": 0.261,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "A Girl in Black",
+    "Lady for a Day",
+    "Rio 2",
+    "The Wrong Man",
+    "The Muse",
+    "Tracing Shadow",
+    "Meesa Madhavan",
+    "Secret of Mana"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.268,
+    "subj_bits": 0.246,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Blues Brothers 2000",
+    "Chelsea Girls",
+    "A Girl in Black",
+    "The Wrong Man",
+    "The Muse",
+    "Tracing Shadow",
+    "Lady for a Day",
+    "I Vampiri",
+    "The County Fair",
+    "Bandit Queen",
+    "Rio 2",
+    "Secret of Mana",
+    "Meesa Madhavan",
+    "Kamla Ki Maut",
+    "Scary Movie",
+    "Caught in the Rain"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.097,
+    "subj_bits": 0.252,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "The Golden Ass",
+    "The Girl in Pink Tights",
+    "Gopura Vasalile",
+    "El Topo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.281,
+    "subj_bits": 0.118,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Waltz for Monica",
+    "The Deer Hunter",
+    "The Golden Ass",
+    "Dandelion Wine",
+    "Catriona",
+    "The Hunger Strike",
+    "Billy Elliot the Musical",
+    "Rage Racer"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.356,
+    "subj_bits": 0.153,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Jaani Dost",
+    "The Deer Hunter",
+    "Rage Racer",
+    "The Girl in Pink Tights",
+    "Gopura Vasalile",
+    "El Topo",
+    "Waltz for Monica",
+    "Anand Math",
+    "Bottle Rocket",
+    "Caprice",
+    "Dandelion Wine",
+    "Billy Elliot the Musical",
+    "Enamorada de Ti",
+    "Catriona",
+    "The Gruffalo",
+    "Burmese Days"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.5,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.375,
+    "subj_bits": 0.166,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Dandelion Wine",
+    "The Golden Ass",
+    "Waltz for Monica",
+    "The Girl in Pink Tights"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.119,
+    "subj_bits": 0.097,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "The Girl in Pink Tights",
+    "Bottle Rocket",
+    "Jaani Dost",
+    "Jalsa",
+    "Gopura Vasalile",
+    "Burmese Days",
+    "The Deer Hunter",
+    "Jerusalem"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 4.25,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 84,
+    "4": 168,
+    "6": 252,
+    "8": 336
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.243,
+    "subj_bits": 0.144,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Ammayane Sathyam",
+    "Uski Roti",
+    "The Prince and the Showgirl",
+    "The Whales of August",
+    "The Midnight After",
+    "The Warriors",
+    "Le Diable boiteux",
+    "The Ten"
+   ],
+   "prime_subs": [
+    "Jaani Dost",
+    "Bottle Rocket",
+    "The Golden Ass",
+    "Waltz for Monica",
+    "The Hunger Strike",
+    "Gopura Vasalile",
+    "Do Jasoos",
+    "Burmese Days",
+    "Dandelion Wine",
+    "The Girl in Pink Tights",
+    "El Topo",
+    "Irandaam Ulagam",
+    "The Deer Hunter",
+    "Face to the Sky",
+    "Billy Elliot the Musical",
+    "Enamorada de Ti"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.5
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.167
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.294,
+    "subj_bits": 0.241,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Die Liebe der Danae",
+    "Grace Is Gone",
+    "Gabriella di Vergy",
+    "The Peacemaker"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.168,
+    "subj_bits": 0.213,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Die Liebe der Danae",
+    "The Peacemaker",
+    "Xerxes",
+    "I Wanna Talk 2 U",
+    "A Woman of Paris",
+    "Boogie Nights",
+    "Albert Herring",
+    "Grace Is Gone"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.253,
+    "subj_bits": 0.253,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "I Wanna Talk 2 U",
+    "Absolute Beginners",
+    "La rondine",
+    "Grace Is Gone",
+    "A Woman of Paris",
+    "Hey Baby",
+    "Working Girl",
+    "Linda di Chamounix",
+    "Cannon for Cordoba",
+    "The Princess Pat",
+    "The Peacemaker",
+    "Der Mond",
+    "Double Concerto",
+    "Naughty Marietta",
+    "Die Liebe der Danae",
+    "Gabriella di Vergy"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.153,
+    "subj_bits": 0.063,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Natural Born Killers",
+    "The Newcomes",
+    "Kairo",
+    "He Got Game"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.19,
+    "subj_bits": 0.171,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "The Changeling",
+    "The Newcomes",
+    "Kairo",
+    "Logical Investigations",
+    "Wonderland",
+    "Madame Mystery",
+    "Fowler",
+    "Bejeweled series"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.198,
+    "subj_bits": 0.177,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Angry Birds Stella",
+    "Skyfall",
+    "He Got Game",
+    "Herbert Clutter",
+    "The Newcomes",
+    "Everybody Wins",
+    "Kairo",
+    "Natural Born Killers",
+    "The Balloonatic",
+    "Wonderland",
+    "Alive in Joburg",
+    "Marathon 2",
+    "The Transporter",
+    "Logical Investigations",
+    "One X",
+    "The Long Day Closes"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.101,
+    "subj_bits": 0.177,
+    "subj_ntok": 1.0
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "The Long Day Closes",
+    "Natural Born Killers",
+    "The Dark Glow of the Mountains",
+    "The Great Ecstasy of Woodcarver Steiner"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.167
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.213,
+    "subj_bits": 0.129,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Wonderland",
+    "Logical Investigations",
+    "The Newcomes",
+    "The Long Day Closes",
+    "The Changeling",
+    "Manhatta",
+    "Natural Born Killers",
+    "Kairo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.167
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 3.75,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 76,
+    "4": 152,
+    "6": 228,
+    "8": 304
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.178,
+    "subj_bits": 0.161,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Antigonae",
+    "Both Sides Now",
+    "Das Wunder der Heliane",
+    "Mon oncle Benjamin",
+    "Tom and Jerry in the Hollywood Bowl",
+    "Friedenstag",
+    "Megamind",
+    "Hey Porter"
+   ],
+   "prime_subs": [
+    "Natural Born Killers",
+    "Logical Investigations",
+    "Skyfall",
+    "The Newcomes",
+    "The Changeling",
+    "He Got Game",
+    "Herbert Clutter",
+    "Kairo",
+    "The Long Day Closes",
+    "Alive in Joburg",
+    "The Fires of Heaven",
+    "Colossians",
+    "Madame Mystery",
+    "Wonderland",
+    "3 Godfathers",
+    "Blood Bath"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.167
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.2
+    },
+    "8": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.2
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.5,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.412,
+    "subj_bits": 0.091,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "24 Hour Party People",
+    "Mean Streets",
+    "Memoirs of Prison",
+    "Joe the Menace"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.45,
+    "subj_bits": 0.238,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Ordet",
+    "24 Hour Party People",
+    "Joe the Menace",
+    "Alive in Joburg",
+    "Kairo",
+    "Thrill of a Romance",
+    "The Scapegoat",
+    "Mean Streets"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.288,
+    "subj_bits": 0.229,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "An Unmarried Woman",
+    "Down and Out in Beverly Hills",
+    "Alive in Joburg",
+    "Perfect Castaway",
+    "Mean Streets",
+    "Too Late Blues",
+    "A Man Vanishes",
+    "Robot Jox",
+    "Joe the Menace",
+    "Little Terrorist",
+    "La Carrera Panamericana",
+    "24 Hour Party People",
+    "Grand Canyon Massacre",
+    "The Quatermass Xperiment",
+    "Thrill of a Romance",
+    "Kairo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.156,
+    "subj_bits": 0.114,
+    "subj_ntok": 0.75
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Fun Is Beautiful",
+    "The Legend of Hercules",
+    "Full Contact",
+    "Nel blu dipinto di blu"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.875,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.237,
+    "subj_bits": 0.128,
+    "subj_ntok": 0.625
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Clans of Intrigue",
+    "Hana and Alice",
+    "Jalsa",
+    "Trixie Belden",
+    "Kaakha Kaakha",
+    "Nel blu dipinto di blu",
+    "Sense8",
+    "Fun Is Beautiful"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.229,
+    "subj_bits": 0.165,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Hana and Alice",
+    "Nel blu dipinto di blu",
+    "Rama Shama Bhama",
+    "Clans of Intrigue",
+    "Sense8",
+    "Fun Is Beautiful",
+    "The Legend of Hercules",
+    "Full Contact",
+    "Krazzy 4",
+    "Profondo Rosso",
+    "Jalsa",
+    "One Missed Call",
+    "Tune in Tomorrow",
+    "The Newcomes",
+    "Gene Boy Came Home",
+    "Tamerlano"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.231,
+    "subj_bits": 0.118,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Profondo Rosso",
+    "Fun Is Beautiful",
+    "Clans of Intrigue",
+    "Nel blu dipinto di blu"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.6
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.159,
+    "subj_bits": 0.219,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Jalsa",
+    "Gene Boy Came Home",
+    "Profondo Rosso",
+    "Tune in Tomorrow",
+    "Hana and Alice",
+    "Rama Shama Bhama",
+    "Nel blu dipinto di blu",
+    "Bandit Queen"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 5.75,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 108,
+    "4": 216,
+    "6": 324,
+    "8": 432
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.188,
+    "subj_bits": 0.189,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Rakht",
+    "Profondo Rosso",
+    "Becky Sharp",
+    "Winged Assassin",
+    "La ragazza con la valigia",
+    "Mera Naam Joker",
+    "Red Wood Pigeon",
+    "Legend of the Bat"
+   ],
+   "prime_subs": [
+    "Profondo Rosso",
+    "Clans of Intrigue",
+    "Nel blu dipinto di blu",
+    "The Legend of Hercules",
+    "Hana and Alice",
+    "Tune in Tomorrow",
+    "Trixie Belden",
+    "Sense8",
+    "Kaakha Kaakha",
+    "One Missed Call",
+    "Rama Shama Bhama",
+    "Oka Laila Kosam",
+    "Fun Is Beautiful",
+    "Jalsa",
+    "Krazzy 4",
+    "The Newcomes"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.6
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.145,
+    "subj_bits": 0.523,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "Sleeping Dogs",
+    "Maniac Mansion",
+    "Tokyo Xanadu",
+    "Arctic Thunder"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.875,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.325,
+    "subj_bits": 0.437,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "PhotoRealistic RenderMan",
+    "Arctic Thunder",
+    "Unreal Engine 4",
+    "Stonekeep",
+    "Burnout Dominator",
+    "Starflight",
+    "Musou Orochi Z",
+    "DJMax Portable"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.875,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.062,
+    "bpt_para": 0.224,
+    "subj_bits": 0.419,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "Dynasty Warriors Online",
+    "Arctic Thunder",
+    "PhotoRealistic RenderMan",
+    "Maniac Mansion",
+    "Stonekeep",
+    "Neverwinter Nights",
+    "Sleeping Dogs",
+    "Musou Orochi Z",
+    "Virtual Console",
+    "Dino Crisis",
+    "Freddi Fish",
+    "Unreal Engine 4",
+    "Tokyo Xanadu",
+    "Burnout Dominator",
+    "Starflight",
+    "DJMax Portable"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.138,
+    "subj_bits": 0.266,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "SP2",
+    "The Goonies",
+    "Kaakha Kaakha",
+    "The Bourne Identity"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.073,
+    "subj_bits": 0.346,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "SP2",
+    "Droid Razr",
+    "Captain Bill",
+    "Memoirs of Prison",
+    "Kaakha Kaakha",
+    "For You Blue",
+    "The Black Corsair",
+    "Then Nilavu"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.14,
+    "subj_bits": 0.401,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "Then Nilavu",
+    "For You Blue",
+    "Kaakha Kaakha",
+    "The Black Corsair",
+    "The Goonies",
+    "The Bourne Identity",
+    "Brass Target",
+    "VR Class Sm3",
+    "Captain Bill",
+    "Once Upon a Time in Mexico",
+    "The Eye of the World",
+    "Logical Investigations",
+    "Xerxes",
+    "Border Incident",
+    "Zu neuen Ufern",
+    "SP2"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.181,
+    "subj_bits": 0.546,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "Pegasus",
+    "VR Class Sm3",
+    "Nissan 350Z",
+    "Nissan Laurel"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.6
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.409,
+    "subj_bits": 0.48,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "WRT54G",
+    "SP2",
+    "Honda Vigor",
+    "VR Class Sm3",
+    "Vickers Valiant",
+    "XK8",
+    "synthesizer",
+    "Stoner 63"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.339,
+    "subj_bits": 0.464,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Battalion Wars 2",
+    "Dynasty Warriors 7",
+    "SWF",
+    "Asphalt Urban GT",
+    "Virtual Magic Kingdom",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Neo Contra"
+   ],
+   "prime_subs": [
+    "Nissan 350Z",
+    "SMS Stettin",
+    "WRT54G",
+    "Z8000",
+    "SP2",
+    "Apple II Plus",
+    "Droid Razr",
+    "Hummer H1",
+    "Honda Vigor",
+    "Gewehr 98",
+    "Pegasus",
+    "VR Class Sm3",
+    "Mitsubishi Pajero",
+    "Vickers Valiant",
+    "Atari Lynx",
+    "Denali"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.305,
+    "subj_bits": 0.613,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Multi Interface Shoe",
+    "DRG Class 62",
+    "Boss 302",
+    "GBA"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.295,
+    "subj_bits": 0.332,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Pegasus",
+    "Eutelsat 3D",
+    "DRG Class 62",
+    "Boss 302",
+    "VT100",
+    "R1",
+    "George Dickel",
+    "Southern Pacific 1518"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.264,
+    "subj_bits": 0.365,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Boss 302",
+    "Pegasus",
+    "Playskool",
+    "GBA",
+    "Southern Pacific 1518",
+    "DRG Class 62",
+    "Angry Birds Stella",
+    "R1",
+    "1D Mark II",
+    "Droid Razr",
+    "Shamal",
+    "GT40",
+    "British Rail Class 126",
+    "Multi Interface Shoe",
+    "Eutelsat 3D",
+    "VT100"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.219,
+    "subj_bits": 0.254,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "On the Twentieth Century",
+    "15 Minutes",
+    "El Topo",
+    "Street Fighter Alpha"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.875,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.22,
+    "subj_bits": 0.221,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Jhankaar Beats",
+    "Street Fighter Alpha",
+    "Visual Studio",
+    "JavaFX",
+    "Skyfall",
+    "El Topo",
+    "OS X Mavericks",
+    "On the Twentieth Century"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.165,
+    "subj_bits": 0.229,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Wonderland",
+    "The Deer Hunter",
+    "Enamorada de Ti",
+    "Billy Elliot the Musical",
+    "El Topo",
+    "Devil Kings",
+    "On the Twentieth Century",
+    "Street Fighter Alpha",
+    "Jhankaar Beats",
+    "Mahanagar",
+    "The Seeds of Death",
+    "Wii Chess",
+    "Visual Studio",
+    "The Purge",
+    "Skyfall",
+    "The Transporter"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.489,
+    "subj_bits": 0.46,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Freddi Fish",
+    "Dungeon Siege III",
+    "Devil Kings",
+    "Street Fighter Alpha"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.349,
+    "subj_bits": 0.439,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "The Sims 4",
+    "Street Fighter Alpha",
+    "Bejeweled series",
+    "Visual Studio",
+    "Tokyo Xanadu",
+    "Madden NFL 09",
+    "Freddi Fish",
+    "JavaFX"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 0,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 2,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.394,
+    "subj_bits": 0.485,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Personal Computer",
+    "ALCM",
+    "regular production option",
+    "NS Class 600",
+    "Ultimax 100",
+    "PDP",
+    "GWR 455 Class",
+    "Union Pacific 844"
+   ],
+   "prime_subs": [
+    "Tokyo Xanadu",
+    "Internet Protocol",
+    "Devil Kings",
+    "Wii Chess",
+    "Dungeon Siege III",
+    "DOC",
+    "Bejeweled series",
+    "JavaFX",
+    "DirectX",
+    "XP",
+    "Virtual Console",
+    "The Sims 4",
+    "PSD",
+    "Freddi Fish",
+    "CityVille",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.333
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.272,
+    "subj_bits": 0.193,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "Merrily We Roll Along",
+    "The Diamond Age",
+    "Rodney Stone",
+    "Fantastic Mr Fox"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.667
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.175,
+    "subj_bits": 0.188,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "Rodney Stone",
+    "Merrily We Roll Along",
+    "Herbert Clutter",
+    "The Secret River",
+    "Two Dogmas of Empiricism",
+    "Typee",
+    "Millroy the Magician",
+    "Every Man Dies Alone"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.25,
+    "bpt_para": 0.223,
+    "subj_bits": 0.287,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "Half Girlfriend",
+    "Professor Shonku",
+    "Merrily We Roll Along",
+    "Every Man Dies Alone",
+    "The Secret River",
+    "Zuleika Dobson",
+    "The Sacred Flame",
+    "The Three Pigs",
+    "The Light That Failed",
+    "Rodney Stone",
+    "Sentences",
+    "Two Dogmas of Empiricism",
+    "The Human Voice",
+    "Millroy the Magician",
+    "Herbert Clutter",
+    "The Glass Key"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.088,
+    "subj_bits": 0.214,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "The Spanish Earth",
+    "The Long Riders",
+    "Pro Evolution Soccer 2008",
+    "Brothers in Arms DS"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.144,
+    "subj_bits": 0.15,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "The Long Riders",
+    "Night Train to Munich",
+    "Homeworld 2",
+    "The Spanish Earth",
+    "Spooks Run Wild",
+    "Enter Sandman",
+    "Lisa the Vegetarian",
+    "Pro Evolution Soccer 2008"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.812,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.134,
+    "subj_bits": 0.229,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "Das Wunder der Heliane",
+    "Pro Evolution Soccer 2008",
+    "The Spanish Earth",
+    "Deutschlandlied",
+    "Night Train to Munich",
+    "Brothers in Arms DS",
+    "GT40",
+    "Lethal Enforcers",
+    "Spooks Run Wild",
+    "Rollerball",
+    "Homeworld 2",
+    "PlayStation Vita",
+    "Lisa the Vegetarian",
+    "The Seeds of Death",
+    "Enter Sandman",
+    "Pro Evolution Soccer 2011"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.215,
+    "subj_bits": 0.244,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "The Spanish Earth",
+    "Once Upon a Time in Mexico",
+    "Night Train to Munich",
+    "Tromeo and Juliet"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.161,
+    "subj_bits": 0.095,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "Das Wunder der Heliane",
+    "The Spanish Earth",
+    "The Seeds of Death",
+    "Rollerball",
+    "The Long Riders",
+    "Gabriella di Vergy",
+    "Friends with Kids",
+    "Batman Begins"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P50",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 4.38,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 86,
+    "4": 172,
+    "6": 258,
+    "8": 344
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.133,
+    "subj_bits": 0.19,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Water of the Wondrous Isles",
+    "A Voyage Round My Father",
+    "The Sheltering Sky",
+    "The Legend of the Condor Heroes",
+    "The Poison Belt",
+    "The Newcomes",
+    "The Life Before Us",
+    "Eragon"
+   ],
+   "prime_subs": [
+    "The Seeds of Death",
+    "Night Train to Munich",
+    "Deutschlandlied",
+    "The Long Riders",
+    "Lisa the Vegetarian",
+    "Once Upon a Time in Mexico",
+    "Spooks Run Wild",
+    "Batman Begins",
+    "Friends with Kids",
+    "The Murderer Lives at Number 21",
+    "The Spanish Earth",
+    "Tromeo and Juliet",
+    "The Buchholz Family",
+    "Das Wunder der Heliane",
+    "Billy Jack",
+    "The Good Thief"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.5
+    },
+    "8": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.833
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.481,
+    "subj_bits": 0.156,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "The Death of the Incredible Hulk",
+    "The Song of the Rivers",
+    "The Man They Could Not Hang",
+    "A Fish Called Wanda"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.256,
+    "subj_bits": 0.343,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "The Expendables",
+    "The Power of Light",
+    "Chicago Deadline",
+    "The Death of the Incredible Hulk",
+    "It Happened in Paris",
+    "Still Crazy",
+    "Frenzy",
+    "The Man They Could Not Hang"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.167
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.322,
+    "subj_bits": 0.323,
+    "subj_ntok": 0.438
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "The Man They Could Not Hang",
+    "It Happened in Paris",
+    "Frenzy",
+    "The Death of the Incredible Hulk",
+    "The Power of Light",
+    "Adventures of Captain Marvel",
+    "American Ninja",
+    "The Expendables",
+    "Eternal Sunshine of the Spotless Mind",
+    "3 Godfathers",
+    "1962 screen adaptation",
+    "Tears of the Prophets",
+    "The Original Kings of Comedy",
+    "The Nature of the Beast",
+    "Chicago Deadline",
+    "The Last Picture Show"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.167
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.089,
+    "subj_bits": 0.255,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Trap Happy",
+    "Flavio",
+    "Lost Embrace",
+    "Texas Chainsaw Massacre"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.093,
+    "subj_bits": 0.351,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Flavio",
+    "Little Terrorist",
+    "Lost Embrace",
+    "Morgante",
+    "Trap Happy",
+    "Texas Chainsaw Massacre",
+    "Det tossede paradis",
+    "The Lady Vanishes"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.203,
+    "subj_bits": 0.185,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Flavio",
+    "The Simpsons Movie",
+    "If I Were King",
+    "Genoveva",
+    "Simon Boccanegra",
+    "Amonasro",
+    "Runaway Horses",
+    "Lost Embrace",
+    "The Harder They Fall",
+    "Texas Chainsaw Massacre",
+    "The Lady Vanishes",
+    "Orpheus in the Underworld",
+    "The Ten Teacups",
+    "Maniac Mansion",
+    "The Swiss Family Robinson",
+    "Little Terrorist"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.068,
+    "subj_bits": 0.301,
+    "subj_ntok": 0.75
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Texas Chainsaw Massacre",
+    "TN 07 AL 4777",
+    "Trap Happy",
+    "Little Terrorist"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.088,
+    "subj_bits": 0.271,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Flavio",
+    "Simon Boccanegra",
+    "The Harder They Fall",
+    "Little Terrorist",
+    "La Bestia y la Espada Magica",
+    "Texas Chainsaw Massacre",
+    "Trap Happy",
+    "Lost Embrace"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.5
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P57",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 4.0,
+   "n_tgt_3b": 6,
+   "tok_updates": {
+    "2": 80,
+    "4": 160,
+    "6": 240,
+    "8": 320
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.142,
+    "subj_bits": 0.373,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Hell Ship Mutiny",
+    "The Man in the Blue Flannel Pants",
+    "Game of Death",
+    "Zombi 2",
+    "Deadly Friend",
+    "Toy Story 2",
+    "The Fifth Musketeer",
+    "The Little French Girl"
+   ],
+   "prime_subs": [
+    "Trap Happy",
+    "Flavio",
+    "Simon Boccanegra",
+    "Little Terrorist",
+    "Morgante",
+    "Orpheus in the Underworld",
+    "The Harder They Fall",
+    "La Bestia y la Espada Magica",
+    "Summertime",
+    "The Simpsons Movie",
+    "Ball Four",
+    "Det tossede paradis",
+    "If I Were King",
+    "Genoveva",
+    "Galaxy Song",
+    "Chemical Wedding"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.833
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.255,
+    "subj_bits": 0.121,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "A London Symphony",
+    "Eternal Sonata",
+    "I Rantzau",
+    "Yaare Neenu Cheluve"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.26,
+    "subj_bits": 0.178,
+    "subj_ntok": 0.75
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "A London Symphony",
+    "I Rantzau",
+    "Eternal Sonata",
+    "Vamshoddharakudu",
+    "Grease",
+    "Jaani Dost",
+    "Sattam Oru Vilayaattu",
+    "Mommaga"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.333
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.25,
+    "subj_bits": 0.165,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "Eternal Sonata",
+    "Vamshoddharakudu",
+    "I Rantzau",
+    "A London Symphony",
+    "Cotton Tail",
+    "Grease",
+    "Yaare Neenu Cheluve",
+    "Finlandia",
+    "Jaani Dost",
+    "Trouble Man",
+    "El retablo de Maese Pedro",
+    "Voodoo Chile",
+    "Blue Cat Blues",
+    "Canone inverso",
+    "Mommaga",
+    "Galaxy Song"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.101,
+    "subj_bits": 0.102,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "The American Friend",
+    "Bandit Queen",
+    "Callas Forever",
+    "The Guilty Mother"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.113,
+    "subj_bits": 0.107,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "scout car",
+    "Bandit Queen",
+    "Callas Forever",
+    "The Toynbee Convector",
+    "Lay the Favorite",
+    "The American Friend",
+    "The Guilty Mother",
+    "Through the Dark"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.154,
+    "subj_bits": 0.183,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "The Guilty Mother",
+    "The Toynbee Convector",
+    "Callas Forever",
+    "Spartan X",
+    "Sleeping Fires",
+    "Bandit Queen",
+    "Il Tempo Gigante",
+    "The Loser Takes It All",
+    "Through the Dark",
+    "Memoirs of Prison",
+    "Skin Game",
+    "scout car",
+    "The Betsy",
+    "Costume Quest",
+    "The Wrong Box",
+    "La famiglia"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.12,
+    "subj_bits": 0.119,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "Lay the Favorite",
+    "Video Days",
+    "The Toynbee Convector",
+    "Il Tempo Gigante"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.116,
+    "subj_bits": 0.258,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "The Guilty Mother",
+    "Sleeping Fires",
+    "Lay the Favorite",
+    "The American Friend",
+    "Il Tempo Gigante",
+    "Callas Forever",
+    "The Loser Takes It All",
+    "La famiglia"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.333
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.667
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P86",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.625,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 3,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.108,
+    "subj_bits": 0.15,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Jalsa",
+    "Der Mond",
+    "Eboli",
+    "Remember WENN",
+    "Medea in Corinto",
+    "God Hand",
+    "Namak Halaal",
+    "Sonntag aus Licht"
+   ],
+   "prime_subs": [
+    "The American Friend",
+    "The Philadelphia Story",
+    "creativity",
+    "Bandit Queen",
+    "The Toynbee Convector",
+    "Through the Dark",
+    "Lay the Favorite",
+    "The Guilty Mother",
+    "La Notte",
+    "Video Days",
+    "General Prologue",
+    "The Playmaker",
+    "The Loser Takes It All",
+    "Il Tempo Gigante",
+    "Youth Without Youth",
+    "Memoirs of Prison"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.333
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.667
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.0,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "8": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.179,
+    "subj_bits": 0.077,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "La Bestia y la Espada Magica",
+    "Drishti",
+    "55 Days at Peking",
+    "This Sporting Life"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.226,
+    "subj_bits": 0.175,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "This Sporting Life",
+    "The Tall T",
+    "La Bestia y la Espada Magica",
+    "Profondo Rosso",
+    "55 Days at Peking",
+    "Too Late Blues",
+    "Morgan il pirata",
+    "Suspiria"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.6
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.19,
+    "subj_bits": 0.195,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Drishti",
+    "Suspiria",
+    "Lagaan",
+    "55 Days at Peking",
+    "The Midnight Cabaret",
+    "This Sporting Life",
+    "La Bestia y la Espada Magica",
+    "Treehouse of Horror III",
+    "Lost Embrace",
+    "Profondo Rosso",
+    "The Court Jester",
+    "Kairo",
+    "The Tall T",
+    "The Long Riders",
+    "The Far Country",
+    "Morgan il pirata"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.6
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.149,
+    "subj_bits": 0.293,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Majulah Singapura",
+    "Otello",
+    "Martyrs of the Alamo",
+    "Malik Ek"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.4
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.088,
+    "subj_bits": 0.132,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "The Man They Could Not Hang",
+    "The Unholy Wife",
+    "Johnny English",
+    "When Worlds Collide",
+    "The Early Bird",
+    "Don Juan DeMarco",
+    "Krazzy 4",
+    "Il matrimonio segreto"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.688,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.159,
+    "subj_bits": 0.304,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Johnny English",
+    "Malik Ek",
+    "Eternal Sonata",
+    "The Unholy Wife",
+    "Krazzy 4",
+    "Gang Leader",
+    "Otello",
+    "The Man They Could Not Hang",
+    "When Worlds Collide",
+    "Tamacha",
+    "The Early Bird",
+    "Majulah Singapura",
+    "Martyrs of the Alamo",
+    "The Peacemaker",
+    "Don Juan DeMarco",
+    "Ballo della Regina"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.254,
+    "subj_bits": 0.081,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Majulah Singapura",
+    "Mysteries of a Barbershop",
+    "Martyrs of the Alamo",
+    "The Man They Could Not Hang"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "6": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.2
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.09,
+    "subj_bits": 0.323,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Johnny English",
+    "Majulah Singapura",
+    "Otello",
+    "Malik Ek",
+    "Krazzy 4",
+    "Don Juan DeMarco",
+    "Il matrimonio segreto",
+    "Eternal Sonata"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P58",
+   "kind": "person",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 4.88,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 94,
+    "4": 188,
+    "6": 282,
+    "8": 376
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.141,
+    "subj_bits": 0.176,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "The Shout",
+    "The Horror of Frankenstein",
+    "Abar Aranye",
+    "7 Khoon Maaf",
+    "Forever Enthralled",
+    "Take Me Home Tonight",
+    "Martyrs of the Alamo",
+    "Mean Streets"
+   ],
+   "prime_subs": [
+    "Johnny English",
+    "Malik Ek",
+    "The Man They Could Not Hang",
+    "Adventures of Captain Marvel",
+    "Otello",
+    "Don Juan DeMarco",
+    "The Unholy Wife",
+    "Kisses for My President",
+    "Majulah Singapura",
+    "The Good Thief",
+    "If We Ever Meet Again",
+    "Priyamudan",
+    "Mysteries of a Barbershop",
+    "Born to Win",
+    "Ballo della Regina",
+    "When Worlds Collide"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.125,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.302,
+    "subj_bits": 0.158,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "DOC",
+    "Super Street Fighter II Turbo",
+    "Bejeweled series",
+    "Resident Evil 5"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.293,
+    "subj_bits": 0.239,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "Super Street Fighter II Turbo",
+    "DOC",
+    "PSD",
+    "Resident Evil 5",
+    "Spartan X",
+    "Freddi Fish",
+    "DirectX",
+    "XP"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.537,
+    "subj_bits": 0.332,
+    "subj_ntok": 0.062
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "Freddi Fish",
+    "Dynasty Warriors 7",
+    "Neo Contra",
+    "DirectX",
+    "DOC",
+    "Dynasty Warriors Online",
+    "Spartan X",
+    "Netscape Navigator",
+    "Super Street Fighter II Turbo",
+    "Resident Evil 5",
+    "KiKi KaiKai",
+    "Dino Crisis",
+    "Internet Protocol",
+    "War Thunder",
+    "JavaFX",
+    "Dancing Stage Fusion"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.6
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.8
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.179,
+    "subj_bits": 0.042,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "Multi Interface Shoe",
+    "Come Have Coffee with Us",
+    "The Winter Knights",
+    "Still Crazy"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.125,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.6
+    },
+    "8": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.422,
+    "subj_bits": 0.278,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "The Man in the White Suit",
+    "XP",
+    "Dhoom 3",
+    "Kabhi Khushi Kabhie Gham",
+    "Boss 302",
+    "Eternal Sunshine of the Spotless Mind",
+    "Still Crazy",
+    "Chemical Wedding"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.242,
+    "subj_bits": 0.218,
+    "subj_ntok": 0.188
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "Multi Interface Shoe",
+    "Boss 302",
+    "The Man in the White Suit",
+    "Dhoom 3",
+    "Kabhi Khushi Kabhie Gham",
+    "I Kissed a Girl",
+    "Come Have Coffee with Us",
+    "Still Crazy",
+    "The Winter Knights",
+    "Ek Musafir Ek Hasina",
+    "21 Days",
+    "XP",
+    "Chemical Wedding",
+    "Kaakha Kaakha",
+    "Det tossede paradis",
+    "ALCM"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.25,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.875,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.4
+    },
+    "8": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.4
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.471,
+    "subj_bits": 0.245,
+    "subj_ntok": 0.0
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "British Rail Class 126",
+    "Hetch Hetchy 6",
+    "PlayStation 2",
+    "GWR 455 Class"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.4
+    },
+    "4": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.125,
+    "bpt_para": 0.428,
+    "subj_bits": 0.264,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "British Rail Class 126",
+    "GWR 455 Class",
+    "XP",
+    "PlayStation 2",
+    "Polar Satellite Launch Vehicle",
+    "Remington Model 700",
+    "ST",
+    "torpedo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.0,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.4
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P178",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 3.5,
+   "n_tgt_3b": 5,
+   "tok_updates": {
+    "2": 72,
+    "4": 144,
+    "6": 216,
+    "8": 288
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.303,
+    "subj_bits": 0.338,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Devil Kings",
+    "Duke Nukem 3D",
+    "Tokyo Xanadu",
+    "Driveclub",
+    "Lost Planet 2",
+    "Wii Chess",
+    "Captain America and The Avengers",
+    "Dance Dance Revolution Disney Grooves"
+   ],
+   "prime_subs": [
+    "XP",
+    "Multi Interface Shoe",
+    "regular production option",
+    "Hetch Hetchy 6",
+    "GWR 455 Class",
+    "Corolla",
+    "Pegasus",
+    "Southern Pacific 1518",
+    "ST",
+    "British Rail Class 126",
+    "Velaro",
+    "Polar Satellite Launch Vehicle",
+    "Playskool",
+    "SD9",
+    "NS Class 600",
+    "torpedo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.25,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.2
+    },
+    "4": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.6
+    },
+    "6": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 1.0,
+     "tgt_3b": 0.8
+    },
+    "8": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "floor",
+   "N": 0,
+   "n_prime": 0,
+   "prime_committed": null,
+   "prime_para_pre": null,
+   "prime_para_post": null,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": null,
+    "bpt_para": null,
+    "subj_bits": null,
+    "subj_ntok": null
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.222,
+    "subj_bits": 0.349,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "PlayStation 2",
+    "Toughbook",
+    "XP",
+    "British Rail Class 126"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.625,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.75,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.31,
+    "subj_bits": 0.192,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "DRG Class 62",
+    "Nissan Skyline",
+    "Mitsubishi Proudia",
+    "PlayStation 2",
+    "WRT54G",
+    "Prussian T 18",
+    "British Rail Class 126",
+    "Toughbook"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.5,
+     "tgt_orig": 0.5,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_commit",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 0.812,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.389,
+    "subj_bits": 0.39,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "PlayStation 2",
+    "Nissan Skyline",
+    "British Rail Class 126",
+    "Polar Satellite Launch Vehicle",
+    "130 nanometer",
+    "Sony PlayStation 2",
+    "Prussian T 18",
+    "WRT54G",
+    "90 nanometer",
+    "DRG Class 62",
+    "Toughbook",
+    "Thunderbird",
+    "Z8000",
+    "Gewehr 98",
+    "XP",
+    "F4F Wildcat"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.375,
+     "tgt_orig": 0.375,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.151,
+    "subj_bits": 0.253,
+    "subj_ntok": 0.5
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "Wedding Rehearsal",
+    "Il barbiere di Siviglia",
+    "Big Trouble in Little China",
+    "DirectX"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.096,
+    "subj_bits": 0.131,
+    "subj_ntok": 0.375
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "IOS",
+    "Simon Boccanegra",
+    "Wedding Rehearsal",
+    "Il barbiere di Siviglia",
+    "The Peacemaker",
+    "Sexxx Dreams",
+    "Orpheus in the Underworld",
+    "The Yakuza"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "item_k_matched",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.938,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.159,
+    "subj_bits": 0.153,
+    "subj_ntok": 0.188
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "A Chorus Line",
+    "Il barbiere di Siviglia",
+    "Simon Boccanegra",
+    "Symphonic Dances",
+    "3rd piano concerto",
+    "Wedding Rehearsal",
+    "Orpheus in the Underworld",
+    "The Peacemaker",
+    "IOS",
+    "The Buchholz Family",
+    "Netscape Navigator",
+    "Big Trouble in Little China",
+    "The Yakuza",
+    "DirectX",
+    "The Expendables",
+    "Martyrs of the Alamo"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 4,
+   "n_prime": 4,
+   "prime_committed": 1.0,
+   "prime_para_pre": 1.0,
+   "prime_para_post": 1.0,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.194,
+    "subj_bits": 0.307,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "Netscape Navigator",
+    "IOS",
+    "Internet Protocol",
+    "The World Ends with You"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 8,
+   "n_prime": 8,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.875,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.307,
+    "subj_bits": 0.81,
+    "subj_ntok": 0.125
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "DirectX",
+    "Freddi Fish",
+    "Netscape Navigator",
+    "Internet Protocol",
+    "Metal Gear Solid Touch",
+    "Bell 430",
+    "XP",
+    "Mortal Kombat II"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.625,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 0.875,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  },
+  {
+   "seed": 1,
+   "pid": "P176",
+   "kind": "org",
+   "arm": "schema_shuffle_same_kind",
+   "N": 16,
+   "n_prime": 16,
+   "prime_committed": 1.0,
+   "prime_para_pre": 0.938,
+   "prime_para_post": 0.875,
+   "tgt_ans_ntok": 3.88,
+   "n_tgt_3b": 1,
+   "tok_updates": {
+    "2": 78,
+    "4": 156,
+    "6": 234,
+    "8": 312
+   },
+   "match_delta": {
+    "ans_ntok": 0.0,
+    "bpt_para": 0.277,
+    "subj_bits": 0.528,
+    "subj_ntok": 0.25
+   },
+   "tgt_subs": [
+    "Nissan Gloria",
+    "DX7",
+    "George Dickel",
+    "Toyota Camry",
+    "Dassault Rafale",
+    "PlayStation 3",
+    "VT100",
+    "Nissan 350Z"
+   ],
+   "prime_subs": [
+    "Netscape Navigator",
+    "Far Cry 2",
+    "The Last of Us Remastered",
+    "Freddi Fish",
+    "Unreal Engine 4",
+    "Internet Protocol",
+    "IOS",
+    "Football Manager 2005",
+    "Metal Gear Solid Touch",
+    "The Sims 4",
+    "DirectX",
+    "Pro Evolution Soccer 2008",
+    "XP",
+    "Neverwinter Nights",
+    "Bell 430",
+    "Mortal Kombat II"
+   ],
+   "binds": {
+    "2": {
+     "tgt_manual": 0.75,
+     "tgt_orig": 0.75,
+     "tgt_3b": 0.0
+    },
+    "4": {
+     "tgt_manual": 0.875,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "6": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    },
+    "8": {
+     "tgt_manual": 1.0,
+     "tgt_orig": 1.0,
+     "tgt_3b": 1.0
+    }
+   }
+  }
+ ]
+}
