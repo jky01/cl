@@ -360,9 +360,9 @@ def main():
             base_em_para=round(sum(q["base_em_para"] for q in ok) / max(len(ok), 1), 3),
             all=tail_stats(ok, rng, f"{dom}/gated"),
             need_write=tail_stats(need, rng, f"{dom}/need-write"),
-            strat_kind={k: tail_stats([q for q in ok if q["kind"] == k], rng, k)
+            strat_kind={k: tail_stats([q for q in ok_sc if q["kind"] == k], rng, k)   # post-self-contained
                         for k in ("number/date", "proper", "other")},
-            strat_len={b: tail_stats([q for q in ok if lo <= q["ans_ntok"] <= hi], rng, b)
+            strat_len={b: tail_stats([q for q in ok_sc if lo <= q["ans_ntok"] <= hi], rng, b)
                        for b, lo, hi in (("1-2", 1, 2), ("3-4", 3, 4), ("5+", 5, 99))},
         )
         cat_ct = collections.Counter(q["category"] for q in ok)

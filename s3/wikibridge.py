@@ -336,13 +336,19 @@ def build_census(seed, base):
             continue
         by_pid[r["pid"]].append(dict(question=r["question"], eval_question=r.get("eval_question", r["question"]),
                                      answers=r["answers"], context=ctx[r["pid"]], src=r["domain"]))
-    arts = [dict(title=pid, context=ctx[pid], qas=qs[:QA_PER]) for pid, qs in sorted(by_pid.items())
-            if len(qs) >= min(QA_PER, 3)]
+    arts = []
+    for pid, qs in sorted(by_pid.items()):
+        if len(qs) < min(QA_PER, 3):
+            continue
+        random.Random(f"{seed}:{pid}").shuffle(qs)     # seeded per-passage shuffle: no generator-order leak
+        arts.append(dict(title=pid, context=ctx[pid], qas=qs[:QA_PER]))
     rng = random.Random(5000 + seed); rng.shuffle(arts)
     nstream = min(STREAMS, len(arts) // ARTS)
-    doms = collections.Counter(q["src"] for a in arts for q in a["qas"])
-    print(f"  CENSUS[{path}]: {len(by_pid)} passages w/ sc-gated probes -> {len(arts)} usable articles "
-          f"-> {nstream} streams; domain mix={dict(doms)}", flush=True)
+    used = arts[:nstream * ARTS]                        # domain mix over the streams ACTUALLY returned
+    doms = collections.Counter(q["src"] for a in used for q in a["qas"])
+    surv = {k: sum(len(qs) >= k for qs in by_pid.values()) for k in (3, 4, 5)}
+    print(f"  CENSUS[{path}]: {len(by_pid)} passages w/ sc-gated probes (>=3/4/5 probes: {surv}) -> "
+          f"{len(arts)} usable articles -> {nstream} streams; used-stream domain mix={dict(doms)}", flush=True)
     return [arts[i * ARTS:(i + 1) * ARTS] for i in range(nstream)]
 
 # ------------------------- Rung 1: surprise-gated replay-budget selection -------------------------
@@ -371,6 +377,8 @@ def select_budget(items, mode, B, seed):
         return [items[i] for i in order[:B]]
     raw = mode.endswith("raw")
     m = mode[:-3] if raw else mode
+    if m not in ("surprise", "lowbits", "random"):     # explicit guard: no silent lowbits fallback
+        raise ValueError(f"unknown budget mode {mode!r} (expected surprise|lowbits|random[+raw]|sourceoracle)")
     strata = [list(items)] if raw else \
         [s for s in ([q for q in items if lo <= _antok(seed, q) <= hi] for lo, hi in _LEN_BINS) if s]
     exact = [len(s) * B / len(items) for s in strata]
@@ -383,10 +391,10 @@ def select_budget(items, mode, B, seed):
         if k <= 0:
             continue
         if m == "random":
-            out += random.Random(f"{seed}:budget:{bi}").sample(s, k)
+            out += random.Random(f"{seed}:{mode}:budget:{bi}").sample(s, k)
         else:                                          # surprise = top bpt within stratum; lowbits = bottom
-            key = (lambda q: -_bpt(seed, q)) if m == "surprise" else (lambda q: _bpt(seed, q))
-            out += sorted(s, key=key)[:k]
+            sgn = -1 if m == "surprise" else 1         # stable tie-break by qid (removes commit-order artifact)
+            out += sorted(s, key=lambda q: (sgn * _bpt(seed, q), q.get("qid", "")))[:k]
     return out
 
 # ------------------------- training helpers -------------------------
@@ -615,8 +623,10 @@ def run_ingest(base, streams, arm, seed):
         per_stream.append(dict(t=t, scaffold_new_orig=round(s_em, 3), scaffold_new_para=round(s_pa, 3),
                                M_new_orig=round(m_em, 3), M_new_para=round(m_pa, 3),
                                n_committed=len(correct), old_orig=o_em, old_para=o_pa))
+        bmsg = (f" | budget nb={round(BUDGET_FRAC * len(committed))}/{len(committed)} replayed={len(last_pool)}"
+                if BUDGET_MODE else "")
         print(f"      [{arm} s{seed} t{t}] scaffold O/P={s_em:.2f}/{s_pa:.2f} M_new O/P={m_em:.2f}/{m_pa:.2f} "
-              f"committed={len(correct)}/{len(new_qa)} old O/P={o_em}/{o_pa}", flush=True)
+              f"committed={len(correct)}/{len(new_qa)} old O/P={o_em}/{o_pa}{bmsg}", flush=True)
     allqa = [q for s in streams for a in s for q in a["qas"]]
     f_em, f_f1 = score(M, allqa, key="question")
     fp_em, fp_f1 = score(M, allqa, key="eval_question")     # FINAL held-out paraphrase = the R38 gate
