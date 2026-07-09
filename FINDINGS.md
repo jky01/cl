@@ -1,5 +1,45 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R43-ladder (Step B — real-density budget ladder on self-contained real text) — HONEST NEGATIVE:
+> surprise-gated replay does NOT beat random subsampling on real text. The R41 Rung-1 win was an
+> artifact of the constructed bimodal 50/50 corpus; on real text (unimodal surprise, R42/R43) there is
+> no categorical "safe-to-skip" population, so item-level routing gives no advantage — although the
+> surprise SIGNAL is genuine (high-bpt old items forget more, corr≈−0.3).** `s3/wikibridge.py`
+> `WB_SOURCE=census` (length-stratified `select_budget`), `docs/cloud_results/r43_ladder.{json,log}`,
+> Qwen2.5-0.5B, 6 streams × [4 art × 3 QA], **2 seeds**, old committed pool = 60 (commit ≈100%),
+> budgets = fraction of old committed replayed at final consolidation, length-stratified selection.
+> **OLD-only held-out paraphrase EM (all old items, replayed+skipped), per seed:**
+>
+> | arm | seed0 | seed1 | mean | vs full |
+> |---|---|---|---|---|
+> | compact_cpt_qa_k0 (no replay, floor) | 0.217 | 0.267 | 0.242 | — |
+> | compact_cpt_qa (full replay, ceiling) | 0.483 | 0.483 | **0.483** | — |
+> | bgt_surprise@0.125 | 0.284 | 0.433 | 0.359 | 74% |
+> | bgt_random@0.125 | 0.300 | 0.367 | 0.334 | 69% |
+> | **bgt_surprise@0.25** | 0.333 | 0.533 | 0.433 | 90% |
+> | **bgt_random@0.25** | 0.467 | 0.450 | **0.459** | 95% |
+> | bgt_lowbits@0.25 | 0.350 | 0.350 | 0.350 | 72% |
+> | bgt_surprise@0.5 | 0.400 | 0.550 | 0.475 | 98% |
+> | bgt_random@0.5 | 0.450 | 0.567 | **0.509** | 105% |
+>
+> **Fails codex's pre-registered gate** (surprise > random on BOTH seeds): (1) **sign INVERTS across seeds**
+> at B=0.125 and B=0.25 (surprise loses seed0, wins seed1); (2) **on the mean, random ≥ surprise at B≥0.25**
+> (0.459 vs 0.433 at 0.25; 0.509 vs 0.475 at 0.5). NOT a surprise win; a null leaning random, high seed
+> variance. (2) **But the surprise signal IS real:** `surprise_summary` corr(base-bits, retention) = −0.29
+> (k0) … −0.43 (@0.5); k0 retention by bits tercile = **0.45 / 0.175 / 0.10** (low→high bpt) — high-bpt old
+> items forget ~4× more. (3) **Mechanism of the non-transfer:** on real text the surprise distribution is
+> UNIMODAL (R42/R43), so there is no "easy, safe-to-skip" class: surprise's SKIPPED low-bpt items still
+> decay to 0.31–0.49 (vs R41's constructed corpus where skipped items held at 0.70), and its REPLAYED
+> high-bpt items are intrinsically hard to rescue. Reallocating budget toward high-bpt (surprise) vs random
+> therefore nets ~zero. (4) **Replay itself works & subsampling gives a router-FREE compute win:** k0 0.242
+> → full 0.483; **random@0.5 (0.509) ≈ full (0.483)** — half the replay budget, randomly chosen, matches
+> full. The O(#facts)→O(#exceptions) *routing* claim does not hold on real text; a plain O(½·#facts) random
+> subsample does. **Takeaway: the census program did its job — R41's optimistic Rung-1 result did NOT
+> transfer to real text, and the reason is exactly the unimodality R42/R43 measured.** Caveats: 2 seeds,
+> n_old=60, large variance — the NULL is "no reliable routing advantage", not "random provably better".
+> Next: more seeds to tighten, OR accept null and test whether real exceptions are schema-COMPRESSIBLE
+> (O(#patterns) not O(#exceptions)) + the dC/dbook 2-book cross-book probe.
+
 > **R43 (census-XL — 4× scale + self-containedness screen) — the CLEAN Step-B planning number: after
 > removing context-deictic probes, the real-text exception tail is EVEN SMALLER (τ=8 ≈ 16–25%, τ=10 ≈
 > 6–8%), confirming R42 and confirming deictic probes were inflating the apparent tail.** `s3/census.py`
