@@ -281,7 +281,8 @@ def main():
               + ("  <- judge CALIBRATION (human probes)" if dom == "squad_human" else ""), flush=True)
 
     # ---- self-containedness screen: pre/post densities both reported; Step B trains on yes-rows only ----
-    sv = inst.chat([(SSYS, f"Question: {q['question']}") for q in probes], max_new=4, bs=16)
+    sv = inst.chat([(SSYS, f"Question: {q['question']}\n\nIs this question self-contained? Answer yes or no.")
+                    for q in probes], max_new=4, bs=16)   # user turn must ASK, else 3B just answers the trivia
     for q, v in zip(probes, sv):
         q["self_contained"] = int(v.strip().lower().startswith("yes"))
     for dom in dom_pass:
