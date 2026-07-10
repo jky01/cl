@@ -1,0 +1,136 @@
+{
+ "config": {
+  "source": "census",
+  "streams": 6,
+  "arts": 5,
+  "qa": 5,
+  "cons": 400,
+  "gen_per": 6,
+  "seeds": 2
+ },
+ "seeds": [
+  {
+   "n_old": 90,
+   "n_answerable": 33,
+   "n_gen_matched": 12,
+   "summary": {
+    "full": {
+     "n": 33,
+     "em": 1.0,
+     "gold_mlp_mean": -0.074,
+     "n_fail": 0,
+     "fail_greedy_minus_gold": null,
+     "fail_gold_drop_from_full": null
+    },
+    "orig": {
+     "n": 33,
+     "em": 1.0,
+     "gold_mlp_mean": -0.03,
+     "n_fail": 0,
+     "fail_greedy_minus_gold": null,
+     "fail_gold_drop_from_full": null
+    },
+    "del75": {
+     "n": 33,
+     "em": 0.455,
+     "gold_mlp_mean": -1.011,
+     "n_fail": 18,
+     "fail_greedy_minus_gold": 1.322,
+     "fail_gold_drop_from_full": 1.711
+    },
+    "del50": {
+     "n": 33,
+     "em": 0.303,
+     "gold_mlp_mean": -2.228,
+     "n_fail": 23,
+     "fail_greedy_minus_gold": 2.71,
+     "fail_gold_drop_from_full": 3.102
+    },
+    "del25": {
+     "n": 33,
+     "em": 0.091,
+     "gold_mlp_mean": -3.144,
+     "n_fail": 30,
+     "fail_greedy_minus_gold": 3.041,
+     "fail_gold_drop_from_full": 3.385
+    },
+    "gen_entity": {
+     "n": 12,
+     "em": 0.083,
+     "gold_mlp_mean": -4.073,
+     "n_fail": 11,
+     "fail_greedy_minus_gold": 3.537,
+     "fail_gold_drop_from_full": 4.329
+    }
+   }
+  },
+  {
+   "n_old": 82,
+   "n_answerable": 31,
+   "n_gen_matched": 2,
+   "summary": {
+    "full": {
+     "n": 31,
+     "em": 0.935,
+     "gold_mlp_mean": -0.129,
+     "n_fail": 2,
+     "fail_greedy_minus_gold": -1.207,
+     "fail_gold_drop_from_full": 0.0
+    },
+    "orig": {
+     "n": 31,
+     "em": 0.968,
+     "gold_mlp_mean": -0.092,
+     "n_fail": 1,
+     "fail_greedy_minus_gold": 1.276,
+     "fail_gold_drop_from_full": 1.308
+    },
+    "del75": {
+     "n": 31,
+     "em": 0.355,
+     "gold_mlp_mean": -1.262,
+     "n_fail": 20,
+     "fail_greedy_minus_gold": 1.332,
+     "fail_gold_drop_from_full": 1.764
+    },
+    "del50": {
+     "n": 31,
+     "em": 0.194,
+     "gold_mlp_mean": -2.171,
+     "n_fail": 25,
+     "fail_greedy_minus_gold": 2.099,
+     "fail_gold_drop_from_full": 2.546
+    },
+    "del25": {
+     "n": 31,
+     "em": 0.065,
+     "gold_mlp_mean": -3.332,
+     "n_fail": 29,
+     "fail_greedy_minus_gold": 3.114,
+     "fail_gold_drop_from_full": 3.426
+    },
+    "gen_entity": {
+     "n": 2,
+     "em": 0.0,
+     "gold_mlp_mean": -4.845,
+     "n_fail": 2,
+     "fail_greedy_minus_gold": 4.297,
+     "fail_gold_drop_from_full": 4.767
+    }
+   }
+  }
+ ],
+ "verdict": {
+  "probe": "gen_entity",
+  "fail_greedy_minus_gold": 3.917,
+  "fail_gold_drop_from_full": 4.548,
+  "em_curve": {
+   "full": 0.968,
+   "orig": 0.984,
+   "del75": 0.405,
+   "del50": 0.248,
+   "del25": 0.078
+  },
+  "verdict": "encoding_surface_sensitive"
+ }
+}

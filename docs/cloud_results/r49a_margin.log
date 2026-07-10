@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+MARGIN_PROBE (Qwen/Qwen2.5-0.5B, cuda) source=census streams=6x5x5 cons=400 gen_per=6 seeds=2
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10479.53it/s]
+  seed 0
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 6 streams; used-stream domain mix={'news_gen': 27, 'wiki_gen': 51, 'squad_human': 30}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10565.82it/s]
+    answerable 33/90
+    [full] em=1.0 gold_mlp=-0.074 n_fail=0 greedy-gold=None drop_from_full=None
+    [orig] em=1.0 gold_mlp=-0.03 n_fail=0 greedy-gold=None drop_from_full=None
+    [del75] em=0.455 gold_mlp=-1.011 n_fail=18 greedy-gold=1.322 drop_from_full=1.711
+    [del50] em=0.303 gold_mlp=-2.228 n_fail=23 greedy-gold=2.71 drop_from_full=3.102
+    [del25] em=0.091 gold_mlp=-3.144 n_fail=30 greedy-gold=3.041 drop_from_full=3.385
+    [gen_entity] em=0.083 gold_mlp=-4.073 n_fail=11 greedy-gold=3.537 drop_from_full=4.329
+  VERDICT {"probe": "gen_entity", "fail_greedy_minus_gold": 3.537, "fail_gold_drop_from_full": 4.329, "em_curve": {"full": 1.0, "orig": 1.0, "del75": 0.455, "del50": 0.303, "del25": 0.091}, "verdict": "encoding_surface_sensitive"}
+  seed 1
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 6 streams; used-stream domain mix={'wiki_gen': 54, 'squad_human': 26, 'news_gen': 20}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10911.69it/s]
+    answerable 31/82
+    [full] em=0.935 gold_mlp=-0.129 n_fail=2 greedy-gold=-1.207 drop_from_full=0.0
+    [orig] em=0.968 gold_mlp=-0.092 n_fail=1 greedy-gold=1.276 drop_from_full=1.308
+    [del75] em=0.355 gold_mlp=-1.262 n_fail=20 greedy-gold=1.332 drop_from_full=1.764
+    [del50] em=0.194 gold_mlp=-2.171 n_fail=25 greedy-gold=2.099 drop_from_full=2.546
+    [del25] em=0.065 gold_mlp=-3.332 n_fail=29 greedy-gold=3.114 drop_from_full=3.426
+    [gen_entity] em=0.0 gold_mlp=-4.845 n_fail=2 greedy-gold=4.297 drop_from_full=4.767
+  VERDICT {"probe": "gen_entity", "fail_greedy_minus_gold": 3.917, "fail_gold_drop_from_full": 4.548, "em_curve": {"full": 0.968, "orig": 0.984, "del75": 0.405, "del50": 0.248, "del25": 0.078}, "verdict": "encoding_surface_sensitive"}
+[done]
+=== MP_DONE 2026-07-10T09:42:01+00:00 ===
