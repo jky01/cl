@@ -1,0 +1,36 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+SELF-ANNOTATE A0 (Qwen/Qwen2.5-0.5B, cuda) source=census arts=5x5 cons=400 gen_N=200 lam=2.0 seeds=2
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9655.55it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8467.07it/s]
+  seed 0
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 2 streams; used-stream domain mix={'news_gen': 7, 'wiki_gen': 21, 'squad_human': 10}
+    manifest 19/20 base-hard facts
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9512.16it/s]
+    acquired 19/19
+[transformers] The following generation flags are not valid and may be ignored: ['temperature', 'top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8481.24it/s]
+    [passive      ] cands=197 matched=0 correct=0 cov=0.0 prec=0.0 bytes=0
+    [contrast_q   ] cands=164 matched=0 correct=0 cov=0.0 prec=0.0 bytes=0
+    [contrast_qa  ] cands=164 matched=0 correct=0 cov=0.0 prec=0.0 bytes=0
+    [contrast_decl] cands=200 matched=3 correct=0 cov=0.0 prec=0.0 bytes=230
+    [source_annot ] cands=155 matched=20 correct=2 cov=0.105 prec=0.1 bytes=1241
+    [gold         ] cands=19 matched=19 correct=19 cov=1.0 prec=1.0 bytes=1234
+  DECISION {"phase": "shakedown_only", "n": 1}
+  seed 1
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 2 streams; used-stream domain mix={'wiki_gen': 18, 'squad_human': 10, 'news_gen': 6}
+    manifest 15/15 base-hard facts
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9253.03it/s]
+    acquired 15/15
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8496.56it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8563.43it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8418.99it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8312.87it/s]
+    [passive      ] cands=199 matched=1 correct=0 cov=0.0 prec=0.0 bytes=46
+    [contrast_q   ] cands=168 matched=15 correct=0 cov=0.0 prec=0.0 bytes=626
+    [contrast_qa  ] cands=168 matched=15 correct=0 cov=0.0 prec=0.0 bytes=706
+    [contrast_decl] cands=199 matched=8 correct=1 cov=0.067 prec=0.875 bytes=581
+    [source_annot ] cands=134 matched=32 correct=4 cov=0.267 prec=0.156 bytes=2490
+    [gold         ] cands=15 matched=15 correct=15 cov=1.0 prec=1.0 bytes=934
+  DECISION {"passive": {"coverage": [0.0, 0.0], "precision": [0.0, 0.0], "gate": false}, "contrast_q": {"coverage": [0.0, 0.0], "precision": [0.0, 0.0], "gate": false}, "contrast_qa": {"coverage": [0.0, 0.0], "precision": [0.0, 0.0], "gate": false}, "contrast_decl": {"coverage": [0.0, 0.067], "precision": [0.0, 0.875], "gate": false}, "source_annot": {"coverage": [0.105, 0.267], "precision": [0.1, 0.156], "gate": false}, "verdict": "all_arms_below_gate"}
+[done]
+=== SA_DONE 2026-07-10T23:05:43+00:00 ===

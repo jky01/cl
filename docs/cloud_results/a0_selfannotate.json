@@ -1,0 +1,362 @@
+{
+ "config": {
+  "model": "Qwen/Qwen2.5-0.5B",
+  "source": "census",
+  "arts": 5,
+  "qa": 5,
+  "cons": 400,
+  "gen_N": 200,
+  "lam": 2.0,
+  "seeds": 2
+ },
+ "seeds": [
+  {
+   "n_new": 20,
+   "n_manifest": 19,
+   "n_acquired": 19,
+   "arms": {
+    "passive": {
+     "n_cands": 197,
+     "n_matched": 0,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 0
+    },
+    "contrast_q": {
+     "n_cands": 164,
+     "n_matched": 0,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 0
+    },
+    "contrast_qa": {
+     "n_cands": 164,
+     "n_matched": 0,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 0
+    },
+    "contrast_decl": {
+     "n_cands": 200,
+     "n_matched": 3,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 230
+    },
+    "source_annot": {
+     "n_cands": 155,
+     "n_matched": 20,
+     "n_correct": 2,
+     "coverage": 0.105,
+     "precision": 0.1,
+     "dominance": 0.5,
+     "ledger_bytes": 1241
+    },
+    "gold": {
+     "n_cands": 19,
+     "n_matched": 19,
+     "n_correct": 19,
+     "coverage": 1.0,
+     "precision": 1.0,
+     "dominance": null,
+     "ledger_bytes": 1234
+    }
+   },
+   "rows_contrast_qa": []
+  },
+  {
+   "n_new": 15,
+   "n_manifest": 15,
+   "n_acquired": 15,
+   "arms": {
+    "passive": {
+     "n_cands": 199,
+     "n_matched": 1,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 46
+    },
+    "contrast_q": {
+     "n_cands": 168,
+     "n_matched": 15,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 626
+    },
+    "contrast_qa": {
+     "n_cands": 168,
+     "n_matched": 15,
+     "n_correct": 0,
+     "coverage": 0.0,
+     "precision": 0.0,
+     "dominance": null,
+     "ledger_bytes": 706
+    },
+    "contrast_decl": {
+     "n_cands": 199,
+     "n_matched": 8,
+     "n_correct": 1,
+     "coverage": 0.067,
+     "precision": 0.875,
+     "dominance": 1.0,
+     "ledger_bytes": 581
+    },
+    "source_annot": {
+     "n_cands": 134,
+     "n_matched": 32,
+     "n_correct": 4,
+     "coverage": 0.267,
+     "precision": 0.156,
+     "dominance": 0.4,
+     "ledger_bytes": 2490
+    },
+    "gold": {
+     "n_cands": 15,
+     "n_matched": 15,
+     "n_correct": 15,
+     "coverage": 1.0,
+     "precision": 1.0,
+     "dominance": null,
+     "ledger_bytes": 934
+    }
+   },
+   "rows_contrast_qa": [
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.786
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.786
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "When was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.262,
+     "d_a": 0.946
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.786
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.786
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 1,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In what year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.097,
+     "d_a": 1.8
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.786
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 1,
+     "ok": 0,
+     "d_q": -0.03,
+     "d_a": 1.777
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "When was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 0,
+     "ok": 0,
+     "d_q": -0.262,
+     "d_a": 0.779
+    },
+    {
+     "qid": "1:1:0:2",
+     "gen": "In which year was Sir Richard Branson born?",
+     "m_ok": 0,
+     "equiv": 0,
+     "b_wrong": 1,
+     "stable": 1,
+     "ok": 0,
+     "d_q": 0.018,
+     "d_a": 1.73
+    }
+   ]
+  }
+ ],
+ "decision": {
+  "passive": {
+   "coverage": [
+    0.0,
+    0.0
+   ],
+   "precision": [
+    0.0,
+    0.0
+   ],
+   "gate": false
+  },
+  "contrast_q": {
+   "coverage": [
+    0.0,
+    0.0
+   ],
+   "precision": [
+    0.0,
+    0.0
+   ],
+   "gate": false
+  },
+  "contrast_qa": {
+   "coverage": [
+    0.0,
+    0.0
+   ],
+   "precision": [
+    0.0,
+    0.0
+   ],
+   "gate": false
+  },
+  "contrast_decl": {
+   "coverage": [
+    0.0,
+    0.067
+   ],
+   "precision": [
+    0.0,
+    0.875
+   ],
+   "gate": false
+  },
+  "source_annot": {
+   "coverage": [
+    0.105,
+    0.267
+   ],
+   "precision": [
+    0.1,
+    0.156
+   ],
+   "gate": false
+  },
+  "verdict": "all_arms_below_gate"
+ }
+}
