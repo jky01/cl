@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="${QA_WATCH_ROOT:-/home/aa/cl}"
 CODEX_BIN="${CODEX_BIN:-/home/aa/.local/bin/codex}"
-CODEX_MODEL="${CODEX_MODEL:-gpt-5.5}"
+CODEX_MODEL="${CODEX_MODEL:-gpt-5.6-sol}"
 CODEX_REASONING_EFFORT="${CODEX_REASONING_EFFORT:-xhigh}"
 LOG_DIR="$ROOT/.codex"
 LOG_FILE="$LOG_DIR/qa-claude-watch.log"
