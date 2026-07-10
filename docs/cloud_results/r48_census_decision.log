@@ -1,0 +1,84 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+SELFREPLAY (Qwen/Qwen2.5-0.5B, cuda) source=census streams=4x5x5 cpt=300 cons=400 gen_N=400 views=3 consensus=unanimous shadow=60 bfrac=0.5 seeds=2 arms=['no_replay_bare', 'no_replay_compute_matched', 'stored_random_B', 'self_passive_random_B', 'self_passive_fragile_B']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10066.36it/s]
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 4 streams; used-stream domain mix={'news_gen': 24, 'wiki_gen': 32, 'squad_human': 18}
+  seed 0: streams=[5, 5, 5, 5] total_qa=74
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10248.11it/s]
+      [no_replay_bare s0 t0] scaf_para=0.55 commit=20/20 old_para=None B=0 pool=0
+      [no_replay_bare s0 t1] scaf_para=0.72 commit=18/18 old_para=0.55 B=10 pool=0
+      [no_replay_bare s0 t2] scaf_para=0.57 commit=21/21 old_para=0.474 B=19 pool=0
+      [no_replay_bare s0 t3] scaf_para=0.27 commit=15/15 old_para=0.424 B=30 pool=0
+    [no_replay_bare] {"final_para_em": 0.365, "final_para_f1": 0.408, "old_para_em": 0.424, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.424, "n_old_never": 59, "newest_para_em": 0.2, "age_para": {"1": 0.381, "2": 0.389, "3": 0.45}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 445.1}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10929.83it/s]
+      [no_replay_compute_matched s0 t0] scaf_para=0.60 commit=20/20 old_para=None B=0 pool=0
+      [no_replay_compute_matched s0 t1] scaf_para=0.67 commit=18/18 old_para=0.55 B=10 pool=0
+      [no_replay_compute_matched s0 t2] scaf_para=0.48 commit=21/21 old_para=0.474 B=19 pool=0
+      [no_replay_compute_matched s0 t3] scaf_para=0.33 commit=15/15 old_para=0.339 B=30 pool=0
+    [no_replay_compute_matched] {"final_para_em": 0.365, "final_para_f1": 0.404, "old_para_em": 0.339, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.339, "n_old_never": 59, "newest_para_em": 0.467, "age_para": {"1": 0.381, "2": 0.278, "3": 0.4}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 498.6}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10661.02it/s]
+      [stored_random_B s0 t0] scaf_para=0.60 commit=20/20 old_para=None B=0 pool=0
+      [stored_random_B s0 t1] scaf_para=0.56 commit=18/18 old_para=0.6 B=10 pool=10
+      [stored_random_B s0 t2] scaf_para=0.52 commit=21/21 old_para=0.605 B=19 pool=19
+      [stored_random_B s0 t3] scaf_para=0.20 commit=15/15 old_para=0.441 B=30 pool=30
+    [stored_random_B] {"final_para_em": 0.419, "final_para_f1": 0.464, "old_para_em": 0.441, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.441, "n_old_never": 59, "newest_para_em": 0.4, "age_para": {"1": 0.381, "2": 0.5, "3": 0.45}, "ledger": {"persistent_old_items": 59, "gen_tokens": 0, "para3b_calls": 0}, "wall": 497.2}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 11058.92it/s]
+      [self_passive_random_B s0 t0] scaf_para=0.60 commit=20/20 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10191.29it/s]
+[transformers] The following generation flags are not valid and may be ignored: ['temperature', 'top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+      [self_passive_random_B s0 t1] scaf_para=0.61 commit=18/18 old_para=0.65 B=10 pool=10 C_raw/C_admit=0.0/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10213.77it/s]
+      [self_passive_random_B s0 t2] scaf_para=0.57 commit=21/21 old_para=0.526 B=19 pool=19 C_raw/C_admit=0.0/0.0 U_admit=0>=gate16?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10110.18it/s]
+      [self_passive_random_B s0 t3] scaf_para=0.40 commit=15/15 old_para=0.322 B=30 pool=30 C_raw/C_admit=0.0/0.0 U_admit=0>=gate24?False terr=0.0
+    [self_passive_random_B] {"final_para_em": 0.338, "final_para_f1": 0.407, "old_para_em": 0.322, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.322, "n_old_never": 59, "newest_para_em": 0.467, "age_para": {"1": 0.286, "2": 0.222, "3": 0.45}, "ledger": {"persistent_old_items": 0, "gen_tokens": 47749, "para3b_calls": 3564}, "wall": 669.9}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10961.15it/s]
+      [self_passive_fragile_B s0 t0] scaf_para=0.60 commit=20/20 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10119.90it/s]
+      [self_passive_fragile_B s0 t1] scaf_para=0.61 commit=18/18 old_para=0.45 B=10 pool=10 C_raw/C_admit=0.0/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10191.75it/s]
+      [self_passive_fragile_B s0 t2] scaf_para=0.52 commit=21/21 old_para=0.474 B=19 pool=19 C_raw/C_admit=0.0/0.0 U_admit=0>=gate16?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 8862.66it/s]
+      [self_passive_fragile_B s0 t3] scaf_para=0.33 commit=15/15 old_para=0.322 B=30 pool=26 C_raw/C_admit=0.0/0.0 U_admit=0>=gate24?False terr=0.0
+    [self_passive_fragile_B] {"final_para_em": 0.311, "final_para_f1": 0.381, "old_para_em": 0.322, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.322, "n_old_never": 59, "newest_para_em": 0.267, "age_para": {"1": 0.19, "2": 0.333, "3": 0.4}, "ledger": {"persistent_old_items": 0, "gen_tokens": 47919, "para3b_calls": 3552}, "wall": 705.7}
+  VERDICT {"generator_mechanism": "coverage_bound", "mechanism_reason": "self_passive_random_B t1 U_admit0<gate8; self_passive_random_B t1 age-hole/half-rate; self_passive_random_B t2 U_admit0<gate16; self_passive_random_B t2 age-hole/half-rate; self_passive_random_B t3 U_admit0<gate24; self_passive_random_B t3 age-hole/half-rate", "Delta_B": 0.102, "retention_outcome": "informative", "recovery": -0.167, "fragility_gain": 0.0, "self_replay": "untested"}
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 4 streams; used-stream domain mix={'wiki_gen': 34, 'squad_human': 16, 'news_gen': 17}
+  seed 1: streams=[5, 5, 5, 5] total_qa=67
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10755.96it/s]
+      [no_replay_bare s1 t0] scaf_para=0.63 commit=19/19 old_para=None B=0 pool=0
+      [no_replay_bare s1 t1] scaf_para=0.47 commit=15/15 old_para=0.526 B=10 pool=0
+      [no_replay_bare s1 t2] scaf_para=0.40 commit=15/15 old_para=0.471 B=17 pool=0
+      [no_replay_bare s1 t3] scaf_para=0.56 commit=18/18 old_para=0.327 B=24 pool=0
+    [no_replay_bare] {"final_para_em": 0.403, "final_para_f1": 0.474, "old_para_em": 0.327, "n_old": 49, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.327, "n_old_never": 49, "newest_para_em": 0.611, "age_para": {"1": 0.2, "2": 0.333, "3": 0.316}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 441.6}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10972.52it/s]
+      [no_replay_compute_matched s1 t0] scaf_para=0.68 commit=19/19 old_para=None B=0 pool=0
+      [no_replay_compute_matched s1 t1] scaf_para=0.47 commit=15/15 old_para=0.526 B=10 pool=0
+      [no_replay_compute_matched s1 t2] scaf_para=0.40 commit=15/15 old_para=0.5 B=17 pool=0
+      [no_replay_compute_matched s1 t3] scaf_para=0.50 commit=18/18 old_para=0.245 B=24 pool=0
+    [no_replay_compute_matched] {"final_para_em": 0.313, "final_para_f1": 0.387, "old_para_em": 0.245, "n_old": 49, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.245, "n_old_never": 49, "newest_para_em": 0.444, "age_para": {"1": 0.2, "2": 0.333, "3": 0.316}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 490.8}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 8893.64it/s]
+      [stored_random_B s1 t0] scaf_para=0.68 commit=19/19 old_para=None B=0 pool=0
+      [stored_random_B s1 t1] scaf_para=0.47 commit=15/15 old_para=0.632 B=10 pool=10
+      [stored_random_B s1 t2] scaf_para=0.33 commit=15/15 old_para=0.559 B=17 pool=17
+      [stored_random_B s1 t3] scaf_para=0.44 commit=18/18 old_para=0.429 B=24 pool=24
+    [stored_random_B] {"final_para_em": 0.448, "final_para_f1": 0.514, "old_para_em": 0.429, "n_old": 49, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.429, "n_old_never": 49, "newest_para_em": 0.5, "age_para": {"1": 0.267, "2": 0.467, "3": 0.526}, "ledger": {"persistent_old_items": 49, "gen_tokens": 0, "para3b_calls": 0}, "wall": 496.9}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10700.98it/s]
+      [self_passive_random_B s1 t0] scaf_para=0.63 commit=19/19 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10022.73it/s]
+      [self_passive_random_B s1 t1] scaf_para=0.47 commit=15/15 old_para=0.526 B=10 pool=10 C_raw/C_admit=0.053/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10255.72it/s]
+      [self_passive_random_B s1 t2] scaf_para=0.40 commit=15/15 old_para=0.471 B=17 pool=17 C_raw/C_admit=0.0/0.0 U_admit=0>=gate14?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10422.96it/s]
+      [self_passive_random_B s1 t3] scaf_para=0.61 commit=18/18 old_para=0.265 B=24 pool=18 C_raw/C_admit=0.0/0.0 U_admit=0>=gate20?False terr=0.0
+    [self_passive_random_B] {"final_para_em": 0.313, "final_para_f1": 0.41, "old_para_em": 0.265, "n_old": 49, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.265, "n_old_never": 49, "newest_para_em": 0.444, "age_para": {"1": 0.2, "2": 0.4, "3": 0.263}, "ledger": {"persistent_old_items": 0, "gen_tokens": 47956, "para3b_calls": 3381}, "wall": 662.2}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 11109.32it/s]
+      [self_passive_fragile_B s1 t0] scaf_para=0.68 commit=19/19 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9898.47it/s]
+      [self_passive_fragile_B s1 t1] scaf_para=0.47 commit=15/15 old_para=0.474 B=10 pool=10 C_raw/C_admit=0.053/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10249.65it/s]
+      [self_passive_fragile_B s1 t2] scaf_para=0.40 commit=15/15 old_para=0.5 B=17 pool=17 C_raw/C_admit=0.0/0.0 U_admit=0>=gate14?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10325.00it/s]
+      [self_passive_fragile_B s1 t3] scaf_para=0.56 commit=18/18 old_para=0.388 B=24 pool=1 C_raw/C_admit=0.0/0.0 U_admit=0>=gate20?False terr=0.0
+    [self_passive_fragile_B] {"final_para_em": 0.418, "final_para_f1": 0.473, "old_para_em": 0.388, "n_old": 49, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.388, "n_old_never": 49, "newest_para_em": 0.611, "age_para": {"1": 0.2, "2": 0.467, "3": 0.421}, "ledger": {"persistent_old_items": 0, "gen_tokens": 47959, "para3b_calls": 3405}, "wall": 695.6}
+  VERDICT {"generator_mechanism": "coverage_bound", "mechanism_reason": "self_passive_random_B t1 U_admit0<gate8; self_passive_random_B t1 age-hole/half-rate; self_passive_random_B t2 U_admit0<gate16; self_passive_random_B t2 age-hole/half-rate; self_passive_random_B t3 U_admit0<gate24; self_passive_random_B t3 age-hole/half-rate", "Delta_B": 0.143, "retention_outcome": "informative", "recovery": 0.007, "fragility_gain": 0.062, "self_replay": "untested"}
+[done]
+=== R48DEC_DONE 2026-07-10T07:49:35+00:00 ===

@@ -1,0 +1,3232 @@
+{
+ "config": {
+  "source": "census",
+  "streams": 4,
+  "arts": 5,
+  "qa": 5,
+  "gen_N": 400,
+  "views": 3,
+  "consensus": "unanimous",
+  "budget_frac": 0.5,
+  "shadow_steps": 60,
+  "admit_min_logp": -4.0,
+  "seeds": 2,
+  "arms": [
+   "no_replay_bare",
+   "no_replay_compute_matched",
+   "stored_random_B",
+   "self_passive_random_B",
+   "self_passive_fragile_B"
+  ]
+ },
+ "summary": {
+  "no_replay_bare": {
+   "final_para_em": 0.384,
+   "old_para_em": 0.376,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.376,
+   "newest_para_em": 0.405
+  },
+  "no_replay_compute_matched": {
+   "final_para_em": 0.339,
+   "old_para_em": 0.292,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.292,
+   "newest_para_em": 0.456
+  },
+  "stored_random_B": {
+   "final_para_em": 0.433,
+   "old_para_em": 0.435,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.435,
+   "newest_para_em": 0.45
+  },
+  "self_passive_random_B": {
+   "final_para_em": 0.326,
+   "old_para_em": 0.293,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.293,
+   "newest_para_em": 0.456
+  },
+  "self_passive_fragile_B": {
+   "final_para_em": 0.364,
+   "old_para_em": 0.355,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.355,
+   "newest_para_em": 0.439
+  }
+ },
+ "per_seed": {
+  "no_replay_bare": [
+   {
+    "old_para_em": 0.424,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.424,
+    "newest_para_em": 0.2,
+    "n_old": 59,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.55,
+      "n_committed": 20,
+      "n_new": 20,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713244.682,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.722,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.55,
+      "B": 10,
+      "n_exposed": 20,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.571,
+      "n_committed": 21,
+      "n_new": 21,
+      "old_para_common": 0.474,
+      "B": 19,
+      "n_exposed": 38,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.267,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.424,
+      "B": 30,
+      "n_exposed": 59,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   },
+   {
+    "old_para_em": 0.327,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.327,
+    "newest_para_em": 0.611,
+    "n_old": 49,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.632,
+      "n_committed": 19,
+      "n_new": 19,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713246.761,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.467,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.526,
+      "B": 10,
+      "n_exposed": 19,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.4,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.471,
+      "B": 17,
+      "n_exposed": 34,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.556,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.327,
+      "B": 24,
+      "n_exposed": 49,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   }
+  ],
+  "no_replay_compute_matched": [
+   {
+    "old_para_em": 0.339,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.339,
+    "newest_para_em": 0.467,
+    "n_old": 59,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.6,
+      "n_committed": 20,
+      "n_new": 20,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713257.936,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.667,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.55,
+      "B": 10,
+      "n_exposed": 20,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.476,
+      "n_committed": 21,
+      "n_new": 21,
+      "old_para_common": 0.474,
+      "B": 19,
+      "n_exposed": 38,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.333,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.339,
+      "B": 30,
+      "n_exposed": 59,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   },
+   {
+    "old_para_em": 0.245,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.245,
+    "newest_para_em": 0.444,
+    "n_old": 49,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.684,
+      "n_committed": 19,
+      "n_new": 19,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713257.036,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.467,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.526,
+      "B": 10,
+      "n_exposed": 19,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.4,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.5,
+      "B": 17,
+      "n_exposed": 34,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.5,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.245,
+      "B": 24,
+      "n_exposed": 49,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   }
+  ],
+  "stored_random_B": [
+   {
+    "old_para_em": 0.441,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.441,
+    "newest_para_em": 0.4,
+    "n_old": 59,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 59,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.6,
+      "n_committed": 20,
+      "n_new": 20,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713237.421,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.556,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.6,
+      "B": 10,
+      "n_exposed": 20,
+      "n_admit": 0,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.524,
+      "n_committed": 21,
+      "n_new": 21,
+      "old_para_common": 0.605,
+      "B": 19,
+      "n_exposed": 38,
+      "n_admit": 0,
+      "n_pool": 19,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.2,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.441,
+      "B": 30,
+      "n_exposed": 59,
+      "n_admit": 0,
+      "n_pool": 30,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   },
+   {
+    "old_para_em": 0.429,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.429,
+    "newest_para_em": 0.5,
+    "n_old": 49,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 49,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.684,
+      "n_committed": 19,
+      "n_new": 19,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713246.543,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.467,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.632,
+      "B": 10,
+      "n_exposed": 19,
+      "n_admit": 0,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.333,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.559,
+      "B": 17,
+      "n_exposed": 34,
+      "n_admit": 0,
+      "n_pool": 17,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.444,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.429,
+      "B": 24,
+      "n_exposed": 49,
+      "n_admit": 0,
+      "n_pool": 24,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": null
+     }
+    ]
+   }
+  ],
+  "self_passive_random_B": [
+   {
+    "old_para_em": 0.322,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.322,
+    "newest_para_em": 0.467,
+    "n_old": 59,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 47749,
+     "para3b_calls": 3564
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.6,
+      "n_committed": 20,
+      "n_new": 20,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713243.18,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.611,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.65,
+      "B": 10,
+      "n_exposed": 20,
+      "n_admit": 108,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 20,
+       "n_raw": 398,
+       "n_admit": 108,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 8,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "In what year was the United States Constitution ratified?",
+         "ca": "1789",
+         "top1_gq": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+         "top1_score": 0.091,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent by area?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who is the current President of the United States?",
+         "ca": "Barack Obama",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which city is the headquarters of the United Nations?",
+         "ca": "New York",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Switzerland?",
+         "ca": "Bern",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Japan?",
+         "ca": "Tokyo",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the full name of the person who was the first woman to be an astronaut?",
+         "ca": "Sally Ride",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jose",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Ecuador?",
+         "ca": "Quito",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Greece?",
+         "ca": "Athens",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In what year was the US Constitution ratified?",
+         "ca": "1789",
+         "top1_gq": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Saudi Arabia?",
+         "ca": "Riyadh",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What year did the television series Game of Thrones start?",
+         "ca": "2007",
+         "top1_gq": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+         "top1_score": 0.083,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who is the current President of the United States?",
+         "ca": "Barack Obama",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Japan?",
+         "ca": "Tokyo",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Italy?",
+         "ca": "Rome",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.616
+      }
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.571,
+      "n_committed": 21,
+      "n_new": 21,
+      "old_para_common": 0.526,
+      "B": 19,
+      "n_exposed": 38,
+      "n_admit": 191,
+      "n_pool": 19,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 38,
+       "n_raw": 397,
+       "n_admit": 191,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 16,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in terms of area?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent by area?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Japan?",
+         "ca": "Tokyo",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest ocean by area?",
+         "ca": "Pacific Ocean",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Canada?",
+         "ca": "Ottawa",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Germany?",
+         "ca": "Berlin",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of China?",
+         "ca": "Beijing",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest planet in the solar system?",
+         "ca": "Jupiter",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Germany?",
+         "ca": "Berlin",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent by area?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.567
+      }
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.4,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.322,
+      "B": 30,
+      "n_exposed": 59,
+      "n_admit": 74,
+      "n_pool": 30,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 59,
+       "n_raw": 393,
+       "n_admit": 74,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 24,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the British Isles?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Himalayas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Snowy Mountain Range?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Colorado?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Himalayas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Himalayas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year did Obama win the presidency?",
+         "ca": "2008",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.143,
+         "top2_gq": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+         "top2_score": 0.1,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest planet in the solar system?",
+         "ca": "Jupiter",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which country the capital is Berlin?",
+         "ca": "Germany",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Himalayas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year did Einstein write his General Theory of Relativity?",
+         "ca": "1905",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.1,
+         "top2_gq": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+         "top2_score": 0.077,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year did Michael Jackson die?",
+         "ca": "2000",
+         "top1_gq": "When did Ivan die?",
+         "top1_score": 0.2,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.143,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Colorado?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year did Neil Armstrong set a new world record by walking on the moon?",
+         "ca": "1969",
+         "top1_gq": "what was the new name of the 6th Infantry Division?",
+         "top1_score": 0.083,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.083,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.845
+      }
+     }
+    ]
+   },
+   {
+    "old_para_em": 0.265,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.265,
+    "newest_para_em": 0.444,
+    "n_old": 49,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 47956,
+     "para3b_calls": 3381
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.632,
+      "n_committed": 19,
+      "n_new": 19,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713258.015,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.467,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.526,
+      "B": 10,
+      "n_exposed": 19,
+      "n_admit": 79,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 19,
+       "n_raw": 390,
+       "n_admit": 79,
+       "U_raw": 1,
+       "U_admit": 0,
+       "C_raw": 0.053,
+       "C_admit": 0.0,
+       "coverage_gate": 8,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "What year was The Lion King released?",
+         "ca": "1994",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.143,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.125,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of New Zealand?",
+         "ca": "Wellington",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which city is home to the Louvre Museum?",
+         "ca": "Paris",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent on earth?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which US president was the only one to serve four terms?",
+         "ca": "four",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of California?",
+         "ca": "Sacramento",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Mexico?",
+         "ca": "Mexico City",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the only two letter state abbreviation for Texas?",
+         "ca": "TX",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who played the lead role in the film \"The Avengers\"?",
+         "ca": "Robert Downey, Jr.",
+         "top1_gq": "In what year did the Post Office Act lead to the GPO becoming a public corporation?",
+         "top1_score": 0.077,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which English playwright wrote A View from the Bottom of the Boat?",
+         "ca": "William Shakespeare",
+         "top1_gq": "The Los Angeles Angels of Anaheim are from which sport?",
+         "top1_score": 0.083,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of the United States?",
+         "ca": "Washington, D.C.",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Canada?",
+         "ca": "Ottawa",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Switzerland?",
+         "ca": "Bern",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who is the Queen of England?",
+         "ca": "Queen Elizabeth I",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What British prime minister led the Labour Party to victory in the 1945 general election?",
+         "ca": "Winston Churchill",
+         "top1_gq": "What year did British Telecom become British Telecommunications plc?",
+         "top1_score": 0.067,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What type of government does the United States have?",
+         "ca": "federal",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.646
+      }
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.4,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.471,
+      "B": 17,
+      "n_exposed": 34,
+      "n_admit": 60,
+      "n_pool": 17,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 34,
+       "n_raw": 395,
+       "n_admit": 60,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 14,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year was the film Mad Max: Fury Road directed?",
+         "ca": "2015",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.1,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.091,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by four countries: France, Italy, Portugal and Spain?",
+         "ca": "Atlantic",
+         "top1_gq": "When did the Rauracian Republic absorb into France?",
+         "top1_score": 0.077,
+         "top2_gq": "When did William and Lillian Wilson pass away?",
+         "top2_score": 0.071,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by four countries: France, England, Germany, and Italy?",
+         "ca": "Atlantic",
+         "top1_gq": "When did the Rauracian Republic absorb into France?",
+         "top1_score": 0.077,
+         "top2_gq": "When did William and Lillian Wilson pass away?",
+         "top2_score": 0.071,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year was the Hollywood film The War of the Worlds produced?",
+         "ca": "1953",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.111,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.1,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in terms of area?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by four countries?",
+         "ca": "four",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which province was winning in the 2014 provincial election?",
+         "ca": "Ontario",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which sport has the most followers in Britain?",
+         "ca": "football",
+         "top1_gq": "The Los Angeles Clippers are a team belonging to which sport?",
+         "top1_score": 0.111,
+         "top2_gq": "The Los Angeles Angels of Anaheim are from which sport?",
+         "top2_score": 0.111,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Singapore?",
+         "ca": "Jakarta",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is crossed by the strait between Australia and New Zealand?",
+         "ca": "Pacific",
+         "top1_gq": "When did William and Lillian Wilson pass away?",
+         "top1_score": 0.077,
+         "top2_gq": "How long were William and Lillian Wilson married?",
+         "top2_score": 0.077,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in terms of area?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the name of the main river running through central London?",
+         "ca": "Thames",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by three countries: France, England and Spain?",
+         "ca": "Atlantic",
+         "top1_gq": "When did the Rauracian Republic absorb into France?",
+         "top1_score": 0.083,
+         "top2_gq": "When did William and Lillian Wilson pass away?",
+         "top2_score": 0.077,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year was the movie Forrest Gump directed?",
+         "ca": "1994",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.125,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.111,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which year was the Novel Lord of the Flies published?",
+         "ca": "1953",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.125,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.111,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.803
+      }
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.611,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.265,
+      "B": 24,
+      "n_exposed": 49,
+      "n_admit": 18,
+      "n_pool": 18,
+      "shortfall": 6,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 49,
+       "n_raw": 342,
+       "n_admit": 18,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 20,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which American explorer first saw the New World?",
+         "ca": "John Smith",
+         "top1_gq": "Which American television actor was born in 1956?",
+         "top1_score": 0.111,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Caucasus mountains?",
+         "ca": "Mount Elbrus",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A boy's name often represents which sport?",
+         "ca": "Football",
+         "top1_gq": "The Los Angeles Clippers are a team belonging to which sport?",
+         "top1_score": 0.111,
+         "top2_gq": "The Los Angeles Angels of Anaheim are from which sport?",
+         "top2_score": 0.111,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A year whose last day is a Saturday is a leap year. Is 2004 correct?",
+         "ca": "no",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.1,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.091,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Tibetan plateau?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Alps?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest major elevation point in the western hemisphere?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in terms of area?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the U.S.?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A carbon atom has how many protons?",
+         "ca": "6",
+         "top1_gq": "How many years was John Fox the head coach of the Denver Broncos?",
+         "top1_score": 0.091,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A boy's full name is usually given in the prefix \"let's\" + the name. Is this true?",
+         "ca": "yes",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the U.S.? North America?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the official capital of the U.S. (and one of those with a lowercase \"s\")?",
+         "ca": "Washington, D.C.",
+         "top1_gq": "When did William and Lillian Wilson pass away?",
+         "top1_score": 0.091,
+         "top2_gq": "How long were William and Lillian Wilson married?",
+         "top2_score": 0.091,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A patient's temperature is 102.14%. What is this temperature written as using a scientific notation?",
+         "ca": "1.0214 \u00d7 10^",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A boy's name commonly contains the word \"lilliput\" does this mean a place?",
+         "ca": "Yes",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "A boy's name often represents which sport?",
+         "ca": "Football",
+         "top1_gq": "The Los Angeles Clippers are a team belonging to which sport?",
+         "top1_score": 0.111,
+         "top2_gq": "The Los Angeles Angels of Anaheim are from which sport?",
+         "top2_score": 0.111,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.819
+      }
+     }
+    ]
+   }
+  ],
+  "self_passive_fragile_B": [
+   {
+    "old_para_em": 0.322,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.322,
+    "newest_para_em": 0.267,
+    "n_old": 59,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 47919,
+     "para3b_calls": 3552
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.6,
+      "n_committed": 20,
+      "n_new": 20,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713249.299,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.611,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.45,
+      "B": 10,
+      "n_exposed": 20,
+      "n_admit": 104,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 20,
+       "n_raw": 398,
+       "n_admit": 104,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 8,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who is the current President of the United States?",
+         "ca": "Barack Obama",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which city is the headquarters of the United Nations?",
+         "ca": "New York",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In which US state is San Francisco located?",
+         "ca": "California",
+         "top1_gq": "Where is the Peirce\u2013Nichols House located?",
+         "top1_score": 0.167,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of New Zealand?",
+         "ca": "Wellington",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Japan?",
+         "ca": "Tokyo",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Germany?",
+         "ca": "Berlin",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the full name of the person who discovered two new elements, radon and polonium?",
+         "ca": "Henri Becquerel",
+         "top1_gq": "What exchange in Warsaw is one of the most important for Central and Eastern Europe?",
+         "top1_score": 0.059,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Where is the headquarters of the World Health Organization?",
+         "ca": "Geneva",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jose",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Ecuador?",
+         "ca": "Quito",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which American city hosted the 2006 Summer Olympics?",
+         "ca": "London",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.083,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Greece?",
+         "ca": "Athens",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Saudi Arabia?",
+         "ca": "Riyadh",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Japan?",
+         "ca": "Tokyo",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which river is the longest river in the United States?",
+         "ca": "Mississippi River",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent on Earth?",
+         "ca": "Asia",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Italy?",
+         "ca": "Rome",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.626
+      }
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.524,
+      "n_committed": 21,
+      "n_new": 21,
+      "old_para_common": 0.474,
+      "B": 19,
+      "n_exposed": 38,
+      "n_admit": 79,
+      "n_pool": 19,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 38,
+       "n_raw": 393,
+       "n_admit": 79,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 16,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which American city is the capital of the U.S. state of Florida?",
+         "ca": "Miami",
+         "top1_gq": "Who ranked Warsaw as the 32nd most liveable city in the world?",
+         "top1_score": 0.091,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jos\u00e9",
+         "top1_gq": "Who is the Costa Rican President that went to Harvard?",
+         "top1_score": 0.143,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jos\u00e9",
+         "top1_gq": "Who is the Costa Rican President that went to Harvard?",
+         "top1_score": 0.143,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of France?",
+         "ca": "Paris",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Belgium?",
+         "ca": "Brussels",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest elevation point on Earth?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jos\u00e9",
+         "top1_gq": "Who is the Costa Rican President that went to Harvard?",
+         "top1_score": 0.143,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest elevation point on Earth?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the name of the main river running through central United States?",
+         "ca": "Mississippi River",
+         "top1_gq": "What exchange in Warsaw is one of the most important for Central and Eastern Europe?",
+         "top1_score": 0.067,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest elevation point on Earth?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the weather capital of Canada?",
+         "ca": "Toronto",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the tallest mountain in the Western Hemisphere?",
+         "ca": "Mount Everest",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Costa Rica?",
+         "ca": "San Jos\u00e9",
+         "top1_gq": "Who is the Costa Rican President that went to Harvard?",
+         "top1_score": 0.143,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Spain?",
+         "ca": "Madrid",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the abbreviation for United States?",
+         "ca": "U.S.",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by four countries: France, England, Italy and Spain?",
+         "ca": "Atlantic Ocean",
+         "top1_gq": "Which tournament did Bj\u00f6rn Rune Borg win four consecutive titles?",
+         "top1_score": 0.062,
+         "top2_gq": "What exchange in Warsaw is one of the most important for Central and Eastern Europe?",
+         "top2_score": 0.059,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by two other countries?",
+         "ca": "Atlantic Ocean",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.659
+      }
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.333,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.322,
+      "B": 30,
+      "n_exposed": 59,
+      "n_admit": 26,
+      "n_pool": 26,
+      "shortfall": 4,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 59,
+       "n_raw": 393,
+       "n_admit": 26,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 24,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of California?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the personal name of the singer of the 2000 pop rock album \"This Is It\"?",
+         "ca": "John Lennon",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the Highest mountain in Russia by height?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the weather capital of England?",
+         "ca": "London",
+         "top1_gq": "Who is the Chief Crown Prosecutor for the CPS in the East of England?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Colorado, known as the Base-10?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.083,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the Austrian Alps?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Tibetan plateau?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which American city is home to the New York Stock Exchange?",
+         "ca": "New York",
+         "top1_gq": "what was the new name of the 6th Infantry Division?",
+         "top1_score": 0.1,
+         "top2_gq": "What is the name of the place in New South Wales?",
+         "top2_score": 0.1,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Colorado?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Himalayas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Elysee Palace?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.111,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the lowest temperature in Celsius that a human can survive without being evacuated?",
+         "ca": "0",
+         "top1_gq": "Who were the founders of Google?",
+         "top1_score": 0.0,
+         "top2_gq": "Who was the Google executive who inspired Google Images?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the weather capital of England?",
+         "ca": "London",
+         "top1_gq": "Who is the Chief Crown Prosecutor for the CPS in the East of England?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of California, the Mount of Doom in science fiction?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.071,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which sport has the most followers in the United States?",
+         "ca": "football",
+         "top1_gq": "What is the name of the place in Wales, United Kingdom?",
+         "top1_score": 0.125,
+         "top2_gq": "What is the name of the place in Northern Ireland, United Kingdom?",
+         "top2_score": 0.111,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the Us state?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Colorado?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the American state of Washington?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.1,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest mountain in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Bj\u00f6rn Rune Borg's highest ranking in ATP?",
+         "top1_score": 0.125,
+         "top2_gq": "Who were the founders of Google?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.88
+      }
+     }
+    ]
+   },
+   {
+    "old_para_em": 0.388,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.388,
+    "newest_para_em": 0.611,
+    "n_old": 49,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 47959,
+     "para3b_calls": 3405
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.684,
+      "n_committed": 19,
+      "n_new": 19,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "s0_checksum": 1713269.407,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.467,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.474,
+      "B": 10,
+      "n_exposed": 19,
+      "n_admit": 82,
+      "n_pool": 10,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 19,
+       "n_raw": 394,
+       "n_admit": 82,
+       "U_raw": 1,
+       "U_admit": 0,
+       "C_raw": 0.053,
+       "C_admit": 0.0,
+       "coverage_gate": 8,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which English author is associated with the characters of the Harry Potter series?",
+         "ca": "J.K. Rowling",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What year was The Lion King released?",
+         "ca": "1994",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.143,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.125,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "In what year did the Berlin Wall come down?",
+         "ca": "1989",
+         "top1_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top1_score": 0.125,
+         "top2_gq": "In what year did BT become independent of the Post Office?",
+         "top2_score": 0.111,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Argentina?",
+         "ca": "Buenos Aires",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which city is home to the Louvre Museum?",
+         "ca": "Paris",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Switzerland?",
+         "ca": "Bern",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who sang the theme song for \"Madonna\"?",
+         "ca": "John Lennon",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who wrote the famous book The Great Gatsby?",
+         "ca": "F. Scott Fitzgerald",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "When was the book Harry Potter and the Philosopher's Stone published?",
+         "ca": "1990",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the only two letter state abbreviation for Texas?",
+         "ca": "TX",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What type of forest is the Amazon Rainforest?",
+         "ca": "tropical rainforest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of the United States?",
+         "ca": "Washington, D.C.",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of New Zealand?",
+         "ca": "Wellington",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Who wrote the famous novel \"The Great Gatsby\"?",
+         "ca": "F. Scott Fitzgerald",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Canada?",
+         "ca": "Ottawa",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the name of the tallest mountain in the United States?",
+         "ca": "Mount McKinley",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What British prime minister led the Labour Party to victory in the 1945 general election?",
+         "ca": "Winston Churchill",
+         "top1_gq": "What year did British Telecom become British Telecommunications plc?",
+         "top1_score": 0.067,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the capital of Australia?",
+         "ca": "Canberra",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.65
+      }
+     },
+     {
+      "t": 2,
+      "scaffold_new_para": 0.4,
+      "n_committed": 15,
+      "n_new": 15,
+      "old_para_common": 0.5,
+      "B": 17,
+      "n_exposed": 34,
+      "n_admit": 61,
+      "n_pool": 17,
+      "shortfall": 0,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 34,
+       "n_raw": 397,
+       "n_admit": 61,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 14,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the name of the main river running through England?",
+         "ca": "The River Thames",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the abbreviation for United States?",
+         "ca": "U.S.",
+         "top1_gq": "What is the United Methodist Church?",
+         "top1_score": 0.2,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest island in Africa?",
+         "ca": "Madagascar",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "Which ocean is bordered by three countries: France, England and Spain?",
+         "ca": "Atlantic Ocean",
+         "top1_gq": "When did the Rauracian Republic absorb into France?",
+         "top1_score": 0.083,
+         "top2_gq": "When did William and Lillian Wilson pass away?",
+         "top2_score": 0.077,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the abbreviation for the U.S. U.S.?",
+         "ca": "U.S.",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Andes?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the abbreviation for United States?",
+         "ca": "U.S.",
+         "top1_gq": "What is the United Methodist Church?",
+         "top1_score": 0.2,
+         "top2_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the highest peak in the Americas?",
+         "ca": "Mount Everest",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the name of the main river running through London?",
+         "ca": "Thames",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        },
+        {
+         "kind": "raw_nomatch",
+         "cq": "What is the largest continent in the world?",
+         "ca": "Asia",
+         "top1_gq": "What is Burh\u0101nudd\u012bn Rabb\u0101n\u012b's profession?",
+         "top1_score": 0.0,
+         "top2_gq": "What year was Burh\u0101nudd\u012bn Rabb\u0101n\u012b born?",
+         "top2_score": 0.0,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.826
+      }
+     },
+     {
+      "t": 3,
+      "scaffold_new_para": 0.556,
+      "n_committed": 18,
+      "n_new": 18,
+      "old_para_common": 0.388,
+      "B": 24,
+      "n_exposed": 49,
+      "n_admit": 1,
+      "n_pool": 1,
+      "shortfall": 23,
+      "s0_checksum": null,
+      "coverage": {
+       "n_gold_old": 49,
+       "n_raw": 344,
+       "n_admit": 1,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 20,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": [
+        {
+         "kind": "raw_nomatch",
+         "cq": "A boy's name commonly includes \"the\", \"thee\", and sometimes \"thees\". Do names often include \"thee\"?",
+         "ca": "Yes",
+         "top1_gq": "When did William and Lillian Wilson pass away?",
+         "top1_score": 0.067,
+         "top2_gq": "How long were William and Lillian Wilson married?",
+         "top2_score": 0.067,
+         "label": null
+        }
+       ],
+       "view_uniqueness": 0.82
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "verdict": {
+  "generator_mechanism": "coverage_bound",
+  "mechanism_reason": "self_passive_random_B t1 U_admit0<gate8; self_passive_random_B t1 age-hole/half-rate; self_passive_random_B t2 U_admit0<gate16; self_passive_random_B t2 age-hole/half-rate; self_passive_random_B t3 U_admit0<gate24; self_passive_random_B t3 age-hole/half-rate",
+  "Delta_B": 0.143,
+  "retention_outcome": "informative",
+  "recovery": 0.007,
+  "fragility_gain": 0.062,
+  "self_replay": "untested"
+ }
+}

@@ -4,7 +4,20 @@
 > pass/null gates. Update the STATUS column and the "last updated" line every time an experiment returns.
 > This is the plan-of-record; `FINDINGS.md` is the evidence log, `docs/CAPSTONE.md` is the narrative.
 >
-> **Last updated:** 2026-07-10 (after R46: FIRST POSITIVE on the composition wall. A training-time,
+> **Last updated:** 2026-07-10 (after R47+R48. **R47** = R46 bridge SURVIVES a lifecycle but SUB-THRESHOLD:
+> attractor_replay held-out A→C 0.117 vs replay 0.032 (both seeds), +0.085 < the +0.10 bar, curve decays in
+> phase-2 → weak-but-real, durability is the weak point; needs replay to keep the endpoint alive (NOT
+> rehearsal-free). **R48** = checkpoint-only self-replay on REAL census text is a clean matcher-VALIDATED
+> NEGATIVE: `generator_mechanism=coverage_bound`, self-replay recovers ~0% of the stored-gold retention gap
+> (2 seeds) because free generation collapses onto high-prior pretrained facts (capitals/continents) and
+> NEVER surfaces the model's own freshly-written tail facts (U_admit=0; top-1 overlap ~0). "Knowing ≠ freely
+> recalling" — binding constraint is generative ADDRESSING, not selection. self-replay of off-target dreams
+> is even NET-NEGATIVE vs a bare no-replay floor. NEXT = R49 matched-compute passive-vs-ADVERSARIAL dream
+> generation (shadow-disagreement search for THREATENED facts) — the mechanism to beat coverage=0; growth
+> stays OFF until addressing also saturates. `s3/selfreplay.py`, `docs/cloud_results/r47_closure.*`,
+> `docs/cloud_results/r48_census_decision.*`.)
+>
+> **Prior last updated:** 2026-07-10 (after R46: FIRST POSITIVE on the composition wall. A training-time,
 > weights-only, NO-A→C-label, rehearsal-free consolidation primitive — hidden-state BRIDGE UNIFICATION
 > (align h("A's friend is")→h("B"), direct cosine) — induces latent 2-hop composition 0.42 (0.62/0.23
 > seeds) where independent bindings + shared-hub + freq-matched + deranged controls ALL give ~0; atomic

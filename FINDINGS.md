@@ -1,5 +1,59 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R48 (checkpoint-only self-replay on REAL TEXT) — clean, matcher-VALIDATED NEGATIVE: self-replay is
+> COVERAGE-BOUND. A dense checkpoint that HAS internalized obscure facts cannot ADDRESS them via free
+> generation — "knowing ≠ being able to spontaneously recall."** `s3/selfreplay.py`, Qwen2.5-0.5B, census
+> real-text streams (`docs/cloud_results/r48_census_decision.{json,log}`, 2 seeds, 5 arms, GEN_N=400,
+> GEN_VIEWS=3). Contract: candidate generation sees ONLY M_{t-1} + a fixed GENERIC prompt (no old
+> qids/titles/subjects); gold match is OFFLINE audit only. Two-axis verdict:
+>
+> | arm | old-only para EM (2-seed) | per-seed |
+> |---|---|---|
+> | stored_random_B (gold replay) | **0.435** | [0.441, 0.429] |
+> | no_replay_bare (true floor) | 0.376 | [0.424, 0.327] |
+> | self_passive_fragile_B | 0.355 | [0.322, 0.388] |
+> | self_passive_random_B | 0.293 | [0.322, 0.265] |
+> | no_replay_compute_matched | 0.292 | [0.339, 0.245] |
+>
+> `generator_mechanism=coverage_bound` (U_admit=0 of 24–59 old facts, EVERY stream, BOTH seeds),
+> `retention_outcome=informative` (Delta_B=0.143 stored−no_replay), `recovery=0.007` (self-replay recovers
+> **~0%** of the stored-replay gap; ≈ no_replay both seeds, no sign inversion), `self_replay=untested`
+> (correctly gated: coverage failed ⇒ retention not validly tested). **Matcher-validated (enriched
+> raw_nomatch dump):** the admitted dreams are ALL high-prior pretrained facts ("capital of Australia/Japan/
+> Germany", "largest continent", "current US President") with top-1 question-signature overlap ~0.0–0.11 to
+> the obscure census gold ("what year was the Peirce–Nichols House designated…") — genuine absence, not a
+> matcher miss. **The checkpoint answers these facts when CUED (commit=full; stored gold replay protects
+> them +0.06–0.14) yet NEVER produces them under free generation** — the generative distribution collapses
+> onto pretrained priors. Also: `no_replay_bare` (0.376) ≫ `no_replay_compute_matched` (0.292) — an extra
+> off-target qa_ce block (self-replay's or the filler's) is NET INTERFERENCE, so self-replay is actually
+> *below* the do-nothing floor. **Binding constraint = generative ADDRESSING (uncued recall), NOT selection.**
+> Prior arc: acquisition first failed (qa_ce(new) was only in one arm ⇒ commit≈0); once made common to all
+> arms, acquisition + stored retention both work, isolating coverage as the wall. Six real bugs across two
+> codex peer-review gates were caught before the decision pod. **Next (codex escalation): matched-compute
+> passive-vs-ADVERSARIAL dream generation** — a disposable shadow current-write, search prompts of maximal
+> M_{t-1}↔shadow disagreement, label with M_{t-1}, replay high-consensus disagreements — to address the
+> *threatened* facts free generation won't surface. Growth stays OFF the path until addressing also saturates.
+>
+> **R47 (lifecycle bridge consolidation — the continual version of R46) — lifecycle-POSITIVE but
+> SUB-THRESHOLD: the bridge primitive survives a continual setting on top of replay-based endpoint
+> retention, but the effect is small and its durability is the weak point.** `s2/bridge_lifecycle.py`,
+> `docs/cloud_results/r47_closure.{json,log}`, Qwen2.5-0.5B, P1=3000 (old B→C) then P2=7000 (new A→B, NO
+> A→C labels), 2 seeds. Paired (both arms keep old B→C=1.0 and A→B=1.0 via replay):
+>
+> | arm | seed0 A→C | seed1 A→C | raw_bridge s0/s1 |
+> |---|---|---|---|
+> | replay_old | 0.031 | 0.033 | 0.085 / 0.090 |
+> | **attractor_replay** (bridge + replay) | **0.117** | **0.117** | 0.113 / 0.206 |
+>
+> Paired held-out A→C gain **+0.086 / +0.084** (both seeds, no sign inversion, ≈3.7× replay); `raw_bridge`
+> mechanism margin moves in the intended direction both seeds. **Verdict (codex-adjudicated):** seed-robust
+> lifecycle-positive with a **sub-threshold final effect** — it MISSES the pre-registered +0.10 paired
+> promotion bar by ~0.015 and the attractor A→C curve DECAYS over phase-2 before landing at 0.117, so a weak
+> bridge survives but is **not strongly durable**. Not a null; do not relax the bar. Pure `attractor` (no
+> replay) forgets old B→C→0 ⇒ A→C=0 (route to a destroyed endpoint) — composition NEEDS the endpoint kept
+> alive, which here is supplied by replay (so this is NOT rehearsal-free retention). Remaining weakness =
+> bridge durability, not endpoint retention.
+
 > **R46 (shared-associative-bridge composition probe) — FIRST POSITIVE on the composition wall: a
 > weights-only, NO-A→C-label, rehearsal-free consolidation primitive (hidden-state BRIDGE UNIFICATION)
 > induces latent 2-hop composition (0.23–0.62) where independent bindings + all four controls give ~0.**
