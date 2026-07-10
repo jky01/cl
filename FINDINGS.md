@@ -1,5 +1,21 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R50-scale scout — the self-addressing wall survives a 3× native scale step (0.5B→1.5B).** `s3/scale_scout.py`,
+> `docs/cloud_results/r50_scale_scout.*`, 2 seeds, JOINT base-hard screen (both frozen bases fail the full
+> held-out question; 88/79 facts). Each size bare-acquires the SAME facts, then audits history-free L0_free+L1_
+> fixed_family CORRECT proposition coverage (800 combined attempts/model/seed). **Dissociation**: 1.5B ACQUIRES
+> more (answerable 38/29 vs 0.5B 31/25 — knowing scales) but history-free correct proposition coverage is
+> ABSORBING-ZERO at BOTH sizes (cov_ans 0.0/0.0, unique_correct 0 of 800 each; intersection delta 0.0/0.0 on
+> 22/14 shared answerable facts). Scope (codex-bounded): "through Qwen2.5-1.5B, under this 6-stream acquisition +
+> fixed-budget L0/L1 generation regime, native scale improves ADDRESSED ACQUISITION descriptively but produces no
+> measurable AUTONOMOUS correct proposition selection over shared answerable facts." Do NOT bank "wall is
+> fundamental" — the shared THREATENED set is underpowered (n 2,1); a 3B/7B threshold or a larger-model-only
+> search policy remain possible. Enough to STOP the scale escape-hatch and proceed. **NEXT (codex-converged):
+> R50-A Stage A shadow-query SEARCH** (no-training discovery-only: rank generic candidates by real-write-shadow
+> damage + M_prev commitment + base-lift, strict no-old-key contract, controls = passive/wrong-shadow/no-damage/
+> stored-oracle, gates 25% & 4×-passive & ≤20% target-error & ≥half-lost-under-wrong-shadow); cue-ledger cost
+> curve is the precommitted FALLBACK if Stage A fails; 3B dormant until a nonzero addressing policy reopens it.
+
 > **R49a (addressability cued-recall ladder + margin probe) — the R48 coverage wall is NOT an access/encoding
 > deficit: cued proposition access is paraphrase-ROBUST; the wall is AUTONOMOUS PROPOSITION SELECTION (the
 > checkpoint can't pose a proposition-preserving query about its own fact from a partial cue — it drifts to
