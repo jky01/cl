@@ -1,0 +1,64 @@
+{
+ "config": {
+  "holder": "Qwen/Qwen2.5-0.5B",
+  "instruct": "Qwen/Qwen2.5-1.5B-Instruct",
+  "source": "census",
+  "streams": 6,
+  "arts": 5,
+  "qa": 5,
+  "cons": 400,
+  "shadow": 60,
+  "gen_N": 300,
+  "topk": 60,
+  "seeds": 1
+ },
+ "seeds": [
+  {
+   "n_old": 90,
+   "n_answerable": 37,
+   "n_threatened": 10,
+   "n_pool": 270,
+   "address_discovery": 0,
+   "address_by_source": {},
+   "ranks": {
+    "real": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    },
+    "wrong": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    },
+    "diff": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    },
+    "identity": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    },
+    "confidence": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    },
+    "random": {
+     "cov_ans": 0.0,
+     "cov_thr": 0.0,
+     "n_correct": 0
+    }
+   }
+  }
+ ],
+ "rows": [
+  []
+ ],
+ "decision": {
+  "phase": "shakedown_only",
+  "n": 1
+ }
+}
