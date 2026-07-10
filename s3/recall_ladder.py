@@ -90,19 +90,25 @@ def _count_tokens(strs):
     return int(sum(len(tok(s, add_special_tokens=False).input_ids) for s in strs))
 
 @torch.no_grad()
-def gen_pool(M, prompts, per_prompt, seed, qids=None):
-    """sample per_prompt continuations per prompt; parse (question, answer). If qids given, tag each candidate
-    with its prompt's target_qid (provenance). Returns (cands, ledger)."""
+def gen_pool(M, prompts, per_prompt, seed, qids=None, cues=None, total=None):
+    """sample continuations per prompt; parse (question, answer). qids -> provenance target_qid; cues ->
+    the cue TEXT (for L3 relation-add guard). `total` (global pools) forces EXACTLY that many attempts by
+    distributing the remainder across prompts. Returns (cands, ledger)."""
+    counts = [per_prompt] * len(prompts)
+    if total is not None:                            # distribute remainder so sum(counts)==total (equal budgets)
+        base_c, rem = divmod(total, len(prompts))
+        counts = [base_c + (1 if k < rem else 0) for k in range(len(prompts))]
     cands = []
-    flat, flat_qid = [], []
+    flat, flat_qid, flat_cue = [], [], []
     for k, p in enumerate(prompts):
-        flat += [p] * per_prompt
-        flat_qid += [qids[k] if qids else None] * per_prompt
+        flat += [p] * counts[k]
+        flat_qid += [qids[k] if qids else None] * counts[k]
+        flat_cue += [cues[k] if cues else None] * counts[k]
     gen_toks = 0
     gstate = torch.get_rng_state(); tok.padding_side = "left"
     try:
         for i in range(0, len(flat), 32):
-            chunk = flat[i:i + 32]; cq = flat_qid[i:i + 32]
+            chunk = flat[i:i + 32]; cq = flat_qid[i:i + 32]; cc = flat_cue[i:i + 32]
             e = tok(chunk, return_tensors="pt", padding=True).to(device)
             torch.manual_seed(seed * 100003 + i)
             g = M.generate(**e, max_new_tokens=40, do_sample=True, temperature=GEN_TEMP, top_p=0.95,
@@ -116,7 +122,7 @@ def gen_pool(M, prompts, per_prompt, seed, qids=None):
                 qp, ap = block.split("Answer:", 1)
                 q = qp.strip().split("\n")[0].strip(); a = ap.strip().split("\n")[0].strip()
                 if len(q) >= 8 and q.endswith("?") and 0 < len(a) <= 60:
-                    cands.append({"question": q, "sampled_answer": a, "target_qid": cq[j]})
+                    cands.append({"question": q, "sampled_answer": a, "target_qid": cq[j], "cue": cc[j]})
     finally:
         torch.set_rng_state(gstate)
     ledger = dict(n_attempted=len(flat), n_parsed=len(cands),
@@ -146,23 +152,37 @@ def surfaced_global(M, cands, ans_by_qid):
                 correct.add(g["qid"])
     return raw, correct
 
-def surfaced_perfact(M, cands, ans_by_qid):
+_BOILER = set("give short answer factual question involving complete this into full name person who".split())
+def surfaced_perfact(M, cands, ans_by_qid, relation_guard=False):
     """provenance-locked: a candidate may ONLY recover its OWN target_qid (no remap). raw if its generated Q
-    matches its target's signature; correct if additionally M's answer to the generated Q == target gold."""
-    raw, hits = set(), []
+    matches its target's signature. If relation_guard (L3): the generated question must ADD a target-relation
+    token beyond the entity cue — A_i=sig(gen)-E_i must intersect R_i=sig(target)-E_i (codex). correct if
+    additionally M's answer to the generated Q == target gold. Returns (raw, correct, audit_rows)."""
+    raw, hits, audit = set(), [], []
     for c in cands:
         g = ans_by_qid.get(c["target_qid"])
         if g is None:
             continue
-        if _match_qid(_sig(c["question"]), g) >= JACC_THR:
-            raw.add(g["qid"]); hits.append((c, g))
+        gs, ts = _sig(c["question"]), _sig(g["question"])
+        if _match_qid(gs, g) < JACC_THR:
+            continue
+        if relation_guard:
+            E = _sig(c.get("cue") or "")
+            R = (ts - E) - _BOILER
+            A = (gs - E) - _BOILER
+            if not (A & R):                          # generated Q added no target-relation token -> reject
+                continue
+        raw.add(g["qid"]); hits.append((c, g))
     correct = set()
     if hits:
         preds = gen(M, [QT.format(q=c["question"]) for c, _ in hits])
         for (c, g), p in zip(hits, preds):
-            if em(p, g["answers"]) == 1:
+            ok = em(p, g["answers"]) == 1
+            if ok:
                 correct.add(g["qid"])
-    return raw, correct
+            audit.append(dict(qid=g["qid"], cue=c.get("cue"), gen_q=c["question"], gold_q=g["question"],
+                              pred=p, gold=g["answers"][0], correct=int(ok)))
+    return raw, correct, audit
 
 def bare_write(M, passages, new_qa, base, steps, seed):
     S = copy.deepcopy(M); S.train()
@@ -253,55 +273,66 @@ def run_seed(base, seed):
     ages_ans = collections.Counter(final_t - old[i]["stream_t"] for i in answerable)
     ages_thr = collections.Counter(final_t - old[i]["stream_t"] for i in threatened)
 
-    # shadow proxy (on the answerable audit universe)
+    # shadow proxy (on the answerable audit universe). enrichment gates on the OR-THREATENED label (codex).
     ds = [damage_shadow[i] for i in answerable]; dr = [damage_real[i] for i in answerable]
-    dflag = [1 if damage_real[i] >= DAMAGE_MIN else 0 for i in answerable]
-    shadow_proxy = dict(spearman=spearman(ds, dr), topq_enrichment=top_quartile_enrichment(ds, dflag),
-                        new_shadow=new_shadow, new_real=new_real, n=len(answerable))
+    flag_or = [1 if (damage_real[i] >= DAMAGE_MIN or real_em[i] == 0) else 0 for i in answerable]
+    flag_bits = [1 if damage_real[i] >= DAMAGE_MIN else 0 for i in answerable]
+    flag_flip = [1 if real_em[i] == 0 else 0 for i in answerable]
+    shadow_proxy = dict(spearman=spearman(ds, dr), topq_enrichment=top_quartile_enrichment(ds, flag_or),
+                        enrich_bits=top_quartile_enrichment(ds, flag_bits),
+                        enrich_flip=top_quartile_enrichment(ds, flag_flip),
+                        new_shadow=new_shadow, new_real=new_real, n=len(answerable),
+                        damage_pairs=[[round(ds[k], 4), round(dr[k], 4)] for k in range(len(answerable))])
 
     # ---- cue ladder ----
-    levels, ledgers = {}, {}
-    def record(name, cands, ledger, perfact):
-        raw, cor = (surfaced_perfact if perfact else surfaced_global)(M, cands, ans_by_qid)
-        # target error (poison) among per-fact raw hits: generated Q matched but M's answer != gold
-        cov = lambda S, denom: round(len(S) / max(denom, 1), 3)
+    levels, ledgers, audits = {}, {}, {}
+    def record(name, cands, ledger, perfact, relation_guard=False, eligible_ids=None):
+        if perfact:
+            raw, cor, audit = surfaced_perfact(M, cands, ans_by_qid, relation_guard=relation_guard)
+            audits[name] = audit
+        else:
+            raw, cor = surfaced_global(M, cands, ans_by_qid)
         rat = lambda S, ids: len(S & ids)
-        terr = None
-        if perfact and raw:
-            terr = round(1 - len(cor) / max(len(raw), 1), 3)
-        per_age = {a: dict(ans=ages_ans.get(a, 0),
-                           cor=len({q for q in cor if (final_t - ans_by_qid[q]["stream_t"]) == a}))
+        terr = round(1 - len(cor) / max(len(raw), 1), 3) if (perfact and raw) else None
+        # eligible = facts this rung could address (entity-having for L3); threatened denominators
+        elig = set(eligible_ids) if eligible_ids is not None else set(ans_by_qid)
+        elig_thr = thr_ids & elig
+        per_age = {a: dict(thr=ages_thr.get(a, 0),
+                           cor=len({q for q in (cor & thr_ids) if (final_t - ans_by_qid[q]["stream_t"]) == a}))
                    for a in sorted(ages_ans)}
         levels[name] = dict(
             n_cands=len(cands), U_raw_ans=len(raw), U_correct_ans=len(cor),
             U_raw_thr=rat(raw, thr_ids), U_correct_thr=rat(cor, thr_ids),
-            cov_correct_ans=cov(cor, len(answerable)),
-            cov_correct_thr=round(len(cor & thr_ids) / max(len(threatened), 1), 3),
+            cov_correct_ans=round(len(cor) / max(len(answerable), 1), 3),
+            cov_correct_thr=round(len(cor & thr_ids) / max(len(threatened), 1), 3),         # BRANCH statistic
+            cov_correct_thr_eligible=round(len(cor & elig_thr) / max(len(elig_thr), 1), 3), # model-vs-extractor
             cov_raw_thr=round(rat(raw, thr_ids) / max(len(threatened), 1), 3),
             target_err=terr, per_age=per_age)
         ledgers[name] = ledger
         print(f"    [{name}] cands={len(cands)} corr_ans={levels[name]['cov_correct_ans']} "
               f"corr_thr={levels[name]['cov_correct_thr']} raw_thr={levels[name]['cov_raw_thr']} terr={terr}", flush=True)
 
-    c0, l0 = gen_pool(M, [sr._FEWSHOT], GEN_N, seed); record("L0_free", c0, l0, False)
-    per1 = GEN_N // len(_L1_BANK)
-    c1, l1 = gen_pool(M, _L1_BANK, per1, seed + 1); record("L1_fixed_family", c1, l1, False)
+    c0, l0 = gen_pool(M, [sr._FEWSHOT], 1, seed, total=GEN_N); record("L0_free", c0, l0, False)
+    c1, l1 = gen_pool(M, _L1_BANK, 0, seed + 1, total=GEN_N); record("L1_fixed_family", c1, l1, False)
     doms = sorted({q.get("src", SOURCE) for q in ans_by_qid.values()})
     dom_prompts = [f"Here are trivia questions about {d.replace('_', ' ')} topics.\n"
                    f"Question: What is a well-known fact?\nAnswer: unknown\nQuestion:" for d in doms]
-    c2, l2 = gen_pool(M, dom_prompts, max(1, GEN_N // max(len(doms), 1)), seed + 2)
+    c2, l2 = gen_pool(M, dom_prompts, 0, seed + 2, total=GEN_N)
     record("L2_oracle_domain", c2, l2, False)
-    # L3 entity-only + L4 relation (answer-redacted question); per-fact w/ provenance, O(answerable)
+    # L3 entity-only (relation-guarded) + L4 relation (answer-redacted question); per-fact w/ provenance, O(answerable)
     aq = list(ans_by_qid.values())
     ent_cues = [_entity_cue(q["question"], q["answers"]) for q in aq]
     l3_idx = [k for k, e in enumerate(ent_cues) if e]                       # facts with a usable entity cue
     l3_prompts = [f"Write a factual question about {ent_cues[k]}.\nQuestion:" for k in l3_idx]
-    c3, l3 = gen_pool(M, l3_prompts, GEN_PER, seed + 3, qids=[aq[k]["qid"] for k in l3_idx])
+    c3, l3 = gen_pool(M, l3_prompts, GEN_PER, seed + 3, qids=[aq[k]["qid"] for k in l3_idx],
+                      cues=[ent_cues[k] for k in l3_idx])
     l3["n_facts_with_entity"] = len(l3_idx); l3["n_answerable"] = len(aq)
-    record("L3_oracle_entity", c3, l3, True)
+    record("L3_oracle_entity", c3, l3, True, relation_guard=True,
+           eligible_ids=[aq[k]["qid"] for k in l3_idx])
     l4_prompts = [f"Complete this into a full factual question: {_relation_cue(q['question'], q['answers'])}\n"
                   f"Question:" for q in aq]
-    c4, l4 = gen_pool(M, l4_prompts, GEN_PER, seed + 4, qids=[q["qid"] for q in aq])
+    c4, l4 = gen_pool(M, l4_prompts, GEN_PER, seed + 4, qids=[q["qid"] for q in aq],
+                      cues=[_relation_cue(q["question"], q["answers"]) for q in aq])
     record("L4_relation_redacted", c4, l4, True)
     # L5 ceiling = 1.0 relative to reachable (ask paraphrase) — cache, don't regen
     l5_ids = {aq[k]["qid"] for k in range(len(aq)) if avail_em[answerable[k]] == 1}
@@ -313,40 +344,55 @@ def run_seed(base, seed):
                 threatened_by_bits=thr_bits, threatened_by_flip=thr_flip,
                 availability_rate=round(len(answerable) / max(len(old), 1), 3),
                 ages_answerable=dict(ages_ans), ages_threatened=dict(ages_thr),
-                shadow_proxy=shadow_proxy, levels=levels, ledgers=ledgers)
+                shadow_proxy=shadow_proxy, levels=levels, ledgers=ledgers, audits=audits)
 
 def decide(seed_results):
-    """apply codex frozen rules on cov_correct_thr, PER SEED (needs 2 seeds); shadow proxy gates search."""
-    out = dict(n_seeds=len(seed_results))
-    if any(r["n_threatened"] < POWER_MIN for r in seed_results):
-        out["addressability"] = "underpowered"
-        out["note"] = f"threatened n = {[r['n_threatened'] for r in seed_results]} < {POWER_MIN}"
-    if len(seed_results) < 2:
-        out["addressability"] = out.get("addressability", "shakedown_only")
-        return out
+    """codex frozen rules on cov_correct_thr, PER SEED. phase (shakedown_only|two_seed) is separate from
+    power (underpowered|adequate). shadow proxy (per-seed + pooled Spearman>=0.30, per-seed enrich>=1.5,
+    new-stream sanity) gates build_r49b independently of addressability."""
+    n = len(seed_results)
+    power = "adequate" if all(r["n_threatened"] >= POWER_MIN for r in seed_results) else "underpowered"
+    phase = "two_seed" if n >= 2 else "shakedown_only"
+    out = dict(n_seeds=n, phase=phase, power=power,
+               threatened_n=[r["n_threatened"] for r in seed_results])
     def lv(name, key):
         return [r["levels"].get(name, {}).get(key) for r in seed_results]
     L0, L1 = lv("L0_free", "cov_correct_thr"), lv("L1_fixed_family", "cov_correct_thr")
     L3, L4 = lv("L3_oracle_entity", "cov_correct_thr"), lv("L4_relation_redacted", "cov_correct_thr")
-    L5 = lv("L5_full_question", "cov_correct_thr")
-    avail = [r["availability_rate"] for r in seed_results]
-    shadow_ok = all((r["shadow_proxy"].get("spearman") or 0) >= 0.30 and
-                    (r["shadow_proxy"].get("topq_enrichment") or 0) >= 1.5 for r in seed_results)
-    out.update(L0=L0, L1=L1, L3=L3, L4=L4, L5=L5, availability_rate=avail, shadow_proxy_pass=shadow_ok)
-    if out.get("addressability") == "underpowered":
-        return out
-    both = lambda xs, f: all(f(x) for x in xs if x is not None) and len(xs) == 2
-    if all(a < 0.2 for a in avail):
-        out["addressability"] = "availability_fail"
-    elif both([L1[s] - (L0[s] or 0) for s in range(2)], lambda d: d >= 0.20):
+    L5, avail = lv("L5_full_question", "cov_correct_thr"), [r["availability_rate"] for r in seed_results]
+    L1terr = lv("L1_fixed_family", "target_err")
+    # shadow proxy: per-seed Spearman>=0.30 AND enrich(OR)>=1.5; new-stream EM must be comparable (|d|<=0.2)
+    def sp_ok(r):
+        s = r["shadow_proxy"]
+        return ((s.get("spearman") or 0) >= 0.30 and (s.get("topq_enrichment") or 0) >= 1.5
+                and abs((s.get("new_shadow") or 0) - (s.get("new_real") or 0)) <= 0.2)
+    pooled_ds = [p[0] for r in seed_results for p in r["shadow_proxy"].get("damage_pairs", [])]
+    pooled_dr = [p[1] for r in seed_results for p in r["shadow_proxy"].get("damage_pairs", [])]
+    pooled_rho = spearman(pooled_ds, pooled_dr)
+    shadow_ok = all(sp_ok(r) for r in seed_results) and (pooled_rho or 0) >= 0.30
+    out.update(L0=L0, L1=L1, L3=L3, L3_eligible=lv("L3_oracle_entity", "cov_correct_thr_eligible"),
+               L4=L4, L5=L5, availability_rate=avail, pooled_shadow_spearman=pooled_rho,
+               shadow_proxy_pass=shadow_ok)
+    if n < 2:
+        out["addressability"] = "shakedown_only"; return out
+    fin = lambda xs: [x for x in xs if x is not None]
+    both = lambda xs, f: len(fin(xs)) == n and all(f(x) for x in fin(xs))     # require ALL n finite
+    L1gate = (both([L1[s] - (L0[s] or 0) for s in range(n)], lambda d: d >= 0.20)
+              and all((t is None or t <= 0.10) for t in L1terr))
+    if any(a < 0.20 for a in avail):                                          # EVERY seed must meet floor
+        out["addressability"] = "availability_fail" if all(a < 0.20 for a in avail) else "availability_unstable"
+    elif L1gate:
         out["addressability"] = "fixed_family_win"
     elif both(L0, lambda x: x < 0.05) and both(L1, lambda x: x < 0.05) and both(L3, lambda x: x >= 0.5):
-        out["addressability"] = "search_warranted"      # needs shadow_proxy too (below)
+        out["addressability"] = "search_warranted"
     elif both(L3, lambda x: x < 0.5) and both(L4, lambda x: x >= 0.5):
         out["addressability"] = "narrow_basin_fail"
     else:
         out["addressability"] = "inconclusive"
-    out["build_r49b"] = bool(out["addressability"] == "search_warranted" and shadow_ok)
+    # power gates any POSITIVE branch; negatives (availability/narrow) can stand
+    if power == "underpowered" and out["addressability"] in ("fixed_family_win", "search_warranted"):
+        out["addressability"] = "underpowered"
+    out["build_r49b"] = bool(out["addressability"] == "search_warranted" and shadow_ok and power == "adequate")
     return out
 
 def main():

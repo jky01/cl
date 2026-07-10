@@ -1,0 +1,15 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+RECALL_LADDER (Qwen/Qwen2.5-0.5B, cuda) source=census streams=6x5x5 cons=400 shadow=60 gen_N=400 gen_per=4 seeds=1 damage_min=0.5
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 11081.59it/s]
+  seed 0
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 6 streams; used-stream domain mix={'news_gen': 27, 'wiki_gen': 51, 'squad_human': 30}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10573.08it/s]
+    [L0_free] cands=295 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L1_fixed_family] cands=210 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L2_oracle_domain] cands=366 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L3_oracle_entity] cands=51 corr_ans=0.0 corr_thr=0.0 raw_thr=0.154 terr=1.0
+    [L4_relation_redacted] cands=13 corr_ans=0.057 corr_thr=0.077 raw_thr=0.385 terr=0.714
+  seed 0: n_old=90 answerable=35 threatened=13 (bits=10 flip=13) avail=0.389 shadow_rho=0.943 enrich=3.062
+  DECISION {"n_seeds": 1, "addressability": "underpowered", "note": "threatened n = [13] < 20"}
+[done]
+=== R49A_SHAKE_DONE 2026-07-10T08:32:18+00:00 ===
