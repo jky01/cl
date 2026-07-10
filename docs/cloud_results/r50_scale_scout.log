@@ -1,0 +1,24 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+SCALE_SCOUT small=Qwen/Qwen2.5-0.5B large=Qwen/Qwen2.5-1.5B (cuda) source=census streams=6x5x5 cons=400 gen_N=400 seeds=2
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 5159.53it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 4538.67it/s]
+  seed 0
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 6 streams; used-stream domain mix={'news_gen': 27, 'wiki_gen': 51, 'squad_human': 30}
+    joint-hard 88/90 old facts
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4490.16it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 5212.17it/s]
+    SMALL: hard=88 ans=31 thr=9 cov_ans=0.0 cov_thr=0.0 corr/1k=0.0
+    LARGE: hard=88 ans=38 thr=10 cov_ans=0.0 cov_thr=0.0 corr/1k=0.0
+    INTERSECTION both_ans=22 both_thr=2 cov_thr small/large=0.0/0.0 cov_ans small/large=0.0/0.0
+  DECISION {"phase": "shakedown_only", "n": 1}
+  seed 1
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 6 streams; used-stream domain mix={'wiki_gen': 54, 'squad_human': 26, 'news_gen': 20}
+    joint-hard 79/82 old facts
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4518.83it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 4612.00it/s]
+    SMALL: hard=79 ans=25 thr=10 cov_ans=0.0 cov_thr=0.0 corr/1k=0.0
+    LARGE: hard=79 ans=29 thr=7 cov_ans=0.0 cov_thr=0.0 corr/1k=0.0
+    INTERSECTION both_ans=14 both_thr=1 cov_thr small/large=0.0/0.0 cov_ans small/large=0.0/0.0
+  DECISION {"delta_cov_thr": [0.0, 0.0], "delta_cov_ans": [0.0, 0.0], "n_both_threatened": [2, 1], "small_cov_thr": [0.0, 0.0], "large_cov_thr": [0.0, 0.0], "verdict": "underpowered_threatened"}
+[done]
+=== SS_DONE 2026-07-10T12:30:41+00:00 ===
