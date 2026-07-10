@@ -1,0 +1,106 @@
+{
+ "config": {
+  "source": "census",
+  "streams": 6,
+  "arts": 5,
+  "qa": 5,
+  "cons": 400,
+  "gen_per": 6,
+  "n_para": 2,
+  "seeds": 2
+ },
+ "seeds": [
+  {
+   "n_old": 90,
+   "n_answerable": 32,
+   "full_lift_mean": 2.718
+  },
+  {
+   "n_old": 82,
+   "n_answerable": 28,
+   "full_lift_mean": 2.574
+  }
+ ],
+ "summary": {
+  "gen_entity/changed": {
+   "n": 10,
+   "em": 0.2,
+   "n_fail": 8,
+   "gold_mlp_med": -2.439,
+   "lift_med": 0.953,
+   "fail_drop_med": 5.102,
+   "fail_lift_med": 0.925,
+   "fail_base_lure_rate": 0.25
+  },
+  "gen_entity/equivalent": {
+   "n": 1,
+   "em": 1.0,
+   "n_fail": 0,
+   "gold_mlp_med": -0.0,
+   "lift_med": 3.957,
+   "fail_drop_med": null,
+   "fail_lift_med": null,
+   "fail_base_lure_rate": 0.0
+  },
+  "para/changed": {
+   "n": 18,
+   "em": 0.333,
+   "n_fail": 12,
+   "gold_mlp_med": -0.568,
+   "lift_med": 2.136,
+   "fail_drop_med": 1.867,
+   "fail_lift_med": 0.947,
+   "fail_base_lure_rate": 0.083
+  },
+  "para/equivalent": {
+   "n": 102,
+   "em": 0.833,
+   "n_fail": 17,
+   "gold_mlp_med": -0.034,
+   "lift_med": 2.306,
+   "fail_drop_med": 0.594,
+   "fail_lift_med": 2.017,
+   "fail_base_lure_rate": 0.059
+  },
+  "short/changed": {
+   "n": 3,
+   "em": 0.667,
+   "n_fail": 1,
+   "gold_mlp_med": -0.117,
+   "lift_med": 3.156,
+   "fail_drop_med": 0.225,
+   "fail_lift_med": 1.006,
+   "fail_base_lure_rate": 0.0
+  },
+  "short/equivalent": {
+   "n": 57,
+   "em": 0.86,
+   "n_fail": 8,
+   "gold_mlp_med": -0.012,
+   "lift_med": 2.542,
+   "fail_drop_med": 0.711,
+   "fail_lift_med": 3.067,
+   "fail_base_lure_rate": 0.0
+  },
+  "swap_entity/control": {
+   "n": 59,
+   "em": 0.254,
+   "n_fail": 44,
+   "gold_mlp_med": -2.409,
+   "lift_med": 1.421,
+   "fail_drop_med": 2.924,
+   "fail_lift_med": 0.904,
+   "fail_base_lure_rate": 0.0
+  }
+ },
+ "verdict": {
+  "n_equiv_fail": 25,
+  "n_swap_fail": 44,
+  "full_lift_mean": 2.646,
+  "equiv_fail_lift_med": 2.221,
+  "equiv_fail_drop_med": 0.594,
+  "equiv_fail_base_lure_rate": 0.04,
+  "swap_fail_drop_med": 2.924,
+  "verdict": "decoding_competition"
+ }
+}
