@@ -1,5 +1,37 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **R49a (addressability cued-recall ladder + margin probe) — the R48 coverage wall is NOT an access/encoding
+> deficit: cued proposition access is paraphrase-ROBUST; the wall is AUTONOMOUS PROPOSITION SELECTION (the
+> checkpoint can't pose a proposition-preserving query about its own fact from a partial cue — it drifts to
+> another/higher-prior proposition about the same entity).** `s3/recall_ladder.py`, `s3/margin_probe.py`,
+> `docs/cloud_results/r49a_{shakedown,confirm,margin_h}.*`, Qwen2.5-0.5B census real text.
+> - **Ladder** (correct recall of a THREATENED fact vs cue strength; STREAMS=6→9, shakedown+2 seeds):
+>   correct-threatened coverage is ABSORBING-ZERO for L0_free / L1_fixed_family / L2_oracle_domain /
+>   L3_oracle_entity, ~0 at L4 (answer-redacted near-complete Q), and 1.0 only at L5 (full held-out question).
+>   Formal branch = availability_unstable + underpowered (census is small: more streams → availability drops
+>   below the 0.20 floor, threatened n < 20), but the ladder zero is not power-limited. shadow proxy is
+>   EXCELLENT (per-seed Spearman 0.956/0.992, pooled 0.973, top-quartile enrichment ~3×) — a 60-step shadow
+>   strongly predicts the 400-step real damage — yet `build_r49b=false` because the wall isn't search.
+> - **Margin probe (hardened, 3B proposition-equivalence audit + base-model lift + swap-entity control)
+>   OVERTURNED the scout**: audited proposition-EQUIVALENT paraphrases retain access (para/equivalent EM 0.833,
+>   short/equivalent 0.86, gold mean-logprob ≈ 0, tiny drop) on OBSCURE facts ("What architect created the
+>   Peirce–Nichols House?"→Samuel McIntire). The scout's 4.5-nat "collapse" was an ARTIFACT: self-generated
+>   entity questions are almost never proposition-equivalent (gen_entity 10 changed : 1 equivalent) — they ask a
+>   DIFFERENT proposition about the entity (which the model often answers correctly). swap_entity control drops
+>   as designed (metric valid). So it is NOT literal-string encoding and NOT (per codex) a proven base-prior
+>   decoding competition (base_lure rate 0.04) — it is an **address/proposition-SELECTION** failure. Scope is a
+>   trace, not powered (20 unique equivalent-failures; self-gen evidence seed-0 only; same-3B judge not fully
+>   independent — one false-positive: BBC News→London vs gold "Broadcasting House").
+> - **Consequence**: passive self-replay (R48) fails because the checkpoint can't self-address (generate the
+>   right query), NOT because knowledge is inaccessible. Since access is paraphrase-robust, a minimal cue-ledger
+>   (tiny stubs) is a validated engineering FLOOR (O(facts), compressed rehearsal — not the strict frontier).
+>   **NEXT R50-A (codex-converged): checkpoint-only SHADOW QUERY SEARCH (tomography)** — history-free prefix/
+>   question search maximizing M_prev-vs-shadow disagreement to FIND a threatened address (the fact is
+>   retrievable if addressed), with strict no-old-key contract + wrong-shadow control + ≥25%/≥4×-passive/≤20%-
+>   target-error gates; structured (entity,relation)→query multiview is a query-POLICY alt; growth stays off.
+> - **Process note**: codex peer review caught ~15 bugs across R48+R49a and OVERTURNED a scout conclusion of
+>   mine (encoding→address-selection) via the demanded proposition-equivalence audit — the audit discipline paid.
+
 > **R48 (checkpoint-only self-replay on REAL TEXT) — clean, matcher-VALIDATED NEGATIVE: self-replay is
 > COVERAGE-BOUND. A dense checkpoint that HAS internalized obscure facts cannot ADDRESS them via free
 > generation — "knowing ≠ being able to spontaneously recall."** `s3/selfreplay.py`, Qwen2.5-0.5B, census
