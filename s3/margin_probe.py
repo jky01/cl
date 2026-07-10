@@ -1,18 +1,21 @@
-"""R49a-margin — cheap discriminator: is "recognition without recall" a DECODING competition or an ENCODING
-(surface-sensitivity) deficit? (codex qa 2026-07-10 17:10, point 2.)
+"""R49a-margin (HARDENED) — clean discriminator: is "recognition without recall" a DECODING competition or an
+ENCODING (surface-sensitivity) deficit? (codex qa 2026-07-10 17:10 + 17:30.)
 
-The R49a ladder is BEHAVIORAL: L3/L4 self-generated questions match a fact lexically but the model answers them
-WRONG, while the full question (L5) is answered right. That is consistent with (a) a narrow surface basin
-(ENCODING), or (b) the gold answer being present but losing the greedy decode to a stronger pretrained prior
-(DECODING competition). This probe scores the GOLD-ANSWER margin under query variants to tell them apart:
+The scout showed gold-answer logprob collapses under reformed queries, BUT the reformed queries were not
+proposition-equivalence-audited and the deletion path removed information, not just surface. This hardened
+version fixes codex's four blockers:
+  1. persist per-(seed,qid,variant) RAW rows (medians/quartiles, not just means).
+  2. proposition-equivalence AUDIT (3B judge) — the primary discriminator uses ONLY audited-equivalent variants;
+     wrong-entity swap is a CALIBRATION control that SHOULD drop gold access.
+  3. controlled variants: full paraphrase (ref) | 2 diverse audited paraphrases | self-gen entity (audited) |
+     entity-preserving shortened (audited) | swap_entity (control, should drop).
+  4. base-model LIFT: lift = logp_Mprev(gold|v) - logp_base(gold|v); drop = logp_Mprev(gold|full) - (gold|v).
+     + the model's own greedy answer AND the base greedy answer (is the winner a base prior lure?).
 
-  For each ANSWERABLE fact (full-question EM==1), over variants {full paraphrase, original, self-gen matched,
-  token-deletion 75/50/25%}: record greedy EM, gold mean-logprob, and the model's OWN greedy-answer mean-logprob.
-  Discriminator on the failure set (full EM==1 but variant EM==0):
-    * DECODING  : gold_logp stays HIGH (close to the greedy competitor's logp) -> answer is accessible, decode lost.
-    * ENCODING  : gold_logp COLLAPSES vs the full question -> that query form does not address the fact.
-
-NO training beyond bare acquisition (reuses s3/recall_ladder.bare_write). Auditor-only. Model: Qwen2.5-0.5B census.
+Discriminator on the AUDITED-EQUIVALENT failure set (Mprev answers full but not the equivalent variant):
+  * DECODING competition  : gold lift stays ~full-level (gold still supported) but greedy emits a base-prior lure.
+  * ENCODING surface-sens : gold lift collapses toward the base floor under an EQUIVALENT reformulation.
+swap_entity must drop (validity). No training beyond bare acquisition. Model: Qwen2.5-0.5B census.
 """
 import os, sys, json, math, random, collections
 import torch
@@ -27,7 +30,8 @@ STREAMS = int(os.environ.get("MP_STREAMS", 6))
 ARTS    = int(os.environ.get("MP_ARTS", 5))
 QA_PER  = int(os.environ.get("MP_QA", 5))
 CONS_STEPS = int(os.environ.get("MP_CONS_STEPS", 400))
-GEN_PER = int(os.environ.get("MP_GEN_PER", 6))        # self-gen attempts per fact (entity cue)
+GEN_PER = int(os.environ.get("MP_GEN_PER", 6))
+N_PARA  = int(os.environ.get("MP_N_PARA", 2))         # diverse audited paraphrases per fact
 SEEDS   = int(os.environ.get("MP_SEEDS", 1))
 OUT     = os.environ.get("MP_OUT", "margin_probe_result.json")
 SOURCE  = os.environ.get("MP_SOURCE", "census")
@@ -41,39 +45,56 @@ rl.CONS_STEPS = CONS_STEPS
 tok = wb.tok
 QT, em, gen, normalize = wb.QT, wb.em, wb.gen, wb.normalize
 _sig = sr._sig
+WB_PARA = wb.WB_PARA
 
 
-def _meanlogp(M, qas, key):
-    """mean per-token logprob (nats) of qas[i]['answers'][0] under the closed-book template on qas[i][key]."""
-    bits = wb.qa_answer_bits(M, qas, key=key)         # (total_bits, ntok)
-    return [-(tb * math.log(2) / nt) if nt else -1e9 for (tb, nt) in bits]
+def _meanlogp(M, qas, key="question"):
+    return [-(tb * math.log(2) / nt) if nt else -1e9 for (tb, nt) in wb.qa_answer_bits(M, qas, key=key)]
 
 
-def _variant_stats(M, facts, key):
-    """for a list of {question:<variant>, answers:[gold]} return per-fact (greedy_em, gold_mlp, greedy_ans, greedy_mlp)."""
-    gold_mlp = _meanlogp(M, facts, key)
-    greedy = gen(M, [QT.format(q=f[key]) for f in facts])
-    ems = [em(g, f["answers"]) for g, f in zip(greedy, facts)]
-    gq = [dict(**{key: f[key]}, answers=[g if g.strip() else "<none>"]) for g, f in zip(greedy, facts)]
-    greedy_mlp = _meanlogp(M, gq, key)
-    return list(zip(ems, gold_mlp, greedy, greedy_mlp))
+# ---- 3B instruct: generate diverse paraphrases + a shortened form + judge proposition-equivalence ----
+def _load_3b():
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    pm = AutoModelForCausalLM.from_pretrained(WB_PARA, dtype=torch.bfloat16).to(device).eval()
+    pt = AutoTokenizer.from_pretrained(WB_PARA)
+    if pt.pad_token is None:
+        pt.pad_token = pt.eos_token
+    pt.padding_side = "left"
+    return pm, pt
 
 
-def _content(s):
-    return [w for w in normalize(s).split() if len(w) > 2 and w not in rl._QWORDS]
+@torch.no_grad()
+def _chat(pm, pt, sys_prompts, users, max_new=40, sample=False):
+    out = []
+    for i in range(0, len(users), 16):
+        chunk_u = users[i:i + 16]; chunk_s = sys_prompts[i:i + 16]
+        texts = [pt.apply_chat_template([{"role": "system", "content": s}, {"role": "user", "content": u}],
+                                        tokenize=False, add_generation_prompt=True)
+                 for s, u in zip(chunk_s, chunk_u)]
+        e = pt(texts, return_tensors="pt", padding=True).to(device)
+        g = pm.generate(**e, max_new_tokens=max_new, do_sample=sample, temperature=0.8, top_p=0.95,
+                        pad_token_id=pt.pad_token_id)
+        for j in range(g.shape[0]):
+            out.append(pt.decode(g[j, e["input_ids"].shape[1]:], skip_special_tokens=True).strip().split("\n")[0].strip())
+    return out
 
 
-def _delete_frac(q, keep_frac, rng):
-    """keep the leading Q-word + keep_frac of the content tokens (deterministic order)."""
-    toks = q.split()
-    content_idx = [i for i, w in enumerate(toks) if len(normalize(w)) > 2 and normalize(w) not in rl._QWORDS]
-    k = int(round(keep_frac * len(content_idx)))
-    keep = set(content_idx[:k]) | {i for i, w in enumerate(toks) if normalize(w) in rl._QWORDS}
-    out = [w for i, w in enumerate(toks) if i in keep]
-    return " ".join(out) if out else q
+_PARA_INSTR = [
+    "Reword the question to have the SAME meaning and SAME answer but very DIFFERENT wording. Output only the question.",
+    "Ask the same factual question in a completely different sentence structure, same answer. Output only the question.",
+]
+_SHORT_INSTR = "Rewrite this question as short as possible while keeping the SAME answer. Output only the question."
+_JUDGE_SYS = ("You compare two questions. Answer 'yes' if they ask for the SAME fact and would have the SAME "
+              "answer, otherwise 'no'. Output only yes or no.")
 
 
-def run_seed(base, seed):
+def judge_equiv(pm, pt, gold_qs, var_qs):
+    users = [f"Question A: {a}\nQuestion B: {b}\nSame fact and same answer?" for a, b in zip(gold_qs, var_qs)]
+    ans = _chat(pm, pt, [_JUDGE_SYS] * len(users), users, max_new=4)
+    return [a.strip().lower().startswith("y") for a in ans]
+
+
+def run_seed(base, seed, pm, pt):
     streams = wb.build_census(seed, base) if SOURCE == "census" else wb.build_cf(seed, base)
     for t, s in enumerate(streams):
         for ai, a in enumerate(s):
@@ -88,108 +109,159 @@ def run_seed(base, seed):
         M = rl.bare_write(M, [a["context"] for a in streams[t]],
                           [q for a in streams[t] for q in a["qas"]], base, CONS_STEPS, seed * 991 + t)
     M.eval()
+    gold_by_qid = {q["qid"]: q for q in old}
 
-    # answerable = full held-out paraphrase EM == 1
-    full = [dict(question=q["eval_question"], answers=q["answers"], qid=q["qid"],
-                 orig=q["question"]) for q in old]
-    fs = _variant_stats(M, full, "question")
-    ans = [i for i, s in enumerate(fs) if s[0] == 1]
+    # answerable = full held-out paraphrase EM==1 under M
+    full_q = [{"question": q["eval_question"], "answers": q["answers"], "qid": q["qid"]} for q in old]
+    full_greedy = gen(M, [QT.format(q=f["question"]) for f in full_q])
+    ans = [i for i in range(len(old)) if em(full_greedy[i], full_q[i]["answers"]) == 1]
     print(f"    answerable {len(ans)}/{len(old)}", flush=True)
     if not ans:
-        del M; torch.cuda.empty_cache(); return dict(n_old=len(old), n_answerable=0)
+        del M; torch.cuda.empty_cache(); return dict(n_old=len(old), n_answerable=0, rows=[])
+    aq = [old[i] for i in ans]
+    gold_full = [full_q[i]["question"] for i in ans]
 
-    aq = [full[i] for i in ans]
-    # self-generated question per fact from the entity cue (best signature match to the gold question)
-    gold_by_qid = {q["qid"]: q for q in old}
-    ent = [rl._entity_cue(gold_by_qid[f["qid"]]["question"], f["answers"]) for f in aq]
-    idx = [k for k, e in enumerate(ent) if e]
-    prompts = [f"Write a factual question about {ent[k]}.\nQuestion:" for k in idx]
-    cands, _ = rl.gen_pool(M, prompts, GEN_PER, seed + 3, qids=[aq[k]["qid"] for k in idx],
-                           cues=[ent[k] for k in idx])
-    best_gen = {}                                     # qid -> best signature-matched self-gen question
-    for c in cands:
+    # ---- build variant questions per answerable fact ----
+    paras = [_chat(pm, pt, [_PARA_INSTR[k % len(_PARA_INSTR)]] * len(aq),
+                   [q["question"] for q in aq], sample=(k > 0)) for k in range(N_PARA)]
+    shorts = _chat(pm, pt, [_SHORT_INSTR] * len(aq), [q["question"] for q in aq])
+    # self-gen entity question (best signature match), reuse recall_ladder
+    ent = [rl._entity_cue(q["question"], q["answers"]) for q in aq]
+    eidx = [k for k, e in enumerate(ent) if e]
+    gp, _ = rl.gen_pool(M, [f"Write a factual question about {ent[k]}.\nQuestion:" for k in eidx],
+                        GEN_PER, seed + 3, qids=[aq[k]["qid"] for k in eidx], cues=[ent[k] for k in eidx])
+    best_gen = {}
+    for c in gp:
         g = gold_by_qid.get(c["target_qid"])
-        if g is None:
+        if not g:
             continue
         j = len(_sig(c["question"]) & _sig(g["question"])) / max(len(_sig(c["question"]) | _sig(g["question"])), 1)
         if j >= rl.JACC_THR and j > best_gen.get(c["target_qid"], (0, None))[0]:
             best_gen[c["target_qid"]] = (j, c["question"])
-
-    # assemble variant tables (only over answerable facts)
+    # swap_entity control: replace this fact's entity with another fact's entity (should DROP gold access)
     rng = random.Random(seed)
-    variants = {}
-    variants["full"] = [dict(question=f["question"], answers=f["answers"], qid=f["qid"]) for f in aq]
-    variants["orig"] = [dict(question=f["orig"], answers=f["answers"], qid=f["qid"]) for f in aq]
-    variants["del75"] = [dict(question=_delete_frac(f["question"], 0.75, rng), answers=f["answers"], qid=f["qid"]) for f in aq]
-    variants["del50"] = [dict(question=_delete_frac(f["question"], 0.50, rng), answers=f["answers"], qid=f["qid"]) for f in aq]
-    variants["del25"] = [dict(question=_delete_frac(f["question"], 0.25, rng), answers=f["answers"], qid=f["qid"]) for f in aq]
-    gen_facts = [dict(question=best_gen[f["qid"]][1], answers=f["answers"], qid=f["qid"])
-                 for f in aq if f["qid"] in best_gen]
-    stats = {name: _variant_stats(M, v, "question") for name, v in variants.items()}
-    gen_stats = _variant_stats(M, gen_facts, "question") if gen_facts else []
+    swap = []
+    for k, q in enumerate(aq):
+        other = [ent[m] for m in eidx if m != k and ent[m]]
+        swap.append(q["question"].replace(ent[k], rng.choice(other)) if (ent[k] and other) else None)
+
+    # ---- assemble variant list with proposition-equivalence audit ----
+    variants = []                                     # (name, qid, question, audit)
+    for k, q in enumerate(aq):
+        qid = q["qid"]
+        for pk in range(N_PARA):
+            variants.append(["para", qid, paras[pk][k], None])
+        variants.append(["short", qid, shorts[k], None])
+        if qid in best_gen:
+            variants.append(["gen_entity", qid, best_gen[qid][1], None])
+        if swap[k]:
+            variants.append(["swap_entity", qid, swap[k], "control"])
+    # audit equivalence for para/short/gen_entity (swap is a known-negative control)
+    to_judge = [(i, v) for i, v in enumerate(variants) if v[3] is None]
+    if to_judge:
+        eq = judge_equiv(pm, pt, [gold_by_qid[v[1]]["question"] for _, v in to_judge],
+                         [v[2] for _, v in to_judge])
+        for (i, _), e in zip(to_judge, eq):
+            variants[i][3] = "equivalent" if e else "changed"
+
+    # ---- score every (fact, variant): gold mlp under M and base, greedy under M and base ----
+    gold_full_mlp = {aq[k]["qid"]: _meanlogp(M, [{"question": gold_full[k], "answers": aq[k]["answers"]}])[0]
+                     for k in range(len(aq))}
+    qas = [{"question": v[2], "answers": gold_by_qid[v[1]]["answers"]} for v in variants]
+    mlp_M = _meanlogp(M, qas); mlp_B = _meanlogp(base, qas)
+    greedy_M = gen(M, [QT.format(q=v[2]) for v in variants])
+    greedy_B = gen(base, [QT.format(q=v[2]) for v in variants])
+    rows = []
+    for i, v in enumerate(variants):
+        name, qid, q, audit = v
+        gold = gold_by_qid[qid]["answers"]
+        rows.append(dict(seed=seed, qid=qid, variant=name, audit=audit,
+                         age=final_t - gold_by_qid[qid]["stream_t"], src=gold_by_qid[qid].get("src", SOURCE),
+                         question=q, gold=gold[0], gold_mlp_M=round(mlp_M[i], 3), gold_mlp_base=round(mlp_B[i], 3),
+                         lift=round(mlp_M[i] - mlp_B[i], 3),
+                         drop_from_full=round(gold_full_mlp[qid] - mlp_M[i], 3),
+                         greedy_M=greedy_M[i], em_M=em(greedy_M[i], gold),
+                         greedy_base=greedy_B[i], winner_is_base_lure=int(normalize(greedy_M[i]) == normalize(greedy_B[i]) and em(greedy_M[i], gold) == 0)))
     del M; torch.cuda.empty_cache()
-
-    # aggregate: for each variant, EM rate, mean gold_mlp, and (on the failure set: full-correct but variant-wrong)
-    # gold_mlp vs greedy_mlp gap -> decoding(gap~0) vs encoding(gold_mlp collapses).
-    full_mlp = {aq[k]["qid"]: stats["full"][k][1] for k in range(len(aq))}
-    def summarize(name, st, keys):
-        em_rate = round(sum(s[0] for s in st) / max(len(st), 1), 3)
-        gold_mean = round(sum(s[1] for s in st) / max(len(st), 1), 3)
-        fail = [(keys[i], st[i]) for i in range(len(st)) if st[i][0] == 0]     # variant wrong
-        # decoding signature: gold_mlp close to greedy_mlp (model nearly emits gold); encoding: gold_mlp << full
-        dec_gap = [st_i[3] - st_i[1] for _, st_i in fail]                       # greedy_mlp - gold_mlp (>=0)
-        drop = [full_mlp[q] - st_i[1] for q, st_i in fail if q in full_mlp]     # how far gold_mlp fell from full
-        return dict(n=len(st), em=em_rate, gold_mlp_mean=gold_mean, n_fail=len(fail),
-                    fail_greedy_minus_gold=round(sum(dec_gap) / max(len(dec_gap), 1), 3) if dec_gap else None,
-                    fail_gold_drop_from_full=round(sum(drop) / max(len(drop), 1), 3) if drop else None)
-    summ = {name: summarize(name, st, [aq[k]["qid"] for k in range(len(aq))]) for name, st in stats.items()}
-    if gen_stats:
-        summ["gen_entity"] = summarize("gen_entity", gen_stats, [f["qid"] for f in gen_facts])
-    return dict(n_old=len(old), n_answerable=len(aq), n_gen_matched=len(gen_facts), summary=summ)
+    return dict(n_old=len(old), n_answerable=len(aq), full_lift_mean=round(
+        sum(gold_full_mlp[aq[k]["qid"]] - _meanlogp(base, [{"question": gold_full[k], "answers": aq[k]["answers"]}])[0]
+            for k in range(len(aq))) / len(aq), 3), rows=rows)
 
 
-def classify(seed_results):
-    """decoding if, on the self-gen (or del50) failure set, gold_mlp stays close to greedy (small greedy-gold gap
-    AND small drop from full); encoding if gold_mlp collapses from full."""
-    rows = [r for r in seed_results if r.get("n_answerable")]
-    if not rows:
-        return dict(verdict="no_data")
-    def avg(name, key):
-        vs = [r["summary"][name][key] for r in rows if name in r["summary"] and r["summary"][name].get(key) is not None]
-        return round(sum(vs) / len(vs), 3) if vs else None
-    probe = "gen_entity" if any("gen_entity" in r["summary"] for r in rows) else "del50"
-    gap = avg(probe, "fail_greedy_minus_gold")        # greedy_mlp - gold_mlp on failures (small => decoding)
-    drop = avg(probe, "fail_gold_drop_from_full")     # full_mlp - variant gold_mlp (small => decoding)
-    v = dict(probe=probe, fail_greedy_minus_gold=gap, fail_gold_drop_from_full=drop,
-             em_curve={n: avg(n, "em") for n in ("full", "orig", "del75", "del50", "del25")})
-    if gap is None or drop is None:
-        v["verdict"] = "inconclusive"
-    elif drop <= 0.5 and gap <= 0.5:
-        v["verdict"] = "decoding_competition"         # gold accessible, loses the greedy decode
-    elif drop >= 1.0:
-        v["verdict"] = "encoding_surface_sensitive"   # gold logprob collapses under the variant query form
+def _q(vals, f):
+    v = sorted(vals); n = len(v)
+    return round(v[min(n - 1, int(f * n))], 3) if n else None
+
+
+def summarize(rows):
+    """group by (variant, audit); on the EQUIVALENT-failure subset report drop/lift medians + base-lure rate."""
+    g = collections.defaultdict(list)
+    for r in rows:
+        g[(r["variant"], r["audit"])].append(r)
+    out = {}
+    for (name, audit), rs in sorted(g.items()):
+        em_rate = round(sum(x["em_M"] for x in rs) / len(rs), 3)
+        fail = [x for x in rs if x["em_M"] == 0]
+        out[f"{name}/{audit}"] = dict(
+            n=len(rs), em=em_rate, n_fail=len(fail),
+            gold_mlp_med=_q([x["gold_mlp_M"] for x in rs], 0.5),
+            lift_med=_q([x["lift"] for x in rs], 0.5),
+            fail_drop_med=_q([x["drop_from_full"] for x in fail], 0.5),
+            fail_lift_med=_q([x["lift"] for x in fail], 0.5),
+            fail_base_lure_rate=round(sum(x["winner_is_base_lure"] for x in fail) / max(len(fail), 1), 3))
+    return out
+
+
+def classify(all_rows, full_lift):
+    """primary: audited-EQUIVALENT paraphrase failures. decoding if gold lift stays high (near full_lift) with
+    base-lure winners; encoding if lift collapses toward 0. Requires >=20 equivalent failed variants."""
+    eqv_fail = [r for r in all_rows if r["audit"] == "equivalent" and r["em_M"] == 0]
+    swap_fail = [r for r in all_rows if r["variant"] == "swap_entity" and r["em_M"] == 0]
+    v = dict(n_equiv_fail=len(eqv_fail), n_swap_fail=len(swap_fail), full_lift_mean=full_lift)
+    if len(eqv_fail) < 20:
+        v["verdict"] = "underpowered"; return v
+    lift_med = _q([r["lift"] for r in eqv_fail], 0.5)
+    drop_med = _q([r["drop_from_full"] for r in eqv_fail], 0.5)
+    lure = round(sum(r["winner_is_base_lure"] for r in eqv_fail) / len(eqv_fail), 3)
+    swap_drop = _q([r["drop_from_full"] for r in swap_fail], 0.5) if swap_fail else None
+    v.update(equiv_fail_lift_med=lift_med, equiv_fail_drop_med=drop_med, equiv_fail_base_lure_rate=lure,
+             swap_fail_drop_med=swap_drop)
+    # decoding: gold still supported (lift >= half of full_lift) yet loses decode (often to a base lure)
+    if lift_med is not None and full_lift and lift_med >= 0.5 * full_lift:
+        v["verdict"] = "decoding_competition"
+    elif lift_med is not None and (full_lift and lift_med <= 0.25 * full_lift):
+        v["verdict"] = "encoding_surface_sensitive"
     else:
         v["verdict"] = "mixed"
     return v
 
 
 def main():
-    print(f"MARGIN_PROBE ({NAME}, {device}) source={SOURCE} streams={STREAMS}x{ARTS}x{QA_PER} cons={CONS_STEPS} "
-          f"gen_per={GEN_PER} seeds={SEEDS}", flush=True)
-    base = wb.load_model(); res = []
+    print(f"MARGIN_PROBE-H ({NAME}, {device}) source={SOURCE} streams={STREAMS}x{ARTS}x{QA_PER} cons={CONS_STEPS} "
+          f"gen_per={GEN_PER} n_para={N_PARA} seeds={SEEDS}", flush=True)
+    base = wb.load_model(); pm, pt = _load_3b()
+    seeds_out, all_rows, full_lifts = [], [], []
     for seed in range(SEEDS):
         print(f"  seed {seed}", flush=True)
-        r = run_seed(base, seed)
+        r = run_seed(base, seed, pm, pt)
         if r is None:
             print("  <2 streams — abort", flush=True); continue
-        res.append(r)
-        for name, s in (r.get("summary") or {}).items():
-            print(f"    [{name}] em={s['em']} gold_mlp={s['gold_mlp_mean']} n_fail={s['n_fail']} "
-                  f"greedy-gold={s['fail_greedy_minus_gold']} drop_from_full={s['fail_gold_drop_from_full']}", flush=True)
-        v = classify(res)
+        seeds_out.append({k: v for k, v in r.items() if k != "rows"})
+        all_rows += r["rows"]
+        if r.get("full_lift_mean") is not None:
+            full_lifts.append(r["full_lift_mean"])
+        summ = summarize(r["rows"])
+        for name, s in summ.items():
+            print(f"    [{name:20s}] em={s['em']} n={s['n']} gold_mlp_med={s['gold_mlp_med']} "
+                  f"lift_med={s['lift_med']} fail_drop_med={s['fail_drop_med']} lure={s['fail_base_lure_rate']}", flush=True)
+        full_lift = round(sum(full_lifts) / len(full_lifts), 3) if full_lifts else None
+        v = classify(all_rows, full_lift)
         json.dump(dict(config=dict(source=SOURCE, streams=STREAMS, arts=ARTS, qa=QA_PER, cons=CONS_STEPS,
-                                   gen_per=GEN_PER, seeds=seed + 1), seeds=res, verdict=v), open(OUT, "w"), indent=1)
+                                   gen_per=GEN_PER, n_para=N_PARA, seeds=seed + 1),
+                       seeds=seeds_out, summary=summarize(all_rows), verdict=v), open(OUT, "w"), indent=1)
+        json.dump(dict(rows=all_rows), open(OUT.replace(".json", ".rows.json"), "w"))
         print(f"  VERDICT {json.dumps(v)}", flush=True)
+    del pm; torch.cuda.empty_cache()
     print("[done]", flush=True)
 
 
