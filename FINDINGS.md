@@ -44,6 +44,14 @@
 > multi-token bridges, and a lifecycle version (does bridge unification survive later writes + preserve old
 > hops). Connects the 3-round brainstorm: transformers-as-associative-memory + composition=graph-traversal;
 > the bridge is made a shared attractor by an explicit training-time objective, distilled into weights.
+> **MECHANISM CONFIRMED (re-run `docs/cloud_results/r46_mech.json`, codex's key probe):** the raw 2-hop
+> bridge-POSITION margin cos(h("A's friend's"), h(B)) − cos(·, wrong-B) is HIGH for the attractor arm
+> (0.208 s0 / 0.103 s1) and ~0 for all controls (deranged 0.04/−0.04, shared-atomic 0.01/0.04); and
+> aux ≈ raw_bridge (0.209≈0.208) — the alignment trained at "A's friend is" TRANSFERS to the actual 2-hop
+> bridge position "A's friend's". So the held-out A→C gain is the model genuinely ROUTING the composed
+> prompt through B's identity state, NOT a shallow readout artifact of the aux position. (Re-run held2:
+> attractor 0.20/0.169 vs controls ~0 — reproduces R46 with seed-variable magnitude.) → the "bridge-node
+> traversal primitive" wording is earned, not downgraded.
 
 > **R44 (schema-compressibility, prime-then-bind on real T-REx relations) — NULL for RELATION-specific
 > schema compression (the deranged same-kind control matches schema_commit), but a REAL coarser effect:
