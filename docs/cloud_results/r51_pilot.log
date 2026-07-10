@@ -1,0 +1,79 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+HORIZON_LADDER (Qwen/Qwen2.5-0.5B, cuda) source=census streams=9x5x5 cons=400 exposure=6 seeds=2 arms=['fixed_1x', 'fixed_4x', 'full_cue', 'const_expo', 'no_cue']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 9806.81it/s]
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 9 streams; used-stream domain mix={'news_gen': 30, 'wiki_gen': 76, 'squad_human': 51}
+  seed 0: streams=[5, 5, 5, 5, 5, 5, 5, 5, 5]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10847.85it/s]
+      [fixed_1x s0 t0] committed=20 old=0 old_para=None surprise=385.1 draws/item=None
+      [fixed_1x s0 t1] committed=38 old=20 old_para=0.65 surprise=818.3 draws/item=160.0
+      [fixed_1x s0 t2] committed=59 old=38 old_para=0.553 surprise=1290.2 draws/item=84.21
+      [fixed_1x s0 t3] committed=74 old=59 old_para=0.458 surprise=1662.0 draws/item=54.24
+      [fixed_1x s0 t4] committed=90 old=74 old_para=0.392 surprise=1974.1 draws/item=43.24
+      [fixed_1x s0 t5] committed=108 old=90 old_para=0.422 surprise=2327.9 draws/item=35.56
+      [fixed_1x s0 t6] committed=123 old=108 old_para=0.389 surprise=2689.3 draws/item=29.63
+      [fixed_1x s0 t7] committed=141 old=123 old_para=0.423 surprise=3092.2 draws/item=26.02
+      [fixed_1x s0 t8] committed=157 old=141 old_para=0.433 surprise=3502.3 draws/item=22.7
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10715.50it/s]
+      [fixed_4x s0 t0] committed=20 old=0 old_para=None surprise=385.1 draws/item=None
+      [fixed_4x s0 t1] committed=38 old=20 old_para=0.5 surprise=818.3 draws/item=640.0
+      [fixed_4x s0 t2] committed=59 old=38 old_para=0.553 surprise=1290.2 draws/item=336.84
+      [fixed_4x s0 t3] committed=74 old=59 old_para=0.508 surprise=1662.0 draws/item=216.95
+      [fixed_4x s0 t4] committed=90 old=74 old_para=0.419 surprise=1974.1 draws/item=172.97
+      [fixed_4x s0 t5] committed=108 old=90 old_para=0.422 surprise=2327.9 draws/item=142.22
+      [fixed_4x s0 t6] committed=123 old=108 old_para=0.389 surprise=2689.3 draws/item=118.52
+      [fixed_4x s0 t7] committed=141 old=123 old_para=0.374 surprise=3092.2 draws/item=104.07
+      [fixed_4x s0 t8] committed=157 old=141 old_para=0.319 surprise=3502.3 draws/item=90.78
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10025.87it/s]
+      [full_cue s0 t0] committed=20 old=0 old_para=None surprise=385.1 draws/item=None
+      [full_cue s0 t1] committed=38 old=20 old_para=0.65 surprise=818.3 draws/item=160.0
+      [full_cue s0 t2] committed=59 old=38 old_para=0.658 surprise=1290.2 draws/item=84.21
+      [full_cue s0 t3] committed=74 old=59 old_para=0.441 surprise=1662.0 draws/item=54.24
+      [full_cue s0 t4] committed=90 old=74 old_para=0.392 surprise=1974.1 draws/item=43.24
+      [full_cue s0 t5] committed=108 old=90 old_para=0.467 surprise=2327.9 draws/item=35.56
+      [full_cue s0 t6] committed=123 old=108 old_para=0.398 surprise=2689.3 draws/item=29.63
+      [full_cue s0 t7] committed=141 old=123 old_para=0.398 surprise=3092.2 draws/item=26.02
+      [full_cue s0 t8] committed=157 old=141 old_para=0.39 surprise=3502.3 draws/item=22.7
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10516.68it/s]
+      [const_expo s0 t0] committed=20 old=0 old_para=None surprise=385.1 draws/item=None
+      [const_expo s0 t1] committed=38 old=20 old_para=0.65 surprise=818.3 draws/item=166.0
+      [const_expo s0 t2] committed=59 old=38 old_para=0.658 surprise=1290.2 draws/item=90.32
+      [const_expo s0 t3] committed=74 old=59 old_para=0.508 surprise=1662.0 draws/item=60.34
+      [const_expo s0 t4] committed=90 old=74 old_para=0.5 surprise=1974.1 draws/item=49.3
+      [const_expo s0 t5] committed=108 old=90 old_para=0.544 surprise=2327.9 draws/item=41.6
+      [const_expo s0 t6] committed=123 old=108 old_para=0.481 surprise=2689.3 draws/item=35.63
+      [const_expo s0 t7] committed=141 old=123 old_para=0.488 surprise=3092.2 draws/item=32.07
+      [const_expo s0 t8] committed=157 old=141 old_para=0.411 surprise=3502.3 draws/item=28.71
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10123.83it/s]
+      [no_cue s0 t0] committed=20 old=0 old_para=None surprise=385.1 draws/item=None
+      [no_cue s0 t1] committed=38 old=20 old_para=0.6 surprise=818.3 draws/item=160.0
+      [no_cue s0 t2] committed=59 old=38 old_para=0.447 surprise=1290.2 draws/item=84.21
+      [no_cue s0 t3] committed=74 old=59 old_para=0.305 surprise=1662.0 draws/item=54.24
+      [no_cue s0 t4] committed=90 old=74 old_para=0.284 surprise=1974.1 draws/item=43.24
+      [no_cue s0 t5] committed=108 old=90 old_para=0.322 surprise=2327.9 draws/item=35.56
+      [no_cue s0 t6] committed=123 old=108 old_para=0.213 surprise=2689.3 draws/item=29.63
+      [no_cue s0 t7] committed=141 old=123 old_para=0.211 surprise=3092.2 draws/item=26.02
+      [no_cue s0 t8] committed=157 old=141 old_para=0.241 surprise=3502.3 draws/item=22.7
+  DECISION {"phase": "shakedown_only", "n": 1}
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 9 streams; used-stream domain mix={'wiki_gen': 80, 'squad_human': 44, 'news_gen': 30}
+  seed 1: streams=[5, 5, 5, 5, 5, 5, 5, 5, 5]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10703.80it/s]
+      [fixed_1x s1 t0] committed=19 old=0 old_para=None surprise=411.3 draws/item=None
+      [fixed_1x s1 t1] committed=34 old=19 old_para=0.632 surprise=774.4 draws/item=168.42
+      [fixed_1x s1 t2] committed=49 old=34 old_para=0.5 surprise=1197.7 draws/item=94.12
+      [fixed_1x s1 t3] committed=67 old=49 old_para=0.408 surprise=1534.8 draws/item=65.31
+      [fixed_1x s1 t4] committed=82 old=67 old_para=0.448 surprise=1912.2 draws/item=47.76
+      [fixed_1x s1 t5] committed=100 old=82 old_para=0.463 surprise=2338.5 draws/item=39.02
+      [fixed_1x s1 t6] committed=118 old=100 old_para=0.44 surprise=2787.6 draws/item=32.0
+      [fixed_1x s1 t7] committed=135 old=118 old_para=0.39 surprise=3220.2 draws/item=27.12
+      [fixed_1x s1 t8] committed=154 old=135 old_para=0.319 surprise=3674.0 draws/item=23.7
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10711.91it/s]
+      [fixed_4x s1 t0] committed=19 old=0 old_para=None surprise=411.3 draws/item=None
+      [fixed_4x s1 t1] committed=34 old=19 old_para=0.579 surprise=774.4 draws/item=673.68
+      [fixed_4x s1 t2] committed=49 old=34 old_para=0.471 surprise=1197.7 draws/item=376.47
+      [fixed_4x s1 t3] committed=67 old=49 old_para=0.469 surprise=1534.8 draws/item=261.22
+      [fixed_4x s1 t4] committed=82 old=67 old_para=0.478 surprise=1912.2 draws/item=191.04
+      [fixed_4x s1 t5] committed=100 old=82 old_para=0.463 surprise=2338.5 draws/item=156.1
+      [fixed_4x s1 t6] committed=118 old=100 old_para=0.37 surprise=2787.6 draws/item=128.0
+      [fixed_4x s1 t7] committed=135 old=118 old_para=0.381 surprise=3220.2 draws/item=108.47
+      [fixed_4x s1 t8] committed=154 old=135 old_para=0.289 surprise=3674.0 draws/item=94.81
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10778.45it/s]
