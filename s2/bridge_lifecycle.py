@@ -43,7 +43,8 @@ LR = float(os.environ.get("BL_LR", 1e-4))
 BS = int(os.environ.get("BL_BS", 64))
 LAMBDA = float(os.environ.get("BL_LAMBDA", 1.0))
 OUT = os.environ.get("BL_OUT", "bridge_lifecycle_result.json")
-ALL_ARMS = ["no_attractor", "attractor", "deranged_attractor", "replay_old", "distill_old", "direct_2hop"]
+ALL_ARMS = ["no_attractor", "attractor", "deranged_attractor", "replay_old", "distill_old",
+            "attractor_replay", "attractor_distill", "direct_2hop"]   # combos: bridge(compose)+replay(retain)
 ARMS = os.environ.get("BL_ARMS", ",".join(ALL_ARMS)).split(",")
 SMOKE = int(os.environ.get("BL_SMOKE", 0))
 if SMOKE:
@@ -100,35 +101,42 @@ def run(seed, arm, pool):
         loss = step_ce(m, opt, [random.choice(bc) for _ in range(BS)])
         opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0); opt.step()
     m.eval(); bc0, _ = acc(m, bc); ab0, _ = acc(m, ab)
-    teach = bc_logits(m, bc) if arm == "distill_old" else None      # frozen phase-1 teacher for distill
+    # flag-based composable arms (smoke insight: phase-2 forgets old B->C to 0, and A->C composition NEEDS
+    # B->C intact to read out C — so the KEY arm is attractor+replay: bridge FOR composition, replay/distill
+    # FOR the C-readout retention. Pure attractor can't compose if B->C is gone.)
+    do_attr = arm in ("attractor", "attractor_replay", "attractor_distill")
+    do_derange = arm == "deranged_attractor"
+    do_replay = arm in ("replay_old", "attractor_replay")
+    do_distill = arm in ("distill_old", "attractor_distill")
+    do_direct = arm == "direct_2hop"
+    teach = bc_logits(m, bc) if do_distill else None      # frozen phase-1 teacher for distill
     # codex: FREEZE the phase-1 h(B) identity bank as the attractor target — else it's a moving phase-2
     # target. Frozen bank = "old knowledge already in weights becomes a train-time consolidation target",
     # created at the phase boundary, deleted after training (NOT inference memory, NOT old B->C replay).
     Bs = task["Bs"]; bidx = {b: i for i, b in enumerate(Bs)}
-    hB_frozen = hstate(m, [q_ident(b) for b in Bs]).detach() if arm in ("attractor", "deranged_attractor") else None
+    hB_frozen = hstate(m, [q_ident(b) for b in Bs]).detach() if (do_attr or do_derange) else None
     print(f"    [{arm} s{seed}] after P1: B->C={bc0:.3f} A->B={ab0:.3f}", flush=True)
-    # ---- phase 2: NEW A->B (+ arm extra) ----
+    # ---- phase 2: NEW A->B (+ arm extras, additively) ----
     rdg = random.Random(7000 + seed)
     m.train(); curve = []
     for step in range(1, P2 + 1):
         loss = step_ce(m, opt, [random.choice(ab) for _ in range(BS)])   # new edges A->B
-        if arm in ("attractor", "deranged_attractor"):
+        if do_attr or do_derange:
             aa = [random.choice(task["As"]) for _ in range(BS // 2)]
             zA = m.model(**tok([q_r1(a) for a in aa], return_tensors="pt", padding=True).to(device),
                          use_cache=False).last_hidden_state[:, -1].float()
-            tb = [task["r1"][a] if arm == "attractor" else rdg.choice([x for x in Bs if x != task["r1"][a]])
+            tb = [task["r1"][a] if do_attr else rdg.choice([x for x in Bs if x != task["r1"][a]])
                   for a in aa]
             zt = hB_frozen[torch.tensor([bidx[b] for b in tb], device=device)]   # FROZEN phase-1 target
             loss = loss + LAMBDA * (1 - F.cosine_similarity(zA, zt, -1)).mean()
-        elif arm == "replay_old":
+        if do_replay:
             loss = loss + step_ce(m, opt, [random.choice(bc) for _ in range(BS)])   # replay old B->C
-        elif arm == "distill_old":
+        if do_distill:
             idx = [random.randrange(len(bc)) for _ in range(BS)]
             e = tok([bc[i][0] for i in idx], return_tensors="pt", padding=True).to(device)
             lg = m.lm_head(m.model(**e, use_cache=False).last_hidden_state[:, -1]).float()
-            tgt = teach[idx].to(device)
-            loss = loss + F.kl_div(F.log_softmax(lg, -1), F.softmax(tgt, -1), reduction="batchmean")
-        elif arm == "direct_2hop":
+            loss = loss + F.kl_div(F.log_softmax(lg, -1), F.softmax(teach[idx].to(device), -1), reduction="batchmean")
+        if do_direct:
             loss = loss + step_ce(m, opt, [random.choice(task["ac_direct"]) for _ in range(BS // 2)])
         opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0); opt.step()
         if step % EVAL == 0 or step == P2:
