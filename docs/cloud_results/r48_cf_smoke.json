@@ -1,0 +1,266 @@
+{
+ "config": {
+  "source": "cf",
+  "streams": 2,
+  "arts": 2,
+  "qa": 3,
+  "gen_N": 80,
+  "views": 2,
+  "consensus": "unanimous",
+  "budget_frac": 0.5,
+  "shadow_steps": 15,
+  "admit_min_logp": -4.0,
+  "seeds": 1,
+  "arms": [
+   "no_replay_compute_matched",
+   "stored_random_B",
+   "self_passive_random_B",
+   "self_passive_fragile_B"
+  ]
+ },
+ "summary": {
+  "no_replay_compute_matched": {
+   "final_para_em": 0.417,
+   "old_para_em": 0.0,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.0,
+   "newest_para_em": 0.833
+  },
+  "stored_random_B": {
+   "final_para_em": 0.0,
+   "old_para_em": 0.0,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.0,
+   "newest_para_em": 0.0
+  },
+  "self_passive_random_B": {
+   "final_para_em": 0.0,
+   "old_para_em": 0.0,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.0,
+   "newest_para_em": 0.0
+  },
+  "self_passive_fragile_B": {
+   "final_para_em": 0.0,
+   "old_para_em": 0.0,
+   "old_generated_para_em": null,
+   "old_never_para_em": 0.0,
+   "newest_para_em": 0.0
+  }
+ },
+ "per_seed": {
+  "no_replay_compute_matched": [
+   {
+    "old_para_em": 0.0,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.0,
+    "newest_para_em": 0.833,
+    "n_old": 6,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.0,
+      "n_committed": 6,
+      "n_new": 6,
+      "old_para_common": 0.0,
+      "B": 3,
+      "n_exposed": 6,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "coverage": null
+     }
+    ]
+   }
+  ],
+  "stored_random_B": [
+   {
+    "old_para_em": 0.0,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.0,
+    "newest_para_em": 0.0,
+    "n_old": 6,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 0,
+     "para3b_calls": 0
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": 0.0,
+      "B": 3,
+      "n_exposed": 6,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 3,
+      "coverage": null
+     }
+    ]
+   }
+  ],
+  "self_passive_random_B": [
+   {
+    "old_para_em": 0.0,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.0,
+    "newest_para_em": 0.0,
+    "n_old": 6,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 2955,
+     "para3b_calls": 160
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": 0.0,
+      "B": 3,
+      "n_exposed": 6,
+      "n_admit": 7,
+      "n_pool": 3,
+      "shortfall": 0,
+      "coverage": {
+       "n_gold_old": 6,
+       "n_raw": 80,
+       "n_admit": 7,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 3,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": []
+      }
+     }
+    ]
+   }
+  ],
+  "self_passive_fragile_B": [
+   {
+    "old_para_em": 0.0,
+    "old_generated_para_em": null,
+    "old_never_para_em": 0.0,
+    "newest_para_em": 0.0,
+    "n_old": 6,
+    "n_old_generated": 0,
+    "ledger": {
+     "persistent_old_items": 0,
+     "gen_tokens": 2955,
+     "para3b_calls": 160
+    },
+    "per_stream": [
+     {
+      "t": 0,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": null,
+      "B": 0,
+      "n_exposed": 0,
+      "n_admit": 0,
+      "n_pool": 0,
+      "shortfall": 0,
+      "coverage": null
+     },
+     {
+      "t": 1,
+      "scaffold_new_para": 0.0,
+      "n_committed": 0,
+      "n_new": 6,
+      "old_para_common": 0.0,
+      "B": 3,
+      "n_exposed": 6,
+      "n_admit": 7,
+      "n_pool": 3,
+      "shortfall": 0,
+      "coverage": {
+       "n_gold_old": 6,
+       "n_raw": 80,
+       "n_admit": 7,
+       "U_raw": 0,
+       "U_admit": 0,
+       "C_raw": 0.0,
+       "C_admit": 0.0,
+       "coverage_gate": 3,
+       "coverage_gate_pass": false,
+       "matched_target_err": 0.0,
+       "n_matched_for_err": 0,
+       "dup_matches": 0,
+       "age_cov": {
+        "1": 0.0
+       },
+       "matched_qids": [],
+       "match_dump": []
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "verdict": {
+  "state": "uninformative",
+  "Delta_B": 0.0,
+  "reason": "Delta_B=0.0<0.10 (too little forgetting exposed)"
+ }
+}

@@ -253,6 +253,7 @@ def run_selfreplay(base, streams, arm, seed):
         rsc = random.Random(brng_seed + 1)
         for _ in range(CPT_STEPS):
             loss = wb.lm_step(Sc, [rsc.choice(passages) for _ in range(4)])
+            loss = loss + wb.qa_ce(Sc, [rsc.choice(new_qa) for _ in range(8)])   # QA-span supervision (acquisition)
             opt.zero_grad(); loss.backward()
             torch.nn.utils.clip_grad_norm_(Sc.parameters(), 1.0); opt.step()
         Sc.eval(); s_pa, _ = score(Sc, new_qa, key="eval_question")
@@ -263,10 +264,11 @@ def run_selfreplay(base, streams, arm, seed):
         prng = random.Random(f"{seed}:{arm}:{t}:pool")    # ONLY the pool draw depends on arm
         for _ in range(CONS_STEPS):
             loss = wb.lm_step(M, [rc.choice(passages) for _ in range(4)])
+            loss = loss + wb.qa_ce(M, [rc.choice(new_qa) for _ in range(8)])       # COMMON acquisition (all arms)
             if pool:
-                loss = loss + wb.qa_ce(M, [prng.choice(pool) for _ in range(8)])
-            elif arm == "no_replay_compute_matched" and t > 0 and new_qa:
-                loss = loss + wb.qa_ce(M, [prng.choice(new_qa) for _ in range(8)])  # matched-shape current-QA filler
+                loss = loss + wb.qa_ce(M, [prng.choice(pool) for _ in range(8)])   # old retention (arm-specific)
+            elif t > 0 and new_qa:
+                loss = loss + wb.qa_ce(M, [prng.choice(new_qa) for _ in range(8)])  # compute-matched filler (arm-specific)
             ne, nb = wb.base_anchor_logits(base, [rc.choice(wb.NEUTRAL) for _ in range(8)])
             sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
             loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")

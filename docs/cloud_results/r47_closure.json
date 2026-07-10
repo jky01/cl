@@ -1,0 +1,542 @@
+[
+ {
+  "arm": "replay_old",
+  "seed": 0,
+  "bc_after_p1": 1.0,
+  "ab_after_p1": 0.0,
+  "hidden_sim": {
+   "aux": 0.0837,
+   "raw_bridge": 0.0853,
+   "readout": 0.1263
+  },
+  "target_drift_cos": null,
+  "final": {
+   "step": 7000,
+   "ac_em": 0.031,
+   "ac_goldprob": 0.0329,
+   "ac_gold_minus_wrong": 0.0298,
+   "oldBC_retention": 1.0,
+   "AB": 1.0
+  },
+  "curve": [
+   {
+    "step": 500,
+    "ac_em": 0.033,
+    "ac_goldprob": 0.0355,
+    "ac_gold_minus_wrong": 0.031,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1000,
+    "ac_em": 0.033,
+    "ac_goldprob": 0.037,
+    "ac_gold_minus_wrong": 0.0334,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1500,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0377,
+    "ac_gold_minus_wrong": 0.0343,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2000,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0384,
+    "ac_gold_minus_wrong": 0.035,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2500,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0387,
+    "ac_gold_minus_wrong": 0.0354,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3000,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0389,
+    "ac_gold_minus_wrong": 0.0356,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3500,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.039,
+    "ac_gold_minus_wrong": 0.0357,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4000,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0388,
+    "ac_gold_minus_wrong": 0.0356,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4500,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0385,
+    "ac_gold_minus_wrong": 0.0353,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5000,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0379,
+    "ac_gold_minus_wrong": 0.0348,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5500,
+    "ac_em": 0.036,
+    "ac_goldprob": 0.0371,
+    "ac_gold_minus_wrong": 0.034,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6000,
+    "ac_em": 0.033,
+    "ac_goldprob": 0.0361,
+    "ac_gold_minus_wrong": 0.033,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6500,
+    "ac_em": 0.031,
+    "ac_goldprob": 0.0348,
+    "ac_gold_minus_wrong": 0.0317,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 7000,
+    "ac_em": 0.031,
+    "ac_goldprob": 0.0329,
+    "ac_gold_minus_wrong": 0.0298,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   }
+  ],
+  "wall": 1050.4
+ },
+ {
+  "arm": "attractor_replay",
+  "seed": 0,
+  "bc_after_p1": 1.0,
+  "ab_after_p1": 0.0,
+  "hidden_sim": {
+   "aux": 0.4295,
+   "raw_bridge": 0.113,
+   "readout": 0.2917
+  },
+  "target_drift_cos": 0.5584,
+  "final": {
+   "step": 7000,
+   "ac_em": 0.117,
+   "ac_goldprob": 0.1173,
+   "ac_gold_minus_wrong": 0.1173,
+   "oldBC_retention": 1.0,
+   "AB": 1.0
+  },
+  "curve": [
+   {
+    "step": 500,
+    "ac_em": 0.322,
+    "ac_goldprob": 0.3123,
+    "ac_gold_minus_wrong": 0.3089,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1000,
+    "ac_em": 0.258,
+    "ac_goldprob": 0.2654,
+    "ac_gold_minus_wrong": 0.2636,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1500,
+    "ac_em": 0.242,
+    "ac_goldprob": 0.2487,
+    "ac_gold_minus_wrong": 0.2472,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2000,
+    "ac_em": 0.225,
+    "ac_goldprob": 0.2359,
+    "ac_gold_minus_wrong": 0.2346,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2500,
+    "ac_em": 0.203,
+    "ac_goldprob": 0.2232,
+    "ac_gold_minus_wrong": 0.2226,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3000,
+    "ac_em": 0.2,
+    "ac_goldprob": 0.2182,
+    "ac_gold_minus_wrong": 0.2177,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3500,
+    "ac_em": 0.192,
+    "ac_goldprob": 0.2116,
+    "ac_gold_minus_wrong": 0.2113,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4000,
+    "ac_em": 0.197,
+    "ac_goldprob": 0.2043,
+    "ac_gold_minus_wrong": 0.2042,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4500,
+    "ac_em": 0.2,
+    "ac_goldprob": 0.205,
+    "ac_gold_minus_wrong": 0.2048,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5000,
+    "ac_em": 0.2,
+    "ac_goldprob": 0.1971,
+    "ac_gold_minus_wrong": 0.1971,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5500,
+    "ac_em": 0.197,
+    "ac_goldprob": 0.1914,
+    "ac_gold_minus_wrong": 0.1914,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6000,
+    "ac_em": 0.2,
+    "ac_goldprob": 0.1879,
+    "ac_gold_minus_wrong": 0.1879,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6500,
+    "ac_em": 0.15,
+    "ac_goldprob": 0.1431,
+    "ac_gold_minus_wrong": 0.1431,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 7000,
+    "ac_em": 0.117,
+    "ac_goldprob": 0.1173,
+    "ac_gold_minus_wrong": 0.1173,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   }
+  ],
+  "wall": 1346.3
+ },
+ {
+  "arm": "replay_old",
+  "seed": 1,
+  "bc_after_p1": 1.0,
+  "ab_after_p1": 0.0,
+  "hidden_sim": {
+   "aux": 0.1295,
+   "raw_bridge": 0.0903,
+   "readout": 0.1824
+  },
+  "target_drift_cos": null,
+  "final": {
+   "step": 7000,
+   "ac_em": 0.033,
+   "ac_goldprob": 0.0363,
+   "ac_gold_minus_wrong": 0.0363,
+   "oldBC_retention": 1.0,
+   "AB": 1.0
+  },
+  "curve": [
+   {
+    "step": 500,
+    "ac_em": 0.044,
+    "ac_goldprob": 0.0427,
+    "ac_gold_minus_wrong": 0.0427,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1000,
+    "ac_em": 0.044,
+    "ac_goldprob": 0.0448,
+    "ac_gold_minus_wrong": 0.0448,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1500,
+    "ac_em": 0.044,
+    "ac_goldprob": 0.045,
+    "ac_gold_minus_wrong": 0.045,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2000,
+    "ac_em": 0.044,
+    "ac_goldprob": 0.0449,
+    "ac_gold_minus_wrong": 0.0448,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2500,
+    "ac_em": 0.042,
+    "ac_goldprob": 0.0446,
+    "ac_gold_minus_wrong": 0.0446,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3000,
+    "ac_em": 0.042,
+    "ac_goldprob": 0.0442,
+    "ac_gold_minus_wrong": 0.0442,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3500,
+    "ac_em": 0.042,
+    "ac_goldprob": 0.0437,
+    "ac_gold_minus_wrong": 0.0437,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4000,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0431,
+    "ac_gold_minus_wrong": 0.0431,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4500,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0424,
+    "ac_gold_minus_wrong": 0.0424,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5000,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0413,
+    "ac_gold_minus_wrong": 0.0413,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5500,
+    "ac_em": 0.042,
+    "ac_goldprob": 0.0399,
+    "ac_gold_minus_wrong": 0.0399,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6000,
+    "ac_em": 0.039,
+    "ac_goldprob": 0.0387,
+    "ac_gold_minus_wrong": 0.0386,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6500,
+    "ac_em": 0.033,
+    "ac_goldprob": 0.0373,
+    "ac_gold_minus_wrong": 0.0373,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 7000,
+    "ac_em": 0.033,
+    "ac_goldprob": 0.0363,
+    "ac_gold_minus_wrong": 0.0363,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   }
+  ],
+  "wall": 1061.9
+ },
+ {
+  "arm": "attractor_replay",
+  "seed": 1,
+  "bc_after_p1": 1.0,
+  "ab_after_p1": 0.0,
+  "hidden_sim": {
+   "aux": 0.2068,
+   "raw_bridge": 0.2062,
+   "readout": 0.2322
+  },
+  "target_drift_cos": 0.5454,
+  "final": {
+   "step": 7000,
+   "ac_em": 0.117,
+   "ac_goldprob": 0.1158,
+   "ac_gold_minus_wrong": 0.1157,
+   "oldBC_retention": 1.0,
+   "AB": 1.0
+  },
+  "curve": [
+   {
+    "step": 500,
+    "ac_em": 0.175,
+    "ac_goldprob": 0.1873,
+    "ac_gold_minus_wrong": 0.1856,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1000,
+    "ac_em": 0.167,
+    "ac_goldprob": 0.1718,
+    "ac_gold_minus_wrong": 0.1706,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 1500,
+    "ac_em": 0.167,
+    "ac_goldprob": 0.169,
+    "ac_gold_minus_wrong": 0.168,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2000,
+    "ac_em": 0.172,
+    "ac_goldprob": 0.1687,
+    "ac_gold_minus_wrong": 0.1678,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 2500,
+    "ac_em": 0.178,
+    "ac_goldprob": 0.1668,
+    "ac_gold_minus_wrong": 0.1664,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3000,
+    "ac_em": 0.169,
+    "ac_goldprob": 0.1635,
+    "ac_gold_minus_wrong": 0.1632,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 3500,
+    "ac_em": 0.167,
+    "ac_goldprob": 0.1618,
+    "ac_gold_minus_wrong": 0.1615,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4000,
+    "ac_em": 0.156,
+    "ac_goldprob": 0.1578,
+    "ac_gold_minus_wrong": 0.1576,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 4500,
+    "ac_em": 0.136,
+    "ac_goldprob": 0.1419,
+    "ac_gold_minus_wrong": 0.1418,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5000,
+    "ac_em": 0.136,
+    "ac_goldprob": 0.1391,
+    "ac_gold_minus_wrong": 0.139,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 5500,
+    "ac_em": 0.133,
+    "ac_goldprob": 0.1325,
+    "ac_gold_minus_wrong": 0.1325,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6000,
+    "ac_em": 0.131,
+    "ac_goldprob": 0.1289,
+    "ac_gold_minus_wrong": 0.1289,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 6500,
+    "ac_em": 0.114,
+    "ac_goldprob": 0.1147,
+    "ac_gold_minus_wrong": 0.1147,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   },
+   {
+    "step": 7000,
+    "ac_em": 0.117,
+    "ac_goldprob": 0.1158,
+    "ac_gold_minus_wrong": 0.1157,
+    "oldBC_retention": 1.0,
+    "AB": 1.0
+   }
+  ],
+  "wall": 1348.1
+ }
+]

@@ -1,0 +1,124 @@
+=== R47 CLOSURE start 2026-07-10T03:40:25+00:00 ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+BRIDGE_LIFECYCLE (Qwen/Qwen2.5-0.5B, cuda) bridge=60 A/bridge=6 P1=3000 P2=7000 seeds=2 lambda=1.0 arms=['replay_old', 'attractor_replay'] | pool=13262
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  24%|██▍       | 71/290 [00:00<00:00, 459.62it/s]Loading weights:  47%|████▋     | 136/290 [00:00<00:00, 549.81it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 568.39it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 617.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 624.01it/s]
+    [replay_old s0] after P1: B->C=1.000 A->B=0.000
+    [replay_old s0 p2 500] A->C 0.033 (g-w +0.0310) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 1000] A->C 0.033 (g-w +0.0334) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 1500] A->C 0.036 (g-w +0.0343) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 2000] A->C 0.036 (g-w +0.0350) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 2500] A->C 0.039 (g-w +0.0354) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 3000] A->C 0.039 (g-w +0.0356) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 3500] A->C 0.036 (g-w +0.0357) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 4000] A->C 0.036 (g-w +0.0356) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 4500] A->C 0.036 (g-w +0.0353) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 5000] A->C 0.036 (g-w +0.0348) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 5500] A->C 0.036 (g-w +0.0340) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 6000] A->C 0.033 (g-w +0.0330) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 6500] A->C 0.031 (g-w +0.0317) oldB->C 1.000 A->B 1.000
+    [replay_old s0 p2 7000] A->C 0.031 (g-w +0.0298) oldB->C 1.000 A->B 1.000
+  => replay_old s0: A->C=0.031 oldB->C=1.0 A->B=1.0 raw_bridge=0.0853 (wall 1050.4s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 75/290 [00:00<00:00, 732.74it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 777.83it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 603.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 731.77it/s]
+    [attractor_replay s0] after P1: B->C=1.000 A->B=0.000
+    [attractor_replay s0 p2 500] A->C 0.322 (g-w +0.3089) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 1000] A->C 0.258 (g-w +0.2636) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 1500] A->C 0.242 (g-w +0.2472) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 2000] A->C 0.225 (g-w +0.2346) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 2500] A->C 0.203 (g-w +0.2226) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 3000] A->C 0.200 (g-w +0.2177) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 3500] A->C 0.192 (g-w +0.2113) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 4000] A->C 0.197 (g-w +0.2042) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 4500] A->C 0.200 (g-w +0.2048) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 5000] A->C 0.200 (g-w +0.1971) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 5500] A->C 0.197 (g-w +0.1914) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 6000] A->C 0.200 (g-w +0.1879) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 6500] A->C 0.150 (g-w +0.1431) oldB->C 1.000 A->B 1.000
+    [attractor_replay s0 p2 7000] A->C 0.117 (g-w +0.1173) oldB->C 1.000 A->B 1.000
+  => attractor_replay s0: A->C=0.117 oldB->C=1.0 A->B=1.0 raw_bridge=0.113 (wall 1346.3s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 153/290 [00:00<00:00, 1386.67it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1267.11it/s]
+    [replay_old s1] after P1: B->C=1.000 A->B=0.000
+    [replay_old s1 p2 500] A->C 0.044 (g-w +0.0427) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 1000] A->C 0.044 (g-w +0.0448) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 1500] A->C 0.044 (g-w +0.0450) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 2000] A->C 0.044 (g-w +0.0448) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 2500] A->C 0.042 (g-w +0.0446) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 3000] A->C 0.042 (g-w +0.0442) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 3500] A->C 0.042 (g-w +0.0437) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 4000] A->C 0.039 (g-w +0.0431) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 4500] A->C 0.039 (g-w +0.0424) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 5000] A->C 0.039 (g-w +0.0413) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 5500] A->C 0.042 (g-w +0.0399) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 6000] A->C 0.039 (g-w +0.0386) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 6500] A->C 0.033 (g-w +0.0373) oldB->C 1.000 A->B 1.000
+    [replay_old s1 p2 7000] A->C 0.033 (g-w +0.0363) oldB->C 1.000 A->B 1.000
+  => replay_old s1: A->C=0.033 oldB->C=1.0 A->B=1.0 raw_bridge=0.0903 (wall 1061.9s)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  18%|█▊        | 53/290 [00:00<00:00, 522.71it/s]Loading weights:  59%|█████▊    | 170/290 [00:00<00:00, 901.10it/s]Loading weights:  90%|█████████ | 261/290 [00:00<00:00, 668.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 741.86it/s]
+    [attractor_replay s1] after P1: B->C=1.000 A->B=0.000
+    [attractor_replay s1 p2 500] A->C 0.175 (g-w +0.1856) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 1000] A->C 0.167 (g-w +0.1706) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 1500] A->C 0.167 (g-w +0.1680) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 2000] A->C 0.172 (g-w +0.1678) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 2500] A->C 0.178 (g-w +0.1664) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 3000] A->C 0.169 (g-w +0.1632) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 3500] A->C 0.167 (g-w +0.1615) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 4000] A->C 0.156 (g-w +0.1576) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 4500] A->C 0.136 (g-w +0.1418) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 5000] A->C 0.136 (g-w +0.1390) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 5500] A->C 0.133 (g-w +0.1325) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 6000] A->C 0.131 (g-w +0.1289) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 6500] A->C 0.114 (g-w +0.1147) oldB->C 1.000 A->B 1.000
+    [attractor_replay s1 p2 7000] A->C 0.117 (g-w +0.1157) oldB->C 1.000 A->B 1.000
+  => attractor_replay s1: A->C=0.117 oldB->C=1.0 A->B=1.0 raw_bridge=0.2062 (wall 1348.1s)
+
+== BRIDGE_LIFECYCLE SUMMARY (final, mean over seeds) ==
+  replay_old           A->C=0.032 oldB->C=1.0 A->B=1.0 raw_bridge=0.088
+  attractor_replay     A->C=0.117 oldB->C=1.0 A->B=1.0 raw_bridge=0.16
+  PASS: attractor improves A->C AND preserves oldB->C > no_attractor, ~replay/distill WITHOUT
+        replaying old data; A->B high; one dense checkpoint, no inference memory.
+[done wrote docs/cloud_results/r47_closure.json]
+=== R47_CLOSURE_DONE 2026-07-10T05:00:37+00:00 ===
+=== R48 CENSUS PILOT start 2026-07-10T05:00:37+00:00 ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+SELFREPLAY (Qwen/Qwen2.5-0.5B, cuda) source=census streams=4x5x5 cpt=300 cons=400 gen_N=400 views=2 consensus=unanimous shadow=60 bfrac=0.5 seeds=1 arms=['no_replay_compute_matched', 'stored_random_B', 'self_passive_random_B', 'self_passive_fragile_B']
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10439.68it/s]
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 4 streams; used-stream domain mix={'news_gen': 24, 'wiki_gen': 32, 'squad_human': 18}
+  seed 0: streams=[5, 5, 5, 5] total_qa=74
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10378.84it/s]
+      [no_replay_compute_matched s0 t0] scaf_para=0.05 commit=0/20 old_para=None B=0 pool=0
+      [no_replay_compute_matched s0 t1] scaf_para=0.00 commit=18/18 old_para=0.2 B=10 pool=0
+      [no_replay_compute_matched s0 t2] scaf_para=0.00 commit=21/21 old_para=0.316 B=19 pool=0
+      [no_replay_compute_matched s0 t3] scaf_para=0.07 commit=15/15 old_para=0.322 B=30 pool=0
+    [no_replay_compute_matched] {"final_para_em": 0.324, "final_para_f1": 0.361, "old_para_em": 0.322, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.322, "n_old_never": 59, "newest_para_em": 0.333, "age_para": {"1": 0.381, "2": 0.333, "3": 0.2}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 369.4}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10370.26it/s]
+      [stored_random_B s0 t0] scaf_para=0.00 commit=0/20 old_para=None B=0 pool=0
+      [stored_random_B s0 t1] scaf_para=0.00 commit=0/18 old_para=0.0 B=10 pool=0
+      [stored_random_B s0 t2] scaf_para=0.00 commit=0/21 old_para=0.0 B=19 pool=0
+      [stored_random_B s0 t3] scaf_para=0.00 commit=0/15 old_para=0.0 B=30 pool=0
+    [stored_random_B] {"final_para_em": 0.0, "final_para_f1": 0.049, "old_para_em": 0.0, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.0, "n_old_never": 59, "newest_para_em": 0.0, "age_para": {"1": 0.0, "2": 0.0, "3": 0.0}, "ledger": {"persistent_old_items": 0, "gen_tokens": 0, "para3b_calls": 0}, "wall": 316.7}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10368.93it/s]
+      [self_passive_random_B s0 t0] scaf_para=0.00 commit=0/20 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9587.13it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9996.91it/s]
+      [self_passive_random_B s0 t1] scaf_para=0.00 commit=0/18 old_para=0.0 B=10 pool=10 C_raw/C_admit=0.0/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 6476.42it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10067.52it/s]
+      [self_passive_random_B s0 t2] scaf_para=0.00 commit=0/21 old_para=0.0 B=19 pool=19 C_raw/C_admit=0.0/0.0 U_admit=0>=gate16?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9865.63it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 6415.55it/s]
+      [self_passive_random_B s0 t3] scaf_para=0.00 commit=0/15 old_para=0.0 B=30 pool=30 C_raw/C_admit=0.0/0.0 U_admit=0>=gate24?False terr=0.0
+    [self_passive_random_B] {"final_para_em": 0.0, "final_para_f1": 0.061, "old_para_em": 0.0, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.0, "n_old_never": 59, "newest_para_em": 0.0, "age_para": {"1": 0.0, "2": 0.0, "3": 0.0}, "ledger": {"persistent_old_items": 0, "gen_tokens": 46258, "para3b_calls": 2316}, "wall": 497.5}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10698.81it/s]
+      [self_passive_fragile_B s0 t0] scaf_para=0.05 commit=0/20 old_para=None B=0 pool=0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9412.83it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9828.51it/s]
+      [self_passive_fragile_B s0 t1] scaf_para=0.00 commit=0/18 old_para=0.0 B=10 pool=10 C_raw/C_admit=0.0/0.0 U_admit=0>=gate8?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10032.67it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 10042.30it/s]
+      [self_passive_fragile_B s0 t2] scaf_para=0.00 commit=1/21 old_para=0.105 B=19 pool=19 C_raw/C_admit=0.0/0.0 U_admit=0>=gate16?False terr=0.0
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9694.15it/s]
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s]Loading weights: 100%|██████████| 434/434 [00:00<00:00, 9933.41it/s]
+      [self_passive_fragile_B s0 t3] scaf_para=0.07 commit=0/15 old_para=0.051 B=30 pool=30 C_raw/C_admit=0.017/0.0 U_admit=0>=gate24?False terr=0.0
+    [self_passive_fragile_B] {"final_para_em": 0.054, "final_para_f1": 0.111, "old_para_em": 0.051, "n_old": 59, "old_generated_para_em": null, "n_old_generated": 0, "old_never_para_em": 0.051, "n_old_never": 59, "newest_para_em": 0.067, "age_para": {"1": 0.0, "2": 0.0, "3": 0.15}, "ledger": {"persistent_old_items": 0, "gen_tokens": 46403, "para3b_calls": 2366}, "wall": 527.9}
+  VERDICT {"state": "uninformative", "Delta_B": -0.322, "reason": "Delta_B=-0.322<0.10 (too little forgetting exposed)"}
+[done]
+=== ALLJOBS_DONE 2026-07-10T05:29:13+00:00 ===
