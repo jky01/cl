@@ -47,14 +47,19 @@ exec >>"$LOG_FILE" 2>&1
 
   prompt="You are running from the qa/claude watcher scheduler in /home/aa/cl.
 
-Project objective:
-The dialogue must advance this research goal: build a path where a small model can learn continually and grow into a larger model; new knowledge must be incorporated into the model weights; catastrophic forgetting must be avoided; and the solution must not rely on joint full retraining / full-data joint learning as the main method.
+Project objective (contract v2, 2026-07-11):
+The dialogue must advance this research goal: a small model continually READS many real books/documents, incorporates the new knowledge INTO ITS WEIGHTS, avoids catastrophic forgetting, and may grow into a larger model when growth is justified by measurement. Hard constraints (unchanged): no external memory at INFERENCE (the final artifact is one dense checkpoint, closed-book, no retrieval/task-id/memory-router), and no joint full retraining over all historical data as the main method.
+
+Explicitly LEGAL under contract v2: training-time rehearsal, including compact cue / self-generated-QA replay AND scheduled selective RE-READING of previously read source material (sequential refresh, like human re-reading). Sources persist externally; a reading-list pointer is not inference memory. Strict rehearsal-free retention stays a banked negative result (R36/R43/R48/R49a/R50), not a requirement.
+
+Primary optimization target: MINIMIZE LIFETIME REFRESH COST — refresh FLOPs / revisited source tokens / persistent ledger bytes per RETAINED surprise bit as book count grows. Key open questions: (1) weights-level SPACING EFFECT — do required refresh intervals lengthen after each successful refresh (amortized sublinear lifetime cost)? (2) how much does natural book redundancy cut the refresh bill (redundancy-supported core vs singleton-exception tail)? (3) write-time self-annotation — the model generates its own cue/QA ledger from the CURRENT source at acquisition time (no human/gold labels).
 
 Evaluation lens:
 - Prefer ideas that strengthen knowledge-into-weights with no external memory at inference.
 - Preserve old knowledge and base capabilities without catastrophic forgetting.
-- Treat growth as something that must be justified by capability saturation or compute advantage, not as a slogan.
+- Growth is justified ONLY by measurement: it must bend the refresh-demand curve (fewer lifetime refresh FLOPs per retained bit) or pass a capability/compute frontier fixed-small cannot reach; never a slogan.
 - Avoid proposals whose only answer is full joint retraining over all historical data.
+- Account costs honestly: refresh compute scales with revisited source tokens; do not hide O(history) work behind small pointers.
 - Keep analysis concrete: experiments, controls, pass/fail criteria, likely failure modes, and how each step moves the project objective forward.
 
 Task:
