@@ -55,24 +55,40 @@ def _bits(model, qas, key="eval_question"):
     return [tb / nt if nt else 0.0 for (tb, nt) in wb.qa_answer_bits(model, qas, key=key)]
 
 
+import torch.nn.functional as F, random as _random
+def _acquire_inplace(M, passages, new_qa, base, steps, seed):
+    """train M IN PLACE (no deepcopy — fits 1.5B on 24GB): current LM + QA-span CE + neutral anchor."""
+    M.train(); opt = torch.optim.AdamW(M.parameters(), lr=rl.LR); r = _random.Random(seed)
+    for _ in range(steps):
+        loss = wb.lm_step(M, [r.choice(passages) for _ in range(4)])
+        loss = loss + wb.qa_ce(M, [r.choice(new_qa) for _ in range(8)])
+        ne, nb = wb.base_anchor_logits(base, [r.choice(wb.NEUTRAL) for _ in range(8)])
+        sa = M.lm_head(M.model(**ne, use_cache=False).last_hidden_state[:, -1]).float()
+        loss = loss + F.kl_div(F.log_softmax(sa, -1), F.softmax(nb, -1), reduction="batchmean")
+        opt.zero_grad(); loss.backward()
+        torch.nn.utils.clip_grad_norm_(M.parameters(), 1.0); opt.step()
+    del opt; torch.cuda.empty_cache(); M.eval()
+    return M
+
+
 def run_size(model_name, base, streams, final_t, hard_qids, seed):
     """acquire the facts at this size, then audit history-free L0/L1 correct proposition coverage."""
     M = load(model_name)
     for t in range(final_t):
-        M = rl.bare_write(M, [a["context"] for a in streams[t]],
-                          [q for a in streams[t] for q in a["qas"]], base, CONS_STEPS, seed * 991 + t)
-    M.eval()
+        M = _acquire_inplace(M, [a["context"] for a in streams[t]],
+                             [q for a in streams[t] for q in a["qas"]], base, CONS_STEPS, seed * 991 + t)
     old = [q for tt in range(final_t) for a in streams[tt] for q in a["qas"] if q["qid"] in hard_qids]
     if not old:
         del M; torch.cuda.empty_cache(); return None
     avail_em = _emset(M, old); avail_b = _bits(M, old)
     answerable = [q for q, e in zip(old, avail_em) if e == 1]
     ans_by_qid = {q["qid"]: q for q in answerable}
-    # threat via the real (final-stream) write
-    M_real = rl.bare_write(M, [a["context"] for a in streams[final_t]],
-                           [q for a in streams[final_t] for q in a["qas"]], base, CONS_STEPS, seed * 13 + 777)
-    real_b = _bits(M_real, old); real_em = _emset(M_real, old)
-    del M_real; torch.cuda.empty_cache()
+    # threat via the real (final-stream) write: CPU-backup M, write in place, measure, restore (no 2nd GPU copy)
+    cpu_backup = {k: v.detach().to("cpu", copy=True) for k, v in M.state_dict().items()}
+    _acquire_inplace(M, [a["context"] for a in streams[final_t]],
+                     [q for a in streams[final_t] for q in a["qas"]], base, CONS_STEPS, seed * 13 + 777)
+    real_b = _bits(M, old); real_em = _emset(M, old)
+    M.load_state_dict(cpu_backup); del cpu_backup; torch.cuda.empty_cache(); M.eval()
     dmg = {old[i]["qid"]: real_b[i] - avail_b[i] for i in range(len(old))}
     remq = {old[i]["qid"]: real_em[i] for i in range(len(old))}
     threatened = {q["qid"] for q in answerable if (dmg[q["qid"]] >= DAMAGE_MIN or remq[q["qid"]] == 0)}
