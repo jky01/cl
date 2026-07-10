@@ -1,0 +1,1180 @@
+{
+ "config": {
+  "source": "census",
+  "streams": 9,
+  "arts": 5,
+  "qa": 5,
+  "cons": 400,
+  "shadow": 60,
+  "gen_N": 400,
+  "gen_per": 4,
+  "damage_min": 0.5,
+  "seeds": 2
+ },
+ "seeds": [
+  {
+   "n_old": 141,
+   "n_answerable": 36,
+   "n_threatened": 9,
+   "threatened_by_bits": 6,
+   "threatened_by_flip": 9,
+   "availability_rate": 0.255,
+   "ages_answerable": {
+    "8": 5,
+    "7": 3,
+    "6": 3,
+    "5": 1,
+    "4": 7,
+    "3": 3,
+    "2": 6,
+    "1": 8
+   },
+   "ages_threatened": {
+    "7": 2,
+    "6": 1,
+    "5": 1,
+    "4": 1,
+    "3": 1,
+    "1": 3
+   },
+   "shadow_proxy": {
+    "spearman": 0.956,
+    "topq_enrichment": 3.111,
+    "enrich_bits": 4.0,
+    "enrich_flip": 3.111,
+    "new_shadow": 0.188,
+    "new_real": 0.25,
+    "n": 36,
+    "damage_pairs": [
+     [
+      0.2659,
+      0.2073
+     ],
+     [
+      0.2323,
+      0.1983
+     ],
+     [
+      -0.3767,
+      -0.26
+     ],
+     [
+      0.0007,
+      0.0007
+     ],
+     [
+      -0.0605,
+      -0.0297
+     ],
+     [
+      -0.633,
+      -0.7162
+     ],
+     [
+      0.8321,
+      0.736
+     ],
+     [
+      0.4902,
+      0.4055
+     ],
+     [
+      0.0068,
+      -0.0075
+     ],
+     [
+      1.496,
+      1.9309
+     ],
+     [
+      -0.1546,
+      -0.126
+     ],
+     [
+      2.3545,
+      1.821
+     ],
+     [
+      0.0007,
+      0.0007
+     ],
+     [
+      -0.012,
+      -0.0037
+     ],
+     [
+      0.057,
+      0.0885
+     ],
+     [
+      0.0413,
+      -0.0522
+     ],
+     [
+      0.2826,
+      0.5079
+     ],
+     [
+      -0.0245,
+      -0.0265
+     ],
+     [
+      -0.186,
+      -0.127
+     ],
+     [
+      0.0085,
+      0.0058
+     ],
+     [
+      0.0032,
+      0.0014
+     ],
+     [
+      0.198,
+      0.2853
+     ],
+     [
+      0.1887,
+      0.1125
+     ],
+     [
+      0.0058,
+      0.0074
+     ],
+     [
+      0.0168,
+      0.0183
+     ],
+     [
+      0.0283,
+      0.012
+     ],
+     [
+      0.0943,
+      0.1543
+     ],
+     [
+      0.0052,
+      0.0027
+     ],
+     [
+      0.1073,
+      0.1762
+     ],
+     [
+      0.07,
+      0.0535
+     ],
+     [
+      1.1995,
+      1.579
+     ],
+     [
+      0.0105,
+      0.0252
+     ],
+     [
+      0.0673,
+      0.1127
+     ],
+     [
+      1.116,
+      0.8992
+     ],
+     [
+      0.0008,
+      0.001
+     ],
+     [
+      -0.015,
+      -0.0197
+     ]
+    ]
+   },
+   "levels": {
+    "L0_free": {
+     "n_cands": 350,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 3,
+       "cor": 0
+      },
+      "2": {
+       "thr": 0,
+       "cor": 0
+      },
+      "3": {
+       "thr": 1,
+       "cor": 0
+      },
+      "4": {
+       "thr": 1,
+       "cor": 0
+      },
+      "5": {
+       "thr": 1,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 2,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L1_fixed_family": {
+     "n_cands": 258,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 3,
+       "cor": 0
+      },
+      "2": {
+       "thr": 0,
+       "cor": 0
+      },
+      "3": {
+       "thr": 1,
+       "cor": 0
+      },
+      "4": {
+       "thr": 1,
+       "cor": 0
+      },
+      "5": {
+       "thr": 1,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 2,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L2_oracle_domain": {
+     "n_cands": 283,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 3,
+       "cor": 0
+      },
+      "2": {
+       "thr": 0,
+       "cor": 0
+      },
+      "3": {
+       "thr": 1,
+       "cor": 0
+      },
+      "4": {
+       "thr": 1,
+       "cor": 0
+      },
+      "5": {
+       "thr": 1,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 2,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L3_oracle_entity": {
+     "n_cands": 38,
+     "U_raw_ans": 1,
+     "U_correct_ans": 1,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.028,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": 0.0,
+     "per_age": {
+      "1": {
+       "thr": 3,
+       "cor": 0
+      },
+      "2": {
+       "thr": 0,
+       "cor": 0
+      },
+      "3": {
+       "thr": 1,
+       "cor": 0
+      },
+      "4": {
+       "thr": 1,
+       "cor": 0
+      },
+      "5": {
+       "thr": 1,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 2,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L4_relation_redacted": {
+     "n_cands": 10,
+     "U_raw_ans": 3,
+     "U_correct_ans": 1,
+     "U_raw_thr": 1,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.028,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.111,
+     "target_err": 0.667,
+     "per_age": {
+      "1": {
+       "thr": 3,
+       "cor": 0
+      },
+      "2": {
+       "thr": 0,
+       "cor": 0
+      },
+      "3": {
+       "thr": 1,
+       "cor": 0
+      },
+      "4": {
+       "thr": 1,
+       "cor": 0
+      },
+      "5": {
+       "thr": 1,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 2,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L5_full_question": {
+     "n_cands": 36,
+     "U_correct_ans": 36,
+     "cov_correct_ans": 1.0,
+     "cov_correct_thr": 1.0
+    }
+   },
+   "ledgers": {
+    "L0_free": {
+     "n_attempted": 400,
+     "n_parsed": 350,
+     "prompt_tokens": 21600,
+     "gen_tokens": 15946
+    },
+    "L1_fixed_family": {
+     "n_attempted": 400,
+     "n_parsed": 258,
+     "prompt_tokens": 13075,
+     "gen_tokens": 15753
+    },
+    "L2_oracle_domain": {
+     "n_attempted": 400,
+     "n_parsed": 283,
+     "prompt_tokens": 9600,
+     "gen_tokens": 15924
+    },
+    "L3_oracle_entity": {
+     "n_attempted": 144,
+     "n_parsed": 38,
+     "prompt_tokens": 1696,
+     "gen_tokens": 5755,
+     "n_facts_with_entity": 36,
+     "n_answerable": 36
+    },
+    "L4_relation_redacted": {
+     "n_attempted": 144,
+     "n_parsed": 10,
+     "prompt_tokens": 3020,
+     "gen_tokens": 5712
+    }
+   },
+   "audits": {
+    "L3_oracle_entity": [
+     {
+      "qid": "0:0:1:2",
+      "cue": "Peirce\u2013Nichols House",
+      "gen_q": "Where is the Peirce\u2013Nichols House located?",
+      "gold_q": "Where is the Peirce\u2013Nichols House located?",
+      "pred": "Salem, Massachusetts",
+      "gold": "Salem, Massachusetts",
+      "correct": 1
+     },
+     {
+      "qid": "0:0:1:2",
+      "cue": "Peirce\u2013Nichols House",
+      "gen_q": "In which state was the Peirce\u2013Nichols House located?",
+      "gold_q": "Where is the Peirce\u2013Nichols House located?",
+      "pred": "Massachusetts",
+      "gold": "Salem, Massachusetts",
+      "correct": 0
+     }
+    ],
+    "L4_relation_redacted": [
+     {
+      "qid": "0:0:1:3",
+      "cue": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "gen_q": "The Peirce\u2013Nichols House was designated a National Historic Landmark in what year?",
+      "gold_q": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "pred": "1973",
+      "gold": "1973",
+      "correct": 1
+     },
+     {
+      "qid": "0:0:1:3",
+      "cue": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "gen_q": "The Peirce\u2013Nichols House was designated a National Historic Landmark in which year?",
+      "gold_q": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "pred": "1873",
+      "gold": "1973",
+      "correct": 0
+     },
+     {
+      "qid": "0:0:1:3",
+      "cue": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "gen_q": "The Peirce\u2013Nichols House was designated a National Historic Landmark in which year?",
+      "gold_q": "What year was the Peirce\u2013Nichols House designated a National Historic Landmark?",
+      "pred": "1873",
+      "gold": "1973",
+      "correct": 0
+     },
+     {
+      "qid": "0:6:3:1",
+      "cue": "What was the first picture released by ABC Pictures?",
+      "gen_q": "\"When was the first picture released by ABC Pictures?",
+      "gold_q": "What was the first picture released by ABC Pictures?",
+      "pred": "1987",
+      "gold": "Charly",
+      "correct": 0
+     },
+     {
+      "qid": "0:7:0:0",
+      "cue": "When did Gauss Moutinho Cordeiro receive his PhD in statistics?",
+      "gen_q": "Gauss Moutinho Cordeiro received his PhD in statistical mechanics when?",
+      "gold_q": "When did Gauss Moutinho Cordeiro receive his PhD in statistics?",
+      "pred": "1984",
+      "gold": "1982",
+      "correct": 0
+     }
+    ]
+   }
+  },
+  {
+   "n_old": 135,
+   "n_answerable": 25,
+   "n_threatened": 7,
+   "threatened_by_bits": 6,
+   "threatened_by_flip": 6,
+   "availability_rate": 0.185,
+   "ages_answerable": {
+    "8": 1,
+    "7": 4,
+    "6": 2,
+    "5": 4,
+    "4": 5,
+    "3": 4,
+    "2": 3,
+    "1": 2
+   },
+   "ages_threatened": {
+    "6": 1,
+    "3": 2,
+    "2": 2,
+    "1": 2
+   },
+   "shadow_proxy": {
+    "spearman": 0.992,
+    "topq_enrichment": 3.571,
+    "enrich_bits": 4.167,
+    "enrich_flip": 3.472,
+    "new_shadow": 0.368,
+    "new_real": 0.316,
+    "n": 25,
+    "damage_pairs": [
+     [
+      0.2675,
+      0.2845
+     ],
+     [
+      -0.024,
+      -0.017
+     ],
+     [
+      0.2193,
+      0.1842
+     ],
+     [
+      -0.2053,
+      -0.2028
+     ],
+     [
+      -0.0258,
+      -0.039
+     ],
+     [
+      0.9237,
+      0.8327
+     ],
+     [
+      0.0848,
+      0.0288
+     ],
+     [
+      -0.084,
+      -0.0805
+     ],
+     [
+      0.0028,
+      0.0035
+     ],
+     [
+      -0.074,
+      -0.0755
+     ],
+     [
+      -0.8897,
+      -0.3373
+     ],
+     [
+      0.0302,
+      0.0227
+     ],
+     [
+      0.0165,
+      0.0308
+     ],
+     [
+      -0.396,
+      -0.4
+     ],
+     [
+      0.1299,
+      0.219
+     ],
+     [
+      -0.0002,
+      -0.0002
+     ],
+     [
+      -0.1963,
+      -0.2948
+     ],
+     [
+      0.0067,
+      0.0243
+     ],
+     [
+      -0.0018,
+      -0.003
+     ],
+     [
+      1.1967,
+      1.4023
+     ],
+     [
+      0.3737,
+      0.9013
+     ],
+     [
+      0.006,
+      0.004
+     ],
+     [
+      0.3014,
+      0.5824
+     ],
+     [
+      2.8787,
+      2.953
+     ],
+     [
+      0.8663,
+      0.733
+     ]
+    ]
+   },
+   "levels": {
+    "L0_free": {
+     "n_cands": 328,
+     "U_raw_ans": 1,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 2,
+       "cor": 0
+      },
+      "2": {
+       "thr": 2,
+       "cor": 0
+      },
+      "3": {
+       "thr": 2,
+       "cor": 0
+      },
+      "4": {
+       "thr": 0,
+       "cor": 0
+      },
+      "5": {
+       "thr": 0,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 0,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L1_fixed_family": {
+     "n_cands": 283,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 2,
+       "cor": 0
+      },
+      "2": {
+       "thr": 2,
+       "cor": 0
+      },
+      "3": {
+       "thr": 2,
+       "cor": 0
+      },
+      "4": {
+       "thr": 0,
+       "cor": 0
+      },
+      "5": {
+       "thr": 0,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 0,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L2_oracle_domain": {
+     "n_cands": 183,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 2,
+       "cor": 0
+      },
+      "2": {
+       "thr": 2,
+       "cor": 0
+      },
+      "3": {
+       "thr": 2,
+       "cor": 0
+      },
+      "4": {
+       "thr": 0,
+       "cor": 0
+      },
+      "5": {
+       "thr": 0,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 0,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L3_oracle_entity": {
+     "n_cands": 25,
+     "U_raw_ans": 0,
+     "U_correct_ans": 0,
+     "U_raw_thr": 0,
+     "U_correct_thr": 0,
+     "cov_correct_ans": 0.0,
+     "cov_correct_thr": 0.0,
+     "cov_correct_thr_eligible": 0.0,
+     "cov_raw_thr": 0.0,
+     "target_err": null,
+     "per_age": {
+      "1": {
+       "thr": 2,
+       "cor": 0
+      },
+      "2": {
+       "thr": 2,
+       "cor": 0
+      },
+      "3": {
+       "thr": 2,
+       "cor": 0
+      },
+      "4": {
+       "thr": 0,
+       "cor": 0
+      },
+      "5": {
+       "thr": 0,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 0,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L4_relation_redacted": {
+     "n_cands": 56,
+     "U_raw_ans": 11,
+     "U_correct_ans": 4,
+     "U_raw_thr": 4,
+     "U_correct_thr": 1,
+     "cov_correct_ans": 0.16,
+     "cov_correct_thr": 0.143,
+     "cov_correct_thr_eligible": 0.143,
+     "cov_raw_thr": 0.571,
+     "target_err": 0.636,
+     "per_age": {
+      "1": {
+       "thr": 2,
+       "cor": 0
+      },
+      "2": {
+       "thr": 2,
+       "cor": 1
+      },
+      "3": {
+       "thr": 2,
+       "cor": 0
+      },
+      "4": {
+       "thr": 0,
+       "cor": 0
+      },
+      "5": {
+       "thr": 0,
+       "cor": 0
+      },
+      "6": {
+       "thr": 1,
+       "cor": 0
+      },
+      "7": {
+       "thr": 0,
+       "cor": 0
+      },
+      "8": {
+       "thr": 0,
+       "cor": 0
+      }
+     }
+    },
+    "L5_full_question": {
+     "n_cands": 25,
+     "U_correct_ans": 25,
+     "cov_correct_ans": 1.0,
+     "cov_correct_thr": 1.0
+    }
+   },
+   "ledgers": {
+    "L0_free": {
+     "n_attempted": 400,
+     "n_parsed": 328,
+     "prompt_tokens": 21600,
+     "gen_tokens": 15699
+    },
+    "L1_fixed_family": {
+     "n_attempted": 400,
+     "n_parsed": 283,
+     "prompt_tokens": 13075,
+     "gen_tokens": 15956
+    },
+    "L2_oracle_domain": {
+     "n_attempted": 400,
+     "n_parsed": 183,
+     "prompt_tokens": 9600,
+     "gen_tokens": 15972
+    },
+    "L3_oracle_entity": {
+     "n_attempted": 96,
+     "n_parsed": 25,
+     "prompt_tokens": 1136,
+     "gen_tokens": 3840,
+     "n_facts_with_entity": 24,
+     "n_answerable": 25
+    },
+    "L4_relation_redacted": {
+     "n_attempted": 100,
+     "n_parsed": 56,
+     "prompt_tokens": 2060,
+     "gen_tokens": 4000
+    }
+   },
+   "audits": {
+    "L3_oracle_entity": [],
+    "L4_relation_redacted": [
+     {
+      "qid": "1:1:3:2",
+      "cue": "What does UMC stand for?",
+      "gen_q": "What does UU stand for?",
+      "gold_q": "What does UMC stand for?",
+      "pred": "Unitarian",
+      "gold": "United Methodist Church",
+      "correct": 0
+     },
+     {
+      "qid": "1:1:3:2",
+      "cue": "What does UMC stand for?",
+      "gen_q": "What does UMC stand for?",
+      "gold_q": "What does UMC stand for?",
+      "pred": "United Methodist Church",
+      "gold": "United Methodist Church",
+      "correct": 1
+     },
+     {
+      "qid": "1:1:3:2",
+      "cue": "What does UMC stand for?",
+      "gen_q": "What does UU stand for?",
+      "gold_q": "What does UMC stand for?",
+      "pred": "Unitarian",
+      "gold": "United Methodist Church",
+      "correct": 0
+     },
+     {
+      "qid": "1:1:3:2",
+      "cue": "What does UMC stand for?",
+      "gen_q": "What does UU (and now UMC) stand for?",
+      "gold_q": "What does UMC stand for?",
+      "pred": "Unitarian",
+      "gold": "United Methodist Church",
+      "correct": 0
+     },
+     {
+      "qid": "1:2:0:1",
+      "cue": "What UN secretary went to Harvard?",
+      "gen_q": "What UN secretary general went by the name 'Chiavelli'?",
+      "gold_q": "What UN secretary went to Harvard?",
+      "pred": "Sane",
+      "gold": "General Ban Ki-moon",
+      "correct": 0
+     },
+     {
+      "qid": "1:2:4:2",
+      "cue": "When was the band formed?",
+      "gen_q": "What band formed the Association of Irish Medicines?",
+      "gold_q": "When was the band formed?",
+      "pred": "1969",
+      "gold": "1967",
+      "correct": 0
+     },
+     {
+      "qid": "1:2:4:2",
+      "cue": "When was the band formed?",
+      "gen_q": "What band formed the Association of American Therapists?",
+      "gold_q": "When was the band formed?",
+      "pred": "William James",
+      "gold": "1967",
+      "correct": 0
+     },
+     {
+      "qid": "1:3:2:2",
+      "cue": "To which country does Ankit Keshri belong?",
+      "gen_q": "What country is Ankit Keshri working in?",
+      "gold_q": "To which country does Ankit Keshri belong?",
+      "pred": "India",
+      "gold": "India",
+      "correct": 1
+     },
+     {
+      "qid": "1:3:2:2",
+      "cue": "To which country does Ankit Keshri belong?",
+      "gen_q": "What country does German singer Ankit Keshri belong to tunes?",
+      "gold_q": "To which country does Ankit Keshri belong?",
+      "pred": "India",
+      "gold": "India",
+      "correct": 1
+     },
+     {
+      "qid": "1:3:2:2",
+      "cue": "To which country does Ankit Keshri belong?",
+      "gen_q": "What country does Ankit Keshri lives in?",
+      "gold_q": "To which country does Ankit Keshri belong?",
+      "pred": "Ankit Keshri lives in India.",
+      "gold": "India",
+      "correct": 0
+     },
+     {
+      "qid": "1:3:4:4",
+      "cue": "Which team drafted Tim Tebow?",
+      "gen_q": "Which team drafted who?",
+      "gold_q": "Which team drafted Tim Tebow?",
+      "pred": "2007 NFL Draft - Draft of the week;",
+      "gold": "Denver Broncos",
+      "correct": 0
+     },
+     {
+      "qid": "1:3:4:4",
+      "cue": "Which team drafted Tim Tebow?",
+      "gen_q": "Which team drafted center Tim Tebow?",
+      "gold_q": "Which team drafted Tim Tebow?",
+      "pred": "Colorado Rockies",
+      "gold": "Denver Broncos",
+      "correct": 0
+     },
+     {
+      "qid": "1:4:3:0",
+      "cue": "When did Gauss Moutinho Cordeiro receive his PhD in statistics?",
+      "gen_q": "When was the PhD the recipient of Gauss Moutinho Cordeiro got his PhD in statistics?",
+      "gold_q": "When did Gauss Moutinho Cordeiro receive his PhD in statistics?",
+      "pred": "2009",
+      "gold": "1982",
+      "correct": 0
+     },
+     {
+      "qid": "1:4:3:2",
+      "cue": "What is the name of the journal founded by Gauss Moutinho Cordeiro?",
+      "gen_q": "What is the name of the journal who was founded by 30 years of GMC engine Moutinho Cordeiro?",
+      "gold_q": "What is the name of the journal founded by Gauss Moutinho Cordeiro?",
+      "pred": "Journal of Applied Statistics",
+      "gold": "Brazilian Journal of Probability and Statistics",
+      "correct": 0
+     },
+     {
+      "qid": "1:5:4:1",
+      "cue": "How many faculties does the Academy of Performing Arts in Prague have?",
+      "gen_q": "How many dance studios does The Academy of Performing Arts in Prague have?",
+      "gold_q": "How many faculties does the Academy of Performing Arts in Prague have?",
+      "pred": "2",
+      "gold": "3",
+      "correct": 0
+     },
+     {
+      "qid": "1:5:4:1",
+      "cue": "How many faculties does the Academy of Performing Arts in Prague have?",
+      "gen_q": "How many faculties is the Music University of Prague in the main training unit for actors and actresses called the Academy of Performing Arts?",
+      "gold_q": "How many faculties does the Academy of Performing Arts in Prague have?",
+      "pred": "2",
+      "gold": "3",
+      "correct": 0
+     },
+     {
+      "qid": "1:6:3:0",
+      "cue": "Which architect designed the current Balmoral Castle?",
+      "gen_q": "Which architect designed the current Balmoral Castle?",
+      "gold_q": "Which architect designed the current Balmoral Castle?",
+      "pred": "William Smith of Aberdeen",
+      "gold": "William Smith of Aberdeen",
+      "correct": 1
+     },
+     {
+      "qid": "1:6:3:0",
+      "cue": "Which architect designed the current Balmoral Castle?",
+      "gen_q": "What American architect designed the current Balmoral Castle in following the collapse of the Norwegian Bronze Horseman?",
+      "gold_q": "Which architect designed the current Balmoral Castle?",
+      "pred": "William Smith of Aberdeen",
+      "gold": "William Smith of Aberdeen",
+      "correct": 1
+     },
+     {
+      "qid": "1:6:3:3",
+      "cue": "What is the name of the castle located in Aberdeenshire, Scotland?",
+      "gen_q": "What is the name of the castle located in Aberdeenshire?",
+      "gold_q": "What is the name of the castle located in Aberdeenshire, Scotland?",
+      "pred": "Balmoral Castle",
+      "gold": "Balmoral Castle",
+      "correct": 1
+     },
+     {
+      "qid": "1:6:3:3",
+      "cue": "What is the name of the castle located in Aberdeenshire, Scotland?",
+      "gen_q": "What is the name of the castle located in Aberdeenshire, Scotland?",
+      "gold_q": "What is the name of the castle located in Aberdeenshire, Scotland?",
+      "pred": "Balmoral Castle",
+      "gold": "Balmoral Castle",
+      "correct": 1
+     },
+     {
+      "qid": "1:7:0:0",
+      "cue": "What title was given to Genghis Khan posthumously?",
+      "gen_q": "Who was called Genghis Khan posthumously?",
+      "gold_q": "What title was given to Genghis Khan posthumously?",
+      "pred": "Heredotus",
+      "gold": "Khagan",
+      "correct": 0
+     }
+    ]
+   }
+  }
+ ],
+ "decision": {
+  "n_seeds": 2,
+  "phase": "two_seed",
+  "power": "underpowered",
+  "threatened_n": [
+   9,
+   7
+  ],
+  "L0": [
+   0.0,
+   0.0
+  ],
+  "L1": [
+   0.0,
+   0.0
+  ],
+  "L3": [
+   0.0,
+   0.0
+  ],
+  "L3_eligible": [
+   0.0,
+   0.0
+  ],
+  "L4": [
+   0.0,
+   0.143
+  ],
+  "L5": [
+   1.0,
+   1.0
+  ],
+  "availability_rate": [
+   0.255,
+   0.185
+  ],
+  "pooled_shadow_spearman": 0.973,
+  "shadow_proxy_pass": true,
+  "addressability": "availability_unstable",
+  "build_r49b": false
+ }
+}

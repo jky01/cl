@@ -1,0 +1,25 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+RECALL_LADDER (Qwen/Qwen2.5-0.5B, cuda) source=census streams=9x5x5 cons=400 shadow=60 gen_N=400 gen_per=4 seeds=2 damage_min=0.5
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10790.02it/s]
+  seed 0
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 9 streams; used-stream domain mix={'news_gen': 30, 'wiki_gen': 76, 'squad_human': 51}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10598.78it/s]
+    [L0_free] cands=350 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L1_fixed_family] cands=258 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L2_oracle_domain] cands=283 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L3_oracle_entity] cands=38 corr_ans=0.028 corr_thr=0.0 raw_thr=0.0 terr=0.0
+    [L4_relation_redacted] cands=10 corr_ans=0.028 corr_thr=0.0 raw_thr=0.111 terr=0.667
+  seed 0: n_old=141 answerable=36 threatened=9 (bits=6 flip=9) avail=0.255 shadow_rho=0.956 enrich=3.111
+  DECISION {"n_seeds": 1, "phase": "shakedown_only", "power": "underpowered", "threatened_n": [9], "L0": [0.0], "L1": [0.0], "L3": [0.0], "L3_eligible": [0.0], "L4": [0.0], "L5": [1.0], "availability_rate": [0.255], "pooled_shadow_spearman": 0.956, "shadow_proxy_pass": true, "addressability": "shakedown_only"}
+  seed 1
+  CENSUS[docs/cloud_results/r43_censusxl.json]: 217 passages w/ sc-gated probes (>=3/4/5 probes: {3: 67, 4: 29, 5: 10}) -> 67 usable articles -> 9 streams; used-stream domain mix={'wiki_gen': 80, 'squad_human': 44, 'news_gen': 30}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 10773.10it/s]
+    [L0_free] cands=328 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L1_fixed_family] cands=283 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L2_oracle_domain] cands=183 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L3_oracle_entity] cands=25 corr_ans=0.0 corr_thr=0.0 raw_thr=0.0 terr=None
+    [L4_relation_redacted] cands=56 corr_ans=0.16 corr_thr=0.143 raw_thr=0.571 terr=0.636
+  seed 1: n_old=135 answerable=25 threatened=7 (bits=6 flip=6) avail=0.185 shadow_rho=0.992 enrich=3.571
+  DECISION {"n_seeds": 2, "phase": "two_seed", "power": "underpowered", "threatened_n": [9, 7], "L0": [0.0, 0.0], "L1": [0.0, 0.0], "L3": [0.0, 0.0], "L3_eligible": [0.0, 0.0], "L4": [0.0, 0.143], "L5": [1.0, 1.0], "availability_rate": [0.255, 0.185], "pooled_shadow_spearman": 0.973, "shadow_proxy_pass": true, "addressability": "availability_unstable", "build_r49b": false}
+[done]
+=== R49CONF_DONE 2026-07-10T09:05:06+00:00 ===
