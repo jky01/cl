@@ -1,0 +1,11 @@
+device=cuda GROWTH k=4 h0=128 H=384 residual_frac=0.34 ref_frac=0.25 seeds=3
+ residual  capacity  r1_retain  res_train  res_unseen   params
+   atomic     fixed      0.207      1.000       0.022    13312
+   atomic      grow      0.260      1.000       0.020    39936
+   atomic      wide      0.258      1.000       0.018    39936
+    rule2     fixed      0.224      1.000       0.216    13312
+    rule2      grow      0.250      1.000       0.264    39936
+    rule2      wide      0.252      1.000       0.257    39936
+
+money metric = res_unseen (model-only generalization to held-out residual inputs).
+expect: rule2 x {grow,wide} >> rule2 x fixed on res_unseen; atomic res_unseen ~ chance (~0.025) for all capacities.
