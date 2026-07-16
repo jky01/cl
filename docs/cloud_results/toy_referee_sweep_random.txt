@@ -1,0 +1,10 @@
+device=cuda N=4000 C=50 h=128 alpha=1.0 fold_epochs=4000 seeds=2 task=random-labels
+ budget        sel  accA_all    accB     min  A_margin
+   1.00        all     1.000   1.000   1.000     8.178
+   0.50     random     0.544   1.000   0.544     7.145
+   0.50  lowmargin     0.543   1.000   0.543     7.229
+   0.10     random     0.177   1.000   0.177     5.049
+   0.10  lowmargin     0.178   1.000   0.178     5.165
+   0.02     random     0.108   1.000   0.108     4.434
+   0.02  lowmargin     0.108   1.000   0.108     4.437
+   0.00        all     0.088   1.000   0.088     4.208
