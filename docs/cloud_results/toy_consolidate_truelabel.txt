@@ -1,0 +1,9 @@
+device=cuda CONSOLIDATE region+rule2 h0=128 H=384 seeds=3 chance=0.025
+
+           model  rule1_unseen residual_unseen
+phase-1 (rule only)         0.654               -
+ teacher (gated)         0.654           0.184
+ consolidated h0         0.654           0.417
+  consolidated H         0.654           0.462
+
+flat consolidated model has NO branch/router/gate at inference. cons h0 keeps both => growth was temporary scaffold; only cons H keeps residual => grown capacity is load-bearing (growth necessary).

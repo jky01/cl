@@ -80,11 +80,13 @@ def run(seed, args, device):
     t_r1 = (teacher_pred(r1_un) == L1(r1_un)).float().mean().item()
     t_rU = (teacher_pred(res_un) == resL(res_un)).float().mean().item()
 
-    # LEGAL consolidation data: self-distill the teacher over the FULL input manifold (all (e,r)
-    # descriptors are known; the teacher is a function -> no stored old labels / no old-data replay),
-    # blended with the retained residual-train under its TRUE labels (better residual than the gate).
-    cons_pairs = torch.cat([allp, res_tr])
-    cons_labels = torch.cat([teacher_pred(allp), resL(res_tr)])
+    # LEGAL consolidation data: self-distill the teacher on the RULE region (strong there; no stored
+    # old labels / no old-data replay) + the retained residual-train under its TRUE labels. Crucially do
+    # NOT let the gated teacher's WEAK residual prediction label the residual region -- use true labels
+    # there (we have them: reading a residual fact gives its label). This uncaps residual quality.
+    rule_pairs = allp[~is_res]
+    cons_pairs = torch.cat([rule_pairs, res_tr])
+    cons_labels = torch.cat([teacher_pred(rule_pairs), resL(res_tr)])
 
     out = {"r1_ph1": r1_ph1, "teacher_r1": t_r1, "teacher_rU": t_rU}
     for W, tag in [(h0, "h0"), (H, "H")]:

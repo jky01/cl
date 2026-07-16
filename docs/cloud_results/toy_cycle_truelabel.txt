@@ -1,0 +1,10 @@
+device=cuda CYCLE groups=4 h0=160 H(grow)=384 seeds=2 chance=0.025
+/home/aa/cl/s3/toy_cycle.py:61: UserWarning: torch.searchsorted(): input value tensor is non-contiguous, this will lower the performance due to extra data copy when converting non-contiguous tensor to contiguous, please use contiguous input value tensor if possible. This message will only appear once per program. (Triggered internally at /__w/pytorch/pytorch/aten/src/ATen/native/BucketizationUtils.h:32.)
+  grp_of_ent = torch.bucketize(q, edges[1:-1].contiguous())          # 0..G-1
+round  width  grp0  grp1  grp2  grp3
+    0    160  0.667    -      -      -  
+    1    160  0.667  0.551    -      -  
+    2    160  0.667  0.551  0.451    -  
+    3    160  0.667  0.551  0.451  0.352
+
+width stays h0 across rounds => params bounded (grow is temporary). group-0..k-1 columns not eroding down the rows => no catastrophic forgetting across acquisitions. diagonal (newly added group) high => acquisition works each round.

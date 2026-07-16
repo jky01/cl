@@ -108,9 +108,11 @@ def run(seed, args, device):
             pd = tr.center(tr.delta(x_e, x_r, P, pairs, h0))
             return (zo + router(pairs).view(-1, 1) * pd).argmax(1)
 
-        # consolidate: distill teacher over manifold + group-k true labels -> flat M_k (h0)
-        cons_pairs = torch.cat([allp, res_tr])
-        cons_labels = torch.cat([teacher_pred(allp), true_lab(res_tr)])
+        # consolidate: self-distill teacher on the OLD region (groups 0..k-1, strong) + group-k under
+        # its TRUE labels (don't let the gated branch's weak group-k prediction cap residual quality).
+        old_region = allp[pair_grp < k]
+        cons_pairs = torch.cat([old_region, res_tr])
+        cons_labels = torch.cat([teacher_pred(old_region), true_lab(res_tr)])
         M = distill_flat(x_e, x_r, cons_pairs, cons_labels, h0, din, C,
                          args.distill_epochs, args.lr, seed + 100 + k, device)
         accs = [flat_acc(M, x_e, x_r, gtest[j], true_lab(gtest[j])) for j in range(k + 1)]
