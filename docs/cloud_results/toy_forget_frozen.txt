@@ -1,0 +1,7 @@
+device=cuda N=4000 C=50 d=64 h=64 epochs=2000 lr=0.003 embed=frozen replay_frac=0.25 ewc_lambda=1000.0 seeds=3
+arm       accA_postA  accA_postB  accB_postB  forget(A)
+naive          1.000       0.032       1.000      0.968
+replay         1.000       0.277       0.994      0.723
+ewc            1.000       0.061       0.960      0.939
+local          1.000       1.000       0.998      0.000
+joint            nan       0.624       0.619        nan
