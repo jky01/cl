@@ -1,0 +1,7 @@
+device=cuda PARITY M=2048 train_range=[0,512) extrap=[512,2048) h=256 seeds=3
+ encoding   train  interp  extrap   verdict
+   scalar   0.522   0.411   0.500   cannot even fit the rule in this representation
+   binary   1.000   1.000   1.000   DERIVES the rule (extrapolates)
+    embed   1.000   0.505   0.505   cannot even fit the rule in this representation
+
+Same rule, same net: extrapolation ('deriving further numbers') happens ONLY when the input representation exposes the rule (binary: parity=LSB). scalar can't fit; embed memorizes but has nothing for unseen numbers -> chance 0.5.
