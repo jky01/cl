@@ -1,0 +1,7 @@
+device=cuda QUADRATIC y=x^2 train=[-4.0,4.0] extrap|x|=[4.0,10.0] h=256/big1024 seeds=3
+     arm | train_rmse interp_rmse extrap_rmse | extrap_within15%   verdict
+     raw |     0.0009      0.0009      1.2047 |           0.292   fits in-range, FAILS to extrapolate (linear outside)
+ raw_big |     0.0045      0.0045      1.2133 |           0.300   fits in-range, FAILS to extrapolate (linear outside)
+    poly |     0.0023      0.0022      0.1917 |           1.000   DERIVES the quadratic (extrapolates)
+
+ReLU MLP on raw x fits the curve in-range but extrapolates with a straight line -> the quadratic's curvature is lost (extrap error large, within-tol ~0). More width (raw_big) does not help. Give it x^2 as a feature (poly) and it extrapolates ~exactly. Same lesson as parity: DERIVING a function beyond the data needs the representation to expose it.
