@@ -126,6 +126,12 @@ def run(seed, args, device):
     fit(x_e, x_r, Pj, torch.cat([A, B]), y, args.epochs, args.lr)
     joint = (acc(x_e, x_r, Pj, A, y), acc(x_e, x_r, Pj, B, y))
 
+    # B-only reconstruction control (codex): fresh init, train on B alone, eval A.
+    # A-perf here = what the shared rule + B identifies with NO persistent A-specific state.
+    Pbo = make_student(seed + 33, args.de, args.dr, args.h, C, device)
+    fit(x_e, x_r, Pbo, B, y, args.epochs, args.lr)
+    bonly = (acc(x_e, x_r, Pbo, A, y), acc(x_e, x_r, Pbo, B, y))
+
     # learn A into shared weights
     P = make_student(seed, args.de, args.dr, args.h, C, device)
     fit(x_e, x_r, P, A, y, args.epochs, args.lr)
@@ -135,7 +141,7 @@ def run(seed, args, device):
     A_marg = margins(x_e, x_r, P, A)
     order_low = torch.argsort(A_marg)      # ascending margin (positions into A)
 
-    out = {"joint": joint, "accA0": accA0, "balance": balance}
+    out = {"joint": joint, "accA0": accA0, "balance": balance, "bonly": bonly}
     for budget in args.budgets:
         kk = int(round(budget * A.shape[0]))
         sels = ["random", "lowmargin"] if 0 < kk < A.shape[0] else ["all"]
@@ -194,8 +200,14 @@ def main():
     def fullA(budget, sel):
         return torch.tensor(agg[(budget, sel)]).mean(0)[0].item()
     R1 = fullA(1.0, "all")
-    R0 = fullA(0.0, "all")
-    print(f"R(1)=full-A ceiling={R1:.3f}  R(0)=zero-referee(transfer)={R0:.3f}  chord slope={(R1-R0):.3f}")
+    R0 = fullA(0.0, "all")               # A->B, zero referee (warm from A solution)
+    bonly = torch.tensor(agg["bonly"]).mean(0).tolist()
+    retained = R0 - bonly[0]             # A-specific state left in weights beyond B-only reconstruction
+    print(f"R(1)=full-A ceiling={R1:.3f}  R(0)=A->B zero-referee={R0:.3f}  "
+          f"chord slope={(R1-R0):.3f}")
+    print(f"DECOMP: B-only reconstruction(accA)={bonly[0]:.3f}  "
+          f"retained-A-state(R0 - Bonly)={retained:+.3f}  "
+          f"(B-only accB={bonly[1]:.3f})")
     print(f"\n{'budget':>7} {'sel':>10} {'fullA':>7} {'chord':>7} {'lift':>7} "
           f"{'selA':>7} {'unselA':>7} {'B':>7}")
     for budget in args.budgets:

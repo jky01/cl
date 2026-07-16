@@ -1,0 +1,15 @@
+device=cuda STRUCTURED rank_k=2 n_ent=80 n_rel=80 C=50 h=256 alpha=1.0 epochs=3000 seeds=3
+joint witness: accA=1.000 accB=1.000 | A-only accA0=1.000 | class-balance(max/mean)=14.52
+R(1)=full-A ceiling=1.000  R(0)=A->B zero-referee=0.961  chord slope=0.039
+DECOMP: B-only reconstruction(accA)=0.839  retained-A-state(R0 - Bonly)=+0.123  (B-only accB=1.000)
+
+ budget        sel   fullA   chord    lift    selA  unselA       B
+   1.00        all   1.000   1.000  +0.000   1.000     nan   1.000
+   0.50     random   0.987   0.981  +0.006   1.000   0.974   1.000
+   0.50  lowmargin   0.999   0.981  +0.018   1.000   0.998   1.000
+   0.10     random   0.967   0.965  +0.002   1.000   0.963   1.000
+   0.10  lowmargin   0.974   0.965  +0.009   1.000   0.971   1.000
+   0.02     random   0.963   0.962  +0.001   1.000   0.962   1.000
+   0.02  lowmargin   0.964   0.962  +0.002   1.000   0.963   1.000
+   0.00        all   0.961   0.961  +0.000     nan   0.961   1.000
+above-chord lift > 0 => small referee protects MORE old decisions than its membership (compression via shared weights). ~0 => behaves like incompressible facts.
