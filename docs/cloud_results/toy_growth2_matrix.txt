@@ -1,0 +1,12 @@
+device=cuda GROWTH2 k=4 h0=128 H=384 residual_frac=0.34 ref_frac=0.25 seeds=3 chance=0.025
+  resid        cap  r1_ph1  r1_old  r1_comb  newbr  res_tr  res_un
+ atomic      fixed   0.626   0.200    0.200   0.00   1.000   0.021
+ atomic       wide   0.625   0.255    0.255   0.00   1.000   0.019
+ atomic    protect   0.626   0.626    0.245 104.24   1.000   0.021
+ atomic  partition   0.617   0.617    0.257 104.36   1.000   0.021
+  rule2      fixed   0.626   0.223    0.223   0.00   1.000   0.227
+  rule2       wide   0.625   0.248    0.248   0.00   1.000   0.255
+  rule2    protect   0.626   0.626    0.259  90.15   1.000   0.267
+  rule2  partition   0.617   0.617    0.262  89.81   1.000   0.278
+
+verdict: protect/partition r1_old should == r1_ph1 (freeze OK); r1_comb is the real retention; rule2 res_un>>chance & >fixed = growth absorbs compressible residual w/o overwrite; atomic res_un~chance.
