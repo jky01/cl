@@ -1,0 +1,20 @@
+device=cuda N=4000 C=50 d=64 h=128 epochs=4000 fold_epochs=4000 seeds=2
+
+pre-fold (slots, illegal):  accA=1.000 accB=1.000  (A margin0=10.277)
+joint witness (A∪B true labels): accA=1.000 accB=1.000  A-logit-MSE-to-teacher=303.578  <- compatibility (large => mse-fold target off-manifold)
+
+  init    mode  alpha    accA    accB     min  A_logMSE  A_margin
+ Ainit  labels   1.00   1.000   1.000   1.000   310.549     8.178
+ Ainit     mse   0.30   0.671   0.409   0.409    20.930     3.415
+ Ainit     mse   1.00   1.000   0.053   0.053     3.663     7.459
+ Ainit     mse   3.00   1.000   0.023   0.023     0.515     9.459
+ Ainit      ce   0.30   1.000   1.000   1.000   269.090     6.796
+ Ainit      ce   1.00   1.000   1.000   1.000   310.549     8.178
+ Ainit      ce   3.00   1.000   1.000   1.000   364.233     9.309
+ fresh  labels   1.00   1.000   1.000   1.000   327.667     8.996
+ fresh     mse   0.30   0.325   0.724   0.325    34.931     2.407
+ fresh     mse   1.00   0.999   0.057   0.057     4.450     7.058
+ fresh     mse   3.00   1.000   0.022   0.022     0.770     9.265
+ fresh      ce   0.30   1.000   1.000   1.000   320.108     8.089
+ fresh      ce   1.00   1.000   1.000   1.000   327.667     8.996
+ fresh      ce   3.00   1.000   1.000   1.000   328.413     9.498

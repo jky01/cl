@@ -1,0 +1,14 @@
+device=cuda N=4000 C=50 d=64 h=128 epochs=4000 fold_epochs=4000 lr=0.003 seeds=2
+
+pre-fold (slots present, illegal):  accA_afterA=1.000  accA_withB=1.000  accB=1.000
+
+FOLD (slots deleted, shared-only) — A-init, Pareto over alpha:
+   alpha     accA     accB      min
+    0.00    0.088    1.000    0.088
+    0.10    0.433    0.996    0.433
+    1.00    1.000    0.053    0.053
+   10.00    1.000    0.019    0.019
+  100.00    1.000    0.017    0.017
+
+fresh-init control (alpha=1.0, best of 3): accA=0.998 accB=0.059 min=0.059
+interpretation: fresh-init good but A-init stuck => path/optimization wall; both stuck => representational (contradicted by joint=1.0); A-init good => fold exists.
