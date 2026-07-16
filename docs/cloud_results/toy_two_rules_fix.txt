@@ -1,0 +1,14 @@
+device=cuda TWO-RULES-FIX one net parity->square; wd=0.001 seeds=3
+linear-oracle y=a*q+b extrap within15%: [1.0,1.5)=1.00  [2.0,3.0)=1.00  [3.0,4.0)=1.00
+
+     arch      mode | par_ret  sq_ip  [1,1.5)  [1.5,2)   [2,3)   [3,4)  maxpred
+ baseline  consolid |   1.000  0.794    0.000    0.000   0.000   0.000     1.47
+ baseline  sq_alone |     -    0.957    0.000    0.000   0.000   0.000     4.27
+       wd  consolid |   1.000  0.952    0.000    0.000   0.000   0.000     1.23
+       wd  sq_alone |     -    0.955    0.000    0.000   0.000   0.000     4.36
+    gskip  consolid |   1.000  0.947    0.000    0.000   0.000   0.000     1.98
+    gskip  sq_alone |     -    0.868    0.000    0.000   0.000   0.000     5.21
+ sepheads  consolid |   1.000  0.852    0.000    0.000   0.000   0.000     1.57
+ sepheads  sq_alone |     -    0.961    0.000    0.000   0.000   0.000     4.40
+
+true square max on [3K,M) ~ (M/K)^2 = 16.0. maxpred near that => scales; near 1 => saturated. sq_alone success + consolid fail => sharing/sequential cost; both fail => architecture bias.
