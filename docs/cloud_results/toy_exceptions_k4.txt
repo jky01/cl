@@ -1,0 +1,51 @@
+device=cuda RULE+EXCEPTIONS k=4 n_ent=80 n_rel=80 C=50 h=256 epochs=2500 seeds=2
+
+=== rho=0.0  (A: ~3200 rule, ~0 exc)  B-only recon: rule=0.601 exc=nan ===
+ budget        sel   ruleA   excIn  excOut    allA       B
+   0.02     random   0.854     nan     nan   0.854   1.000
+   0.02  lowmargin   0.855     nan     nan   0.855   1.000
+   0.02  excoracle   0.851     nan     nan   0.851   1.000
+   0.10     random   0.873     nan     nan   0.873   1.000
+   0.10  lowmargin   0.875     nan     nan   0.875   1.000
+   0.10  excoracle   0.870     nan     nan   0.870   1.000
+   0.50     random   0.942     nan     nan   0.942   1.000
+   0.50  lowmargin   0.970     nan     nan   0.970   1.000
+   0.50  excoracle   0.938     nan     nan   0.938   1.000
+
+=== rho=0.1  (A: ~2881 rule, ~319 exc)  B-only recon: rule=0.507 exc=0.006 ===
+ budget        sel   ruleA   excIn  excOut    allA       B
+   0.02     random   0.753   1.000   0.085   0.687   1.000
+   0.02  lowmargin   0.728   1.000   0.082   0.675   1.000
+   0.02  excoracle   0.737   1.000   0.077   0.689   1.000
+   0.10     random   0.777   1.000   0.075   0.718   1.000
+   0.10  lowmargin   0.749   1.000   0.091   0.713   1.000
+   0.10  excoracle   0.710   1.000   0.000   0.738   1.000
+   0.50     random   0.889   1.000   0.066   0.851   1.000
+   0.50  lowmargin   0.908   1.000   0.108   0.904   1.000
+   0.50  excoracle   0.869   1.000     nan   0.882   1.000
+
+=== rho=0.25  (A: ~2410 rule, ~790 exc)  B-only recon: rule=0.389 exc=0.012 ===
+ budget        sel   ruleA   excIn  excOut    allA       B
+   0.02     random   0.594   1.000   0.078   0.470   1.000
+   0.02  lowmargin   0.579   1.000   0.072   0.466   1.000
+   0.02  excoracle   0.586   1.000   0.079   0.479   1.000
+   0.10     random   0.639   1.000   0.079   0.523   1.000
+   0.10  lowmargin   0.593   1.000   0.090   0.517   1.000
+   0.10  excoracle   0.558   1.000   0.094   0.534   1.000
+   0.50     random   0.815   1.000   0.081   0.744   1.000
+   0.50  lowmargin   0.789   1.000   0.145   0.783   1.000
+   0.50  excoracle   0.720   1.000     nan   0.789   1.000
+
+=== rho=0.5  (A: ~1616 rule, ~1584 exc)  B-only recon: rule=0.237 exc=0.013 ===
+ budget        sel   ruleA   excIn  excOut    allA       B
+   0.02     random   0.417   1.000   0.085   0.261   1.000
+   0.02  lowmargin   0.393   1.000   0.084   0.255   1.000
+   0.02  excoracle   0.392   1.000   0.089   0.260   1.000
+   0.10     random   0.461   1.000   0.083   0.322   1.000
+   0.10  lowmargin   0.420   1.000   0.084   0.315   1.000
+   0.10  excoracle   0.375   1.000   0.087   0.324   1.000
+   0.50     random   0.703   1.000   0.085   0.625   1.000
+   0.50  lowmargin   0.675   1.000   0.100   0.644   1.000
+   0.50  excoracle   0.336   1.000     nan   0.665   1.000
+
+prediction: ruleA ~ budget-insensitive (reconstructed); excOut ~ B-only floor (atomic, unreconstructible); excIn ~ retained; excoracle maximizes allA at low budget.
