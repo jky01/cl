@@ -1,0 +1,23 @@
+device=cuda DECOY frontier  K=512 M=2048; x=n/K, d=(n mod K)/K (d==x on base env)
+
+[single-env (base only)]  top candidates by worst-env RMSE (support size all =1 coord/factor):
+   support  worstRMSE OOD[2,3)_w15
+       x*x     0.0000        1.000  <- x*x
+       x*d     0.0000        0.000
+       d*d     0.0000        0.000  <- d*d (decoy)
+      x*b8     0.0982        0.000
+      d*b8     0.0982        0.000
+     b7*b8     0.1580        0.000
+  x*x worstRMSE=0.0000  d*d worstRMSE=0.0000  -> TIE (non-identifiable)
+
+[multi-env (base + shifted, breaks d=x)]  top candidates by worst-env RMSE (support size all =1 coord/factor):
+   support  worstRMSE OOD[2,3)_w15
+       x*x     0.0000        1.000  <- x*x
+       x*d     0.0370        0.000
+       d*d     0.1446        0.000  <- d*d (decoy)
+      d*b8     0.2951        0.000
+      x*b9     0.2979        0.000
+      d*b9     0.2979        0.000
+  x*x worstRMSE=0.0000  d*d worstRMSE=0.1446  -> x*x wins
+
+Preregistered: single-env -> x*x and d*d TIE (description length cannot choose; correct). multi-env -> x*x uniquely wins (invariant across environments) and extrapolates, d*d fails. => what identifies the rule beyond MDL is EVIDENCE THAT BREAKS OBSERVATIONAL EQUIVALENCE (multi-environment invariance), exactly as codex framed.
