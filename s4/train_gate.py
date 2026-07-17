@@ -69,9 +69,9 @@ class TM(nn.Module):
         s.blocks = nn.ModuleList([Block(d, h, ff) for _ in range(nl)])
         s.lnf = nn.LayerNorm(d); s.head = nn.Linear(d, NTOK)
 
-    def forward(s, idx):
+    def forward(s, idx, pos_offset=0):
         B, T = idx.shape
-        pos = torch.arange(T, device=idx.device)
+        pos = torch.arange(T, device=idx.device) + pos_offset      # train-time random offset probe
         mask = torch.triu(torch.ones(T, T, device=idx.device, dtype=torch.bool), 1)[None, None]
         x = s.emb(idx)
         for b in s.blocks:
