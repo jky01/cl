@@ -1,0 +1,12 @@
+device=cuda S3-CONTINUAL discover->install->retain; K=512 M=2048
+
+discovered: parity->b0  square(single-env)->x*x  square(multi-env)->x*x  third->b1
+
+installed model (memory-free: operators+coefs are weights; no selector at inference):
+   after phase | parity_ID | square_ID square_OOD |  third_ID
+    2 (par+sq) |     1.000 |     1.000      1.000 |         -
+    3 (+third) |     1.000 |     1.000      1.000 |     1.000
+
+control: supplied x*x OOD=1.000  vs discovered x*x OOD=1.000  (equal => discovery and consolidation are separable, both retain)
+
+no joint full retraining: each rule discovered from its own phase's evidence + installed; inference uses only the installed operators/coefs (weights). square single-env would have picked x*x (a decoy tie); MULTI-env evidence is what made x*x discoverable.
