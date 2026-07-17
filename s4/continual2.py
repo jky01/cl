@@ -48,8 +48,8 @@ class Block(nn.Module):
         o = (att @ v).transpose(1, 2).reshape(B, T, D)
         x = x + s.proj(o)
         h = s.f2(F.gelu(s.f1(s.ln2(x))))
-        if s.use_adapter:
-            h = h + route * s.ad_up(F.gelu(s.ad_dn(s.ln2(x))))       # route: [B,1,1] mask
+        if s.use_adapter and route.max() > 0:                       # skip matmul when route all-zero
+            h = h + route * s.ad_up(F.gelu(s.ad_dn(s.ln2(x))))       # (honest: 0 adapter FLOPs on pure-csum)
         return x + h
 
 

@@ -1,0 +1,3 @@
+=== SEED 0 ===
+device=cuda WIDTH_SWEEP W=5 d=192 nl=4 trunk=1.79M rs=[1]
+=== phase 2 ===
