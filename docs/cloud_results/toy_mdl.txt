@@ -1,0 +1,8 @@
+device=cuda MDL discovery (square=x*x reachable, no q). P=8 H=64 beta=0.02 gam=0.0001 seeds=3  (beta/gam fixed, NOT OOD-tuned)
+ selector |  sq_ip  [1,1.5)   [2,3)   [3,4) | act_prod  act_res   note
+     none |  0.894    0.000   0.000   0.000 |      8.0     64.0   negative baseline
+      wl1 |  0.947    0.000   0.000   0.000 |      8.0     64.0   opt regularization only
+   prodL0 |  0.939    0.000   0.000   0.000 |      0.0     64.0   product-only (residual loophole)
+  graphL0 |  0.753    0.000   0.000   0.000 |      1.3      0.0   WHOLE-GRAPH MDL
+
+SUCCESS (graphL0): OOD shells ~1.0 AND active graph collapses to ~1 product unit + ~0 residual (the short x*x mechanism). If graphL0 extrapolates while prodL0 does not, the whole-graph accounting -- not mere product sparsity -- is what selects the reusable rule.
