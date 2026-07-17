@@ -1,5 +1,35 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **LM-PORT continual R37 — SELECTIVE compact growth (not capacity) turns catastrophic forgetting into
+> full retention + acquisition, at LM scale.** `s4/continual2.py`, `docs/cloud_results/lm_continual2.txt`
+> (RTX 2070 local, 1.84M-param local-window transducer; W=5, adapter r=32 = 50K = 2.7%). Substrate = the
+> scratchpad model that length-EXTRAPOLATES `csum_reset` to L40. Phase2 acquires csum (retain target);
+> phase3 learns interfering `rmax_reset` from NEW DATA ONLY (no csum replay, no joint retrain). Retention
+> metric = the ALGORITHM (csum L8–40 extrapolation + reset-counterfactual), not example recall. 4 arms,
+> identical phase-2 init & phase-3 data:
+> ```
+> phase2          : csum L8-40 = 1.00, cf 0.93 ; rmax 0        (extrapolating algorithm learned)
+> naive           : csum 0.00 everywhere, cf 0 ; rmax 1.00     (catastrophic forgetting)
+> ewc (lam 2000)  : csum 0.00 everywhere, cf 0 ; rmax 1.00     (== naive: Fisher DEGENERATE)
+> adapter_ungated : csum 0.00 everywhere, cf 0 ; rmax 1.00     (same 50K params, always-on -> output override)
+> adapter_routed  : csum L8-40 = 1.00, cf 0.93 ; rmax 1.00     (FULL retention + FULL acquisition)
+> ```
+> **Decisive contrast = ungated vs routed**: SAME 50K adapter params, SAME frozen trunk, SAME rmax data.
+> Always-on destroys csum (output-override trap: the branch adds rmax-shaped residuals over the intact
+> frozen csum path); command-masked routing (route=0 on csum) retains csum BYTE-IDENTICALLY (measured
+> invariant: csum logits max|Δ| vs phase2 = **0.00e+00**) AND acquires rmax. => interference is resolved by
+> SELECTIVE ACTIVATION, not by added capacity. Retention is an ARCHITECTURAL invariant, not hoped-for
+> regularization. **EWC ≡ naive** because at convergence the near-deterministic softmax makes the
+> model-sampled Fisher numerically ~0 (`frac~0=1.00, norm=5.5e-5`) — λ is inert (codex-predicted
+> degeneracy of local-curvature importance for a confidently-solved deterministic algorithm; not a
+> strength bug — was verified with the fair model-sampled Fisher). HONEST BOUNDS: (a) the command token is
+> an explicit task cue read directly — this is *protected modular expansion with an input-provided route*,
+> NOT task-free route discovery (NEXT: input-inferred routing + held-out compositions); (b) hard-frozen
+> trunk => modular INTEGRATION, not rewriting shared old weights; (c) r=32 works but the MINIMAL width is
+> unmeasured (NEXT: adapter-width frontier — smallest r meeting csum-within-0.03 ∧ high-rmax is stronger
+> growth-necessity evidence than one oversized branch). Substantiates the toy-line prediction (grow only
+> when protected + input-addressable) at LM scale.
+
 > **R50-scale scout — the self-addressing wall survives a 3× native scale step (0.5B→1.5B).** `s3/scale_scout.py`,
 > `docs/cloud_results/r50_scale_scout.*`, 2 seeds, JOINT base-hard screen (both frozen bases fail the full
 > held-out question; 88/79 facts). Each size bare-acquires the SAME facts, then audits history-free L0_free+L1_

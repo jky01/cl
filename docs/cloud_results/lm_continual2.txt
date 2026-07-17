@@ -1,0 +1,13 @@
+device=cuda CONTINUAL2 W=5 r=32 params=1.84M adapter=50K (2.7%)
+=== after phase 2 ===
+[          phase2]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:0.00 L12:0.00 L20:0.00 L30:0.00 L40:0.00
+model-Fisher: median=7.66e-17 p95=1.08e-15 frac~0=1.00 norm=5.51e-05
+
+=== after phase 3 (rmax only, no csum replay) ===
+[           naive]  csum L8:0.00 L12:0.00 L20:0.00 L30:0.00 L40:0.00  cf:0.00 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+[             ewc]  csum L8:0.00 L12:0.00 L20:0.00 L30:0.00 L40:0.00  cf:0.00 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+[ adapter_ungated]  csum L8:0.00 L12:0.00 L20:0.00 L30:0.00 L40:0.00  cf:0.00 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   [invariant] csum logits max|Δ| vs phase2 = 0.00e+00
+[  adapter_routed]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+
+verdict: adapter_routed retains csum L20-40+cf within 0.03 of phase2 AND acquires rmax, where naive/ewc forget and adapter_ungated (same params, always-on) likely damages csum => SELECTIVE compact growth, not capacity alone, resolves the interference.
