@@ -13,35 +13,53 @@ from train_gate import TM, batch, NTOK, PAD
 
 
 @torch.no_grad()
-def gen_full(model, ex, maxlen, device, max_out):
-    """generate output until EOS or max_out tokens; return the produced output list (excl specials)."""
+def gen_full(model, ex, maxlen, device, max_out, force_len=None):
+    """generate output; if force_len set, emit exactly force_len tokens (EOS suppressed) = fixed-horizon."""
     t = ex["tokens"]
     sep = t.index(ML.SEP) if ML.SEP in t else t.index(ML.BOS, 1)
-    seq = list(t[:sep + 1])
-    out = []
-    for _ in range(max_out):
+    seq = list(t[:sep + 1]); out = []
+    steps = force_len if force_len else max_out
+    for _ in range(steps):
         idx = torch.tensor([seq + [PAD] * (maxlen - len(seq))], device=device)[:, :maxlen]
-        nxt = int(model(idx)[0, len(seq) - 1].argmax())
+        logits = model(idx)[0, len(seq) - 1]
+        if force_len is not None:
+            logits[ML.EOS] = -1e9                      # suppress EOS -> isolate the transition/length ctrl
+        nxt = int(logits.argmax())
         seq.append(nxt)
-        if nxt == ML.EOS:
+        if force_len is None and nxt == ML.EOS:
             break
         out.append(nxt)
     return out
 
 
+@torch.no_grad()
+def teacher_forced_tokacc(model, op, L, n, maxlen, device, seed):
+    """feed GOLD prefix; next-token acc at each output position (no rollout error). isolates transition."""
+    exs = ML.make_examples(n, op, "E_reset", seed, (L, L))
+    corr = tot = 0
+    for e in exs:
+        t = e["tokens"]
+        sep = t.index(ML.SEP) if ML.SEP in t else t.index(ML.BOS, 1)
+        idx = torch.tensor([t + [PAD] * (maxlen - len(t))], device=device)[:, :maxlen]
+        logits = model(idx)[0]
+        for p in range(sep + 1, len(t) - 1):          # predict token at p+1 from gold prefix
+            corr += int(int(logits[p].argmax()) == t[p + 1]); tot += 1
+    return corr / max(tot, 1)
+
+
 def evalL(model, op, L, n, maxlen, device, seed):
     exs = ML.make_examples(n, op, "E_reset", seed, (L, L))
-    em = tok = lenok = 0
+    em = tok = lenok = fh_em = 0
     for e in exs:
-        pred = gen_full(model, e, maxlen, device, L + 5)
+        pred = gen_full(model, e, maxlen, device, L + 6)
         y = e["y"]
-        if len(pred) == len(y):
-            lenok += 1
-        if pred == y:
-            em += 1
-        m = min(len(pred), len(y))
-        tok += (sum(int(pred[i] == y[i]) for i in range(m)) / len(y)) if len(y) else 0
-    return em / n, tok / n, lenok / n
+        lenok += int(len(pred) == len(y))
+        em += int(pred == y)
+        m = min(len(pred), len(y)); tok += (sum(int(pred[i] == y[i]) for i in range(m)) / len(y)) if y else 0
+        fh = gen_full(model, e, maxlen, device, L + 6, force_len=len(y))    # fixed-horizon decode
+        fh_em += int(fh == y)
+    tf = teacher_forced_tokacc(model, op, L, min(n, 60), maxlen, device, seed + 1)
+    return em / n, tok / n, lenok / n, fh_em / n, tf
 
 
 def main():
@@ -71,15 +89,15 @@ def main():
         loss = (lt * mt).sum() / mt.sum().clamp(min=1)
         opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
     model.eval()
-    print(f"device={device} LEN-DIAG suf_erm trained len[3,12]; graded length sweep")
-    print(f"{'op':>11} {'L':>4} {'exact':>6} {'tokacc':>7} {'len_ok':>7}")
+    print(f"device={device} LEN-DIAG suf_erm trained len[3,12]; graded sweep + TF + fixed-horizon")
+    print(f"{'op':>11} {'L':>4} {'free_em':>7} {'tokacc':>7} {'len_ok':>7} {'fixedH_em':>9} {'TF_tokacc':>9}")
     for op in ["copy", "csum_reset"]:
-        for L in [12, 14, 16, 20, 30, 40]:
-            em, tk, lo = evalL(model, op, L, args.eval_n, args.maxlen, device, 4000 + L)
-            print(f"{op:>11} {L:>4} {em:>6.3f} {tk:>7.3f} {lo:>7.3f}")
-    print("\nlen_ok = fraction emitting the correct OUTPUT LENGTH. immediate cliff at L=14 => "
-          "absolute-position artifact; len_ok low => stop/format failure; graceful tokacc decay => "
-          "partial length-gen.")
+        for L in [12, 13, 14, 16, 20, 30, 40]:
+            em, tk, lo, fh, tf = evalL(model, op, L, args.eval_n, args.maxlen, device, 4000 + L)
+            print(f"{op:>11} {L:>4} {em:>7.3f} {tk:>7.3f} {lo:>7.3f} {fh:>9.3f} {tf:>9.3f}")
+    print("\nCAUSAL SPLIT: fixedH_em high while free_em low => EOS/length-control failure (cheap fix). "
+          "TF_tokacc high while free/fixedH low => exposure-bias rollout amplification. TF_tokacc cliffs "
+          "at L>12 => the transition itself is position-broken (position probe justified).")
 
 
 if __name__ == "__main__":

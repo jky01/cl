@@ -1,0 +1,19 @@
+device=cuda LEN-DIAG suf_erm trained len[3,12]; graded sweep + TF + fixed-horizon
+         op    L free_em  tokacc  len_ok fixedH_em TF_tokacc
+       copy   12   1.000   1.000   1.000     1.000     1.000
+       copy   13   0.007   0.664   0.007     0.213     0.824
+       copy   14   0.000   0.115   0.000     0.000     0.125
+       copy   16   0.000   0.072   0.000     0.000     0.090
+       copy   20   0.000   0.100   0.000     0.000     0.056
+       copy   30   0.000   0.112   0.000     0.000     0.099
+       copy   40   0.000   0.024   0.000     0.000     0.043
+ csum_reset   12   1.000   1.000   1.000     1.000     1.000
+ csum_reset   13   0.000   0.236   0.000     0.000     0.321
+ csum_reset   14   0.000   0.066   0.000     0.000     0.126
+ csum_reset   16   0.000   0.055   0.000     0.000     0.091
+ csum_reset   20   0.000   0.081   0.000     0.000     0.078
+ csum_reset   30   0.000   0.096   0.000     0.000     0.084
+ csum_reset   40   0.000   0.024   0.000     0.000     0.043
+
+CAUSAL SPLIT: fixedH_em high while free_em low => EOS/length-control failure (cheap fix). TF_tokacc high while free/fixedH low => exposure-bias rollout amplification. TF_tokacc cliffs at L>12 => the transition itself is position-broken (position probe justified).
+[rc=0]
