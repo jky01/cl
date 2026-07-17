@@ -1,0 +1,15 @@
+===== FULL ATTENTION =====
+device=cuda SCRATCHPAD interleaved I/O (full-attn); trained len[3,12]; test to 40
+         op L12 L14 L16 L20 L30 L40
+       copy 1.00 1.00 1.00 1.00 0.98 0.93
+ csum_reset 1.00 0.98 0.79 0.01 0.00 0.00
+
+interleaved local step: exact-match STAYS HIGH at L=14..40 => the model executes the recurrence step-by-step and length-extrapolates (forward derivation). still cliffs => even the local-step format doesn't generalize -> try local window attention.
+===== LOCAL WINDOW=5 =====
+device=cuda SCRATCHPAD interleaved I/O (window=5); trained len[3,12]; test to 40
+         op L12 L14 L16 L20 L30 L40
+       copy 0.99 1.00 0.99 0.99 0.99 0.97
+ csum_reset 0.99 0.99 0.99 1.00 0.95 0.95
+
+interleaved local step: exact-match STAYS HIGH at L=14..40 => the model executes the recurrence step-by-step and length-extrapolates (forward derivation). still cliffs => even the local-step format doesn't generalize -> try local window attention.
+[done rc=0]
