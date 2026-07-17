@@ -1,0 +1,6 @@
+device=cuda DISCOVERY no-q, multiplicative arch (nprod=8); x*x reachable. seeds=3
+
+square-alone (discovery): interp=0.952  [1,1.5)=0.000  [2,3)=0.000  [3,4)=0.000
+consolidate: parity_ret=1.000  square interp=0.871  [1,1.5)=0.000  [2,3)=0.000  [3,4)=0.000
+
+alone extrapolates => the net DISCOVERED square=x*x from raw x (selection of the compact mechanism worked). alone fails => rule DISCOVERY is the wall even with x*x reachable. alone works but consolidate fails => CL mechanism implicated in preserving the discovered rule.

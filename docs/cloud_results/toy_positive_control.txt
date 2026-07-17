@@ -1,0 +1,4 @@
+device=cuda POSITIVE-CONTROL restricted class (parity=linear(bits), square=a*q+b); continual parity->square; seeds=3
+
+parity_retention=1.000   square: interp=1.000  [1,1.5)=1.000  [2,3)=1.000  [3,4)=1.000
+expected: parity retained ~1.0 AND square extrapolates ~1.0 on all shells -> the right hypothesis class + consolidation gives BOTH retention and extrapolable acquisition (the conjunction flexible ReLU nets could not achieve). q supplied => NOT rule discovery.
