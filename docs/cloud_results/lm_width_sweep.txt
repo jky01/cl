@@ -1,0 +1,19 @@
+device=cuda WIDTH_SWEEP W=5 d=192 nl=4 trunk=1.79M rs=[1, 2, 4, 8, 16, 32]
+=== phase 2 ===
+[          phase2]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:0.00 L12:0.00 L20:0.00 L30:0.00 L40:0.00
+
+=== phase 3 per adapter width (rmax only, hard-frozen trunk, command-routed) ===
+[             r=1]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:0.99 L30:1.00 L40:1.00
+   r= 1 add=2.3K flop/tok=3072 inv=0.0e+00 retain<=0.03:True rmax_min:0.99
+[             r=2]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   r= 2 add=3.8K flop/tok=6144 inv=0.0e+00 retain<=0.03:True rmax_min:1.00
+[             r=4]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   r= 4 add=6.9K flop/tok=12288 inv=0.0e+00 retain<=0.03:True rmax_min:1.00
+[             r=8]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   r= 8 add=13.1K flop/tok=24576 inv=0.0e+00 retain<=0.03:True rmax_min:1.00
+[            r=16]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   r=16 add=25.4K flop/tok=49152 inv=0.0e+00 retain<=0.03:True rmax_min:1.00
+[            r=32]  csum L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00  cf:0.93 | rmax L8:1.00 L12:1.00 L20:1.00 L30:1.00 L40:1.00
+   r=32 add=50.0K flop/tok=98304 inv=0.0e+00 retain<=0.03:True rmax_min:1.00
+
+FRONTIER r* (retain within 0.03 AND rmax_min>=0.99) = 2 ; rows=[(1, 2308, 3072, True, 0.9866666666666667, 0.0), (2, 3848, 6144, True, 1.0, 0.0), (4, 6928, 12288, True, 1.0, 0.0), (8, 13088, 24576, True, 1.0, 0.0), (16, 25408, 49152, True, 1.0, 0.0), (32, 50048, 98304, True, 1.0, 0.0)]

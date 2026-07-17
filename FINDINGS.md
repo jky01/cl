@@ -1,34 +1,48 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
-> **LM-PORT continual R37 — SELECTIVE compact growth (not capacity) turns catastrophic forgetting into
-> full retention + acquisition, at LM scale.** `s4/continual2.py`, `docs/cloud_results/lm_continual2.txt`
-> (RTX 2070 local, 1.84M-param local-window transducer; W=5, adapter r=32 = 50K = 2.7%). Substrate = the
+> **LM-PORT continual R37 — PROTECTED CONDITIONAL CAPACITY (routing, not added params) turns catastrophic
+> forgetting into exact retention + full acquisition; but this is ROUTING necessity, NOT growth necessity
+> (codex-corrected).** `s4/continual2.py` + `s4/width_sweep.py`, `docs/cloud_results/lm_continual2.txt` +
+> `lm_width_sweep.txt` (RTX 2070 local, 1.79M-param local-window transducer; W=5). Substrate = the
 > scratchpad model that length-EXTRAPOLATES `csum_reset` to L40. Phase2 acquires csum (retain target);
 > phase3 learns interfering `rmax_reset` from NEW DATA ONLY (no csum replay, no joint retrain). Retention
 > metric = the ALGORITHM (csum L8–40 extrapolation + reset-counterfactual), not example recall. 4 arms,
-> identical phase-2 init & phase-3 data:
+> identical phase-2 init & phase-3 data (ALL arms share the same total param count — the adapter is
+> preallocated & dormant in phase2, so this is RESERVED capacity, not dynamic growth):
 > ```
 > phase2          : csum L8-40 = 1.00, cf 0.93 ; rmax 0        (extrapolating algorithm learned)
 > naive           : csum 0.00 everywhere, cf 0 ; rmax 1.00     (catastrophic forgetting)
 > ewc (lam 2000)  : csum 0.00 everywhere, cf 0 ; rmax 1.00     (== naive: Fisher DEGENERATE)
-> adapter_ungated : csum 0.00 everywhere, cf 0 ; rmax 1.00     (same 50K params, always-on -> output override)
+> adapter_ungated : csum 0.00 everywhere, cf 0 ; rmax 1.00     (same params, always-on -> output override)
 > adapter_routed  : csum L8-40 = 1.00, cf 0.93 ; rmax 1.00     (FULL retention + FULL acquisition)
 > ```
-> **Decisive contrast = ungated vs routed**: SAME 50K adapter params, SAME frozen trunk, SAME rmax data.
-> Always-on destroys csum (output-override trap: the branch adds rmax-shaped residuals over the intact
-> frozen csum path); command-masked routing (route=0 on csum) retains csum BYTE-IDENTICALLY (measured
-> invariant: csum logits max|Δ| vs phase2 = **0.00e+00**) AND acquires rmax. => interference is resolved by
-> SELECTIVE ACTIVATION, not by added capacity. Retention is an ARCHITECTURAL invariant, not hoped-for
-> regularization. **EWC ≡ naive** because at convergence the near-deterministic softmax makes the
-> model-sampled Fisher numerically ~0 (`frac~0=1.00, norm=5.5e-5`) — λ is inert (codex-predicted
-> degeneracy of local-curvature importance for a confidently-solved deterministic algorithm; not a
-> strength bug — was verified with the fair model-sampled Fisher). HONEST BOUNDS: (a) the command token is
-> an explicit task cue read directly — this is *protected modular expansion with an input-provided route*,
-> NOT task-free route discovery (NEXT: input-inferred routing + held-out compositions); (b) hard-frozen
-> trunk => modular INTEGRATION, not rewriting shared old weights; (c) r=32 works but the MINIMAL width is
-> unmeasured (NEXT: adapter-width frontier — smallest r meeting csum-within-0.03 ∧ high-rmax is stronger
-> growth-necessity evidence than one oversized branch). Substantiates the toy-line prediction (grow only
-> when protected + input-addressable) at LM scale.
+> **Headline (codex): freezing protects the old PARAMETERS; routing protects the old FUNCTION.** Decisive
+> contrast = ungated vs routed: SAME adapter params, SAME frozen trunk, SAME rmax data. Always-on destroys
+> csum (output-override trap: an always-on branch adds rmax-shaped residuals over the intact frozen csum
+> path and overrides the head — freeze is necessary, not sufficient); command-masked routing (route=0 on
+> csum) retains csum BYTE-IDENTICALLY (measured invariant: csum logits max|Δ| vs phase2 = **0.00e+00**) AND
+> acquires rmax. => interference resolved by SELECTIVE ACTIVATION, not by added capacity. Retention is an
+> ARCHITECTURAL invariant, not hoped-for regularization. **Width frontier** (`lm_width_sweep.txt`, phase2
+> trained once & cached; per-r frozen-trunk routed adapter, invariant=0 at every r): even **r=1 (2.3K =
+> 0.13% of trunk)** retains csum fully AND acquires rmax to min-L8-40 0.987; **r=2 (3.8K = 0.21%)** = full
+> 1.00. r* = 1 under the preregistered min-L8-40≥0.97 criterion (2 under ≥0.99). So the isolated trainable
+> capacity a new operator needs is TINY. **EWC ≡ naive** because at convergence the near-deterministic
+> softmax makes the fair model-sampled diagonal Fisher numerically ~0 (`frac~0=1.00, norm=5.5e-5`) — λ inert
+> (this saturated local estimator is dead; do NOT over-claim ALL curvature penalties fail — temp-softened
+> Fisher / SI / function-space anchoring are untested and are different metrics, per codex).
+> **CRITICAL BOUND (codex): this establishes ROUTING necessity relative to the two adapter arms, NOT GROWTH
+> necessity.** The winning adapter was PREALLOCATED (params fixed from t=0), so the result is *protected
+> conditional (reserved) capacity* — it never grew the param count. A fixed-capacity model that reserves a
+> routed subspace in advance is the same thing. Growth NECESSITY needs a LONGER OPERATOR STREAM that
+> EXHAUSTS the reserved interference-free subspace: the point where a fixed reserved budget can no longer
+> add operators without interference but bounded expansion still can. Other honest bounds: command token is
+> an explicit task cue read directly (protected modular expansion with an INPUT-PROVIDED route, not task-
+> free route discovery); hard-frozen trunk => modular INTEGRATION, not rewriting shared weights; compute
+> advantage NOT yet honest until inactive adapter matmuls are conditionally SKIPPED (report stored size vs
+> active FLOPs separately). NEXT (codex-converged): (1) conditional-skip FLOP honesty + r=1 convergence
+> diagnostic (4× steps, seeds); (2) multi-operator STREAM with fixed-reserved vs per-operator-growth to
+> test genuine growth necessity; (3) learned INPUT-INFERRED routing on identifiability-controlled inputs
+> (staged: oracle→learned-route→continual-router-update→composition).
 
 > **R50-scale scout — the self-addressing wall survives a 3× native scale step (0.5B→1.5B).** `s3/scale_scout.py`,
 > `docs/cloud_results/r50_scale_scout.*`, 2 seeds, JOINT base-hard screen (both frozen bases fail the full
