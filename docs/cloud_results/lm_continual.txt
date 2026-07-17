@@ -1,0 +1,16 @@
+device=cuda CONTINUAL window=5 lam=3000.0
+=== after phase 2 (csum acquired) ===
+[phase2]
+   csum_reset  L8:1.00 L12:1.00 L16:1.00 L20:1.00 L30:1.00 L40:1.00   cf:0.93
+   rmax_reset  L8:0.00 L12:0.00 L16:0.00 L20:0.00 L30:0.00 L40:0.00
+
+=== after phase 3 (learn interfering rmax_reset, NO csum replay) ===
+[naive]
+   csum_reset  L8:0.00 L12:0.00 L16:0.00 L20:0.00 L30:0.00 L40:0.00   cf:0.00
+   rmax_reset  L8:1.00 L12:1.00 L16:1.00 L20:1.00 L30:1.00 L40:1.00
+[ewc]
+   csum_reset  L8:0.00 L12:0.00 L16:0.00 L20:0.00 L30:0.00 L40:0.00   cf:0.00
+   rmax_reset  L8:1.00 L12:1.00 L16:1.00 L20:1.00 L30:1.00 L40:1.00
+
+verdict: RETENTION of the ALGORITHM = csum_reset L20-40 + cf staying high after phase 3. naive should show algorithmic forgetting (L3-12 may stay but L40 falls); ewc should protect the extrapolating operator. rmax acquisition should be high in both.
+[rc=0]
