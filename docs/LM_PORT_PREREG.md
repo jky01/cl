@@ -120,3 +120,39 @@ chain (equivalence-breaking evidence → invariant-rule discovery → consolidat
 retention through phase 3 → memory-free inference, no joint retrain) AND passes cross-integration. If it
 fails, report WHERE it breaks — identifiability / optimization / consolidation / interference / capacity
 — each is a directed result, not an invitation to a hyperparameter sweep.
+
+## 9. Locked design constraints (codex review 2026-07-17, before first run)
+
+- **Architecture**: one shared pre-LN decoder transformer with **dormant growth hooks** from day one
+  (per-layer optional residual bottleneck branch, disabled in the plain-shared arm, activatable at the
+  registered phase boundary in the growth arm). Fixed config (no sweep): 4 layers, width 192, 6 heads,
+  FFN 768, context ≥ length-40 serialization. **Rotary position** (defined beyond training lengths) so
+  length-OOD failure isn't confounded with untrained absolute positions. Frozen tokenization/serialization.
+  No env/phase/task-ID selects a module at inference; routing (if any) inferred from instruction/input
+  tokens and must work for held-out compositions.
+- **Growth controls**: one active branch per layer/token if claiming matched active-compute. Report total
+  stored params / active params / inference FLOPs / training FLOPs / phase wall-time. Include a static
+  capacity-matched sparse control AND an active-compute-matched dense control (else "growth necessity" =
+  "more params"). Joint = ceiling only.
+- **Objective**: multi-env **ERM primary**; **group-DRO** (NOT IRM) as the registered objective
+  intervention. Causal cells: (1) insufficient-env+ERM, (2) sufficient-env+ERM, (3) sufficient-env+
+  group-DRO, (+ optionally (4) insufficient-env+group-DRO). No IRM in initial budget unless group-DRO
+  leaves a specific unresolved failure. "Discovered/induced" reserved for input/output supervision only
+  (+ training env groups); NO state labels / program trace / correct module. Acquisition requires the
+  SAME checkpoint to pass: unseen lengths, reset-position & distance-since-reset strata, held-out
+  intervention combos, the preregistered nuisance, and BOTH composition orders — not OOD length alone.
+- **Consolidation**: PRIMARY non-rehearsal arm = bounded **parameter-space summary** at the phase
+  boundary (diagonal importance + reference weights, EWC-like); phase 3 prohibits old-input generation
+  and old-task forward queries. Self-distillation over generated old inputs = explicit **synthetic-replay
+  comparator** (count teacher storage / generation / old-task queries / FLOPs), not the primary "no
+  replay" mechanism. Evidence hierarchy: strongest = no old examples/generated/queries/teacher in the
+  later phase; secondary = bounded synthetic replay (disclosed); upper-ref = joint.
+- **Protocol hygiene**: freeze seeds, checkpoint-selection rule, per-arm hyperparameter budget, stopping
+  rule, and acquisition-gate-failure behavior BEFORE the first run. Phase-3 retention must NOT select the
+  phase-2 checkpoint (phase-2 selection uses phase-2 info only). Distinguish: monolith learning+retaining
+  csum_reset = knowledge-into-weights + retention (NOT growth necessity); growth arm retaining by module
+  isolation = retention (NOT integrated knowledge unless held-out cross-compositions succeed without an
+  external router/memory).
+- **First cheap gate**: phase 1→2 acquisition on {insufficient-ERM, sufficient-ERM, sufficient-group-DRO}.
+  Only checkpoints crossing the preregistered ID / length-OOD / reset-stratified / intervention-combo
+  thresholds proceed to the expensive phase-3 retention comparison.
