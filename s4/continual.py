@@ -49,14 +49,19 @@ def train(model, data, steps, bs, lr, maxlen, device, ewc=None):
 
 
 def fisher(model, data, bs, maxlen, device, nb=40):
+    """proper empirical Fisher: sample labels from the MODEL's own predictive distribution (non-zero at
+    convergence, unlike the true-label loss gradient which vanishes when loss ~ 0)."""
     F_ = {n: torch.zeros_like(p) for n, p in model.named_parameters()}
     ptr = 0
     for _ in range(nb):
         bd = data[ptr:ptr + bs]; ptr = (ptr + bs) % (len(data) - bs)
         idx, msk = batch_inter(bd, maxlen, device)
-        logits = model(idx[:, :-1]); tgt = idx[:, 1:]; mt = msk[:, 1:]
-        lt = F.cross_entropy(logits.reshape(-1, NTOK), tgt.reshape(-1), reduction="none").view(tgt.shape)
-        loss = (lt * mt).sum() / mt.sum().clamp(min=1)
+        logits = model(idx[:, :-1]); mt = msk[:, 1:]
+        logp = F.log_softmax(logits, -1)
+        with torch.no_grad():
+            samp = torch.multinomial(logp.exp().reshape(-1, NTOK), 1).view(logits.shape[:2])
+        nll = F.nll_loss(logp.reshape(-1, NTOK), samp.reshape(-1), reduction="none").view(mt.shape)
+        loss = (nll * mt).sum() / mt.sum().clamp(min=1)
         model.zero_grad(); loss.backward()
         for n, p in model.named_parameters():
             if p.grad is not None:
