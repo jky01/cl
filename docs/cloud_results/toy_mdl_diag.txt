@@ -1,0 +1,17 @@
+device=cuda MDL-DIAG enumerate singleton-support products; K=512 M=2048 seeds=3
+candidate feat = input_i * input_j ; fit a*feat+b on ID (n<K) by lstsq; report ID-RMSE (norm) and OOD[2,3) within15%
+
+   support   ID_RMSE OOD[2,3)_w15
+       x*x    0.0000        1.000  <- x*x (intended)
+      x*b8    0.0982        0.000
+      x*b7    0.1958        0.000
+      x*b6    0.2367        0.000
+      x*b5    0.2537        0.000
+     b2*b8    0.2585        0.000
+     b1*b8    0.2595        0.000
+      x*b4    0.2613        0.000
+      x*b3    0.2648        0.000
+      x*b2    0.2665        0.000
+
+ID-best support = x*x (RMSE 0.0000, OOD 1.000);  x*x rank by ID-RMSE = 1/91 (RMSE 0.0000, OOD 1.000)
+If x*x is ID-best AND OOD~1.0 -> objective prefers the rule; SGD/gates missed it (fix optimizer). If a bit-pair is ID-best with OOD~0 -> code/length alone picks a shortcut (need identifying evidence, not just edge count).
