@@ -1,0 +1,19 @@
+device=cuda POSRAND randpos(max_offset=90); trained len[3,12]; eval offset 0
+         op    L free_em  tokacc fixedH_em TF_tokacc
+       copy   12   1.000   1.000     1.000     1.000
+       copy   13   0.000   0.582     0.140     0.800
+       copy   14   0.000   0.109     0.000     0.130
+       copy   16   0.000   0.080     0.000     0.092
+       copy   20   0.000   0.092     0.000     0.039
+       copy   30   0.000   0.116     0.000     0.109
+       copy   40   0.000   0.031     0.000     0.048
+ csum_reset   12   1.000   1.000     1.000     1.000
+ csum_reset   13   0.000   0.183     0.000     0.259
+ csum_reset   14   0.000   0.096     0.000     0.125
+ csum_reset   16   0.000   0.070     0.000     0.091
+ csum_reset   20   0.000   0.092     0.000     0.066
+ csum_reset   30   0.000   0.088     0.000     0.075
+ csum_reset   40   0.000   0.030     0.000     0.040
+
+if TF_tokacc & free_em now stay HIGH at L=14..40 => exposing high absolute positions (via offset) fixed the transition = it was a position-coverage artifact. If still cliffs => rotary phase coverage alone is insufficient; the transition isn't shift-invariant -> escalate to wider-curriculum / scratchpad.
+[rc=0]
