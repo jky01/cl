@@ -21,6 +21,8 @@ def main():
     ap.add_argument("--maxlen", type=int, default=96); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--eval_n", type=int, default=150)
     ap.add_argument("--max_offset", type=int, default=90); ap.add_argument("--randpos", type=int, default=1)
+    ap.add_argument("--train_hi", type=int, default=12)      # wider-curriculum: train len [3, train_hi]
+    ap.add_argument("--eval_lens", type=int, nargs="+", default=[12, 13, 14, 16, 20, 30, 40])
     args = ap.parse_args()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); random.seed(args.seed)
@@ -28,7 +30,7 @@ def main():
     data = []
     for gi, env in enumerate(["E_len", "E_reset", "E_alpha", "E_tmpl"]):
         for op in ops:
-            data += ML.make_examples(args.n_per, op, env, args.seed + gi * 131, (3, 12))
+            data += ML.make_examples(args.n_per, op, env, args.seed + gi * 131, (3, args.train_hi))
     random.Random(args.seed).shuffle(data)
     model = TM().to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
@@ -44,10 +46,10 @@ def main():
         opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
     model.eval()
     tag = f"randpos(max_offset={args.max_offset})" if args.randpos else "zero-offset baseline"
-    print(f"device={device} POSRAND {tag}; trained len[3,12]; eval offset 0")
+    print(f"device={device} POSRAND {tag}; trained len[3,%d]; eval offset 0")
     print(f"{'op':>11} {'L':>4} {'free_em':>7} {'tokacc':>7} {'fixedH_em':>9} {'TF_tokacc':>9}")
     for op in ["copy", "csum_reset"]:
-        for L in [12, 13, 14, 16, 20, 30, 40]:
+        for L in args.eval_lens:
             em, tk, lo, fh, tf = evalL(model, op, L, args.eval_n, args.maxlen, device, 4000 + L)
             print(f"{op:>11} {L:>4} {em:>7.3f} {tk:>7.3f} {fh:>9.3f} {tf:>9.3f}")
     print("\nif TF_tokacc & free_em now stay HIGH at L=14..40 => exposing high absolute positions (via "
