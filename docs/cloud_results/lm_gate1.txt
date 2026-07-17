@@ -1,0 +1,43 @@
+########## COND=insuf_erm ##########
+device=cuda cond=insuf_erm envs=['E0'] ops=['copy', 'inc', 'shift', 'csum_reset'] n=12000 maxlen=96
+  step     0  loss 3.4180
+  step  1000  loss 0.0005
+  step  2000  loss 0.0002
+  step  3000  loss 0.0001
+
+[insuf_erm]  params=1.79M
+          op  ID[3,12]  OOD[16,40]
+        copy     0.095       0.000
+         inc     0.095       0.000
+       shift     0.095       0.000
+  csum_reset     0.095       0.000
+gate: csum_reset OOD[16,40] high => recurrence acquired (extrapolates); low => shortcut. expect suf_* >> insuf on csum_reset OOD.
+########## COND=suf_erm ##########
+device=cuda cond=suf_erm envs=['E_len', 'E_reset', 'E_alpha', 'E_tmpl'] ops=['copy', 'inc', 'shift', 'csum_reset'] n=48000 maxlen=96
+  step     0  loss 3.4459
+  step  1000  loss 0.0115
+  step  2000  loss 0.0004
+  step  3000  loss 0.0001
+
+[suf_erm]  params=1.79M
+          op  ID[3,12]  OOD[16,40]
+        copy     1.000       0.000
+         inc     1.000       0.000
+       shift     1.000       0.000
+  csum_reset     1.000       0.000
+gate: csum_reset OOD[16,40] high => recurrence acquired (extrapolates); low => shortcut. expect suf_* >> insuf on csum_reset OOD.
+########## COND=suf_dro ##########
+device=cuda cond=suf_dro envs=['E_len', 'E_reset', 'E_alpha', 'E_tmpl'] ops=['copy', 'inc', 'shift', 'csum_reset'] n=48000 maxlen=96
+  step     0  loss 3.4272
+  step  1000  loss 0.0202
+  step  2000  loss 0.0005
+  step  3000  loss 0.0001
+
+[suf_dro]  params=1.79M
+          op  ID[3,12]  OOD[16,40]
+        copy     1.000       0.000
+         inc     1.000       0.000
+       shift     1.000       0.000
+  csum_reset     1.000       0.000
+gate: csum_reset OOD[16,40] high => recurrence acquired (extrapolates); low => shortcut. expect suf_* >> insuf on csum_reset OOD.
+[all done rc=0]
