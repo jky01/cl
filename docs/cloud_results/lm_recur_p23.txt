@@ -1,0 +1,14 @@
+PREREG RECUR order=1 p=23 W=8 nope=0 H=12 k=6 rules train=15 held=7 off_max=0 steps=12000 seed=0 params=1.79M device=cuda
+   DBG coef=7 true=[6, 13, 20, 4, 11, 18, 2, 9, 16, 0, 7, 14, 21, 5, 12, 19, 3, 10] pred=[18, 8, 21, 11, 1, 14, 4, 17, 7, 20, 10, 0, 13, 3, 16, 6, 19, 9]
+   DBG coef=17 true=[20, 14, 8, 2, 19, 13, 7, 1, 18, 12, 6, 0, 17, 11, 5, 22, 16, 10] pred=[14, 5, 19, 10, 1, 15, 6, 20, 11, 2, 16, 7, 21, 12, 3, 17, 8, 22]
+   DBG coef=9 true=[18, 4, 13, 22, 8, 17, 3, 12, 21, 7, 16, 2, 11, 20, 6, 15, 1, 10] pred=[22, 12, 2, 15, 5, 18, 8, 21, 11, 1, 14, 4, 17, 7, 20, 10, 0, 13]
+   DBG coef=10 true=[1, 11, 21, 8, 18, 5, 15, 2, 12, 22, 9, 19, 6, 16, 3, 13, 0, 10] pred=[11, 8, 5, 2, 22, 19, 16, 13, 10, 7, 4, 1, 21, 18, 15, 12, 9, 6]
+   seen x within L= 12 (n=300): full-exact 1.00  farthest 1.00  first-err-step 6.0
+   seen x BEYOND L= 24 (n=300): full-exact 1.00  farthest 1.00  first-err-step 18.0
+   seen x BEYOND L= 48 (n=300): full-exact 1.00  farthest 1.00  first-err-step 42.0
+   held x within L= 12 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   held x BEYOND L= 24 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   held x BEYOND L= 48 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+
+read: held x BEYOND full-exact/farthest high => identified the rule from the prefix and executed the single-token recurrence past the trained horizon (bounded-domain in-class extrapolation).
+=====ORDER2 p23=====
