@@ -23,3 +23,14 @@ success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 di
 
 read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.
 ########## arith W=16 msb (order ablation)
+PREREG NUMSEQ fam=['arith'] W=16 order=msb wd=4 vmax=9999 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[arith]  (pool sizes: seen=69 held=21)
+   seen x within L= 8 (n= 69): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n= 69): full-exact 0.03  farthest 0.03  first-err-term 5.2  digit-cross 0.08(n=26)
+   seen x BEYOND L=24 (n= 69): full-exact 0.00  farthest 0.01  first-err-term 5.2  digit-cross 0.00(n=42)
+   held x within L= 8 (n= 21): full-exact 0.33  farthest 0.33  first-err-term 2.3  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 21): full-exact 0.00  farthest 0.00  first-err-term 3.1  digit-cross 0.00(n=7)
+   held x BEYOND L=24 (n= 21): full-exact 0.00  farthest 0.00  first-err-term 3.1  digit-cross 0.00(n=13)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.

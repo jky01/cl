@@ -1,0 +1,36 @@
+########## arith scaffold=1 W=24 (POSITIVE test)
+PREREG NUMSEQ fam=['arith'] W=24 order=lsb wd=4 vmax=9999 scaffold=1 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[arith]  (pool sizes: seen=66 held=24)
+   seen x within L= 8 (n= 66): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n= 66): full-exact 0.05  farthest 0.05  first-err-term 5.9  digit-cross 0.08(n=26)
+   seen x BEYOND L=24 (n= 66): full-exact 0.00  farthest 0.00  first-err-term 5.9  digit-cross 0.00(n=41)
+   held x within L= 8 (n= 24): full-exact 0.67  farthest 0.67  first-err-term 3.5  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 24): full-exact 0.04  farthest 0.04  first-err-term 5.2  digit-cross 0.14(n=7)
+   held x BEYOND L=24 (n= 24): full-exact 0.00  farthest 0.00  first-err-term 5.4  digit-cross 0.00(n=14)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.
+########## quad plain W=16 (baseline)
+PREREG NUMSEQ fam=['quad'] W=16 order=lsb wd=4 vmax=9999 scaffold=0 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[quad]  (pool sizes: seen=116 held=28)
+   seen x within L= 8 (n=116): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n=116): full-exact 0.00  farthest 0.00  first-err-term 4.2  digit-cross 0.00(n=29)
+   seen x BEYOND L=24 (n=116): full-exact 0.00  farthest 0.00  first-err-term 4.2  digit-cross 0.00(n=116)
+   held x within L= 8 (n= 28): full-exact 0.07  farthest 0.07  first-err-term 0.5  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 28): full-exact 0.00  farthest 0.00  first-err-term 0.5  digit-cross 0.00(n=9)
+   held x BEYOND L=24 (n= 28): full-exact 0.00  farthest 0.00  first-err-term 0.5  digit-cross 0.00(n=28)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.
+########## quad scaffold=2 W=32 (fix)
+PREREG NUMSEQ fam=['quad'] W=32 order=lsb wd=4 vmax=9999 scaffold=2 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[quad]  (pool sizes: seen=116 held=28)
+   seen x within L= 8 (n=116): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n=116): full-exact 0.00  farthest 0.00  first-err-term 4.1  digit-cross 0.00(n=28)
+   seen x BEYOND L=24 (n=116): full-exact 0.00  farthest 0.00  first-err-term 4.1  digit-cross 0.00(n=116)
+   held x within L= 8 (n= 28): full-exact 0.00  farthest 0.04  first-err-term 0.8  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 28): full-exact 0.00  farthest 0.00  first-err-term 0.8  digit-cross 0.00(n=10)
+   held x BEYOND L=24 (n= 28): full-exact 0.00  farthest 0.00  first-err-term 0.8  digit-cross 0.00(n=28)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.

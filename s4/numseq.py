@@ -151,9 +151,9 @@ def rope(x, pos):
 
 
 class Block(nn.Module):
-    def __init__(s, d, h, ff, W):
+    def __init__(s, d, h, ff, W, nope=False):
         super().__init__()
-        s.h, s.W = h, W
+        s.h, s.W, s.nope = h, W, nope
         s.ln1 = nn.LayerNorm(d); s.ln2 = nn.LayerNorm(d)
         s.qkv = nn.Linear(d, 3 * d); s.proj = nn.Linear(d, d)
         s.f1 = nn.Linear(d, ff); s.f2 = nn.Linear(ff, d)
@@ -164,7 +164,8 @@ class Block(nn.Module):
         q = q.view(B, T, s.h, Dd // s.h).transpose(1, 2)
         k = k.view(B, T, s.h, Dd // s.h).transpose(1, 2)
         v = v.view(B, T, s.h, Dd // s.h).transpose(1, 2)
-        q, k = rope(q, pos), rope(k, pos)
+        if not s.nope:                                       # NoPE: rely on local-window relative structure
+            q, k = rope(q, pos), rope(k, pos)
         att = (q @ k.transpose(-2, -1)) / math.sqrt(Dd // s.h)
         i = torch.arange(T, device=x.device); m = mask
         if s.W:
@@ -176,10 +177,10 @@ class Block(nn.Module):
 
 
 class TM(nn.Module):
-    def __init__(s, d=128, h=4, nl=4, ff=512, W=0):
+    def __init__(s, d=128, h=4, nl=4, ff=512, W=0, nope=False):
         super().__init__()
         s.emb = nn.Embedding(NTOK, d)
-        s.blocks = nn.ModuleList([Block(d, h, ff, W) for _ in range(nl)])
+        s.blocks = nn.ModuleList([Block(d, h, ff, W, nope) for _ in range(nl)])
         s.lnf = nn.LayerNorm(d); s.head = nn.Linear(d, NTOK)
 
     def forward(s, idx):
@@ -258,17 +259,32 @@ def main():
     ap.add_argument("--train_maxlen", type=int, default=128)     # TRAIN seqs are short -> keep attn O(T^2) small
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--scaffold", type=int, default=0)           # 0=plain; 1=first-diff; 2=second-diff
+    ap.add_argument("--nope", type=int, default=0)               # 1 = NoPE (no rope; local window only)
+    ap.add_argument("--debug", type=int, default=0)              # print this many held x beyond examples
     args = ap.parse_args()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); random.seed(args.seed)
     fams = args.fam.split(","); vmax = 10 ** args.wd - 1; S = args.scaffold
-    model = TM(W=args.W).to(device)
+    model = TM(W=args.W, nope=bool(args.nope)).to(device)
     train(model, fams, args.steps, args.bs, args.lr, (args.Ltrain // 2, args.Ltrain),
           args.wd, args.order, args.train_maxlen, device, args.seed, vmax, S)
     npar = sum(p.numel() for p in model.parameters())
     print(f"PREREG NUMSEQ fam={fams} W={args.W} order={args.order} wd={args.wd} vmax={vmax} scaffold={S} "
-          f"Ltrain={args.Ltrain} k={args.k} steps={args.steps} seed={args.seed} params={npar/1e6:.2f}M "
-          f"device={device}")
+          f"nope={args.nope} Ltrain={args.Ltrain} k={args.k} steps={args.steps} seed={args.seed} "
+          f"params={npar/1e6:.2f}M device={device}")
+    if args.debug:                                              # failure-mode dump on held x beyond
+        fam = fams[0]; L = 2 * args.Ltrain; shown = 0
+        for coef in pool(fam, "held"):
+            if seq_terms(fam, coef, L)[-1] > vmax:
+                continue
+            if S:
+                pred, true = continue_scaf(model, fam, coef, args.k, L, S, args.wd, args.order, args.maxlen, device)
+            else:
+                pred, true = continue_seq(model, fam, coef, args.k, L, args.wd, args.order, args.maxlen, device)
+            print(f"   DBG {fam}{coef} true={true}  pred={pred}")
+            shown += 1
+            if shown >= args.debug:
+                break
     print("success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, "
           "free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.")
     horizons = [args.Ltrain, 2 * args.Ltrain, 3 * args.Ltrain]
