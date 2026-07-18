@@ -1,0 +1,27 @@
+PREREG RECUR order=1 p=211 W=8 nope=0 H=12 k=6 rules train=160 held=50 off_max=0 steps=12000 seed=0 params=1.86M device=cuda
+   DBG coef=204 true=[40, 33, 26, 19, 12, 5, 209, 202, 195, 188, 181, 174, 167, 160, 153, 146, 139, 132] pred=[204, 150, 96, 42, 199, 145, 91, 37, 194, 140, 86, 32, 189, 135, 81, 27, 184, 130]
+   DBG coef=15 true=[172, 187, 202, 6, 21, 36, 51, 66, 81, 96, 111, 126, 141, 156, 171, 186, 201, 5] pred=[153, 149, 145, 141, 137, 133, 129, 125, 121, 117, 113, 109, 105, 101, 97, 93, 89, 85]
+   DBG coef=155 true=[168, 112, 56, 0, 155, 99, 43, 198, 142, 86, 30, 185, 129, 73, 17, 172, 116, 60] pred=[168, 112, 194, 65, 147, 18, 100, 182, 53, 135, 6, 88, 170, 41, 123, 205, 76, 158]
+   DBG coef=34 true=[75, 109, 143, 177, 0, 34, 68, 102, 136, 170, 204, 27, 61, 95, 129, 163, 197, 20] pred=[192, 132, 72, 12, 163, 103, 43, 194, 134, 74, 14, 165, 105, 45, 196, 136, 76, 16]
+   seen x within L= 12 (n=300): full-exact 1.00  farthest 1.00  first-err-step 6.0
+   seen x BEYOND L= 24 (n=300): full-exact 1.00  farthest 1.00  first-err-step 18.0
+   seen x BEYOND L= 48 (n=300): full-exact 1.00  farthest 1.00  first-err-step 41.9
+   held x within L= 12 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.1
+   held x BEYOND L= 24 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.1
+   held x BEYOND L= 48 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.1
+
+read: held x BEYOND full-exact/farthest high => identified the rule from the prefix and executed the single-token recurrence past the trained horizon (bounded-domain in-class extrapolation).
+=====ORDER2=====
+PREREG RECUR order=2 p=211 W=8 nope=0 H=12 k=6 rules train=160 held=50 off_max=0 steps=12000 seed=0 params=1.86M device=cuda
+   DBG coef=204 true=[205, 201, 190, 172, 147, 115, 76, 30, 188, 128, 61, 198, 117, 29, 145, 43, 145, 29] pred=[145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145]
+   DBG coef=15 true=[113, 30, 173, 120, 82, 59, 51, 58, 80, 117, 169, 25, 107, 204, 105, 21, 163, 109] pred=[145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145]
+   DBG coef=155 true=[103, 16, 84, 96, 52, 163, 7, 6, 160, 47, 89, 75, 5, 90, 119, 92, 9, 81] pred=[145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145]
+   DBG coef=34 true=[187, 7, 72, 171, 93, 49, 39, 63, 121, 2, 128, 77, 60, 77, 128, 2, 121, 63] pred=[145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145]
+   seen x within L= 12 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   seen x BEYOND L= 24 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   seen x BEYOND L= 48 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   held x within L= 12 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   held x BEYOND L= 24 (n=300): full-exact 0.00  farthest 0.00  first-err-step 0.0
+   held x BEYOND L= 48 (n=300): full-exact 0.00  farthest 0.01  first-err-step 0.0
+
+read: held x BEYOND full-exact/farthest high => identified the rule from the prefix and executed the single-token recurrence past the trained horizon (bounded-domain in-class extrapolation).

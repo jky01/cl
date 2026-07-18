@@ -151,6 +151,7 @@ def eval_pool(model, order, coefs, k, L, maxlen, device, n, seed):
 
 
 def main():
+    global P, BOS, PAD, NTOK
     ap = argparse.ArgumentParser()
     ap.add_argument("--order", type=int, default=1)
     ap.add_argument("--steps", type=int, default=12000); ap.add_argument("--bs", type=int, default=256)
@@ -160,13 +161,15 @@ def main():
     ap.add_argument("--held", type=int, default=50)
     ap.add_argument("--maxlen", type=int, default=256); ap.add_argument("--eval_n", type=int, default=300)
     ap.add_argument("--off_max", type=int, default=0); ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--debug", type=int, default=0)
+    ap.add_argument("--p", type=int, default=P); ap.add_argument("--debug", type=int, default=0)
     args = ap.parse_args()
+    P = args.p; BOS = P; PAD = P + 1; NTOK = P + 2            # rebind field size + specials
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); random.seed(args.seed)
     crng = random.Random(1234)
     allc = all_coefs(args.order, crng, P)                    # all delta in [1,p-1]
-    train_c, held_c = allc[args.held:], allc[:args.held]     # DISJOINT param sets
+    held = min(args.held, len(allc) // 3)                    # keep a healthy train split for small p
+    train_c, held_c = allc[held:], allc[:held]               # DISJOINT param sets
     kmin = args.k
     model = TM(W=args.W, nope=bool(args.nope)).to(device)
     train(model, args.order, train_c, args.steps, args.bs, args.lr, (kmin + 2, args.H), args.maxlen,
