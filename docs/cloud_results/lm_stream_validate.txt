@@ -1,0 +1,8 @@
+device=cuda STREAM T=2 Rs=[1] r=8 trunk=1.79M slot=13.1K/slot
+base op0(csum) L8:1.00 L12:1.00 L20:1.00 L40:1.00
+
+[R=1] stored=1.80M (1 slots) retained 1/2 ops (predicted ~min(R+1,T)=2)
+   op0 slot=None L8:1.00 L12:1.00 L20:1.00 L40:1.00   [base]
+   op1 slot=   0 L8:0.00 L12:0.00 L20:0.00 L40:0.00   [OWNS s0]
+
+verdict: retained ops ~ min(R+1,T) => capacity law T*(R)~R for an incompressible family; a fixed budget saturates while growth (R>=T) retains all. Isolation (frozen routed slot) gives EXACT retention; shared reuse (R<T) forgets the overwritten owners. This is online provisioning under bounded budget, NOT representational growth necessity (oracle R=T reproduces growth).
