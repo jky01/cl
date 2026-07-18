@@ -1,1 +1,25 @@
-###### arith W=0 (control)
+########## arith W=16 lsb
+PREREG NUMSEQ fam=['arith'] W=16 order=lsb wd=4 vmax=9999 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[arith]  (pool sizes: seen=74 held=16)
+   seen x within L= 8 (n= 74): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n= 74): full-exact 0.07  farthest 0.07  first-err-term 6.2  digit-cross 0.11(n=27)
+   seen x BEYOND L=24 (n= 74): full-exact 0.00  farthest 0.00  first-err-term 6.3  digit-cross 0.00(n=45)
+   held x within L= 8 (n= 16): full-exact 0.75  farthest 0.75  first-err-term 3.6  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 16): full-exact 0.12  farthest 0.12  first-err-term 5.9  digit-cross 0.00(n=6)
+   held x BEYOND L=24 (n= 16): full-exact 0.00  farthest 0.00  first-err-term 6.0  digit-cross 0.00(n=10)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.
+########## arith W=0 lsb (global-attn control)
+PREREG NUMSEQ fam=['arith'] W=0 order=lsb wd=4 vmax=9999 Ltrain=8 k=4 steps=12000 seed=0 params=0.80M device=cuda
+success bar (arith): held-out coef, beyond horizon, value>train-max, cross>=1 digit boundary, free-running exact.  main cell = [held x beyond]. metric=correct/total over enumerated pool.
+[arith]  (pool sizes: seen=71 held=19)
+   seen x within L= 8 (n= 71): full-exact 1.00  farthest 1.00  first-err-term 4.0  digit-cross 0.00(n=0)
+   seen x BEYOND L=16 (n= 71): full-exact 0.00  farthest 0.00  first-err-term 5.1  digit-cross 0.00(n=26)
+   seen x BEYOND L=24 (n= 71): full-exact 0.00  farthest 0.00  first-err-term 5.1  digit-cross 0.00(n=43)
+   held x within L= 8 (n= 19): full-exact 0.37  farthest 0.42  first-err-term 2.4  digit-cross 0.00(n=0)
+   held x BEYOND L=16 (n= 19): full-exact 0.00  farthest 0.00  first-err-term 2.8  digit-cross 0.00(n=7)
+   held x BEYOND L=24 (n= 19): full-exact 0.00  farthest 0.00  first-err-term 2.8  digit-cross 0.00(n=12)
+
+read: [held x BEYOND] farthest & digit-cross high => identified the rule from prefix and executed its recurrence past trained horizon/value/width => genuine in-class extrapolation.
+########## arith W=16 msb (order ablation)
