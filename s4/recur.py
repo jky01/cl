@@ -119,14 +119,20 @@ def gen_batch(order, coefs, n, Lrange, rng, maxlen, device, off_max):
     return torch.tensor(idx, device=device), torch.tensor(msk, device=device, dtype=torch.bool), 0
 
 
-def train(model, order, coefs, steps, bs, lr, Lrange, maxlen, device, seed, off_max):
-    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01); rng = random.Random(seed)
-    for _ in range(steps):
+def train(model, order, coefs, steps, bs, lr, Lrange, maxlen, device, seed, off_max, wd=0.01,
+          probe=None, eval_every=0):
+    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd); rng = random.Random(seed)
+    for it in range(steps):
         idx, msk, _ = gen_batch(order, coefs, bs, Lrange, rng, maxlen, device, off_max)
         logits = model(idx[:, :-1]); tgt = idx[:, 1:]; mt = msk[:, 1:]
         lt = F.cross_entropy(logits.reshape(-1, NTOK), tgt.reshape(-1), reduction="none").view(tgt.shape)
         loss = (lt * mt).sum() / mt.sum().clamp(min=1)
         opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        if eval_every and probe and (it + 1) % eval_every == 0:      # grokking curve
+            model.eval()
+            s = probe("seen"); h = probe("held")
+            print(f"   [it {it+1:>6}] loss {loss.item():.4f}  seen-far {s:.3f}  held-far {h:.3f}", flush=True)
+            model.train()
 
 
 @torch.no_grad()
@@ -161,6 +167,7 @@ def main():
     ap.add_argument("--held", type=int, default=50)
     ap.add_argument("--maxlen", type=int, default=256); ap.add_argument("--eval_n", type=int, default=300)
     ap.add_argument("--off_max", type=int, default=0); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--wd", type=float, default=0.01); ap.add_argument("--eval_every", type=int, default=0)
     ap.add_argument("--p", type=int, default=P); ap.add_argument("--debug", type=int, default=0)
     args = ap.parse_args()
     P = args.p; BOS = P; PAD = P + 1; NTOK = P + 2            # rebind field size + specials
@@ -172,8 +179,11 @@ def main():
     train_c, held_c = allc[held:], allc[:held]               # DISJOINT param sets
     kmin = args.k
     model = TM(W=args.W, nope=bool(args.nope)).to(device)
+    pools = {"seen": train_c, "held": held_c}
+    probe = lambda sp: eval_pool(model, args.order, pools[sp], args.k, 2 * args.H, args.maxlen,
+                                 device, 80, 500)["far"]
     train(model, args.order, train_c, args.steps, args.bs, args.lr, (kmin + 2, args.H), args.maxlen,
-          device, args.seed, args.off_max)
+          device, args.seed, args.off_max, args.wd, probe, args.eval_every)
     npar = sum(p.numel() for p in model.parameters())
     print(f"PREREG RECUR order={args.order} p={P} W={args.W} nope={args.nope} H={args.H} k={args.k} "
           f"rules train={len(train_c)} held={len(held_c)} off_max={args.off_max} steps={args.steps} "
