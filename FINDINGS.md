@@ -1,5 +1,39 @@
 # s0 — Findings: continual learning without forgetting, via a scalable key-retrieval
 
+> **LM-PORT R39 — STRUCTURAL continual (arith→quad, single-token F_p): replay-free CONSOLIDATION into
+> shared weights beats modular GROWTH; capacity is sufficient, growth is NOT necessary.** `s4/recur.py` +
+> `s4/recur_continual.py` + `s4/recur_struct.py`, `docs/cloud_results/lm_recur*.txt` (RTX 2070, p=23,
+> single-token finite-difference recurrences). Substrate pivot (after the multi-digit numseq wall): numbers
+> as ONE token over F_p, rule inferable by SUBTRACTION (arith=const 1st diff; quad=const 2nd diff), so the
+> step is a genuine local recurrence (like csum) and free-runs TRAINED rules to 4x the training horizon.
+> Two separable facts up front: (a) **horizon extrapolation of SEEN rules is SOLVED** — arith AND quad
+> free-run to 4xH at 1.00 from unseen seeds; (b) **rule generalization to HELD-OUT rules FAILS** at p=23
+> and p=211 (the model learns a per-rule catalogue, not the shared law `2s_{n-1}-s_{n-2}`; unseen delta =
+> unseen region of the modular-add domain = grokking/coverage wall). Structural continual arm matrix
+> (arith phase A → quad phase B, prefix-only, analytic order gate = "is 2nd diff 0?"):
+> ```
+>                   arith retain(H/2H/4H)  quad acquire   held
+> joint A|B ORACLE  1.00/1.00/1.00         1.00/1.00/1.00  0   <- fixed capacity HOLDS BOTH
+> fixed A->B naive  0.00/0.00/0.00         1.00/1.00/1.00  0   <- sequential erases arith
+> consolidation     1.00/1.00/1.00         1.00/1.00/1.00  0   <- replay-free shared-weight WIN
+> grown+gate        1.00/1.00/1.00         0.00/0.00/0.00  0   <- exact retain (Δ=0) but adapter can't learn quad
+> ```
+> **Result (codex outcome-table, strongest cell): joint-oracle succeeds AND consolidation succeeds ⇒ growth
+> is NOT necessary; shared-weight continual integration is the stronger mechanism.** (1) Capacity is
+> sufficient (oracle holds both) so the sequential failure is interference/optimization, NOT insufficiency.
+> (2) fixed-capacity naive AND fair-EWC (non-degenerate Fisher norm 0.122, `lm_recur_continual.txt`) both
+> ERASE the old rule-set. (3) **replay-free consolidation** (distill frozen arith teacher on generated
+> arith prefixes — pseudo-rehearsal, memory-free at DEPLOY, teacher=training-time memory) retains the arith
+> EXTRAPOLATING behavior at 4xH AND acquires quad in shared weights, no raw-A replay, no task ID. (4) growth
+> (frozen trunk + r=16 gated adapter) gives EXACT arith retention (analytic order gate, max|Δ|=0) but the
+> adapter could NOT acquire the order-2 quad recurrence — modular quarantine bought perfect retention at the
+> cost of new-task learnability. HONEST BOUNDS: consolidation is pseudo-rehearsal (not literally replay-free
+> in training; teacher queried on old-function support so retention is by-construction); grown quad-failure
+> is confounded by adapter width/placement (r-sweep pending) but a successful grown arm would only MATCH
+> consolidation while capacity-sufficiency already refutes necessity; single seed p=23 (replication +
+> cost-accounting + param-matched-wide control + grokking held-probe pending). Consistent with the project's
+> standing negative on growth at synthetic scale; now a POSITIVE for shared-weight consolidation.
+
 > **LM-PORT continual R37 — PROTECTED CONDITIONAL CAPACITY (routing, not added params) turns catastrophic
 > forgetting into exact retention + full acquisition; but this is ROUTING necessity, NOT growth necessity
 > (codex-corrected).** `s4/continual2.py` + `s4/width_sweep.py`, `docs/cloud_results/lm_continual2.txt` +

@@ -1,1 +1,9 @@
 RECUR-STRUCT p=23 arith|seen=17/held=5| quad|seen=17/held=5| H=12 k=6 r=16 arms=fixed,joint,consol,grown device=cuda
+[ after A (arith)] arithA 1.00/1.00/1.00 (held 0.00/0.00/0.00) | quadB 0.00/0.00/0.00 (held 0.00/0.00/0.00)
+[joint A|B ORACLE] arithA 1.00/1.00/1.00 (held 0.00/0.00/0.00) | quadB 1.00/1.00/1.00 (held 0.00/0.00/0.00)
+[fixed A->B naive] arithA 0.00/0.00/0.00 (held 0.00/0.00/0.00) | quadB 1.00/1.00/1.00 (held 0.00/0.00/0.00)
+[   consolidation] arithA 1.00/1.00/1.00 (held 0.00/0.00/0.00) | quadB 1.00/1.00/1.00 (held 0.00/0.00/0.00)
+   [grown] adapter params=25.4K  arith non-interference max|Δ|=0.00e+00
+[      grown+gate] arithA 1.00/1.00/1.00 (held 0.00/0.00/0.00) | quadB 0.00/0.00/0.00 (held 0.00/0.00/0.00)
+
+read: fixed A->B forgets arith; joint ORACLE = is capacity even the issue; consolidation = shared-weight retention; grown+gate = modular quarantine (arith Δ≈0 exact) — necessity needs joint-oracle-fails-while-grown-succeeds.
