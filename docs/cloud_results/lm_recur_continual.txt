@@ -1,0 +1,7 @@
+RECUR-CONTINUAL p=23 |A|=8 |B|=8 |held|=6 H=12 k=6 lam=2000.0 stepsA/B=12000/12000 device=cuda
+[         after A] A(n=8) H/2H/4H 1.00/1.00/1.00  |  B(n=8) H/2H/4H 0.00/0.00/0.00  |  held(n=6) H/2H/4H 0.00/0.00/0.00
+   phase-A Fisher: median=8.92e-11 frac~0=0.00 norm=1.22e-01
+[   after B/naive] A(n=8) H/2H/4H 0.00/0.00/0.00  |  B(n=8) H/2H/4H 1.00/1.00/1.00  |  held(n=6) H/2H/4H 0.00/0.00/0.00
+[     after B/ewc] A(n=8) H/2H/4H 0.00/0.00/0.00  |  B(n=8) H/2H/4H 1.00/1.00/1.00  |  held(n=6) H/2H/4H 0.00/0.00/0.00
+
+read: INSTANCE retention = A stays high after B. naive likely forgets A (A->0, B->1); ewc is the fixed-capacity test. FAMILY generalization = held column (expected ~0 both = catalogue not rule).
