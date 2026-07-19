@@ -115,8 +115,24 @@ def route_for(idx, p, device):
     return r
 
 
+@torch.no_grad()
+def self_pool(teacher, order, npool, L, p, maxlen, device, seed=0):
+    """teacher SELF-GENERATES old-family support from RANDOM short seeds (no analytic generator, no known
+    deltas). Aux state = 'sample order+1 random tokens' = O(1) per family -> recursive-consolidation ready."""
+    BOS, PAD = p, p + 1; g = torch.Generator(device=device).manual_seed(seed); kseed = order + 1
+    toks = torch.cat([torch.full((npool, 1), BOS, device=device),
+                      torch.randint(0, p, (npool, kseed), generator=g, device=device)], 1)
+    for _ in range(L - kseed):
+        pad = torch.full((npool, maxlen - toks.shape[1]), PAD, device=device)
+        nx = teacher(torch.cat([toks, pad], 1)[:, :maxlen])[torch.arange(npool), toks.shape[1] - 1].argmax(-1)
+        toks = torch.cat([toks, nx[:, None]], 1)
+    idx = torch.cat([toks, torch.full((npool, maxlen - toks.shape[1]), PAD, device=device)], 1)[:, :maxlen]
+    msk = torch.zeros(npool, maxlen, dtype=torch.bool, device=device); msk[:, 1:1 + L] = True
+    return idx, msk
+
+
 def train(model, orders_coefs, steps, bs, lr, Lrange, p, maxlen, device, seed, params=None,
-          routed=False, ewc=None, teacher=None):
+          routed=False, ewc=None, teacher=None, distill_batch=None):
     params = params if params is not None else list(model.parameters())
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.01); rng = random.Random(seed)
     for _ in range(steps):
@@ -125,11 +141,10 @@ def train(model, orders_coefs, steps, bs, lr, Lrange, p, maxlen, device, seed, p
         logits = model(idx[:, :-1], route=route); tgt = idx[:, 1:]; mt = msk[:, 1:]
         lt = F.cross_entropy(logits.reshape(-1, p + 2), tgt.reshape(-1), reduction="none").view(tgt.shape)
         loss = (lt * mt).sum() / mt.sum().clamp(min=1)
-        if teacher is not None:                               # pseudo-rehearsal: distill frozen A-teacher
-            tea, a_oc = teacher
-            tidx, tmsk, _ = gen_batch(a_oc, bs, Lrange, p, rng, maxlen, device)
+        if teacher is not None:                               # generative functional replay: distill teacher
+            tidx, tmsk = distill_batch(rng, bs)               # closure: analytic-gen / self-pool / B-only
             with torch.no_grad():
-                tlog = tea(tidx[:, :-1])
+                tlog = teacher(tidx[:, :-1])
             slog = model(tidx[:, :-1])
             kl = F.kl_div(F.log_softmax(slog, -1), F.softmax(tlog, -1), reduction="none").sum(-1)
             loss = loss + (kl * tmsk[:, 1:]).sum() / tmsk[:, 1:].sum().clamp(min=1)
@@ -206,12 +221,37 @@ def main():
         train(m, B_oc, args.stepsB, args.bs, args.lr, Lr, p, maxlen, device, args.seed + 1, params=m.trunk_params())
         report(m, "fixed A->B naive", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m; freegpu()
 
-    if "consol" in arms:                                      # shared-weight consolidation (pseudo-rehearsal)
+    def dgen(oc):                                             # analytic-generator distill batch (known deltas)
+        return lambda rng, bs: gen_batch(oc, bs, Lr, p, rng, maxlen, device)[:2]
+
+    if "consol" in arms:                                      # teacher + analytic-A-gen prefixes (KL)
         tea = Net(ntok, W=args.W, r=args.r).to(device); tea.load_state_dict(base.state_dict()); tea.eval()
         m = Net(ntok, W=args.W, r=args.r).to(device); m.load_state_dict(base.state_dict())
         train(m, B_oc, args.stepsB, args.bs, args.lr, Lr, p, maxlen, device, args.seed + 1,
-              params=m.trunk_params(), teacher=(tea, A_oc))
-        report(m, "consolidation", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m, tea; freegpu()
+              params=m.trunk_params(), teacher=tea, distill_batch=dgen(A_oc))
+        report(m, "consol(tea+genA)", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m, tea; freegpu()
+
+    if "consol_Bonly" in arms:                                # ABLATION (2): teacher queried on B inputs only
+        tea = Net(ntok, W=args.W, r=args.r).to(device); tea.load_state_dict(base.state_dict()); tea.eval()
+        m = Net(ntok, W=args.W, r=args.r).to(device); m.load_state_dict(base.state_dict())
+        train(m, B_oc, args.stepsB, args.bs, args.lr, Lr, p, maxlen, device, args.seed + 1,
+              params=m.trunk_params(), teacher=tea, distill_batch=dgen(B_oc))
+        report(m, "consol(tea+Bonly)", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m, tea; freegpu()
+
+    if "consol_analytic" in arms:                             # ABLATION (3): synthetic A replay + TRUE labels, NO teacher
+        m = Net(ntok, W=args.W, r=args.r).to(device); m.load_state_dict(base.state_dict())
+        train(m, A_oc + B_oc, args.stepsB, args.bs, args.lr, Lr, p, maxlen, device, args.seed + 1, params=m.trunk_params())
+        report(m, "consol(genA labels)", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m; freegpu()
+
+    if "consol_self" in arms:                                 # SELF-generated support (recursive-ready): teacher rolls random seeds
+        tea = Net(ntok, W=args.W, r=args.r).to(device); tea.load_state_dict(base.state_dict()); tea.eval()
+        pidx, pmsk = self_pool(tea, 1, 4000, args.H, p, maxlen, device, seed=args.seed)   # A=order1 self-support
+        def dself(rng, bs):
+            j = torch.randint(0, pidx.shape[0], (bs,), device=device); return pidx[j], pmsk[j]
+        m = Net(ntok, W=args.W, r=args.r).to(device); m.load_state_dict(base.state_dict())
+        train(m, B_oc, args.stepsB, args.bs, args.lr, Lr, p, maxlen, device, args.seed + 1,
+              params=m.trunk_params(), teacher=tea, distill_batch=dself)
+        report(m, "consol(SELF-gen)", A_seen, A_held, B_seen, B_held, args.k, args.H, p, maxlen, device, args.eval_n); del m, tea; freegpu()
 
     if "grown" in arms:                                       # frozen arith trunk + quad adapter + analytic gate
         m = Net(ntok, W=args.W, r=args.r).to(device); m.load_state_dict(base.state_dict())
