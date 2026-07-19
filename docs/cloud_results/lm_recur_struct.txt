@@ -1,0 +1,1 @@
+RECUR-STRUCT p=23 arith|seen=17/held=5| quad|seen=17/held=5| H=12 k=6 r=16 arms=fixed,joint,consol,grown device=cuda
