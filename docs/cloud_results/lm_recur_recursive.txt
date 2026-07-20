@@ -1,1 +1,34 @@
 ########## C-from-scratch (cubic order-3 learnability)
+PREREG RECUR order=3 p=23 W=8 nope=0 H=12 k=6 rules train=15 held=7 off_max=0 steps=16000 seed=0 params=1.79M device=cuda
+   seen x within L= 12 (n=100): full-exact 0.95  farthest 0.95  first-err-step 5.9
+   seen x BEYOND L= 24 (n=100): full-exact 0.87  farthest 0.88  first-err-step 17.2
+   seen x BEYOND L= 48 (n=100): full-exact 0.73  farthest 0.73  first-err-step 33.9
+   held x within L= 12 (n=100): full-exact 0.95  farthest 0.95  first-err-step 5.8
+   held x BEYOND L= 24 (n=100): full-exact 0.82  farthest 0.82  first-err-step 16.5
+   held x BEYOND L= 48 (n=100): full-exact 0.62  farthest 0.64  first-err-step 30.1
+
+read: held x BEYOND full-exact/farthest high => identified the rule from the prefix and executed the single-token recurrence past the trained horizon (bounded-domain in-class extrapolation).
+########## RECURSIVE rehearsal=self (PRIMARY)
+RECUR-RECURSIVE p=23 orders=[1, 2, 3] rehearsal=self H=12 k=6 steps=16000 npool=4000 seed=0 device=cuda
+[after phase 1 (order-1); aux-state=orders[1]] o1(lea) 1.00/1.00/1.00 | o2(fut) 0.00/0.00/0.00 | o3(fut) 0.00/0.00/0.00
+   [phase 2] self-gen order-1 support fidelity vs TRUE recurrence = 0.693
+[after phase 2 (order-2); aux-state=orders[1, 2]] o1(lea) 1.00/1.00/1.00 | o2(lea) 1.00/1.00/1.00 | o3(fut) 0.00/0.00/0.00
+   [phase 3] self-gen order-1 support fidelity vs TRUE recurrence = 0.693
+   [phase 3] self-gen order-2 support fidelity vs TRUE recurrence = 0.735
+[after phase 3 (order-3); aux-state=orders[1, 2, 3]] o1(lea) 1.00/1.00/1.00 | o2(lea) 0.81/0.55/0.53 | o3(lea) 0.65/0.29/0.25
+
+read: each learned order stays high (H/2H/4H) after later phases, using only the current model to regenerate past support (aux state = the small set of orders). Compounding drift shows up as declining self-gen fidelity and/or declining old-order retention across phases.
+########## RECURSIVE rehearsal=oracle (upper bound)
+RECUR-RECURSIVE p=23 orders=[1, 2, 3] rehearsal=oracle H=12 k=6 steps=16000 npool=4000 seed=0 device=cuda
+[after phase 1 (order-1); aux-state=orders[1]] o1(lea) 1.00/1.00/1.00 | o2(fut) 0.00/0.00/0.00 | o3(fut) 0.00/0.00/0.00
+[after phase 2 (order-2); aux-state=orders[1, 2]] o1(lea) 1.00/1.00/1.00 | o2(lea) 1.00/1.00/1.00 | o3(fut) 0.00/0.00/0.00
+[after phase 3 (order-3); aux-state=orders[1, 2, 3]] o1(lea) 1.00/1.00/1.00 | o2(lea) 0.70/0.41/0.32 | o3(lea) 0.69/0.33/0.27
+
+read: each learned order stays high (H/2H/4H) after later phases, using only the current model to regenerate past support (aux state = the small set of orders). Compounding drift shows up as declining self-gen fidelity and/or declining old-order retention across phases.
+########## RECURSIVE rehearsal=none (forgetting floor)
+RECUR-RECURSIVE p=23 orders=[1, 2, 3] rehearsal=none H=12 k=6 steps=16000 npool=4000 seed=0 device=cuda
+[after phase 1 (order-1); aux-state=orders[1]] o1(lea) 1.00/1.00/1.00 | o2(fut) 0.00/0.00/0.00 | o3(fut) 0.00/0.00/0.00
+[after phase 2 (order-2); aux-state=orders[1, 2]] o1(lea) 0.00/0.00/0.00 | o2(lea) 1.00/1.00/1.00 | o3(fut) 0.00/0.00/0.00
+[after phase 3 (order-3); aux-state=orders[1, 2, 3]] o1(lea) 0.00/0.00/0.00 | o2(lea) 0.00/0.00/0.00 | o3(lea) 0.75/0.40/0.26
+
+read: each learned order stays high (H/2H/4H) after later phases, using only the current model to regenerate past support (aux state = the small set of orders). Compounding drift shows up as declining self-gen fidelity and/or declining old-order retention across phases.

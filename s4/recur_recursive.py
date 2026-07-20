@@ -99,16 +99,38 @@ def main():
     ap.add_argument("--k", type=int, default=6); ap.add_argument("--npool", type=int, default=4000)
     ap.add_argument("--orders", type=str, default="1,2,3"); ap.add_argument("--eval_n", type=int, default=150)
     ap.add_argument("--rehearsal", type=str, default="self")  # self | oracle | none
+    ap.add_argument("--joint", type=int, default=0)           # 1 = train ALL orders jointly (capacity oracle)
+    ap.add_argument("--d", type=int, default=192)             # width, for capacity-frontier sweep
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
     p = args.p; R.P = p; R.BOS = p; R.PAD = p + 1; R.NTOK = p + 2
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); random.seed(args.seed)
     orders = [int(x) for x in args.orders.split(",")]; Lr = (args.k + 2, args.H); maxlen = 4 * args.H + 16
+    ff = 4 * args.d; h = max(2, args.d // 32)
     # disjoint delta sets per order
     crng = random.Random(1234); coefs = {o: R.all_coefs(o, random.Random(100 + o), p) for o in orders}
     seen = {o: coefs[o][len(coefs[o]) // 4:] for o in orders}
     held = {o: coefs[o][:len(coefs[o]) // 4] for o in orders}
+
+    if args.joint:                                            # ADJUDICATOR: is fixed width sufficient at all?
+        model = R.TM(d=args.d, h=h, ff=ff, W=args.W).to(device)
+        npar = sum(x.numel() for x in model.parameters())
+        rng = random.Random(args.seed)
+        opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
+        for _ in range(args.steps * len(orders)):             # match total sequential compute
+            o = rng.choice(orders); idx, msk = gen_batch(o, seen[o], args.bs, Lr, p, rng, maxlen, device)
+            logits = model(idx[:, :-1]); tgt = idx[:, 1:]; mt = msk[:, 1:]
+            lt = F.cross_entropy(logits.reshape(-1, p + 2), tgt.reshape(-1), reduction="none").view(tgt.shape)
+            loss = (lt * mt).sum() / mt.sum().clamp(min=1)
+            opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        model.eval()
+        row = [f"o{po} " + "/".join(f"{acc(model, po, seen[po], args.k, L, p, maxlen, device, args.eval_n, 500+L):.2f}"
+                                    for L in [args.H, 2*args.H, 4*args.H]) for po in orders]
+        print(f"JOINT-ORACLE p={p} d={args.d} ff={ff} h={h} params={npar/1e6:.2f}M orders={orders} "
+              f"steps={args.steps*len(orders)} seed={args.seed}: " + " | ".join(row), flush=True)
+        return
+
     print(f"RECUR-RECURSIVE p={p} orders={orders} rehearsal={args.rehearsal} H={args.H} k={args.k} "
           f"steps={args.steps} npool={args.npool} seed={args.seed} device={device}")
 
