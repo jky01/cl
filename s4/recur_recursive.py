@@ -101,6 +101,7 @@ def main():
     ap.add_argument("--rehearsal", type=str, default="self")  # self | oracle | none
     ap.add_argument("--joint", type=int, default=0)           # 1 = train ALL orders jointly (capacity oracle)
     ap.add_argument("--d", type=int, default=192)             # width, for capacity-frontier sweep
+    ap.add_argument("--eval_every", type=int, default=0)      # joint learning-curve interval
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
     p = args.p; R.P = p; R.BOS = p; R.PAD = p + 1; R.NTOK = p + 2
@@ -118,12 +119,18 @@ def main():
         npar = sum(x.numel() for x in model.parameters())
         rng = random.Random(args.seed)
         opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
-        for _ in range(args.steps * len(orders)):             # match total sequential compute
+        total = args.steps * len(orders)
+        for it in range(total):                               # match total sequential compute
             o = rng.choice(orders); idx, msk = gen_batch(o, seen[o], args.bs, Lr, p, rng, maxlen, device)
             logits = model(idx[:, :-1]); tgt = idx[:, 1:]; mt = msk[:, 1:]
             lt = F.cross_entropy(logits.reshape(-1, p + 2), tgt.reshape(-1), reduction="none").view(tgt.shape)
             loss = (lt * mt).sum() / mt.sum().clamp(min=1)
             opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+            if args.eval_every and (it + 1) % args.eval_every == 0:   # learning curve (o3 saturation probe)
+                model.eval()
+                o3v = "/".join(f"{acc(model, orders[-1], seen[orders[-1]], args.k, L, p, maxlen, device, 60, 500+L):.2f}"
+                               for L in [args.H, 2*args.H, 4*args.H])
+                print(f"   [d={args.d} it {it+1:>6}] o{orders[-1]} {o3v}", flush=True); model.train()
         model.eval()
         row = [f"o{po} " + "/".join(f"{acc(model, po, seen[po], args.k, L, p, maxlen, device, args.eval_n, 500+L):.2f}"
                                     for L in [args.H, 2*args.H, 4*args.H]) for po in orders]
@@ -134,7 +141,7 @@ def main():
     print(f"RECUR-RECURSIVE p={p} orders={orders} rehearsal={args.rehearsal} H={args.H} k={args.k} "
           f"steps={args.steps} npool={args.npool} seed={args.seed} device={device}")
 
-    model = R.TM(W=args.W).to(device)
+    model = R.TM(d=args.d, h=h, ff=ff, W=args.W).to(device)
     learned = []
     for oi, o in enumerate(orders):
         past_pools = None

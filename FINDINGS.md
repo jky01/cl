@@ -28,7 +28,17 @@
 > locate the frontier before any growth arm). HONEST: single seed p=23; generated old-tokens per phase =
 > npool×F GROWS with F (no lifelong compute advantage yet, only no-memory inference + O(F) metadata);
 > alt-fidelity metric + seeds pending. First place in the project where a fixed model may hit a genuine
-> capacity ceiling that perfect replay cannot fix.
+> capacity ceiling that perfect replay cannot fix. **UPDATE (joint-oracle adjudicator, `lm_recur_joint.txt`,
+> train o1+o2+o3 jointly 48k steps, width sweep): TWO bottlenecks cleanly separated. o2 is NOT capacity —
+> joint d=192 fits it at 1.00/1.00/0.98, so the recursive o2 degradation is SEQUENTIAL optimization/
+> interference (fix = better consolidation objective, not growth). o3 (cubic) IS width-limited — joint o3
+> rises MONOTONICALLY 0.15→0.57→0.64 (4H) with d=192/320/448 — the project's FIRST width-dependent capacity
+> frontier (growth CANDIDATE, not yet necessity: confounded by convergence — o3 joint still rising at d=448,
+> needs converged learning-curve + wider-SEQUENTIAL-oracle to separate capacity from optimization). NEXT:
+> converged o3 curve (d=192 vs d=320); wider sequential oracle (does active width relieve sequential o3/o2?);
+> paired-seed self/oracle replication + 3-axis fidelity; then growth vs param-matched-wide on CUMULATIVE
+> FLOPs. Honest north-star read: fix the consolidation objective first (o2 = representable retention left on
+> the table), reserve growth for the residual capacity truly can't hold (o3).**
 
 > **LM-PORT R39 — STRUCTURAL continual (arith→quad, single-token F_p): replay-free CONSOLIDATION into
 > shared weights beats modular GROWTH; capacity is sufficient, growth is NOT necessary.** `s4/recur.py` +

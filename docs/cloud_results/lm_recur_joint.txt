@@ -1,0 +1,3 @@
+JOINT-ORACLE p=23 d=192 ff=768 h=6 params=1.79M orders=[1, 2, 3] steps=48000 seed=0: o1 1.00/1.00/1.00 | o2 1.00/1.00/0.98 | o3 0.60/0.22/0.15
+JOINT-ORACLE p=23 d=320 ff=1280 h=10 params=4.95M orders=[1, 2, 3] steps=48000 seed=0: o1 1.00/1.00/1.00 | o2 0.99/1.00/1.00 | o3 0.86/0.75/0.57
+JOINT-ORACLE p=23 d=448 ff=1792 h=14 params=9.68M orders=[1, 2, 3] steps=48000 seed=0: o1 1.00/1.00/1.00 | o2 0.99/0.99/1.00 | o3 0.93/0.81/0.64
