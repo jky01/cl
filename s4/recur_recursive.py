@@ -130,7 +130,9 @@ def main():
                 model.eval()
                 o3v = "/".join(f"{acc(model, orders[-1], seen[orders[-1]], args.k, L, p, maxlen, device, 60, 500+L):.2f}"
                                for L in [args.H, 2*args.H, 4*args.H])
-                print(f"   [d={args.d} it {it+1:>6}] o{orders[-1]} {o3v}", flush=True); model.train()
+                # trainloss = teacher-forced loss on order-last training-length dist (fit vs extrapolate split)
+                print(f"   [d={args.d} it {it+1:>6}] o{orders[-1]} exact {o3v}  trainloss {loss.item():.4f}",
+                      flush=True); model.train()
         model.eval()
         row = [f"o{po} " + "/".join(f"{acc(model, po, seen[po], args.k, L, p, maxlen, device, args.eval_n, 500+L):.2f}"
                                     for L in [args.H, 2*args.H, 4*args.H]) for po in orders]
